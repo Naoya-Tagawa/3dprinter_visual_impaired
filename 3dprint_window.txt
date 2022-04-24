@@ -1,0 +1,1053 @@
+    
+
+Nozzle PAM:    0 RPM
+Print EAH:     0 RRM
+Pi1ament sensor     
+is disabIed.        
+
+インジケーター 22/0°     Z  0.l5?
+[H] 21/0°     →l00%   
+   ---%     〇--:--  
+Prusa i3 MK3 Uk     
+
+>Flnmwane:         ⤴
+  3.9.0-342l       ⤴
+ erusa3d.com       ⤴
+ fcrum.enusa3d.com ⤴
+
+                    
+Y:              +7.0
+                    
+                    
+
+ Settings          ⤴
+ Move X            →
+>Move Y            →
+ Move Z            →
+
+ Settings          ⤴
+ Move X            →
+>Move Y            →
+ Move Z            →
+
+FRRCR:              
+                    
+Preheat the nozzle! 
+                    
+
+>Main              ⤴
+ Wizard             
+ Eirs[ 1ayer caL.  →
+ Au[o home          
+
+                    
+E:              +0.0
+                    
+                    
+
+ERROR:              
+                    
+Prebeat the nozzle! 
+                    
+
+ Oalibnatien       →
+ Statistics        →
+ PaiI stats        →
+>Sueeont           →
+
+ Oalibration       →
+ Statistics        →
+ Pail stats        →
+>Sueeort           →
+
+>Main               
+ PLA  -  215/60    →
+ PET  -  230/85    →
+ ASA  -  260/105   →
+
+ ASA  -  260/105   →
+ ABS  -  255/100   →
+ HIPS -  220/100   →
+>PP   -  254/100   →
+
+ HIPS -  220/l00   →
+ PP   -  254/100   →
+ PLEX -  240/50    →
+>Cooldown           
+
+                    
+ OriginaI Prusa i3  
+   Prusa Research   
+                    
+
+                    
+SortingLtiIes       
+                    
+                    
+
+                    
+Sorting TiIes       
+■■■■■■L             
+                    
+
+>Main              ⤴
+ 3D_Printer_test_out
+ 3D_Printer_test_stl
+ 3D_Printer_test_wit
+
+ 3D_Pninten_tesL_wit
+ 3D8enchy_0.l5mm_PLA
+ MK3_PLA_3D8enchy_15
+>MK3_PLA_3DHubs_Marv
+
+ MK3_PLA_NefmrLtLi_1
+ MK3_PLA_Prusa_200um
+ MK3_PLA_Prusa8eerOp
+>MK3_PLA_Treefro9_15
+
+ MK3_PLA_Treefrog_15
+ MK3_PLA_Treefrog_50
+ MK3_PLA_Tricerabops
+>MK3_PLA_Vase_200um_
+
+ MK3_PRUSA_dual_colo
+ modei2_0.3mm_PLA_MK
+ mode11_0.3mm_PLA_MK
+>model3_0.3mm_PLA_MK
+
+ modeI1_0.3mm_PLA_MK
+ mode13_0.3mm_PLALMK
+ qQ_J.gcode         
+>test3_0.3mm_PLA_MK3
+
+ V3_solid_virUs_2x3_
+ V3_so1id_virUsx8.45
+ V3_so1id_virUsx6.45
+>V3_so1id_virUsx6.45
+
+ vinus↓0.45_0.15mm_s
+ watanabe_Schnecke2_
+ watanabe_Schnecke_0
+>watanabe_Schnecke_0
+
+ virusx0.45_0.l5mm_s
+ watanabe_Schnecke2_
+ watanabe_Schnecke_0
+>watanabe_Schnecke_0
+
+>Main               
+ PLA  -  215/60    →
+ RET  -  230/85    →
+ ASA  -  260/105   →
+
+ Main               
+ PLA  -  215 60    →
+>PET  -  230 85    →
+ ASA  -  260 V05   →
+
+ PFT  -  230/85    →
+ ASA  -  260/105   →
+ A8S  -  255/100   →
+>HIPS -  220/100   →
+
+ ABS  -  255/l06   →
+ NIPS -  220/l06   →
+ PP   -  254/l06   →
+>ELEN -  240 50    →
+
+>Main              ⤴
+ Temperature       →
+ Move axis         →
+ Disab1e steppers   
+
+ Pil. sensor  [N/A] 
+ E, auto1oad  [N/A]→
+ Eans oheok   [Uff] 
+>Mode      [Norma1] 
+
+ Crash det.   [Off] 
+ HW Setue          →
+ Mesh bedLIeveIing →
+>Lin. connection   →
+
+ Temp. cal.    [Un] 
+ RPi port     [Uff] 
+ Live adjusb Z     →
+>Se1ect 1angUage   →
+
+ SD card   [NormaI] 
+ Sort    [A1phabet] 
+ Sound       [Unoe] 
+>Brightness        →
+
+>Back              ⤴
+ [eve1 Bright:   130
+ [eve1 Dimmed:    50
+ Mode        [Auto] 
+
+ Select language   →
+ SD card   [Normal] 
+>Sort    [A1phabet] 
+ Sound       [Cnce] 
+
+>Settings          ⤴
+ Eng1ish            
+ Oestina            
+ Deutsch            
+
+ Espanol            
+ Erancais           
+ 1ta1iano           
+>Po1ski             
+
+>Settings          ⤴
+ X-correct:   [Uff] 
+ Y-oorrect:   [Uff] 
+ Z-correct:   [Uff] 
+
+ X-correct:   [Cff] 
+ Y-correct:   [Uff] 
+ 7-oorrect:   [Uff] 
+>E-correct:   [Uff] 
+
+ERROR: Pilament     
+sensor is not       
+responding, please  
+cbeck connec[ion.   
+
+>Settings          ⤴
+ Nozzle:           0
+ Bed:              0
+ Pan speed:        0
+
+>Main              ⤴
+ Wizard             
+ Eirst 1ayer cal.  →
+ Auto home          
+
+ Pirst layer cal.  →
+ Auto home          
+ Be1t test          
+>Se1ftest           
+
+ Belt test          
+ Se1ftest           
+ Oa1ibrate XYZ      
+>Oalibrate Z       →
+
+                    
+Calibrating Z       
+                    
+                    
+
+Is filament loaNed7 
+                    
+>Yes                
+ No                 
+
+Please load fi1ament
+first.              
+                    
+                    
+
+ Mesh Bed LeveIing →
+ Bed 1eve1 correct →
+ PID ca1ibration   →
+>Reset XY2 calibr,  
+
+ Bed leveI correct →
+ PID ca1ibration   →
+ Reset XY2 calibr.  
+>Teme. calibration →
+
+>Calibration       ⤴
+ Oa1ibrate         →
+                    
+                    
+
+ Set temeenature:   
+                    
+ 210                
+                    
+
+ Set temperature:   
+                    
+ 208                
+                    
+
+ Set temperature:   
+                    
+ 20B                
+                    
+
+ Set temperature:   
+                    
+ 207                
+                    
+
+ Set temperature:   
+                    
+ 204                
+                    
+
+ Set temeenature:   
+                    
+ 203                
+                    
+
+ Set temperature:   
+                    
+ 202                
+                    
+
+ Set temperature:   
+                    
+ 201                
+                    
+
+ Set temeenature:   
+                    
+ 208                
+                    
+
+ Set temperature:   
+                    
+ 208                
+                    
+
+ Set temeenature:   
+                    
+ 211                
+                    
+
+>Main              ⤴
+ Last erint        →
+ TotaI             →
+                    
+
+Total faiIures      
+ Power fai1ures  1  
+ Pilam. runouts  0  
+ Crash  X 0    Y 0  
+
+Last print fai1ures 
+ Power fai1ures  1  
+ Runouts H 0   S 0  
+ Crash   X 0   Y 0  
+
+インジケーター126/211°   Z  0.157
+[H] 21/0°     p100k   
+   ---%     〇--:--  
+PID cal.    0/5     
+
+ Main              ⤴
+>Pirmware:         ⤴
+  3.9.0-3421       ⤴
+ erusa3d.com       ⤴
+
+ prusa3d.com       ⤴
+ forum.prusa3d,com ⤴
+ howto.prusa3d.oom ⤴
+>------------      ⤴
+
+ 1_75mm_MK3        ⤴
+ EINSy_10a         ⤴
+ E3Dv6fulI         ⤴
+>------------      ⤴
+
+ ------------      ⤴
+ Date:             ⤴
+ May 18 2020       ⤴
+>------------      ⤴
+
+ ------------      ⤴
+ XY2 caI. details  →
+ Extnuden info     →
+>Senson in+o       →
+
+ Sensor info       →
+ Belt status       →
+ Temperatures      →
+>Voltages          →
+
+ PWR:      23.4V    
+ BED:      23.5V    
+                    
+                    
+
+ Nozzle:       217° 
+ Bed:           20° 
+ Ambient:       25° 
+ PINDA:         20° 
+
+Belt status         
+ X 244              
+ Y 277              
+                    
+
+Sensor state        
+ PINDA:           0 
+ PINDA:         N/A 
+ IR:              1 
+
+Nozzle PAM:    0 RPM
+Print EAH:     0 RRM
+Pi1ament sensor     
+is disabIed.        
+
+!MU   -  Z20/100   a
+TT    -  254/100    
+TlJC  -  240/50     
+t%xOb mmn           
+
++bdh               ⤴
+ TNWm↓Nry_0.15mm_PtI
+ xxWpLZ 8.3mm_PLALI■
++xxWpLL 8.3mm_PLALj■
+
+>Info screen       ⤴
+ Preheat           →
+ Print from SD     →
+ Load filamen[     →
+
+>Main              ⤴
+ 3D_Printer_test_out
+ 3D_Printer_test_stl
+ 3D_Printer_test_wit
+
+>Main              ⤴
+ 3D_Printer_test_out
+ 3D_Printer_test_stl
+ 3D_Printer_test_wit
+
+>Main              ⤴
+ Wizard             
+ Eirs[ 1ayer caL.  →
+ Au[o home          
+
+>Main              ⤴
+ Wizard             
+ Eirs[ 1ayer caL.  →
+ Au[o home          
+
+>Main               
+ PLA  -  215/60    →
+ PET  -  230/85    →
+ ASA  -  260/105   →
+
+ MK3_PRUSA_dual_colo
+ modei2_0.3mm_PLA_MK
+ mode11_0.3mm_PLA_MK
+>model3_0.3mm_PLA_MK
+
+ ABS  -  255/l06   →
+ NIPS -  220/l06   →
+ PP   -  254/l06   →
+>ELEN -  240 50    →
+
+ Pil. sensor  [N/A] 
+ E, auto1oad  [N/A]→
+ Eans oheok   [Uff] 
+>Mode      [Norma1] 
+
+ SD card   [NormaI] 
+ Sort    [A1phabet] 
+ Sound       [Unoe] 
+>Brightness        →
+
+ Espanol            
+ Erancais           
+ 1ta1iano           
+>Po1ski             
+
+ Oalibnatien       →
+ Statistics        →
+ PaiI stats        →
+>Sueeont           →
+
+ Oalibration       →
+ Statistics        →
+ Pail stats        →
+>Sueeort           →
+
+ Set temeenature:   
+                    
+ 203                
+                    
+
+ HIPS -  220/l00   →
+ PP   -  254/100   →
+ PLEX -  240/50    →
+>Cooldown           
+
+                    
+ OriginaI Prusa i3  
+   Prusa Research   
+                    
+
+>Main              ⤴
+ 3D_Printer_test_out
+ 3D_Printer_test_stl
+ 3D_Printer_test_wit
+
+ MK3_PLA_NefmrLtLi_1
+ MK3_PLA_Prusa_200um
+ MK3_PLA_Prusa8eerOp
+>MK3_PLA_Treefro9_15
+
+ MK3_PLA_Treefrog_15
+ MK3_PLA_Treefrog_50
+ MK3_PLA_Tricerabops
+>MK3_PLA_Vase_200um_
+
+ V3_solid_virUs_2x3_
+ V3_so1id_virUsx8.45
+ V3_so1id_virUsx6.45
+>V3_so1id_virUsx6.45
+
+>Main              ⤴
+ Temperature       →
+ Move axis         →
+ Disab1e steppers   
+
+>Settings          ⤴
+ Eng1ish            
+ Oestina            
+ Deutsch            
+
+>Main              ⤴
+ Wizard             
+ Eirs[ 1ayer caL.  →
+ Au[o home          
+
+>Main              ⤴
+ Wizard             
+ Eirs[ 1ayer caL.  →
+ Au[o home          
+
+PrlnLerdrasu↓zLJmeen
+calHbraLmU epL,     
+Please follojHLyp   
+manUal,qcnapLmr    ↓
+
+FirsL sLeps,qsecLion
+CalihraLlon fboj,   
+                    
+                   >>
+
+ hyhidwummmi       ⤴
+J°yNyudL           →
+J°ruyLqFrmpJ■:     →
+HLcaiqfLLamm0L     →
+
+ CalibraLion       →
+ S[a[is[ics        →
+ Eail s[a[s        →
+>SUppor[           →
+
+ howto.prusa3Nncom ⤴
+ ------------      ⤴
+ 1_75nmdMK3        ⤴
+>ElNSy_l0a         ⤴
+
+>------------      ⤴
+ XYZLcaI. detai1s  →
+ Extnukkh jnfor    →
+ Senseh jh+er      →
+
+ Sensor info       →
+ Bel[ s[a[us       →
+ Temperaburep      →
+>Vol[a9es          →
+
+Sensor sLaLe        
+HFlNUA:          d0 
+HElNMAL        JN/A 
+ lR:              1 
+
+ OaIibnatienr      →
+ Statistjzs        →
+ PaiI stats        →
+>Sueeeht           →
+
+>Main              ⤴
+ 3D_Printer_besLuout
+ 3D_Printer_besL_stl
+ 3D_Printer_besL_wit
+
+HMK3_FLA_Uasp_2■6um_
+HMK3_PLA_UhDebbpu200
+ MK3dPRUSA_UsaLucolo
+>_PLA_MK3_15pM9code 
+
+ tesL_8.l5mNJFLl_MK3
+ V3_solld_uurzsZx3_0
+ V3_solid_vurzsJ6.15
+>us_2x3O0[H]lmpsMdA■MM
+
+ lnfo screer       ⤴
+HPreheaL           →
+ PrinL fromdS>     →
+>Load filamerL     →
+
+ Unload filapenL   →
+ Settings          →
+>Oalibration       →
+ Statistics        →
+
+                    
+Z:              +0.2
+                    
+                    
+
+インジケーター 2l/0°     Z  0.15?
+[H] 21/0°     →100%   
+   ---%     〇--:--  
+Prusa i3 MK3 OK.    
+
+ ! !     ---       ⤴
+     - !           →
+   : ! !  r .>>     →
+   >J !:1>r-n!     ⤴
+
+ lnfc scneen       ⤴
+HPreheat           →
+ Print from SD     →
+ Load filamenL     →
+
+Last erint failures 
+ Power failures  1  
+ Runouts H 0   Sd0  
+ Crash   X 0   Yd0  
+
+TcLal fallunes      
+HPower failures  1  
+ Filam. runouLs u0  
+ Crash  X 0    Yd0  
+
+TcLal failures      
+ Power failures  1  
+ Filam. runouLs  0  
+ Orash  X 0    Y 0  
+
+>Main              ⤴
+ LasL prlnL        →
+ To[al             →
+                    
+
+ SeLLings          →
+ CalHbraLion       →
+ S[a[ls[lcs        →
+>Eail s[aLs        →
+
+>Print from SU     →
+ Load fiIamenL     →
+ Un1oad filapmnL   →
+ Settings          →
+
+>Info screen       ⤴
+ Preheat           →
+ Print from SU     →
+ Load fiIamen[     →
+
+ PLA  -  2l5 66    →
+ PET  -  236 65    →
+>ASA  -  266 U■5   →
+ A8S  -  255 U■]   →
+
+ HlPS -  226/H66   →
+ PP   -  254 VW]   →
+ ELEN -  246 56    →
+>Cooldown           
+
+>Main              ⤴
+ 3D_Printer_besL_out
+ 3D_Printer_LesL_stl
+ 3D_Printer_besL_wit
+
+ V3_solid_virus_2↓3_
+ V3_solid_virusx0.45
+ V3_so1id_virusx0.45
+>sx0.45-rot-suport-b
+
+>Maun       ]      ⤴
+ TempmraLUrp       →
+ No e axls         →
+  isWUle   m pm     
+
+HNahn              ⤴
+ TenperaLure       →
+ Move axis         →
+ Disab1e steppers   
+
+ERROR: PiIament     
+eeneor is not       
+heeponding, p1ease  
+oheck connection.   
+
+ Fans check   [Cff] 
+ Mode      [Normal] 
+ Orash det.   [Cff] 
+>HW Setup          →
+
+ RPi eort     []ff] 
+ Live adjusL Z     →
+ Select 1an9Ua9p   →
+>SD card   [Norpal] 
+
+ SU carN   D4mrvel] 
+ SorL    [AuN Wxpb] 
+ SoUnU       C]↓ce] 
+>8rl9nbness        →
+
+ En9llsn            
+ CesLina            
+ Deu[sch            
+>Espanol            
+
+ Eseanol            
+ Prancais           
+ Italiano           
+>Polski             
+
+>Back              ⤴
+ Level BrighL:   130
+ LeveI Dimmed:    50
+ Mode        [AULo] 
+
+>Settings          ⤴
+ Nozzle:           0
+ Bed:              0
+ Pan speed:        0
+
+ Move axis         →
+ Disable steppers   
+ Pil. sensor  [N A] 
+>P. autoload  [NdA]→
+
+ Main               
+ PLA  -  2l5/60    →
+>PET  -  230/85    →
+ ASA  -  260/105   →
+
+ Calibration       →
+ Statistics        →
+ Pai1 stats        →
+>Support           →
+
+>Main              ⤴
+ Eirmware:         ⤴
+  3.8.0-3421       ⤴
+ prusa3d.com       ⤴
+
+ 3D_Pninten_tesL_wit
+ 3D8enchy_0.l5mm_PLA
+ MK3_PLA_3D8enchy_15
+>MK3_PLA_3DHubs_Marv
+
+ 3D_Pninten_tesL_wit
+ 3D8enchy_0.l5mm_PLA
+ MK3_PLA_3D8enchy_15
+>MK3_PLA_3DHubs_Marv
+
+ 3D_Pninten_tesL_wit
+ 3D8enchy_0.l5mm_PLA
+ MK3_PLA_3D8enchy_15
+>MK3_PLA_3DHubs_Marv
+
+ 3D_Pninten_tesL_wit
+ 3D8enchy_0.l5mm_PLA
+ MK3_PLA_3D8enchy_15
+>MK3_PLA_3DHubs_Marv
+
+ 3D_Pninten_tesL_wit
+ 3D8enchy_0.l5mm_PLA
+ MK3_PLA_3D8enchy_15
+>MK3_PLA_3DHubs_Marv
+
+ 3D_Pninten_tesL_wit
+ 3D8enchy_0.l5mm_PLA
+ MK3_PLA_3D8enchy_15
+>MK3_PLA_3DHubs_Marv
+
+ 3D_Pninten_tesL_wit
+ 3D8enchy_0.l5mm_PLA
+ MK3_PLA_3D8enchy_15
+>MK3_PLA_3DHubs_Marv
+
+ 3D_Pninten_tesL_wit
+ 3D8enchy_0.l5mm_PLA
+ MK3_PLA_3D8enchy_15
+>MK3_PLA_3DHubs_Marv
+
+ 3D_Printer_tesL_wit
+ 3D8enchy_0.l5mm_PLA
+ MK3_PLA_3D8enchy_15
+>MK3_PLA_3DHubs_Marv
+
+>Main              ⤴
+ 3D_Printer_test_out
+ 3D_Printer_test_stl
+ 3D_Printer_test_wit
+
+ 3D_Printer_tesL_wit
+ 3D8enchy_0.l5mm_PLA
+ MK3_PLA_3D8enchy_15
+>MK3_PLA_3DHubs_Marv
+
+ 3D_Printer_tesL_wit
+ 3D8enchy_0.l5mm_PLA
+ MK3_PLA_3D8enchy_15
+>MK3_PLA_3DHubs_Marv
+
+ 3D_Printer_tesL_wit
+ 3D8enchy_0.l5mm_PLA
+ MK3_PLA_3D8enchy_15
+>MK3_PLA_3DHubs_Marv
+
+ 3D_Printer_test_wit
+ 3D8enchy_0.l5mm_PLA
+ MK3_PLA_3D8enchy_15
+>MK3_PLA_3DHubs_Marv
+
+ PFT  -  230/85    →
+ ASA  -  260/105   →
+ A8S  -  255/100   →
+>HIPS -  220/100   →
+
+ PFT  -  230/85    →
+ ASA  -  260/105   →
+ ABS  -  255/100   →
+>HIPS -  220/100   →
+
+ 3D_Printer_test_wit
+ 3DBenchy_0.l5mm_PLA
+ MK3_PLA_3DBenchy_15
+>MK3_PLA_3DHubs_Marv
+
+ 3D_Printer_test_wit
+ 3DBenchy_0.15mm_PLA
+ MK3_PLA_3DBenchy_15
+>MK3_PLA_3DHubs_Marv
+
+ 3D_Printer_test_wit
+ 3DBenchy_0.15mm_PLA
+ MK3_PLA_3DBenchy_15
+>MK3_PLA_3DHubs_Marv
+
+ 3D_Printer_test_wit
+ 3DBenchy_0.15mm_PLA
+ MK3_PLA_3DBenchy_15
+>MK3_PLA_3DHubs_Marv
+
+3D_Printer_test_wit
+3DBenchy_0.15mm_PLA
+MK3_PLA_3DBenchy_15
+>MK3_PLA_3DHubs_Marv
+
+OriginaIPrusai3Prusa Research
+                    
+ OriginaI Prusa i3  
+   Prusa Research   
+                    
+
+                     OriginaI Prusa i3     Prusa Research                       
+                     OriginaI Prusa i3     Prusa Research                       
+                    
+ OriginaI Prusa i3  
+   Prusa Research   
+                    
+
+                    
+ OriginaI Prusa i3  
+   Prusa Research   
+                    
+
+ HIPS -  220/l00   →
+ PP   -  254/l00   →
+ PLEX -  240/50    →
+>Cooldown           
+
+ HIPS -  220/l00   →
+ PP   -  254/l00   →
+ PLEX -  240/50    →
+>Cooldown           
+
+インジケーター 22/0°     Z  0.15?
+[H] 21/0°     →l00%   
+   ---%     〇--:--  
+Ppusa i3 MK3 Uk     
+
+>Main               
+ PLA  -  215/60    →
+ PET  -  230/85    →
+ ASA  -  260/l05   →
+
+>Main Z Z Z Z Z Z Z Z Z Z Z Z Z Z 
+ PLA Z Z Z 215/60 Z Z Z Z
+ >PET Z Z Z 230/85 Z Z Z Z
+ ASA Z Z Z 260/l05 Z Z Z
+
+>Main Z Z Z Z Z Z Z Z Z Z Z Z Z Z 
+ PLA Z Z Z 215/60 Z Z Z Z
+ >PET Z Z Z 230/85 Z Z Z Z
+ ASA Z Z Z 260/l05 Z Z Z
+
+>Main Z Z Z Z Z Z Z Z Z Z Z Z Z Z 
+ PLA Z Z Z 215/60 Z Z Z Z
+ >PET Z Z Z 230/85 Z Z Z Z
+ ASA Z Z Z 260/l05 Z Z Z
+
+>Main Z Z Z Z Z Z Z Z Z Z Z Z Z Z 
+ PLA Z Z Z 215/60 Z Z Z Z
+ >PET Z Z Z 230/85 Z Z Z Z
+ ASA Z Z Z 260/l05 Z Z Z
+
+>Main Z Z Z Z Z Z Z Z Z Z Z Z Z Z 
+ PLA Z Z Z 215/60 Z Z Z Z
+ >PET Z Z Z 230/85 Z Z Z Z
+ ASA Z Z Z 260/l05 Z Z Z
+
+>Main                PLA  Z  215/60    Z
+ >PET  Z  230/85    Z
+ ASA  Z  260/l05   Z
+
+>Main                PLA  Z  215/60    Z
+ >PET  Z  230/85    Z
+ ASA  Z  260/l05   Z
+
+>Main               
+ PLA  Z  215/60    Z
+ >PET  Z  230/85    Z
+ ASA  Z  260/l05   Z
+
+>Main               
+ PLA  Z  215/60    Z
+ >PET  Z  230/85    Z
+ ASA  Z  260/l05   Z
+
+>Main               
+ PLA  Z  215/60    Z
+ >PET  Z  230/85    Z
+ ASA  Z  260/l05   Z
+
+>Main               
+ PLA  Z  215/60    Z
+ PET  Z  230/85    Z
+ ASA  Z  260/l05   Z
+
+>Main               
+ PLA  Z  215/60    Z
+ PET  Z  230/85    Z
+ ASA  Z  260/l05   Z
+
+>Main               
+ PLA  Z  215/60    Z
+ PET  Z  230/85    Z
+ ASA  Z  260/l05   Z
+
+>Main               
+ PLA  -  215/60    →
+ PET  -  230/85    →
+ ASA  -  260/l05   →
+
+>Main               
+ PLA  -  215/60    →
+ PET  -  230/85    →
+ ASA  -  260/l05   →
+
+>Main               
+ PLA  -  215/60    →
+ PET  -  230/85    →
+ ASA  -  260/l05   →
+
+ virus↓0.45_0.15mm_s
+ watanabe_Schnecke2_
+ watanabe_Schnecke_0
+watanabe_Schnecke_0
+
+ virus↓0.45_0.15mm_s
+ watanabe_Schnecke2_
+ watanabe_Schnecke_0
+watanabe_Schnecke_0
+
+ virus↓0.45_0.15mm_s
+ watanabe_Schnecke2_
+ watanabe_Schnecke_0
+watanabe_Schnecke_0
+
+ virus↓0.45_0.15mm_s
+ watanabe_Schnecke2_
+ watanabe_Schnecke_0
+watanabe_Schnecke_0
+
+ virus↓0.45_0.15mm_s
+ watanabe_Schnecke2_
+ watanabe_Schnecke_0
+watanabe_Schnecke_0
+
+ virus↓0.45_0.15mm_s
+ watanabe_Schnecke2_
+ watanabe_Schnecke_0
+>waLanabe_Schnecke_
+
+ virus↓0.45_0.15mm_s
+ watanabe_Schnecke2_
+ watanabe_Schnecke_0
+>waLanabe_Schnecke_
+
+ virus↓0.45_0.15mm_s
+ watanabe_Schnecke2_
+ watanabe_Schnecke_0
+>waLanabe_Schnecke_
+
+ virus↓0.45_0.15mm_s
+ watanabe_Schnecke2_
+ watanabe_Schnecke_0
+>waLanabe_Schnecke_
+
+ virus↓0.45_0.15mm_s
+ watanabe_Schnecke2_
+ watanabe_Schnecke_0
+>waLanabe_Schnecke_
+
+ virus↓0.45_0.15mm_s
+ watanabe_Schnecke2_
+ watanabe_Schnecke2_
+>waLanabe_Schnecke_0
+
+ virus↓0.45_0.15mm_s
+ watanabe_Schnecke2_
+ watanabe_Schnecke2_
+>waLanabe_Schnecke_0
+
+ virus↓0.45_0.15mm_s
+ watanabe_Schnecke2_
+ >waLanabe_Schnecke_0
+>waLanabe_Schnecke_0
+
+ virus↓0.45_0.15mm_s
+ watanabe_Schnecke2_
+ >waLanabe_Schnecke_0
+>waLanabe_Schnecke_0
+
+ virus↓0.45_0.15mm_s
+ watanabe_Schnecke2_
+ >waLanabe_Schnecke_0
+>waLanabe_Schnecke_0
+
+ virus↓0.45_0.15mm_s
+ watanabe_Schnecke2_
+ >waLanabe_Schnecke_0
+>waLanabe_Schnecke_0
+
+ virus↓0.45_0.15mm_s
+ watanabe_Schnecke2_
+ watanabe_Schnecke2_
+>waLanabe_Schnecke_0
+
+ virus↓0.45_0.15mm_s
+ watanabe_Schnecke2_
+ watanabe_Schnecke2_
+>waLanabe_Schnecke_0
+
