@@ -1,0 +1,267 @@
+Prusa i3 MK3 OK.
+Z
+Firmware:
+3.9.0-3421
+prusa3d.com
+forum.prusa3d.com
+Y:
++
+Settings
+Move X →
+Move Y →
+Move Z →
+ERROR:
+Preheat the nozzle!
+>Main
+Main
+>Wizard
+Wizard
+>First layer cal.
+Frist layer cal. →
+Auto home
+>Auto home
+Z:
+Calibration →
+>Calibration →
+Statistics →
+>Statistics →
+Fail stats →
+>Fail stats →
+>Support →
+Support →
+>Main
+Main
+PLA - 215/60 →
+PET - 230/85 →
+ASA - 260/105 →
+ABS - 255/100 →
+HIPS - 220/100 →
+PP - 254/100 →
+>PLA - 215/60 →
+>PET - 230/85 →
+>ASA - 260/105 →
+>ABS - 255/100 →
+>HIPS - 220/100 →
+>PP - 254/100 →
+FLEX - 240/50 →
+>FLEX - 240/50 →
+Cooldown
+>Cooldown
+Original Prusa i3 
+Prusa Research
+Sorting files
+>Main
+Temperature →
+Move axis →
+Disable steppers
+>Temperature
+>Move axis
+>Disable steppers
+Fil. sensor [N/A]
+F. autoload [N/A] →
+Fans check [Off]
+Fans check [On]
+>Mode [Normal]
+>Fil. sensor [N/A]
+>F. autoload [N/A]
+>Fans check [Off]
+>Fans check [On]
+Mode [Normal]
+Crash det. [Off]
+Crash det. [On]
+HW Setup →
+Mesh bed leveling →
+Lin. correction →
+Temp. cal. [On]
+RPi port [Off]
+RPi port [On]
+Live adjust Z →
+Select language →
+>Crash det. [Off]
+>Crash det. [On]
+>HW Setup
+>Mesh bed leveling
+>Lin. correction
+>Temp. cal. [On]
+>RPi port [Off]
+>Live adjust Z
+>Select language
+>Temp. cal. [On]
+>RPi port [Off]
+>Temp. cal. [Off]
+>RPi port [On]
+SD card [Normal]
+Sort [Alphabet]
+Sound [Once]
+Brightness →
+>SD card [Normal]
+>Sort [Alphabet]
+>Sound [Once]
+>Brightness
+Back
+Level Bright: 130
+Level Dimmed: 50
+Mode [Auto]
+>Back
+>Level Bright: 130
+>Level Dimmed: 50
+>Mode [Auto]
+Timeout: 10
+Select language
+SD card [Normal]
+Sort [Alphabet]
+Sound [Once]
+>Select language
+>SD card [Normal]
+>Sort [Alphabet]
+>Sound [Once]
+Settings
+English
+Cestina
+Deutsch
+>Settings
+>English
+>Cestina
+>Deutsch
+Espanol
+Francais
+Italiano
+Polski
+>Espanol
+>Francais
+>Italiano
+>Polski
+Settings
+X-correct: [Off]
+Y-correct: [Off]
+Z-correct: [Off]
+X-correct: [On]
+Y-correct: [On]
+Z-correct: [On]
+>Settings
+>X-correct: [Off]
+>Y-correct: [Off]
+>Z-correct: [Off]
+>X-correct: [On]
+>Y-correct: [On]
+>Z-correct: [On]
+E-correct: [Off]
+E-correct: [On]
+>E-correct: [Off]
+>E-correct: [On]
+ERROR: Filament
+sensor is not
+responding, please
+check connection.
+Settings
+Nozzle: 0
+Bed: 0
+Fan speed: 0
+>Settings
+>Nozzle: 0
+>Bed: 0
+>Fan speed: 0
+>Main
+Wizard
+First layer cal.
+Auto home
+Main
+>Wizard
+>First layer cal.
+>Auto home
+Belt test
+Selftest
+>Belt test
+>Selftest
+Calibrate XYZ
+Calibrate Z
+>Calibrate XYZ
+>Calibrate Z
+Caribrating Z →
+Is filament loaded?
+>Yes
+No
+>No
+Yes
+Please load filament first.
+Mesh Bed Leveling →
+Bed Level correct →
+PID calibration →
+Reset XYZ calibr.
+>Mesh Bed Leveling →
+>Bed Level correct →
+>PID calibration →
+>Reset XYZ calibr.
+Temp. calibration →
+>Temp. calibration →
+Calibration
+Calibrate
+>Calibration
+>Calibrate
+Set temperature:
+>Main
+Last print →
+Total →
+Total failures
+Power failures 1
+Filam. runouts 0
+Crash X 0    Y 0
+Last print failures
+Power failures 1
+Runouts H 0   S 0
+Crash   X 0   Y 0
+PID cal. 0/5
+prusa3d.com
+forum.prusa3d.com
+howto.prusa3d.com
+>prusa3d.com
+>forum.prusa3d.com
+>howto.prusa3d.com
+>Firmware:
+3.9.0-3421
+1_75mm_MK3
+EINSy_10a
+E3Dv6full
+>1_75mm_MK3
+>EINSy_10a
+>E3Dv6full
+Date:
+May
+April
+July
+August
+September
+October
+November
+December
+March
+February
+XYZ cal. details →
+Extruder info →
+Sensor info →
+>XYZ cal. details →
+>Extruder info →
+>Sensor info →
+Belt status →
+Temperatures →
+Voltages →
+>Belt status →
+>Temperatures →
+>Voltages →
+PWR: 23.4V
+BED: 23.5V
+Nozzle: 217°
+Bed: 20°
+Ambient: 25°
+PINDA: 20°
+Belt status
+X 244
+Y 277
+Sensor state
+PINDA:      0
+FINDA:     N/A
+IR:          1
+Nozzle FAN:  0 RPM
+Print FAN:   0 RPM
+Filament sensor
+is disabled.
