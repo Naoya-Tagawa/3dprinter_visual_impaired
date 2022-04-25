@@ -327,7 +327,6 @@ for f in window_z:
     like = {}
     continue
     
-#print(new_d)
-#print(len(new_d))
+
 print(out)
 print(output_text)
