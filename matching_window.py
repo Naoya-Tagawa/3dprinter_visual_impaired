@@ -7,6 +7,7 @@ from natsort import natsorted
 from PIL import Image
 import difflib
 from dictionary_word import speling
+import pyttsx3
 
 def syaei(img1,p1,p2,p3,p4):
     #座標
@@ -330,3 +331,16 @@ for f in window_z:
 
 print(out)
 print(output_text)
+
+def text_read(text):
+    engine = pyttsx3.init()
+    #rateはデフォルトが200
+    rate = engine.getProperty('rate')
+    engine.setProperty('rate',150)
+    #volume デフォルトは1.0 設定は0.0~1.0
+    volume = engine.getProperty('volume')
+    engine.setProperty('volume',1.0)
+    engine.say(text)
+    engine.runAndWait()
+
+text_read(output_text)
