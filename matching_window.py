@@ -9,6 +9,7 @@ import difflib
 from dictionary_word import speling
 import pyttsx3
 import time
+import difflib
 
 def syaei(img1,p1,p2,p3,p4):
     #座標
@@ -344,11 +345,12 @@ def kersol_search(text):
         if (i == 1) & (word == '\n'):
             i = 0
     return kersol 
-
+before_kersol = ">waLanabe_Schnecke_0"
 ikersol = kersol_search(output_text)
 print(out)
 print(output_text)
 print(ikersol)
+before_text = ['jj','\n']
 def whole_text_read(text):
     engine = pyttsx3.init()
     #rateはデフォルトが200
@@ -371,6 +373,7 @@ def whole_text_read(text):
             continue
         engine.say(word)
         engine.runAndWait()
+
 def partial_text_read(text):
     engine = pyttsx3.init()
     #rateはデフォルトが200
@@ -380,17 +383,21 @@ def partial_text_read(text):
     volume = engine.getProperty('volume')
     engine.setProperty('volume',1.0)
     for word in text:
-        if word == '\n':
-            time.sleep(3)
-        if word == '/':
-            engine.say("スラッシュ")
-            continue
-        if word == ",":
-            engine.say("カンマ")
-            continue
-        if word == ".":
-            engine.say("ドット")
-            continue
         engine.say(word)
         engine.runAndWait()
+before = []
+after = []
+#カーソルの類似度
+s = difflib.SequenceMatcher(None,before_kersol,ikersol)
+if s.ratio() >= 0.95:
+    #類似度90%は変化部分を読む
+    res = difflib.ndiff(before_text,output_text)
+    for word in res:
+        if (word[0] == '-'):
+            before.append(word[2:])
+        elif word[0] == '+':
+            after.append(word[2:])
+
 whole_text_read(output_text)
+print(before)
+print(after)
