@@ -8,6 +8,7 @@ from PIL import Image
 import difflib
 from dictionary_word import speling
 import pyttsx3
+import time
 
 def syaei(img1,p1,p2,p3,p4):
     #座標
@@ -155,6 +156,9 @@ like = {}
 l = 0
 like_x = {}
 out = ""
+before_kersol =""
+kersol = ""
+before_text = ""
 for f in window_z:
     l = 0
     while True:
@@ -328,10 +332,23 @@ for f in window_z:
     like = {}
     continue
     
+def kersol_search(text):
+    i = 0
+    kersol = ""
+    for word in text:
+        if word[0] == ">":
+            i = 1
+            kersol += word
+        elif i == 1:
+            kersol += word
+        if (i == 1) & (word == '\n'):
+            i = 0
+    return kersol 
 
+ikersol = kersol_search(output_text)
 print(out)
 print(output_text)
-
+print(ikersol)
 def text_read(text):
     engine = pyttsx3.init()
     #rateはデフォルトが200
@@ -340,7 +357,10 @@ def text_read(text):
     #volume デフォルトは1.0 設定は0.0~1.0
     volume = engine.getProperty('volume')
     engine.setProperty('volume',1.0)
-    engine.say(text)
-    engine.runAndWait()
+    for word in text:
+        if word == '\n':
+            time.sleep(5)
+        engine.say(word)
+        engine.runAndWait()
 
 text_read(output_text)
