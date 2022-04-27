@@ -349,7 +349,7 @@ ikersol = kersol_search(output_text)
 print(out)
 print(output_text)
 print(ikersol)
-def text_read(text):
+def whole_text_read(text):
     engine = pyttsx3.init()
     #rateはデフォルトが200
     rate = engine.getProperty('rate')
@@ -359,8 +359,38 @@ def text_read(text):
     engine.setProperty('volume',1.0)
     for word in text:
         if word == '\n':
-            time.sleep(5)
+            time.sleep(3)
+        if word == '/':
+            engine.say("スラッシュ")
+            continue
+        if word == ",":
+            engine.say("カンマ")
+            continue
+        if word == ".":
+            engine.say("ドット")
+            continue
         engine.say(word)
         engine.runAndWait()
-
-text_read(output_text)
+def partial_text_read(text):
+    engine = pyttsx3.init()
+    #rateはデフォルトが200
+    rate = engine.getProperty('rate')
+    engine.setProperty('rate',150)
+    #volume デフォルトは1.0 設定は0.0~1.0
+    volume = engine.getProperty('volume')
+    engine.setProperty('volume',1.0)
+    for word in text:
+        if word == '\n':
+            time.sleep(3)
+        if word == '/':
+            engine.say("スラッシュ")
+            continue
+        if word == ",":
+            engine.say("カンマ")
+            continue
+        if word == ".":
+            engine.say("ドット")
+            continue
+        engine.say(word)
+        engine.runAndWait()
+whole_text_read(output_text)
