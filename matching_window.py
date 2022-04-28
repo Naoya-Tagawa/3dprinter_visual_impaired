@@ -96,7 +96,7 @@ def points_extract(img):
     return p1,p2,p3,p4
 
 #対象画像をロード
-img = cv2.imread(r".\camera1\camera12.jpg")
+img = cv2.imread(r".\camera1\camera37.jpg")
 c_img = cv2.cvtColor(img,cv2.COLOR_BGR2RGB)
 m_img = cv2.cvtColor(img,cv2.COLOR_BGR2RGB)
 plt.imshow(c_img)
@@ -289,7 +289,7 @@ for f in window_z:
             like = {}
             continue
             
-        print(out_modify)
+        #print(out_modify)
         out_modify = speling.correct(out_modify)
         out_modify = out_modify + ' '
         out = out + out_modify
@@ -345,11 +345,12 @@ def kersol_search(text):
             i = 0
     return kersol 
 
-before_kersol = ">Main"
+before_kersol = ""
 ikersol = kersol_search(output_text)
 print(out)
 print(output_text)
 print(ikersol)
+print(len(ikersol))
 before_text = ['>Main','\n']
 
 def whole_text_read(text):
@@ -360,24 +361,28 @@ def whole_text_read(text):
     #volume デフォルトは1.0 設定は0.0~1.0
     volume = engine.getProperty('volume')
     engine.setProperty('volume',1.0)
+    count = 0
     for word in text:
+        if word == ' ':
+            continue
         if word == '\n':
             time.sleep(3)
-        if word == '/':
+        if '/'in word:
             engine.say("スラッシュ")
             continue
         if word == ",":
             engine.say("カンマ")
             continue
-        if word == ".":
+        if "." in word:
             engine.say("ドット")
             continue
         engine.say(word)
         engine.runAndWait()
 #カーソルがテキストにあるか判断
 def kersol_exist_search(kersol,text): 
+    text = text.splitlines()
     for word in text:
-        s = difflib.SequenceMatcher(None,kersol,word)
+        s = difflib.SequenceMatcher(None,kersol[1:],word)
         if s.ratio() >= 0.90:
             return True
 
@@ -399,7 +404,7 @@ after = []
 
 #カーソルの類似度
 s = difflib.SequenceMatcher(None,before_kersol,ikersol)
-if kersol_exist_search(before_kersol,output_text) == True: #前のカーソルがある(全画面変わっていない)
+if kersol_exist_search(before_kersol,out) == True: #前のカーソルがある(全画面変わっていない)
     if s.ratio() >= 0.95: #カーソルが変わっていないなら
         partial_text_read(ikersol)
     
@@ -416,8 +421,9 @@ if kersol_exist_search(before_kersol,output_text) == True: #前のカーソル�
         engine.say("から")
         partial_text_read(ikersol)
         engine.say("に変更されました")
+        engine.runAndWait()
 
-elif (before_kersol == False) & (ikersol == False): #前のカーソルも今のカーソルもない(数値の画面が変わった)
+elif (len(before_kersol) == 0) & (len(ikersol) == 0): #前のカーソルも今のカーソルもない(数値の画面が変わった)
     #類似度90%は変化部分を読む
     res = difflib.ndiff(before_text,output_text)
     for word in res:
@@ -425,13 +431,18 @@ elif (before_kersol == False) & (ikersol == False): #前のカーソルも今の
             before.append(word[2:])
         elif word[0] == '+':
             after.append(word[2:])
-            engine = pyttsx3.init()
+    engine = pyttsx3.init()
     #rateはデフォルトが200
     rate = engine.getProperty('rate')
     engine.setProperty('rate',150)
     #volume デフォルトは1.0 設定は0.0~1.0
     volume = engine.getProperty('volume')
     engine.setProperty('volume',1.0)
+    whole_text_read(before)
+    engine.say("から")
+    whole_text_read(after)
+    engine.say("に変更になりました")
+    engine.runAndWait()
 else: #全画面変化
     whole_text_read(output_text)    
 

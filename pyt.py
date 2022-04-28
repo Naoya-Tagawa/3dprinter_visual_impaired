@@ -2,21 +2,33 @@ from ntpath import join
 import pyttsx3
 import time
 import difflib
+def whole_text_read(text):
+    engine = pyttsx3.init()
+    #rateはデフォルトが200
+    rate = engine.getProperty('rate')
+    engine.setProperty('rate',150)
+    #volume デフォルトは1.0 設定は0.0~1.0
+    volume = engine.getProperty('volume')
+    engine.setProperty('volume',1.0)
+    count = 0
+    engine.say(text)
+    engine.runAndWait()
 def kersol_exist_search(kersol,text): 
+    text = text.splitlines()
     for word in text:
         s = difflib.SequenceMatcher(None,kersol,word)
-        print(s.ratio())
         if s.ratio() >= 0.90:
             return True
     
     return False
 
 sd = ""
-s1 = ['bacon\n', 'eggs\n', 'ham\n', 'guido\n']
-s2 = ['python\n', 'eggy\n', 'hamster\n', 'guido\n']
-kersol = ""
+s1 = 'Bed Level correct → \nPID calibration     →\nReset XYZ calibr. \n>Temp. calibration →\n'
+s2 = [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'Timeout: ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '10', '\n', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 
+'', ' ', '\n']
+kersol = ">Temp. calibration →"
 print(kersol_exist_search(kersol,s1))
-
+whole_text_read(s1)
 res = difflib.context_diff(s1,s2)
 for word in res:
     if word[0] == '!':
