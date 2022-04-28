@@ -7,7 +7,7 @@ def train(features):
     for f in features:
         model[f] += 1
     return model
-file = open(r"C:\\Users\\Fate2\\Desktop\\lab\\train.txt",'r',encoding = "utf-8")
+file = open("./dictionary_word/train.txt",'r',encoding = "utf-8")
 data = file.read()
 NWORDS = train(words(data))
 alphabet = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ.,->0123456789'
