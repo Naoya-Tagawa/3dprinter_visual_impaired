@@ -1,6 +1,5 @@
-import sys
-#import path
-#sys.path.append("C:/Users/Naoya Tagawa/AppData/Local/Programs/Python/Python310/Lib/site-packages")
+import difflib
+import time
 import cv2
 import time
 import numpy as np
@@ -13,8 +12,9 @@ import tkinter as tk
 import tkinter.ttk as ttk
 import threading
 from PIL import Image
-#import pyttsx3 あとでインストールする
-
+import pyttsx3 
+from dictionary_word import speling
+import difflib
 def syaei(img1,p1,p2,p3,p4):
     #座標
     #p1 左上
@@ -141,17 +141,20 @@ def match_text(frame,count_w):
     img_mask = cv2.medianBlur(img_mask,3)
     #膨張化
     img_mask = cv2.dilate(img_mask,kernel)
-    count1=0
+
+    head = 0
     index = []
-    output_text = []
-    count=0
-    count_first = 0
+    out_modify = "" #修正したテキスト
+    output_text = [] #読み取ったテキスト
+    before_text = "" #前のテキスト
     s = {}
     new_d = {}
     like = {}
     l = 0
     like_x = {}
-    out = ""
+    out = "" #読み取ったテキスト
+    before_kersol = "" #前のカーソル
+    kersol = "" 
     for f in window_z:
         l = 0
         while True:
@@ -233,31 +236,133 @@ def match_text(frame,count_w):
     
         max_v = sorted(like.items(),reverse = True)
         if max_v[0][0] < 0.7:
-            out = out + ' '
-            output_text.append(' ')
-            like = {}
+
+            if head == 0:
+                out = out + ' '
+                output_text.append(' ')
+                head = 1
+                like = {}
         
+                if x == 558:
+                    out_modify = speling.correct(out_modify)
+                    out = out + out_modify + "\n"
+                    output_text.append(out_modify)
+                    output_text.append('\n')
+                    head = 0
+                    out_modify = ""
+                    like = {}
+                    continue
+            
+                continue
+
             if x == 558:
-                #print(label_temp[max_v[0][1]])
+
+                out_modify = speling.correct(out_modify)
+                out_modify = out_modify + ' '
+                out = out + out_modify + "\n"
+                output_text.appned(out_modify)
                 output_text.append('\n')
-                out = out + "\n"
-            continue
-        
-        if x == 558:
-            #print(label_temp[max_v[0][1]])
-            output_text.append(label_temp[max_v[0][1]])
-            out = out + label_temp[max_v[0][1]] + "\n"
+                head = 0
+                out_modify = ""
+                like = {}
+                continue
+        if head == 0:
+            out_modify = out_modify + label_temp[max_v[0][1]]
+            head == 1
             like = {}
+
+            if x == 558:
+                out_modify = speling.correct(out_modify)
+                out_modify = out_modify + "\n"
+                out = out + out_modify
+                output_text.append(out_modify)
+                like = {}
+                out_modify = ""
+                head = 0
+                continue
+
             continue
-        output_text.append(label_temp[max_v[0][1]])
-        out = out + label_temp[max_v[0][1]]
+
+        if x == 558:
+            out_modify = out_modify + label_temp[max_v[0][1]]
+            out_modify = speling.correct(out_modify)
+            output_text.append(out_modify)
+            output_text.append("\n")
+            out = out + out_modify + "\n"
+            like = {}
+            out_modify = ""
+            head = 0
+            continue
+
+        out_modify = out_modify + label_temp[max_v[0][1]]
         like = {}
         continue
-    
+    #現在のカーソル
+    present_kersol = kersol_search(output_text)
     file_w(out,output_text)
-    cv2.imwrite(r'C:\Users\Naoya Tagawa\Desktop\answer\window{0}.jpg'.format(count_w),syaei_img)
     plt.imshow(img_mask)
     plt.show()
+#カーソルの表示を探す
+def kersol_search(text):
+    i = 0
+    kersol1 = ""
+    for word in text:
+        if word[0] == ">":
+            i = 1
+            kersol1 += word + ' '
+        elif i == 1:
+            kersol1 += word
+        elif (i == 1) & (word == '\n'):
+            i = 0
+    return kersol1
+
+#テキスト全部読み上げ
+def whole_text_read(text):
+    engine = pyttsx3.init()
+    #rateはデフォルトが200
+    rate = engine.getProperty('rate')
+    engine.setProperty('rate',150)
+    #volume デフォルトは1.0 設定は0.0~1.0
+    volume = engine.getProperty('volume')
+    engine.setProperty('volume',1.0)
+    count = 0
+    for word in text:
+        if word == ' ':
+            continue
+        if word == '\n':
+            engine.say("スラッシュ")
+            continue
+        if word == ',':
+            engine.say("カンマ")
+            continue
+        if "." in word:
+            engine.say(word)
+            engine.say("ドット")
+            continue
+        engine.say(word)
+        engine.runAndWait()
+
+#カーソルがテキストにあるか
+def kersol_exist_search(kersol,text):
+    text = text.splitlines()
+    for word in text:
+        s = difflib.SequenceMatcher(None,kersol[1:],word)
+        if s.ratio() >= 0.90:
+            return True
+    return False
+
+def partial_text_read(text):
+    engine = pyttsx3.init()
+    #rateはデフォルトが200
+    rate = engine.getProperty('rate')
+    engine.setProperty('rate',150)
+    #volume デフォルトは1.0 設定は0.0~1.0
+    volume = engine.getProperty('volume')
+    engine.setProperty('volume',1.0)
+    engine.say(text)
+    engine.runAndWait()
+
+
 
 def file_w(text,output_text):
     f = open('3dprint_window.txt',mode='a',encoding = 'UTF-8')

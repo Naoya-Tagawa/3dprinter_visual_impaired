@@ -143,14 +143,11 @@ window_z = ((21, 18, 26, 36),(50, 18, 25, 36),(78, 18, 26, 36),(106, 18, 26, 36)
 (21,107,26,36), (50, 107, 26, 36), (78, 107, 26, 36), (106, 107, 26, 36), (134, 107, 26, 36),(162, 107, 26, 36), (190, 107, 26, 36), (218, 107, 26, 36), (246, 107, 26, 36), (274, 107, 26, 36), (302, 107, 26, 36), (332, 107, 26, 36), (362, 107, 26, 36), (390, 107, 26, 36), (418, 107, 26, 36), (448, 107, 26, 36), (476, 107, 26, 36),(502,107,26,37),(530, 107, 26, 36),(558, 107, 26, 36), 
 (21,150,26,36),(50, 150, 26, 36), (78, 150, 26, 36), (106, 150, 26, 36), (134, 150, 26, 36), (162, 150, 26, 36), (190, 150, 26, 36), (218, 150, 26, 36), (246, 150, 26, 36), (274, 150, 26, 36), (302, 150, 26, 36), (332, 150, 26, 36), (362, 151, 26, 36), (390, 151, 26, 36), (418, 151, 26, 36), (448, 151, 26, 36), (476, 151, 26, 36), (502, 151, 26, 36), (530, 151, 26, 36), (558, 151, 26, 36))
 
-count1=0
 head = 0
 out_modify = ""
 index = []
 output_text = []
 before_text = []
-count=0
-count_first = 0
 s = {}
 new_d = {}
 like = {}
@@ -168,8 +165,6 @@ for f in window_z:
         x, y , w , h = f
         x = x + l
         match_img = img_mask[y:y+h,x:x+w]
-        #plt.imshow(match_img)
-        #plt.show()
         for i in range(len(temp['x'])):
             temp_th = img_temp[i]
             #plt.imshow(temp_th)
@@ -181,8 +176,6 @@ for f in window_z:
             match = cv2.matchTemplate(match_img,temp_th,cv2.TM_CCORR_NORMED)
             #返り値は最小類似点、最大類似点、最小の場所、最大の場所
             min_value, max_value, min_pt, max_pt = cv2.minMaxLoc(match)
-            # ptに類似度が最大(値が最小だから)のmin_valueの場所min_ptを格納
-            pt = max_pt
             #からのリストに
             s.setdefault(max_value,i)
             #類似度が最大のもの順にソート
@@ -218,14 +211,8 @@ for f in window_z:
         x = x1
         y = y + l
         match_img = img_mask[y:y+h,x:x+w]
-        #ma = cv2.cvtColor(match_img,cv2.COLOR_BGR2RGB)
-        #plt.imshow(ma)
-        #plt.show()
         for i in range(len(temp['x'])):
             temp_th = img_temp[i]
-            #plt.imshow(temp_th)
-            #plt.show()
-            #print(match_img.shape)
             temp_th = cv2.resize(temp_th,dsize = (26,36))
             #テンプレートマッチング
             #入力画像、テンプレート画像、類似度の計算方法が引数 返り値は検索窓の各市でのテンプレート画像との類似度を表す二次元配列
@@ -253,8 +240,6 @@ for f in window_z:
     x , y , w , h = f
     
     max_v = sorted(like.items(),reverse = True)
-    #print(max_v)
-    #print(label_temp[max_v[0][1]])
     if max_v[0][0] < 0.7:
         
         if head == 0:
