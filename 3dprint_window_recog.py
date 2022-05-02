@@ -146,7 +146,8 @@ def match_text(frame,count_w):
     index = []
     out_modify = "" #修正したテキスト
     output_text = [] #読み取ったテキスト
-    before_text = [] #前のテキスト
+    if count_w == 0:
+        before_text = [] #前のテキスト
     s = {}
     new_d = {}
     like = {}
@@ -266,6 +267,7 @@ def match_text(frame,count_w):
                 out_modify = ""
                 like = {}
                 continue
+
         if head == 0:
             out_modify = out_modify + label_temp[max_v[0][1]]
             head == 1
