@@ -146,7 +146,7 @@ def match_text(frame,count_w):
     index = []
     out_modify = "" #修正したテキスト
     output_text = [] #読み取ったテキスト
-    before_text = "" #前のテキスト
+    before_text = [] #前のテキスト
     s = {}
     new_d = {}
     like = {}
@@ -299,9 +299,57 @@ def match_text(frame,count_w):
         continue
     #現在のカーソル
     present_kersol = kersol_search(output_text)
+    before = []
+    after = []
+    #前と後のカーソルの類似度
+    s = difflib.SequenceMatcher(None,before_kersol,present_kersol)
+    if kersol_exist_search(before_kersol,out) == True: #前のカーソルがある(全画面変わっていない)
+        if s.ratio() >= 0.95:
+            partial_text_read(present_kersol)
+        
+        else: #カーソルが変わっていたら
+            engine = pyttsx3.init()
+            #rateはデフォルトが200
+            rate = engine.getProperty('rate')
+            engine.setProperty('rate',150)
+            #volume デフォルトは1.0 設定は0.0~1.0
+            volume = engine.getProperty('volume')
+            engine.setProperty('volume',1.0)
+            engine.say("カーソルが")
+            partial_text_read(before_kersol)
+            engine.say("から")
+            partial_text_read(present_kersol)
+            engine.say("に変更されました")
+            engine.runAndWait()
+    
+    elif (len(before_kersol) == 0) & (len(present_kersol) == 0): #前のカーソルも今のカーソルもない(数値の画面が変わった)
+    #類似度90%は変化部分を読む
+        res = difflib.ndiff(before_text,output_text)
+        for word in res:
+            if (word[0] == '-'):
+                before.append(word[2:])
+            elif word[0] == '+':
+                after.append(word[2:])
+        engine = pyttsx3.init()
+        #rateはデフォルトが200
+        rate = engine.getProperty('rate')
+        engine.setProperty('rate',150)
+        #volume デフォルトは1.0 設定は0.0~1.0
+        volume = engine.getProperty('volume')
+        engine.setProperty('volume',1.0)
+        whole_text_read(before)
+        engine.say("から")
+        whole_text_read(after)
+        engine.say("に変更になりました")
+        engine.runAndWait()
+    else: #全画面変化
+        whole_text_read(output_text)
+    #前のテキストを保持
+    before_text = output_text
     file_w(out,output_text)
     plt.imshow(img_mask)
     plt.show()
+
 #カーソルの表示を探す
 def kersol_search(text):
     i = 0
@@ -395,7 +443,7 @@ def file_w(text,output_text):
     #engine.runAndWait()
     
 #テンプレートをロード
-temp = np.load(r'C:\Users\Naoya Tagawa\OneDrive\dataset.npz')
+temp = np.load(r'./dataset.npz')
 #テンプレート画像を格納
 img_temp = temp['x']
 #テンプレートのラベル(文)を格納
