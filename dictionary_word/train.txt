@@ -12,6 +12,7 @@ Move Y →
 Move Z →
 ERROR:
 Preheat the nozzle!
+>Preheat
 >Main
 Main
 >Wizard
@@ -180,9 +181,12 @@ Calibrate Z
 Caribrating Z →
 Is filament loaded?
 >Yes
+>Load
+>Print
 No
 >No
 Yes
+Load 
 Please load filament first.
 Mesh Bed Leveling →
 Bed Level correct →

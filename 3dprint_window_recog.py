@@ -97,7 +97,7 @@ def points_extract(img):
     return p1,p2,p3,p4
 
 def camera(cycle,count):
-    cap = cv2.VideoCapture(0)
+    cap = cv2.VideoCapture(2)
     read_fps = cap.get(cv2.CAP_PROP_FPS)
     print(read_fps)
     time_counter = 0
@@ -108,17 +108,20 @@ def camera(cycle,count):
             cv2.destroyAllWindows()
         time_counter += 1
         cv2.imshow("frame",frame)
+        if count == 0:
+            b_text = []
+            b_kersol = []
         #フレームカウントがthreshを超えたら処理
         if(time_counter >= cycle):
             time_counter = 0
-            match_text(frame,count)
+            b_text , b_kersol = match_text(frame,count,b_text,b_kersol)
             count+=1
         #qキーが入力されたら画面を閉じる
         if cv2.waitKey(1) & 0xFF == ord('q'):
             cap.release()
             cv2.destroyAllWindows()
 
-def match_text(frame,count_w):
+def match_text(frame,count_w,before_text,before_kersol):
     #カーネル
     kernel = np.ones((3,3),np.uint8)
     window_img = frame
@@ -146,15 +149,12 @@ def match_text(frame,count_w):
     index = []
     out_modify = "" #修正したテキスト
     output_text = [] #読み取ったテキスト
-    if count_w == 0:
-        before_text = [] #前のテキスト
     s = {}
     new_d = {}
     like = {}
     l = 0
     like_x = {}
     out = "" #読み取ったテキスト
-    before_kersol = "" #前のカーソル
     kersol = "" 
     for f in window_z:
         l = 0
@@ -237,8 +237,8 @@ def match_text(frame,count_w):
     
         max_v = sorted(like.items(),reverse = True)
         if max_v[0][0] < 0.7:
-
             if head == 0:
+                
                 out = out + ' '
                 output_text.append(' ')
                 head = 1
@@ -261,12 +261,20 @@ def match_text(frame,count_w):
                 out_modify = speling.correct(out_modify)
                 out_modify = out_modify + ' '
                 out = out + out_modify + "\n"
-                output_text.appned(out_modify)
+                output_text.append(out_modify)
                 output_text.append('\n')
                 head = 0
                 out_modify = ""
                 like = {}
                 continue
+            
+            out_modify = speling.correct(out_modify)
+            out_modify = out_modify + ' '
+            out = out + out_modify
+            output_text.append(out_modify)
+            like = {}
+            out_modify = ""
+            continue
 
         if head == 0:
             out_modify = out_modify + label_temp[max_v[0][1]]
@@ -299,6 +307,7 @@ def match_text(frame,count_w):
         out_modify = out_modify + label_temp[max_v[0][1]]
         like = {}
         continue
+    print(output_text)
     #現在のカーソル
     present_kersol = kersol_search(output_text)
     before = []
@@ -306,6 +315,7 @@ def match_text(frame,count_w):
     #前と後のカーソルの類似度
     s = difflib.SequenceMatcher(None,before_kersol,present_kersol)
     if kersol_exist_search(before_kersol,out) == True: #前のカーソルがある(全画面変わっていない)
+        print("True")
         if s.ratio() >= 0.95:
             partial_text_read(present_kersol)
         
@@ -347,10 +357,11 @@ def match_text(frame,count_w):
     else: #全画面変化
         whole_text_read(output_text)
     #前のテキストを保持
+    print(present_kersol)
     before_text = output_text
+    before_kersol = present_kersol
     file_w(out,output_text)
-    plt.imshow(img_mask)
-    plt.show()
+    return before_text , before_kersol
 
 #カーソルの表示を探す
 def kersol_search(text):
@@ -360,10 +371,10 @@ def kersol_search(text):
         if word[0] == ">":
             i = 1
             kersol1 += word + ' '
-        elif i == 1:
-            kersol1 += word
         elif (i == 1) & (word == '\n'):
             i = 0
+        elif (i == 1) & (word == '\n'):
+            kersol1 += word
     return kersol1
 
 #テキスト全部読み上げ
@@ -379,7 +390,7 @@ def whole_text_read(text):
     for word in text:
         if word == ' ':
             continue
-        if word == '\n':
+        if word == '/':
             engine.say("スラッシュ")
             continue
         if word == ',':

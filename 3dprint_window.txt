@@ -1,0 +1,290 @@
+ Loadqfllanmyk000/-→
+ Unloadqfllamm4k00-→
+ SeLLun9s000000000-→
+ >CalHhnaLlo000000-→
+
+ Infonscreen000000v⤴
+ >Preheat000000000-→
+ PrintcfrompSDT000-→
+ LoadkfiIamentc0000→
+
+ InTonscreenn000000⤴
+ Preheatm0000000000→
+ >Print+remnSDp0000→
+ Loadk+1Iamentc000-→
+
+ Preheatm0000000000→
+ Print-fromdSU0000-→
+ Load-fiIamenL00!0-→
+ >UnloadfiIanenL00-→
+
+ >Infcscreenn000000⤴
+ Preheatc0000000000→
+ PrintcfromnSDC0000→
+ LoadkfiIamentc000-→
+
+ >Infcscreenn000000⤴
+ >Preheat000!000000→
+ PrintcfromnSDC0000→
+ LoadkfiIamentc000-→
+
+ >Infoscreenn000000⤴
+ Preheatc0000000000→
+ PrintcfromnSDp0000→
+ LoadkfiIamentc000-→
+
+ >Infoscreen       ⤴
+ Preheat           →
+ Print from SD     →
+ load filament      →
+
+ info screen       ⤴
+ Preheat           →
+ >Printfrom SD     →
+ load filament      →
+
+ info screen       +
+ Preheat           →
+ >Printfrom SD     →
+ card filament     →
+
+ info screen       +
+ Preheat           →
+ Print from SD     →
+ >Lcadfilament     →
+
+ >Infoscreen       ⤴
+ Preheat           →
+ Print from SD     →
+ load filament     →
+
+ >Infoscreen       ⤴
+ Preheat           →
+ Print from SD     →
+ load filament     →
+
+ >lnfcscreen       +
+ Preheat           →
+ Print from SD     →
+ load filament     →
+
+ >Infcscreen       ⤴
+ Preheat           →
+ Print from SD     →
+ load filament     →
+
+ >Infoscreen       ⤴
+ Preheat           →
+ Print from SD     →
+ load filament     →
+
+ >Infoscreen       ⤴
+ Preheat           →
+ Print from SD     →
+ load filament     →
+
+ >Infoscreen       ⤴
+ Preheat           →
+ Print from SD     →
+ load filament     →
+
+ >lnfcscreen       ⤴
+ Preheat           →
+ Print from SD     →
+ load filament     →
+
+ インジケーター25/0°     Z  6.15?
+ [H]25/0°     +l06%   
+   ---%     〇-- 0  
+ Prusa MK3 0     
+
+ >Infcscreen       ⤴
+ Preheat           →
+ Print from SD     →
+ load filament     →
+
+ info 0 0        °
+ >PneneaL          ⤴
+ PnlnL from A      →
+ load fllanm k     →
+
+ info 0 0        °
+ >PneneaL           ⤴
+ >PnunLfpop A      →
+ load fllanm k     →
+
+ >Infcscreen       ⤴
+ Preheat           →
+ Print from SD     →
+ load filament     →
+
+ info screen       ⤴
+ >Preheat          →
+ Print from SD     →
+ load filament     →
+
+ info screen       ⤴
+ Preheat           →
+ >Printfrom SD     →
+ load filament     →
+
+ Preheat           a
+ Print from SD     →
+ load filament     →
+ >Unloadfilament   →
+
+ >Printfrom SD     a
+ card filament     →
+ load filament   →
+ Settings          →
+
+ info screen       ⤴
+ >Preheat          →
+ Print from SD     →
+ load filament     →
+
+ info screen       ⤴
+ Preheat           →
+ >Printfrom SD     →
+ load filament     →
+
+ >Infcscreen       ⤴
+ Preheat           →
+ Print from SD     →
+ Load filament     →
+
+ info screen       ⤴
+ >Preheat          →
+ Print from SD     →
+ Load filament     →
+
+ info screen       ⤴
+ Preheat           →
+ >Printfrom SD     →
+ Load filament     →
+
+ info screen       ⤴
+ Preheat           →
+ Print from SD     →
+ >Load+iIament     →
+
+ インジケーター25/0f     Z  0.15?
+ [H]2B/0      →100%   
+   ---%     〇--:--  
+ Prusa MK3 OK.    
+
+ info screen       ⤴
+ Preheat           →
+ >Printfrom SD     →
+ Load Filament     →
+
+ >InTeaxzeer       ⤴
+ Preheat           →
+ Print I 0 SD     →
+ LoadL+]]aeent     →
+
+ info screen       ⤴
+ >Preheat          →
+ Print from SD     →
+ Load filament     →
+
+ >SD  xzxMM         
+ FmN↓xM            °
+ Fan   ABS  A      ⤴
+ Load °LLm↓m       →
+
+ L■[l]l 1VN■NAN     
+ l■1U11 1  No     
+ U1111]] 0   V     
+ インジケーター1]1 N !           
+
+ >InTossreen       ⤴
+ Preheat           →
+ Print +rem SD     →
+ Load filament     →
+
+ info screen       ⤴
+ >Preheat          →
+ Print from SD     →
+ Load filament     →
+
+ >Infcscreen       ⤴
+ Preheat           →
+ Print from SD     →
+ Load filament     →
+
+ info screen       ⤴
+ Preheat           →
+ >PrintTrem SD     →
+ Load filament     →
+
+ info screen       ⤴
+ Preheat           →
+ Print from SD     →
+ >LoadfilamenL     →
+
+ インジケーター25/0°     Z  0.15?
+ [H]26/0°     →100%   
+   ---%     〇--:--  
+ Prusa MK3 OK.    
+
+ インジケーター25/0°     Z  0.15?
+ [H]26/0°     →100%   
+   ---%     〇--:--  
+ Prusa MK3 OK.    
+
+ インジケーター25/0°     Z  0.15?
+ [H]26/0°     →100%   
+   ---%     〇--:--  
+ Prusa MK3 OK.    
+
+ インジケーター25/0°     Z  0.15?
+ [H]26/0°     →100%   
+   ---%     〇--:--  
+ Prusa MK3 OK.    
+
+ >Infcscreen       ⤴
+ Preheat           →
+ Print from SD     →
+ Load filament     →
+
+ info screen       ⤴
+ >Preheat          →
+ Print from SD     →
+ Load +1Iament     →
+
+ >Infcscreen       ⤴
+ Preheat           →
+ Print from SD     →
+ Load filament     →
+
+ info screen       ⤴
+ >Preheat          →
+ Print from SD     →
+ Load filament     →
+
+ info screen       ⤴
+ Preheat           →
+ >Printfrom SD     →
+ Load filament     →
+
+                    
+                    
+                    
+                    
+
+ info screen       ⤴
+ Preheat           →
+ >Printfrom SD     →
+ Load filament     →
+
+ >Info soneen       f
+ Preheat           ⤴
+ >Print fpom SD     →
+ Load filament     →
+
+ >Infoscreen       ⤴
+ Preheat           →
+ Print from SD     →
+ Load filament     →
+

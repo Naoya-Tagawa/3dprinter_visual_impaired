@@ -1,4 +1,4 @@
-from ntpath import join
+from dictionary_word import speling
 import pyttsx3
 import time
 import difflib
@@ -30,6 +30,7 @@ kersol = ">Temp. calibration →"
 print(kersol_exist_search(kersol,s1))
 whole_text_read(s1)
 res = difflib.context_diff(s1,s2)
+print(speling.correct("+1Iament"))
 for word in res:
     if word[0] == '!':
         sd += word[2:]
