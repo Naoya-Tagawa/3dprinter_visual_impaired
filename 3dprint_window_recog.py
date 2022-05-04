@@ -238,11 +238,11 @@ def match_text(frame,count_w,before_text,before_kersol):
         max_v = sorted(like.items(),reverse = True)
         if max_v[0][0] < 0.7:
             if head == 0:
-                
-                out = out + ' '
-                output_text.append(' ')
-                head = 1
-                like = {}
+                if len(out_modify) == 0:
+                    out = out + ' '
+                    output_text.append(' ')
+                    head = 1
+                    like = {}
         
                 if x == 558:
                     out_modify = speling.correct(out_modify)
@@ -253,7 +253,14 @@ def match_text(frame,count_w,before_text,before_kersol):
                     out_modify = ""
                     like = {}
                     continue
-            
+                
+                out_modify = speling.correct(out_modify)
+                out_modify += ' '
+                output_text.append(out_modify)
+                out += out_modify
+                head = 1
+                out_modify = "" 
+                like = {}
                 continue
 
             if x == 558:
@@ -337,23 +344,27 @@ def match_text(frame,count_w,before_text,before_kersol):
     elif (len(before_kersol) == 0) & (len(present_kersol) == 0): #前のカーソルも今のカーソルもない(数値の画面が変わった)
     #類似度90%は変化部分を読む
         res = difflib.ndiff(before_text,output_text)
+        #print('\n'.join(res))
         for word in res:
+            print(word)
             if (word[0] == '-'):
                 before.append(word[2:])
             elif word[0] == '+':
                 after.append(word[2:])
-        engine = pyttsx3.init()
-        #rateはデフォルトが200
-        rate = engine.getProperty('rate')
-        engine.setProperty('rate',150)
-        #volume デフォルトは1.0 設定は0.0~1.0
-        volume = engine.getProperty('volume')
-        engine.setProperty('volume',1.0)
-        whole_text_read(before)
-        engine.say("から")
-        whole_text_read(after)
-        engine.say("に変更になりました")
-        engine.runAndWait()
+        if (len(before) > 0) & (len(after) > 0):
+            engine = pyttsx3.init()
+            #rateはデフォルトが200
+            rate = engine.getProperty('rate')
+            engine.setProperty('rate',150)
+            #volume デフォルトは1.0 設定は0.0~1.0
+            volume = engine.getProperty('volume')
+            engine.setProperty('volume',1.0)
+            whole_text_read(before)
+            engine.say("から")
+            whole_text_read(after)
+            engine.say("に変更になりました")
+            engine.runAndWait()
+        
     else: #全画面変化
         whole_text_read(output_text)
     #前のテキストを保持
@@ -373,7 +384,7 @@ def kersol_search(text):
             kersol1 += word + ' '
         elif (i == 1) & (word == '\n'):
             i = 0
-        elif (i == 1) & (word == '\n'):
+        elif i == 1:
             kersol1 += word
     return kersol1
 

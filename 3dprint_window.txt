@@ -288,3 +288,178 @@
  Print from SD     →
  Load filament     →
 
+ >Infcscreen       ⤴
+ Preheat           →
+ Print from SD     →
+ Load filament     →
+
+ >Infcscneen       ⤴
+ Preheat           →
+ Print not SD     →
+ Load filament     →
+
+ scneen       ⤴
+ FneheaL           →
+ Print not SD     →
+ Load filament     →
+
+info screen       ⤴
+  Preheat           →
+  Print from SD     →
+  Load filament     →
+
+  info screen       ⤴
+>Preheat           →
+  Print from SD     →
+  Load filament     →
+
+  info screen       ⤴
+  Preheat           →
+>Print from SD     →
+  Load filament     →
+
+>Info screen       ⤴
+  Preheat           →
+  Print from SD     →
+  Load filament     →
+
+  Info screen       ⤴
+>Preheat           →
+  Print from SD     →
+  Load Filament     →
+
+>Info screen       ⤴
+  Preheat           →
+  Print from SD     →
+  Load filament     →
+
+  Info screen       ⤴
+  Preheat           →
+>Print from SD     →
+  Load Filament     →
+
+>Info screen       ⤴
+  Preheat           →
+  Print from SD     →
+  Load filament     →
+
+  Info screen       ⤴
+>Preheat           →
+  Print from SD     →
+  Load filament     →
+
+>Info screen       ⤴
+  Preheat           →
+  Print from SD     →
+  Load filament     →
+
+  Info screen       ⤴
+>Preheat           →
+  Print from SD     →
+  Load filament     →
+
+  Info screen       ⤴
+>Preheat           →
+  Print from SD     →
+  Load filament     →
+
+  Info screen       ⤴
+  Preheat           →
+  Print from SD     →
+>Load filament     →
+
+  Unlcad filament   →
+  Settings          →
+>Calibration       →
+  Statistics        →
+
+>Main              ⤴
+  Wizard            
+  First layer cal.  →
+  Auto home          
+
+インジケーター 25/0°     Z  0.15?
+[On] 25/0°     →100%   
+    ---%     〇--:--  
+Prusa i3 MK3 OK.    
+
+インジケーター 25/0°     Z  0.15?
+[On] 25/0°     →100%   
+    ---%     〇--:--  
+Prusa i3 MK3 OK.    
+
+インジケーター 24/0°     Z  0.15?
+[On] 24/0°     →l00%   
+    ---%     〇--:--  
+Prusa i3 MK3 OK.    
+
+インジケーター 24/0°     Z  0.15?
+[On] 24/0°     →l00%   
+    ---%     〇--:--  
+Prusa i3 MK3 OK.    
+
+インジケーター 25/0°     Z  0.15?
+[On] 25/0°     →100%   
+    ---%     〇--:--  
+Prusa i3 MK3 OK.    
+
+インジケーター 2q>>■M     Z  0.15?
+[On] 2M/■P     →100%   
+    ---      e--:--  
+Prusa Z Z O[H].    
+
+インジケーター ?4/0°     Z  8.15?
+[On] 25/0°     →100%   
+    ---%     e--:--  
+Prusa i3 MK3 OK.    
+
+インジケーター ?5/0°     Z  0.15?
+[On] 25/0°     →100%   
+    ---%     〇--:--  
+Prusa i3 MK3 OK.    
+
+インジケーター ?5/0°     Z  0.15?
+[On] 25/0°     →100%   
+    ---%     e--:--  
+Prusa i3 MK3 OK.    
+
+インジケーター ?5/0°     Z  0.15?
+[On] 25/0°     →100%   
+    ---%     e--:--  
+Prusa i3 MK3 OK.    
+
+インジケーター ?4/0°     Z  0.15?
+[On] 25/0°     →100%   
+    ---%     〇--:--  
+Prusa i3 MK3 OK.    
+
+                     
+                     
+                     
+                     
+
+>Info ssreen       ⤴
+  Preheat           →
+  Print Trem SD     →
+  Load filament     →
+
+  Load filament     a
+  Unlcad filament   →
+  Settings          →
+>Calibration       →
+
+  Load filament     a
+  Unlcad filament   →
+>Settings          →
+  Calibration       →
+
+                     
+  Bed:              1
+                     
+                     
+
+                     
+  Bed:              3
+                     
+                     
+

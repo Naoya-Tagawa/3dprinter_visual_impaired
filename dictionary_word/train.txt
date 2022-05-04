@@ -183,6 +183,10 @@ Is filament loaded?
 >Yes
 >Load
 >Print
+>Unload
+Unload
+>Info
+Info
 No
 >No
 Yes
