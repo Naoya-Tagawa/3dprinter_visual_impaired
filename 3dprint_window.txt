@@ -463,3 +463,163 @@ Prusa i3 MK3 OK.
                      
                      
 
+>Calibration       →
+  Statistics        →
+  Main stats        →
+  Support           →
+
+  Calibration       →
+  Statistics        →
+  Fail stats        →
+>Support           →
+
+>Settings          →
+  Calibration       →
+  Statistics        →
+  Fail stats        →
+
+  Info screen       ⤴
+  Preheat           →
+>Print from SD     →
+  Load filament     →
+
+  Main               
+  PLA  -  215/60    →
+>PET  -  230/85    →
+  ASA  -  260/105   →
+
+  PLA  -  215/60    →
+  PET  -  230/85    →
+>ASA  -  260/105   →
+  ABS  -  255/100   →
+
+  ABS  -  255/100   →
+  HIPS -  220/100   →
+  PP   -  254/100   →
+>FLEX -  240/50    →
+
+インジケーター 78/?40°           
+Preheating 0 Unload
+                     
+>Cancel             
+
+beginning. Ccntlnue?
+                     
+                     
+  Yes   >No          
+
+Crash detecLhon Fan 
+bed tunned 0 onDy i3
+Normal Mode         
+                     
+
+インジケーター 52/0°     Z  0.15?
+[On] 52/0°     →l00%   
+    ---%     〇--:--  
+Prusa i3 MK3 OK.    
+
+  Calibration       →
+  Statistics        →
+  Fail stats        →
+>Support           →
+
+  Calibration       →
+  Statistics        →
+  Fail stats        →
+>Support           →
+
+  Settings          →
+  Calibration       →
+  Statistics        →
+>Fail stats        →
+
+>Main              ⤴
+  Last print        →
+  Total             →
+                     
+
+Last print fatlapes 
+  Power failures  0  
+  Runouts H 0   6 0  
+  Crash   X 0   f 0  
+
+Last print failures 
+  Power failures  0  
+  Runouts H 0   S 0  
+  Crash   X 0   Y 0  
+
+Total +ad]tres      
+  Power Tad]ures  2  
+  Filam. runouts  0  
+  Crash  > 8    Y 0  
+
+  CaLUm z b[H]        °
+  SLaLLz 0         ⤴
+  Fans E p        ⤴
+>SUmpmpL           →
+
+>Main              ⤴
+  Firmware:         ⤴
+   3.8.0-3421       ⤴
+  prusa3d.com       ⤴
+
+  Firmware:         ⤴
+   3.8.0-3421       ⤴
+  prusa3d.com       ⤴
+>forum.prusa3d.com ⤴
+
+  forum.prusa3d.com ⤴
+>howto.prusa3d.com ⤴
+  ------------      ⤴
+  1_75mm_MK3        ⤴
+
+  1_75mm_MK3        ⤴
+  EINSy_10a         ⤴
+>E3Dv6full         ⤴
+  ------------      ⤴
+
+  ------------      ⤴
+  XYZ cal. details  →
+  Extruder info     →
+>Sensor info       →
+
+  Extruder info     →
+  Sensor info       →
+  Belt status       →
+>Temperatures      →
+
+>Main              ⤴
+  Firmware:         ⤴
+   3.8.0-3421       ⤴
+  prusa3d.com       ⤴
+
+                     
+                     
+                     
+                     
+
+インジケーター 52/0°     Z  0.15?
+b[H] 52/0°     →l00%   
+    ---%     〇--:--  
+Prusa i3 MK3 OK.    
+
+>globe_ue_0.15mm_PL
+  MtPUJIx1_2h6m.gcode
+  MtEUJIx2_4h8m.gcode
+  MtPUJIx3_8h11m,good
+
+  Info screen       ⤴
+>Preheat           →
+  Print from SD     →
+  Load filament     →
+
+  Main               
+>PLA  -  215/60    →
+  PET  -  230/85    →
+  ASA  -  260/105   →
+
+  Main               
+  PLA  -  215/60    →
+  PET  -  230/85    →
+>ASA  -  260/105   →
+

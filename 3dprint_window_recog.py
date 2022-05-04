@@ -344,7 +344,6 @@ def match_text(frame,count_w,before_text,before_kersol):
     elif (len(before_kersol) == 0) & (len(present_kersol) == 0): #前のカーソルも今のカーソルもない(数値の画面が変わった)
     #類似度90%は変化部分を読む
         res = difflib.ndiff(before_text,output_text)
-        #print('\n'.join(res))
         for word in res:
             print(word)
             if (word[0] == '-'):
@@ -401,15 +400,32 @@ def whole_text_read(text):
     for word in text:
         if word == ' ':
             continue
-        if word == '/':
+        if '/' in word:
+            target = '/'
+            idx = word.find(target)
+            r = word[:idx]
+            engine.say(r)
             engine.say("スラッシュ")
+            r = word[idx:]
+            engine.say(r)
             continue
-        if word == ',':
+        if ',' in word:
+            target = ','
+            idx = word.find(target)
+            r = word[:idx]
+            engine.say(r)
             engine.say("カンマ")
+            r = word[idx:]
+            engine.say(r)
             continue
         if "." in word:
-            engine.say(word)
+            target = '.'
+            idx = word.find(target)
+            r = word[:idx]
+            engine.say(r)
             engine.say("ドット")
+            r = word[idx:]
+            engine.say(word)
             continue
         engine.say(word)
         engine.runAndWait()

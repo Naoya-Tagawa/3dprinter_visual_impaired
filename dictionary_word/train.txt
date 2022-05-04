@@ -185,7 +185,21 @@ Is filament loaded?
 >Print
 >Unload
 Unload
+unload
 >Info
+Preheating
+Running
+Continue?
+will
+delete
+beginning.
+current
+calibration
+results
+and start
+from the
+to
+Crash detection can Fan bed tunrned off 
 Info
 No
 >No
