@@ -27,5 +27,7 @@ def known(words): return set(w for w in words if w in NWORDS)
 def correct(word):
     if len(word) <= 1:
         return word
+    elif word.isdecimal() == True:
+        return word 
     candidates = known([word]) or known(edits1(word)) or known_edits2(word) or [word]
     return max(candidates, key=lambda w: NWORDS[w])

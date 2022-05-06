@@ -623,3 +623,223 @@ Prusa i3 MK3 OK.
   PET  -  230/85    →
 >ASA  -  260/105   →
 
+インジケーター 26/6°     Z  6.15?
+[On] 26/6°     +H66%   
+    ---%     〇-- 0  
+Prusa i3 MK3 0     
+
+インジケーター Z5/0°     Z  6.15?
+[On] Z5/0°     +l00%   
+    ---%     〇--:--  
+Prusa i3 MK3 OK.    
+
+  Info screen       ⤴
+>Preheat           →
+  Print from SD     →
+  Load filament     →
+
+  Preheat           →
+  print from SD     →
+  Load f1IamenL     →
+  unload f1IamenL   →
+
+  Preheat           →
+  print from SD     →
+  Load f1IamenL     →
+  unload f1IamenL   →
+
+  Preheat           →
+>Print from SD     →
+  Load filament     →
+  Unload filament   →
+
+  Preheat           →
+  Print from SD     →
+>Load filament     →
+  Unload filament   →
+
+  calibration       →
+  Statistics        →
+  Fail stats        →
+>Support           →
+
+  calibration       →
+  Statistics        →
+  Fail stats        →
+  Support           →
+
+  Preheat           →
+  Print from SD     →
+  Load filament     →
+>Unload filament   →
+
+Total fLLwmm        
+               b  A[H] 
+Total ppU L  ump    
+         RPi  ]  SD 
+
+Total filament     
+             634.64m 
+Total print Live   
+         bed 0 i3 
+
+Total filament     
+             i3 244 
+Total print Lin.    
+         bed Fan i3 
+
+Total filament     
+             634.64m 
+Total print time:   
+         bed 0 i3 
+
+  Settings          ⤴
+  Move X            →
+  Move Y            →
+>Move Z            →
+
+  Main               
+  PLA  -  215/60    →
+>PET  -  230/85    →
+  ASA  -  260/105   →
+
+  Main               
+>PLA  -  215/60    →
+  PET  -  230/85    →
+  ASA  -  260/105   →
+
+インジケーター 40/Z20°           
+Preheating to load  
+                     
+>Cancel             
+
+インジケーター124/220°           
+Preheating to load  
+                     
+>Cancel             
+
+インジケーター173/220f           
+Preheating to load  
+                     
+>Cancel             
+
+インジケーター212/220f           
+                     
+Prusa the not      
+to load filament    
+
+インジケーター212/220f           
+                     
+Prusa the not      
+to load filament    
+
+Total fllamenL:     
+             634.64m 
+Total print time:   
+         Bed 277 i3 
+
+Filament exLpUdhng Q
+wlLh connecL cobor7 
+>Yes                
+  No                 
+
+Filament e↓Lnuduny k
+wlLh connecL cobor7 
+>Yes                
+  No                 
+
+Filament e↓Lnuduny k
+wlLh connecL cobor7 
+>Yes                
+  No                 
+
+FllwmenL e↓Lnuduny k
+wlLh connecL cobor7 
+>Yes                
+  No                 
+
+filament extnUdung Q
+will correct cobor7 
+>Yes                
+  No                 
+
+  Main              ⤴
+Last print        →
+  Total             →
+                     
+
+  CalHhnaLion       →
+  SLaLisLics        →
+  Fail stats        →
+>Support           →
+
+  E3Dv6full         ⤴
+  A  ---------      ⤴
+  Date:             ⤴
+May 1 20       ⤴
+
+  No zle:       Z  
+  Bed:           0  
+  Ambient:       0  
+  PINDA:         0  
+
+  Nozzle:       20 
+  Bed:          0  
+  Ambient:       40  
+  PINDA:         37  
+
+  Nozzle:       Z  
+  Bed:          0  
+  Ambient:       40  
+  PINDA:         37  
+
+  Sensor info       →
+  Belt status       →
+  Temperatures      →
+>Voltages          →
+
+>Extruder info     →
+  Sensor info       →
+  Belt status       →
+  Temperatures      →
+
+  Unload filament   →
+  Settings          →
+  Calibration       →
+>Statistics        →
+
+  Firmware:         ⤴
+   3.9.0-3421       ⤴
+  prusa3d.com       ⤴
+>forum.prusa3d.com ⤴
+
+>Main              ⤴
+  globe_bottom_0.l5mm
+  globe_ue_0.l5mn_PLA
+  MtFUJIx1_2h6m.9code
+
+  Load filament     →
+  Unload filament   →
+>Settings          →
+  Calibration       →
+
+  Unload fllwmmnL   →
+  Settings          →
+>Calibration       →
+  Statistics        →
+
+>Load filament     →
+  Unload filament   →
+  Settings          →
+  Calibration       →
+
+Last print fallanes 
+  Power failures  0  
+  Runouts H 0   S 0  
+  Crash   X 0   Y 0  
+
+>Main              ⤴
+  Last print        →
+  Total             →
+                     
+

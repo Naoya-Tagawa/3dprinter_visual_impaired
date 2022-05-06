@@ -6,6 +6,12 @@ prusa3d.com
 forum.prusa3d.com
 Y:
 +
+time
+Press the knob to load filament
+extruding
+$
+with correct
+color
 Settings
 Move X →
 Move Y →
@@ -200,6 +206,11 @@ and start
 from the
 to
 Crash detection can Fan bed tunrned off 
+failures
+Runouts
+Power
+Filam. runouts
+
 Info
 No
 >No
