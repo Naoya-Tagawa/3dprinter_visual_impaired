@@ -213,12 +213,10 @@ if __name__ == "__main__":
         k=0
         print("Succeeded in character detection")
         for i in range(0,len(char_List1)-1,2):
-            #img_h = syaei_img[int(char_List1[i]):int(char_List1[i+1]),:]
-            #print(img_h.shape)
-            #h ,w,rgb= img_k.shape
+            print(int(char_List1[i+1]))
             for j in range(0,len(char_List2)-1, 2):
-                syaei_img = cv2.rectangle(syaei_img, (int(char_List2[j]), int(char_List1[i]), int(char_List2[j+1]), int(char_List1[i+1])), (0,0,255), 2)
-                cv2.imwrite("result{0}.jpg".format(k),syaei_img)
+                img_f = cv2.rectangle(syaei_img, (int(char_List2[j]) ,int(char_List1[i])), (int(char_List2[j+1]), int(char_List1[i+1])), (0,0,255), 2)
+                cv2.imwrite("result{0}.jpg".format(k),img_f)
                 k += 1
 
         cv2.imwrite("result1.jpg", syaei_img)
