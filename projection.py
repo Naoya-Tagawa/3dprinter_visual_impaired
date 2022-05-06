@@ -188,24 +188,30 @@ if __name__ == "__main__":
     plt.show()
 
     # convert gray scale image
+    kernel = np.ones((3,3),np.uint8)
     gray_img = cv2.cvtColor(syaei_img, cv2.COLOR_RGB2GRAY)
  
     # black white
-    ret, bw_img = cv2.threshold(gray_img, 0, 255, cv2.THRESH_OTSU)
-    height, width = bw_img.shape
+    img_mask = cv2.adaptiveThreshold(gray_img,255,cv2.ADAPTIVE_THRESH_MEAN_C,cv2.THRESH_BINARY,7,-3)
+    #ノイズ除去
+    img_mask = cv2.medianBlur(img_mask,3)
+    #膨張化
+    img_mask = cv2.dilate(img_mask,kernel)
+    #ret, bw_img = cv2.threshold(gray_img, 0, 255, cv2.THRESH_OTSU)
+    height, width = img_mask.shape
  
     # create projection distribution
-    array_H = Projection_H(bw_img, height, width)
-    array_V = Projection_V(bw_img, height, width)
+    array_H = Projection_H(img_mask, height, width)
+    #array_V = Projection_V(bw_img, height, width)
  
     # detect character height position
     H_THRESH = max(array_H)
     char_List1 = Detect_HeightPosition(H_THRESH, height, array_H)
  
     # detect character width position
-    W_THRESH = max(array_V)
-    char_List2 = Detect_WidthPosition(W_THRESH, width, array_V)
-    print(array_V)
+    #W_THRESH = max(array_V)
+    #char_List2 = Detect_WidthPosition(W_THRESH, width, array_V)
+    #print(array_V)
     print(array_H)
     print(char_List1)
     # draw image
@@ -213,7 +219,7 @@ if __name__ == "__main__":
         k=0
         print("Succeeded in character detection")
         for i in range(0,len(char_List1)-1,2):
-            img_h = bw_img[int(char_List1[i]):int(char_List1[i+1]),:]
+            img_h = img_mask[int(char_List1[i]):int(char_List1[i+1]),:]
             h , w = img_h.shape
             array_V = Projection_V(img_h,h,w)
             W_THRESH = max(array_V)
