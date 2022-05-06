@@ -213,7 +213,11 @@ if __name__ == "__main__":
         k=0
         print("Succeeded in character detection")
         for i in range(0,len(char_List1)-1,2):
-            print(int(char_List1[i+1]))
+            img_h = bw_img[int(char_List1[i]):int(char_List1[i+1]),:]
+            h , w = img_h.shape
+            array_V = Projection_V(img_h,h,w)
+            W_THRESH = max(array_V)
+            char_List2 = Detect_WidthPosition(W_THRESH,w,array_V)
             for j in range(0,len(char_List2)-1, 2):
                 img_f = cv2.rectangle(syaei_img, (int(char_List2[j]) ,int(char_List1[i])), (int(char_List2[j+1]), int(char_List1[i+1])), (0,0,255), 2)
                 cv2.imwrite("result{0}.jpg".format(k),img_f)
