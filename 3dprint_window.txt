@@ -843,3 +843,263 @@ Last print fallanes
   Total             →
                      
 
+インジケーターZ20/Z?0°   Z 50.00?
+[H]100/100°   →l00%   
+    ---%     〇--:--  
+Prusa i3 MK3 OK.    
+
+インジケーター220/Z20°   Z 50.00?
+[H]100/100°   +l06%   
+    ---%     〇-- 0  
+Prusa i3 MK3 0     
+
+  Main              ⤴
+  Wizard             
+  First layer cal.  →
+>Auto home          
+
+  Belt test          
+  Selftest           
+  Calibrate XYZ      
+>Calibrate Z       →
+
+Please s]ean the    
+nozzle Bed          
+caIibrat1eh. Click  
+the done.         >X
+
+  Info sxreen       ⤴
+>Preheat           →
+  Print +ree SD     →
+  LoadkIiIaeent     →
+
+  Info sxreen       ⤴
+  Preheat           →
+>Print from SD     →
+  Load filament     →
+
+  Unload fllemenL   a
+  Settings          →
+  Calibration       →
+>Statistics        →
+
+  CalihnaLion       →
+  Statistics        →
+  Fail stats        →
+>Support           →
+
+>Info sxreen       ⤴
+  Preheat           →
+  Print +ree SD     →
+  LoadkIiIaeent     →
+
+インジケーター220/220°   Z  0.15 
+[H]100/100°   →100%   
+    ---%     〇--:--  
+Prusa i3 MK3 OK.    
+
+  OaIibrat1en       →
+  Statistics        →
+  Main stats        →
+>Support           →
+
+  Print from SD     a
+  Load filament     →
+  Unload filament   →
+>Settings          →
+
+>Info screen       ⤴
+  Preheat           →
+  Print from SD     →
+  LoadkTi]ament     →
+
+  Info sopee[H]        
+>Preheat           °
+  Print not 0     ⤴
+  Load filament     →
+
+  knob 0  LV[H][H]M     °
+  SeLLu %           °
+  CaLUm z b[H]        ⤴
+>SLaLLsLbzs        ⤴
+
+  Info screen       ⤴
+  Preheat           →
+  Print from SD     →
+  Load filament     →
+
+  Info screen       ⤴
+  Preheat           →
+  Print from SD     →
+  Load filament     →
+
+  Preheat           →
+  print from SD     →
+  Load filament     →
+>Unload filament   →
+
+インジケーター 67/0°     Z  6 50
+b[H] 67/0°     +HU6k   
+    ---%     〇-- 0  
+Prusa i3 MK3 >F.    
+
+                     
+                     
+              0 0  
+0 u     ]          
+
+インジケーター 28/0°     Z  0.15?
+[On] 28/0°     +l0U%   
+    ---%     〇-- 0  
+Prusa i3 MK3 0     
+
+インジケーター 28/0°     Z  0.15?
+[On] 28/0°     →100%   
+    ---%     〇--:--  
+Prusa i3 MK3 OK.    
+
+インジケーター 28/0°     Z  0.15?
+[On] 28/0°     →100%   
+    ---%     〇--:--  
+Prusa i3 MK3 OK.    
+
+>Info screen       ⤴
+  Preheat           →
+  Print from SD     →
+  Load filament     →
+
+  Info screen       ⤴
+>Preheat           →
+  Print from SD     →
+  Load filament     →
+
+  info screen       ⤴
+  Preheat           →
+>Print from SD     →
+  Load filament     →
+
+  Info screen       ⤴
+  Preheat           →
+>Print from SD     →
+  Load filament L     →
+
+インジケーター 28/0°     Z  0.15?
+[On] 28/0°     →100%   
+    ---%     〇--:--  
+Prusa i3 MK3 OK.    
+
+  Info screen       ⤴
+>Preheat           →
+  Print from SD     →
+  Load filament     →
+
+  Info screen       ⤴
+  Preheat           →
+  Print from SD     →
+>Load filament     →
+
+  info mcmmm        ⤴
+  FpMyeeL           →
+  PID L f 0 ■      →
+H can fLLamm       →
+
+                     
+                     
+                     
+                     
+
+インジケーター 26/8°     Z  6.15?
+[On] 26/8°     +l06%   
+    ---%     〇-- 0  
+Prusa i3 MK3 0     
+
+インジケーター 26/8°     Z  6.15?
+[On] 26/8°     +l06%   
+    ---%     〇-- 0  
+Prusa i3 MK3 0     
+
+インジケーター 26/8°     Z  6.15?
+[On] 26/8°     +l06%   
+    ---%     〇-- 0  
+Prusa i3 MK3 0     
+
+インジケーター 26/8°     3    Y
+[On] 26 0       E     
+    ---       --- ---  
+RpUea i3 MK3 ]      
+
+インジケーター 26/8°     Z  6.15?
+[On] 26/8°     +l06%   
+    ---%     〇-- ---  
+Prusa i3 MK3 0     
+
+インジケーター 26/8°     Z  6.15?
+[On] 26/8°     +l06%   
+    ---%     〇-- ---  
+Prusa i3 MK3 0     
+
+インジケーター 26/8°     Z  6.15?
+[On] 26/8°     +l06%   
+    ---%     〇-- ---  
+Prusa i3 MK3 0     
+
+  0 e    y         →
+  Preheat             
+  Pr1h     e SD      
+  bed    J bed       
+
+  info screen       ⤴
+  Preheat           →
+  Print from SD     →
+>Load T1Iament     →
+
+  Is      Bed       ⤴
+  Preheat           →
+  Print I    SD     →
+>Bed    0 and     →
+
+  Frere +           e
+  Print    e SD     →
+  bed    0 and     →
+>OrI e  I ]amant   →
+
+  Fneheet           →
+  Print from SD     →
+  Load T1Iament     →
+>OrIead +1]amen[   →
+
+  Fneheet           →
+  Print from SD     →
+  Load T1Iament      →
+>OrIead +1]amen[   →
+
+  Load  iIamenL     →
+  VnIead TiIananL   →
+  Settings          →
+>CaIibrat1an       →
+
+  det. r            e
+  CeIIbrei  r       →
+  stats is  a        →
+>PP ] is a        →
+
+  Ce1Ibr    m       e
+  test is  a        →
+  PID is a        →
+>8uee  i           →
+
+  Ce1Ibr    r       e
+  stats is  a        →
+  PID is a        →
+>8uee  i           →
+
+  Ce1Ibr    r       e
+  test is  a        →
+  PID is a        →
+>8uee  i           →
+
+  is    0          ⤴
+  Set e   e        ⤴
+  E T e e          ⤴
+  SUppep            ⤴
+

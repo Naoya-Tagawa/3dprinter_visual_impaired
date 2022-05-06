@@ -106,7 +106,7 @@ def camera(cycle,count):
         #フレームが取得できない場合は画面を閉じる
         if not ret:
             cv2.destroyAllWindows()
-        time_counter += 1
+        time_counter += 300
         cv2.imshow("frame",frame)
         if count == 0:
             b_text = []
@@ -115,7 +115,8 @@ def camera(cycle,count):
         if(time_counter >= cycle):
             time_counter = 0
             b_text , b_kersol = match_text(frame,count,b_text,b_kersol)
-            count+=1
+            
+            #count+=1
         #qキーが入力されたら画面を閉じる
         if cv2.waitKey(1) & 0xFF == ord('q'):
             cap.release()
@@ -181,6 +182,7 @@ def match_text(frame,count_w,before_text,before_kersol):
             like_x.setdefault(new_d[0][0],x)
             if l == 0:
                 l = 1
+                break
             elif l == 1:
                 l = 2
             elif l == 2:
@@ -225,6 +227,7 @@ def match_text(frame,count_w,before_text,before_kersol):
             like.setdefault(new_d[0][0],new_d[0][1])
             if l == 0:
                 l = 1
+                break
             elif l == 1:
                 l = 2
             elif l == 2:
@@ -324,21 +327,24 @@ def match_text(frame,count_w,before_text,before_kersol):
     if kersol_exist_search(before_kersol,out) == True: #前のカーソルがある(全画面変わっていない)
         print("True")
         if s.ratio() >= 0.95:
-            partial_text_read(present_kersol)
+            engine = pyttsx3.init()
+            #engine.say("現在のカーソルは")
+            engine.runAndWait()
+            #partial_text_read(present_kersol)
         
         else: #カーソルが変わっていたら
             engine = pyttsx3.init()
             #rateはデフォルトが200
             rate = engine.getProperty('rate')
             engine.setProperty('rate',150)
-            #volume デフォルトは1.0 設定は0.0~1.0
-            volume = engine.getProperty('volume')
-            engine.setProperty('volume',1.0)
-            engine.say("カーソルが")
-            partial_text_read(before_kersol)
-            engine.say("から")
-            partial_text_read(present_kersol)
-            engine.say("に変更されました")
+            ##volume デフォルトは1.0 設定は0.0~1.0
+            #volume = engine.getProperty('#volume')
+            engine.setProperty('#volume',1.0)
+            ##engine.say("カーソルが")
+            #partial_text_read(before_kersol)
+            #engine.say("から")
+            #partial_text_read(present_kersol)
+            #engine.say("に変更されました")
             engine.runAndWait()
     
     elif (len(before_kersol) == 0) & (len(present_kersol) == 0): #前のカーソルも今のカーソルもない(数値の画面が変わった)
@@ -355,17 +361,22 @@ def match_text(frame,count_w,before_text,before_kersol):
             #rateはデフォルトが200
             rate = engine.getProperty('rate')
             engine.setProperty('rate',150)
-            #volume デフォルトは1.0 設定は0.0~1.0
-            volume = engine.getProperty('volume')
-            engine.setProperty('volume',1.0)
-            whole_text_read(before)
-            engine.say("から")
-            whole_text_read(after)
-            engine.say("に変更になりました")
+            ##volume デフォルトは1.0 設定は0.0~1.0
+            #volume = engine.getProperty('#volume')
+            engine.setProperty('#volume',1.0)
+            #whole_text_read(before)
+            #engine.say("から")
+            #whole_text_read(after)
+            #engine.say("に変更になりました")
             engine.runAndWait()
         
     else: #全画面変化
-        whole_text_read(output_text)
+        #whole_text_read(output_text)
+        engine = pyttsx3.init()
+        #engine.say("現在のカーソルは")
+        #partial_text_read(present_kersol)
+        engine.runAndWait()
+
     #前のテキストを保持
     print(present_kersol)
     before_text = output_text
@@ -387,15 +398,60 @@ def kersol_search(text):
             kersol1 += word
     return kersol1
 
+#カーソルの位置をいう
+def kersol_read(text):
+    engine = pyttsx3.init()
+    #rateはデフォルトが200
+    rate = engine.getProperty('rate')
+    engine.setProperty('rate',150)
+    ##volume デフォルトは1.0 設定は0.0~1.0
+    #volume = engine.getProperty('#volume')
+    engine.setProperty('#volume',1.0)
+    count = 0
+    #engine.say("現在のカーソルは")
+    for word in text:
+        if word == ' ':
+            continue
+        if '/' in word:
+            target = '/'
+            idx = word.find(target)
+            r = word[:idx]
+            #engine.say(r)
+            #engine.say("スラッシュ")
+            r = word[idx:]
+            #engine.say(r)
+            continue
+        if ',' in word:
+            target = ','
+            idx = word.find(target)
+            r = word[:idx]
+            #engine.say(r)
+            #engine.say("カンマ")
+            r = word[idx:]
+            #engine.say(r)
+            continue
+        if "." in word:
+            target = '.'
+            idx = word.find(target)
+            r = word[:idx]
+            #engine.say(r)
+            #engine.say("ドット")
+            r = word[idx:]
+            #engine.say(word)
+            continue
+        #engine.say(word)
+    
+    engine.runAndWait()
+
 #テキスト全部読み上げ
 def whole_text_read(text):
     engine = pyttsx3.init()
     #rateはデフォルトが200
     rate = engine.getProperty('rate')
     engine.setProperty('rate',150)
-    #volume デフォルトは1.0 設定は0.0~1.0
-    volume = engine.getProperty('volume')
-    engine.setProperty('volume',1.0)
+    ##volume デフォルトは1.0 設定は0.0~1.0
+    #volume = engine.getProperty('#volume')
+    engine.setProperty('#volume',1.0)
     count = 0
     for word in text:
         if word == ' ':
@@ -404,31 +460,32 @@ def whole_text_read(text):
             target = '/'
             idx = word.find(target)
             r = word[:idx]
-            engine.say(r)
-            engine.say("スラッシュ")
+            #engine.say(r)
+            #engine.say("スラッシュ")
             r = word[idx:]
-            engine.say(r)
+            #engine.say(r)
             continue
         if ',' in word:
             target = ','
             idx = word.find(target)
             r = word[:idx]
-            engine.say(r)
-            engine.say("カンマ")
+            #engine.say(r)
+            #engine.say("カンマ")
             r = word[idx:]
-            engine.say(r)
+            #engine.say(r)
             continue
         if "." in word:
             target = '.'
             idx = word.find(target)
             r = word[:idx]
-            engine.say(r)
-            engine.say("ドット")
+            #engine.say(r)
+            #engine.say("ドット")
             r = word[idx:]
-            engine.say(word)
+            #engine.say(word)
             continue
-        engine.say(word)
-        engine.runAndWait()
+        #engine.say(word)
+    
+    engine.runAndWait()
 
 #カーソルがテキストにあるか
 def kersol_exist_search(kersol,text):
@@ -444,10 +501,10 @@ def partial_text_read(text):
     #rateはデフォルトが200
     rate = engine.getProperty('rate')
     engine.setProperty('rate',150)
-    #volume デフォルトは1.0 設定は0.0~1.0
-    volume = engine.getProperty('volume')
-    engine.setProperty('volume',1.0)
-    engine.say(text)
+    ##volume デフォルトは1.0 設定は0.0~1.0
+    #volume = engine.getProperty('#volume')
+    engine.setProperty('#volume',1.0)
+    #engine.say(text)
     engine.runAndWait()
 
 
@@ -463,23 +520,23 @@ def file_w(text,output_text):
     #engine.getProperty("rate")
     #engine.setProperty("rate",200)
     #engine.setProperty("voice","english")
-    #volume = engine.getProperty('volume')
-    #engine.setProperty('volume',1.0)
+    ##volume = engine.getProperty('#volume')
+    #engine.setProperty('#volume',1.0)
     #print(output_text)
     #for word in output_text:
         #if '\n' in word:
             #word = "".join(word)
-            #engine.say(word)
+            ##engine.say(word)
             #time.sleep(3)
             #continue
         #else:
-            #engine.say(word)
+            ##engine.say(word)
             
     #if text !="not":
-        #engine.say("現在カーソルが示しているのは")
+        ##engine.say("現在カーソルが示しているのは")
         #text = "".join(text)
-        #engine.say(text)
-        #engine.say("です")
+        ##engine.say(text)
+        ##engine.say("です")
     #engine.runAndWait()
     
 #テンプレートをロード

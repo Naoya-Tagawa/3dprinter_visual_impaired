@@ -96,7 +96,7 @@ def points_extract(img):
     return p1,p2,p3,p4
 
 #対象画像をロード
-img = cv2.imread(r".\camera1\camera1.jpg")
+img = cv2.imread(r".\camera1\camera11.jpg")
 c_img = cv2.cvtColor(img,cv2.COLOR_BGR2RGB)
 m_img = cv2.cvtColor(img,cv2.COLOR_BGR2RGB)
 plt.imshow(c_img)
