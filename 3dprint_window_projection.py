@@ -112,12 +112,6 @@ def Projection_H(img, height, width):
                 total_count += 1
         array_H[i] = total_count
  
-    fig = plt.figure()
-    ax = fig.add_subplot(1, 1, 1)
-    x_axis = np.arange(height)
-    ax.barh(x_axis, array_H)
-    fig.savefig("hist_H.png")
- 
     return array_H
  
 #横方向のProjection profileを得る
@@ -130,14 +124,6 @@ def Projection_V(img, height, width):
             if (temp_pixVal == 0):
                 total_count += 1
         array_V[i] = total_count
- 
- 
-    fig = plt.figure()
-    ax = fig.add_subplot(1, 1, 1)
-    x_axis = np.arange(width)
-    ax.bar(x_axis, array_V)
-    fig.savefig("hist_V.png")
- 
     return array_V
  
  
@@ -212,6 +198,7 @@ def camera(cycle,count):
 
 def match_text(frame,before_text,before_kersol):
     #カーネル
+    start_time = time.perf_counter()
     kernel = np.ones((3,3),np.uint8)
     window_img = frame
     #フレームの青い部分を二値化
@@ -251,7 +238,11 @@ def match_text(frame,before_text,before_kersol):
     like_x = {}
     out = "" #読み取ったテキスト
     kersol = "" 
+    end_time = time.perf_counter()
+    print(end_time-start_time)
     for i in range(0,len(char_List1)-1,2):
+        end_time = time.perf_counter()
+        print(end_time-start_time)
         #行ごとに画像を切り取る
         img_h = img_mask[int(char_List1[i]):int(char_List1[i+1]),:]
         height_h , width_h =img_h.shape
@@ -268,8 +259,8 @@ def match_text(frame,before_text,before_kersol):
             match_img = img_mask[int(char_List1[i]):int(char_List1[i+1]),int(char_List2[j]):int(char_List2[j+1])]
             match_img = cv2.resize(match_img,dsize=(26,36))
             height_m,width_m = match_img.shape
-            plt.imshow(match_img)
-            plt.show()
+            #plt.imshow(match_img)
+            #plt.show()
             for f in range(len(temp['x'])):
                 temp_th = img_temp[f]
                 temp_th = cv2.resize(temp_th,dsize=(26,36))
@@ -284,10 +275,6 @@ def match_text(frame,before_text,before_kersol):
                 
             #類似度が最大のもの順にソート
             new_d = sorted(s.items(), reverse = True)
-            print(label_temp[new_d[0][1]])
-            print(new_d[0][0])
-            print(label_temp[new_d[1][1]])
-            print(new_d[1][0])
                        
             #new_d[0][1]がlabelの番号、new_d[0][0]が最大類似度
             #print(char_List2)
@@ -332,8 +319,12 @@ def match_text(frame,before_text,before_kersol):
             #print(out_modify)
             new_d = {}
             continue
+
     print(output_text)
     print(out)
+    end_time = time.perf_counter()
+    e_time = end_time - start_time
+    print(e_time)
     #現在のカーソル
     present_kersol = kersol_search(output_text)
     before = []
@@ -534,7 +525,7 @@ def file_w(text,output_text):
 
 if __name__ == "__main__":
     #対象画像をロード
-    img = cv2.imread("./camera1/camera10.jpg")
+    img = cv2.imread("./camera1/camera23.jpg")
     #テンプレートをロード
     temp = np.load(r'./dataset2.npz')
     #テンプレート画像を格納

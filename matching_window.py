@@ -50,8 +50,8 @@ def cut_blue_img(img):
     cnts = cv2.findContours(close_img, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
     cnts = cnts[0] if len(cnts) == 2 else cnts[1]
     cv2.fillPoly(close_img, cnts, [255,255,255])
-    plt.imshow(close_img)
-    plt.show()
+    #plt.imshow(close_img)
+    #plt.show()
     return close_img
 
 def points_extract(img):
@@ -96,11 +96,12 @@ def points_extract(img):
     return p1,p2,p3,p4
 
 #対象画像をロード
+start = time.perf_counter()
 img = cv2.imread(r".\camera1\camera11.jpg")
 c_img = cv2.cvtColor(img,cv2.COLOR_BGR2RGB)
 m_img = cv2.cvtColor(img,cv2.COLOR_BGR2RGB)
-plt.imshow(c_img)
-plt.show()
+#plt.imshow(c_img)
+#plt.show()
 #青い部分のみを二値化
 close_img = cut_blue_img(img)
 #コーナー検出
@@ -135,8 +136,8 @@ img_mask = cv2.medianBlur(img_mask,3)
 img_mask = cv2.dilate(img_mask,kernel)
 
 #画像の確認
-plt.imshow(img_mask,cmap='gray')
-plt.show()
+#plt.imshow(img_mask,cmap='gray')
+#plt.show()
 
 window_z = ((21, 18, 26, 36),(50, 18, 25, 36),(78, 18, 26, 36),(106, 18, 26, 36),(134, 18, 26, 36),(162,18,26,36),(190,18,26,36),(218,18,26,36),(246,18,26,36),(274,18,26,36),(302,18,26,36),(332,18,26,36),(362,18,26,36),(390,18,26,36),(418,18,26,36),(448,18,26,36) , (476,18,26,36),(502,18,26,36),(530,18,26,36),(558, 18, 26, 36), 
 (21,63,26,36),(50, 63, 26, 36), (78, 63, 26, 36), (106, 63, 26, 36), (134, 63, 26, 36), (162, 63, 26, 36), (190, 63, 26, 36), (218, 63, 26, 36), (246, 63, 26, 36), (274, 63, 26, 36), (302, 63, 26, 36), (332, 63, 26, 36), (362, 63, 26, 36), (390, 63, 26, 36), (418, 63, 26, 37), (448, 63, 26, 36), (476, 63, 26, 36), (502, 63, 26, 36), (530, 63, 26, 36), (558, 63, 26, 36),
@@ -334,6 +335,8 @@ before_kersol = ""
 ikersol = kersol_search(output_text)
 print(out)
 print(output_text)
+end = time.perf_counter()
+print(end-start)
 print(ikersol)
 print(len(ikersol))
 before_text = ['>Main','\n']

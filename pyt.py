@@ -27,7 +27,10 @@ s1 = 'Bed Level correct → \nPID calibration     →\nReset XYZ calibr. \n>Temp
 s2 = [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'Timeout: ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '10', '\n', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 
 '', ' ', '\n']
 kersol = ">Temp. calibration →"
+start = time.perf_counter()
 print(kersol_exist_search(kersol,s1))
+end = time.perf_counter()
+print(end-start)
 whole_text_read(s1)
 res = difflib.context_diff(s1,s2)
 print(speling.correct(" Infc"))
