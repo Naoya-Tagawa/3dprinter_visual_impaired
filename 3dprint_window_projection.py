@@ -263,12 +263,13 @@ def match_text(frame,before_text,before_kersol):
         for j in range(0,len(char_List2)-1,2):
             list = {}
             new_d = {}
+            s={}
             #一文字ずつ切り取る
             match_img = img_mask[int(char_List1[i]):int(char_List1[i+1]),int(char_List2[j]):int(char_List2[j+1])]
             match_img = cv2.resize(match_img,dsize=(26,36))
             height_m,width_m = match_img.shape
-            #plt.imshow(match_img)
-            #plt.show()
+            plt.imshow(match_img)
+            plt.show()
             for f in range(len(temp['x'])):
                 temp_th = img_temp[f]
                 temp_th = cv2.resize(temp_th,dsize=(26,36))
@@ -279,11 +280,15 @@ def match_text(frame,before_text,before_kersol):
                 min_value, max_value, min_pt, max_pt = cv2.minMaxLoc(match)
                 #からのリストに
                 s.setdefault(max_value,f)
+    
                 
             #類似度が最大のもの順にソート
             new_d = sorted(s.items(), reverse = True)
             print(label_temp[new_d[0][1]])
             print(new_d[0][0])
+            print(label_temp[new_d[1][1]])
+            print(new_d[1][0])
+                       
             #new_d[0][1]がlabelの番号、new_d[0][0]が最大類似度
             #print(char_List2)
             #print(width_m)
