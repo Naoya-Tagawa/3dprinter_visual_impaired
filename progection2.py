@@ -1,3 +1,16 @@
+import difflib
+import time
+import cv2
+import numpy as np
+import glob
+from natsort import natsorted
+import tkinter as tk
+import tkinter.ttk as ttk
+import threading
+from PIL import Image
+import pyttsx3 
+from dictionary_word import speling
+import difflib
 import numpy as np
 import cv2
 import matplotlib.pyplot as plt
@@ -85,7 +98,7 @@ def syaei(img1,p1,p2,p3,p4):
     M = cv2.getPerspectiveTransform(pts1, pts2)
     dst = cv2.warpPerspective(img1, M, (w, h))
     return dst
-
+#縦方向のProjection profileを得る
 def Projection_H(img, height, width):
     array_H = np.zeros(height)
     for i in range(height):
@@ -104,7 +117,7 @@ def Projection_H(img, height, width):
  
     return array_H
  
- 
+ #横方向のProjection profileを得る
 def Projection_V(img, height, width):
     array_V = np.zeros(width)
     for i in range(width):
@@ -124,11 +137,10 @@ def Projection_V(img, height, width):
  
     return array_V
  
- 
+ #Projection profileから縦方向の座標を得る
 def Detect_HeightPosition(H_THRESH, height, array_H):
-    lower_posi = 0
-    upper_posi = 0
- 
+    lower_posi = i
+    upper_posi = i
     for i in range(height):
         val = array_H[i]
         if (val > H_THRESH):
