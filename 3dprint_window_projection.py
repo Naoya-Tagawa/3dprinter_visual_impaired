@@ -38,8 +38,8 @@ def cut_blue_img(img):
     cnts = cv2.findContours(close_img, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
     cnts = cnts[0] if len(cnts) == 2 else cnts[1]
     cv2.fillPoly(close_img, cnts, [255,255,255])
-    plt.imshow(close_img)
-    plt.show()
+    #plt.imshow(close_img)
+    #plt.show()
     return close_img
 
 def points_extract(img):
@@ -267,8 +267,8 @@ def match_text(frame,before_text,before_kersol):
             match_img = img_mask[int(char_List1[i]):int(char_List1[i+1]),int(char_List2[j]):int(char_List2[j+1])]
             match_img = cv2.resize(match_img,dsize=(26,36))
             height_m,width_m = match_img.shape
-            plt.imshow(match_img)
-            plt.show()
+            #plt.imshow(match_img)
+            #plt.show()
             for f in range(len(temp['x'])):
                 temp_th = img_temp[f]
                 temp_th = cv2.resize(temp_th,dsize=(26,36))
@@ -323,7 +323,7 @@ def match_text(frame,before_text,before_kersol):
                 continue
             #print(label_temp[new_d[0][1]])
             out_modify = out_modify + label_temp[new_d[0][1]]
-            print(out_modify)
+            #print(out_modify)
             new_d = {}
             continue
     print(output_text)
