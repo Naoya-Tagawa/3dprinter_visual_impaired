@@ -267,8 +267,8 @@ def match_text(frame,before_text,before_kersol):
             match_img = img_mask[int(char_List1[i]):int(char_List1[i+1]),int(char_List2[j]):int(char_List2[j+1])]
             match_img = cv2.resize(match_img,dsize=(26,36))
             height_m,width_m = match_img.shape
-            #plt.imshow(match_img)
-            #plt.show()
+            plt.imshow(match_img)
+            plt.show()
             for f in range(len(temp['x'])):
                 temp_th = img_temp[f]
                 temp_th = cv2.resize(temp_th,dsize=(26,36))
@@ -282,32 +282,39 @@ def match_text(frame,before_text,before_kersol):
                 
             #類似度が最大のもの順にソート
             new_d = sorted(s.items(), reverse = True)
-            #print(new_d[0][1])
+            #print(label_temp[new_d[0][1]])
             #new_d[0][1]がlabelの番号、new_d[0][0]が最大類似度
-            print(char_List2)
-            print(width_m)
+            #print(char_List2)
+            #print(width_m)
             #空白があるとき
             if (j != 0) & (char_List2[j] > (width_m + char_List2[j-1])):
                 out_modify = speling.correct(out_modify)
-                out += out_modify
+                out = out+ out_modify + ' '
+                output_text.append(' ')
                 output_text.append(out_modify)
                 out_modify = ""
                 new_d = {}
 
-                if (j+1) == len(char_List2):
+                if (j+1) == len(char_List2)-1:
                     out_modify = speling.correct(out_modify)
-                    out_modify += label_temp[new_d[0][1]]
+                    try:
+                        out_modify = out_modify+ label_temp[new_d[0][1]]
+                    except KeyError:
+                        out_modify = out_modify + '→'
                     out = out + out_modify + "\n"
                     output_text.append(out_modify)
                     output_text.append('\n')
                     out_modify = ""
                     new_d = {}
                 continue
-            
+
             #行の最後の時
-            if (j+1) == len(char_List2):
+            if (j+1) == len(char_List2)-1:
                 out_modify = speling.correct(out_modify)
-                out_modify += label_temp[new_d[0][1]]
+                try:
+                    out_modify = out_modify + label_temp[new_d[0][1]]
+                except KeyError:
+                    out_modify = out_modify + '→'
                 out = out + out_modify + "\n"
                 output_text.append(out_modify)
                 output_text.append('\n')
@@ -316,10 +323,11 @@ def match_text(frame,before_text,before_kersol):
                 continue
             #print(label_temp[new_d[0][1]])
             out_modify = out_modify + label_temp[new_d[0][1]]
-            #print(out_modify)
+            print(out_modify)
             new_d = {}
             continue
     print(output_text)
+    print(out)
     #現在のカーソル
     present_kersol = kersol_search(output_text)
     before = []
@@ -520,7 +528,7 @@ def file_w(text,output_text):
 
 if __name__ == "__main__":
     #対象画像をロード
-    img = cv2.imread("./camera1/camera12.jpg")
+    img = cv2.imread("./camera1/camera10.jpg")
     #テンプレートをロード
     temp = np.load(r'./dataset.npz')
     #テンプレート画像を格納
