@@ -170,7 +170,7 @@ def Detect_WidthPosition(W_THRESH, width, array_V):
  
 if __name__ == "__main__":
     # input image
-    img = cv2.imread("./camera1/camera12.jpg")
+    img = cv2.imread("./camera1/camera33.jpg")
     #対象画像をロード
     #青い部分のみを二値化
     close_img = cut_blue_img(img)
@@ -192,12 +192,16 @@ if __name__ == "__main__":
     gray_img = cv2.cvtColor(syaei_img, cv2.COLOR_RGB2GRAY)
  
     # black white
-    img_mask = cv2.adaptiveThreshold(gray_img,255,cv2.ADAPTIVE_THRESH_MEAN_C,cv2.THRESH_BINARY,7,-3)
+    #img_mask = cv2.adaptiveThreshold(gray_img,255,cv2.ADAPTIVE_THRESH_MEAN_C,cv2.THRESH_BINARY,7,-3)
     #ノイズ除去
-    img_mask = cv2.medianBlur(img_mask,3)
+    #img_mask = cv2.medianBlur(img_mask,3)
     #膨張化
-    img_mask = cv2.dilate(img_mask,kernel)
-    #ret, bw_img = cv2.threshold(gray_img, 0, 255, cv2.THRESH_OTSU)
+    #img_mask = cv2.dilate(img_mask,kernel)
+    ret, bw_img = cv2.threshold(gray_img, 0, 255, cv2.THRESH_OTSU)
+    #ノイズ除去
+    img_mask = cv2.medianBlur(bw_img,3)
+    #膨張化
+    img_mask = cv2.dilate(bw_img,kernel)
     height, width = img_mask.shape
  
     # create projection distribution
