@@ -282,7 +282,8 @@ def match_text(frame,before_text,before_kersol):
                 
             #類似度が最大のもの順にソート
             new_d = sorted(s.items(), reverse = True)
-            #print(label_temp[new_d[0][1]])
+            print(label_temp[new_d[0][1]])
+            print(new_d[0][0])
             #new_d[0][1]がlabelの番号、new_d[0][0]が最大類似度
             #print(char_List2)
             #print(width_m)
@@ -530,7 +531,7 @@ if __name__ == "__main__":
     #対象画像をロード
     img = cv2.imread("./camera1/camera10.jpg")
     #テンプレートをロード
-    temp = np.load(r'./dataset.npz')
+    temp = np.load(r'./dataset2.npz')
     #テンプレート画像を格納
     img_temp = temp['x']
     #テンプレートのラベル(文)を格納
