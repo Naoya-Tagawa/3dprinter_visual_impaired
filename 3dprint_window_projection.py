@@ -260,7 +260,8 @@ def match_text(frame,before_text,before_kersol):
             new_d = {}
             s={}
             #一文字ずつ切り取る
-            match_img = img_mask[int(char_List1[i]):int(char_List1[i+1]),int(char_List2[j]):int(char_List2[j+1])]
+            match_img = img_mask[int(char_List1[i])-1:int(char_List1[i+1])+1,int(char_List2[j])-1:int(char_List2[j+1])+1]
+            cv2.imwrite(r"C:\Users\Fate2\Desktop\ex3\ex{0}.jpg".format(j), match_img)
             match_img = cv2.resize(match_img,dsize=(26,36))
             height_m,width_m = match_img.shape
             #plt.imshow(match_img)
@@ -283,7 +284,10 @@ def match_text(frame,before_text,before_kersol):
                 
             #類似度が最大のもの順にソート
             new_d = sorted(s.items(), reverse = True)
-                       
+            print(label_temp[new_d[0][1]])
+            print(new_d[0][0])
+            print(label_temp[new_d[1][1]])
+            print(new_d[1][0])     
             #new_d[0][1]がlabelの番号、new_d[0][0]が最大類似度
             #print(char_List2)
             #print(width_m)
@@ -291,7 +295,7 @@ def match_text(frame,before_text,before_kersol):
             if (j != 0) & (char_List2[j] > (width_m + char_List2[j-1])):
 
                 if (j+1) == len(char_List2)-1:
-                    out_modify = out_modify+ label_temp[new_d[0][1]]
+                    out_modify = out_modify+ ' ' + label_temp[new_d[0][1]]
                     out = out + out_modify + "\n"
                     output_text.append(out_modify)
                     output_text.append('\n')
@@ -532,7 +536,7 @@ def file_w(text,output_text):
 
 if __name__ == "__main__":
     #対象画像をロード
-    img = cv2.imread("./camera1/camera12.jpg")
+    img = cv2.imread("./camera1/camera14.jpg")
     #テンプレートをロード
     temp = np.load(r'./dataset2.npz')
     #テンプレート画像を格納

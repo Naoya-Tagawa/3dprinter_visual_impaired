@@ -1335,3 +1335,79 @@ HIPS- 2 28/l88→ →
  HIPS- 2 28/l88→→
  >PP- ] 54/100→→
 
+ASA - ?68/105→
+ABS - 255/l88→
+HIPS - 228/l88→
+>PP - ]54/100→
+
+ASA - ?68/105→
+ABS - 255/l88→
+HIPS - 228/l88→
+>PP - ]54/100→
+
+ASA - ?68/105→
+ABS - 255/l88→
+HIPS - 228/l88→
+>PP - ]54/100→
+
+ASA - ?68/105→
+ABS - 255/l88→
+HIPS - 228/l88→
+>PP - ]54/100→
+
+ASA - ?68/105→
+ABS - 255/l88→
+HIPS - 228/l88→
+>PP - ]54/100→
+
+ASA - ?68/105 →
+ABS - 255/l88 →
+HIPS - 228/l88 →
+>PP - ]54/100 →
+
+ASA - 160/105 →
+ABS - ?55/100 →
+NIPS - ??0/100 →
+>PP - ?54/100 →
+
+ASA - 160/105 →
+ABS - ?55/100 →
+NIPS - ??0/100 →
+>PP - ?54/100 →
+
+ASA - ?60/105 →
+ABS - ?55/100 →
+HIPS - ??0/100 →
+>PP - ?54/100 →
+
+ASA - ?60/105 →
+ABS - ?55/100 →
+HIPS - ??0/100 →
+>PP - ?54/100 →
+
+Crash det. [0ff]
+HW Setup →
+Mesh bed 1eveling →
+>Lin. correction →
+
+ASA - ?60/105 →
+ABS - ?55/100 →
+HIPS - ??0/100 →
+>PP - ?54/100 →
+
+ASA - ?60/105 →
+ABS - ?55/100 →
+HIPS - ??0/100 →
+>PP - ?54/100 →
+
+Set temperature[H]
+?08
+
+>Settings ⤴
+[nglish
+Cestina
+Deutsch
+
+Origina1 Prusa i3
+Prusa Research
+
