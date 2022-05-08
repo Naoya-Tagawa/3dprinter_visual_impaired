@@ -29,7 +29,7 @@ def read_image():
             y.append(data)
             fa.close()
 
-    glob_files(r'.\img\*',r'.\ex2tex',640,480)
+    glob_files(r'.\imgx\*',r'.\exx',640,480)
     np.savez(outfile,x=x,y=y)
 
 

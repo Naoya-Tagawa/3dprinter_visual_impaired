@@ -254,8 +254,8 @@ def match_text(frame,before_text,before_kersol):
         #print(end_time-start_time)
 
         for j in range(0,len(char_List2)-1,2):
-            end_time = time.perf_counter()
-            print(end_time-start_time)
+            #end_time = time.perf_counter()
+            #print(end_time-start_time)
             list = {}
             new_d = {}
             s={}
@@ -283,14 +283,16 @@ def match_text(frame,before_text,before_kersol):
                 
             #類似度が最大のもの順にソート
             new_d = sorted(s.items(), reverse = True)
-            #print(label_temp[new_d[0][1]])
-            #print(new_d[0][0])
-            #print(label_temp[new_d[1][1]])
-            #print(new_d[1][0])     
+            print(label_temp[new_d[0][1]])
+            print(new_d[0][0])
+            print(label_temp[new_d[1][1]])
+            print(new_d[1][0])     
             #new_d[0][1]がlabelの番号、new_d[0][0]が最大類似度
             #print(char_List2)
             #print(width_m)
             #空白があるとき
+            if new_d[0][0] < 0.7:
+                continue
             if (j != 0) & (char_List2[j] > (width_m + char_List2[j-1])):
 
                 if (j+1) == len(char_List2)-1:
@@ -535,7 +537,7 @@ def file_w(text,output_text):
 
 if __name__ == "__main__":
     #対象画像をロード
-    img = cv2.imread("./camera1/camera69.jpg")
+    img = cv2.imread("./camera1/camera55.jpg")
     #テンプレートをロード
     temp = np.load(r'./dataset2.npz')
     #テンプレート画像を格納

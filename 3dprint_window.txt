@@ -1452,3 +1452,66 @@ Main ⤴
 3.9.0-34?1 ⤴
 prusa3d.com ⤴
 
+Main ⤴
+>Firmware: ⤴
+3.9.0-34?1 ⤴
+prusa3d.com ⤴
+
+Set temperature[H]
+?09
+
+インジケーター126/211° Z 0,1■°
+[H] ?1/0° ↓100%
+---% 〇--[H]--
+P1D cal. 0/5
+
+ASA - ?60/105 →
+ABS - ?55/100 →
+HIPS - ??0/100 →
+>PP - ?54/100 →
+
+ASA - ?60/105 →
+ABS - ?55/100 →
+HIPS - ??0/100 →
+>PP - ?54/100 →
+
+>Calibration ⤴
+Calibrate →
+
+>Calibration ⤴
+Calibrate →
+
+ASA - 260/105 →
+ABS - 255/l00 →
+HlPS - 220/l00 →
+>PP - 254/100 →
+
+Set temperature:
+210
+
+ERROR:
+Preheat the nozzle!
+
+>Settings ⤴
+[nglish
+Cestina
+Deutsch
+
+インジケーター126/211° Z 0,15?
+: 21/0° >>l00%
+---% 〇--:--
+PlD cal. 0/5
+
+MK3.PRUSA_dual_colo
+modei2.0.3mm_PLA_MK
+model1.0.3mm_PLA_MK
+>m〇del3.0.3mm_PLA_MK
+
+MK3.PRUSA_dual_colo
+modei2.0.3mm_PLA_MK
+model1.0.3mm_PLA_MK
+>model3.0.3mm_PLA_MK
+
+Set temperature:
+209
+
