@@ -1515,3 +1515,48 @@ model1.0.3mm_PLA_MK
 Set temperature:
 209
 
+Set temperature:
+209
+
+V3_solid_virus_2x3_
+V3_solid_virusx0.45
+V3.solid_virusx0.45
+>V3.solid.virusx0.45
+
+Main
+PLA - 2l5/60 →
+>PET - 230/05 +
+ASA - 260/105 +
+
+Crash det. [0ff]
+HW Setup →
+Mesh bed leveling →
+>Lin. correction →
+
+Sorting files
+000000
+
+ls filament loaded?
+>Yes
+No
+
+>Settings ⤴
+[nglish
+Cestina
+Deutsch
+
+Bed level correct →
+PlD calibration →
+Reset XYZ calibr.
+>Temp. calibration →
+
+Nozzle FAN: 0 RPM
+Print FAN: 0 RPM
+Filament sensor
+is disabled.
+
+[RR0R: Filament
+sensor is not
+responding, please
+check connection.
+
