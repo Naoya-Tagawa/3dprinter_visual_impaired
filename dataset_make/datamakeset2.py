@@ -166,7 +166,7 @@ def Detect_WidthPosition(W_THRESH, width, array_V):
 if __name__ == "__main__":
     count = 0
     # input image
-    img = cv2.imread('./camera1/camera8.jpg')
+    img = cv2.imread('./camera1/camera49.jpg')
     #対象画像をロード
     #青い部分のみを二値化
     close_img = cut_blue_img(img)
@@ -211,7 +211,7 @@ if __name__ == "__main__":
             char_List2 = Detect_WidthPosition(W_THRESH,w,array_V)
             #print(char_List2)
             for j in range(0,len(char_List2)-1, 2):
-                img_f = img_mask[int(char_List1[i]):int(char_List1[i+1]), int(char_List2[j]):int(char_List2[j+1])]
+                img_f = img_mask[int(char_List1[i])-1:int(char_List1[i+1])+1, int(char_List2[j])-1:int(char_List2[j+1])+1]
                 #cv2.imwrite("result{0}.jpg".format(k),img_f)
                 #k += 1
                 cv2.imwrite(r"C:\Users\Fate2\Desktop\ex3\ex{0}.jpg".format(count), img_f)

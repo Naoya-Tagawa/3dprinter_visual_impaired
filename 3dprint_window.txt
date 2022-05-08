@@ -1411,3 +1411,29 @@ Deutsch
 Origina1 Prusa i3
 Prusa Research
 
+Origina1 Prusa i3
+Prusa Research
+
+ASA - ?60/105 →
+ABS - ?55/100 →
+HIPS - ??0/100 →
+>PP - ?54/100 →
+
+ERROR:
+Preheat the nozzle!
+
+ASA - ?60/105 →
+ABS - ?55/100 →
+HIPS - ??0/100 →
+>PP - ?54/100 →
+
+Be1t test
+Selftest
+Calibrate XYZ
+>0a1ibrate Z →
+
+Main ⤴
+>Firmware: ⤴
+3.9.0-34?1 ⤴
+prusa3d.com ⤴
+
