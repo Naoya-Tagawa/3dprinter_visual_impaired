@@ -176,7 +176,6 @@ if __name__ == "__main__":
     #img_k = img[p1[1]:p2[1],p2[0]:p3[0]]
     #射影変換
     syaei_img = syaei(img,p1,p2,p3,p4)
-    cv2.imwrite("llo.jpg",syaei_img)
     # convert gray scale image
     kernel = np.ones((3,3),np.uint8)
     gray_img = cv2.cvtColor(syaei_img, cv2.COLOR_RGB2GRAY)
@@ -187,7 +186,7 @@ if __name__ == "__main__":
     #膨張化
     img_mask = cv2.dilate(bw_img,kernel)
     height, width = img_mask.shape
- 
+    cv2.imwrite("llo.jpg",img_mask)
     # create projection distribution
     array_H = Projection_H(img_mask, height, width)
     #array_V = Projection_V(bw_img, height, width)
