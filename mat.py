@@ -204,47 +204,8 @@ for f in window_z:
         elif l == -2:
             break
     l = 0
-    mid_v = sorted(like_x.items(),reverse = True)      
-    x1 = mid_v[0][1]
-    like_x = {}
-    while True:
-        s = {}
-        new_d = {}
-        x, y , w , h = f
-        x = x1
-        y = y + l
-        match_img = img_mask[y:y+h,x:x+w]
-        for i in range(len(temp['x'])):
-            temp_th = img_temp[i]
-            temp_th = cv2.resize(temp_th,dsize = (26,36))
-            #テンプレートマッチング
-            #入力画像、テンプレート画像、類似度の計算方法が引数 返り値は検索窓の各市でのテンプレート画像との類似度を表す二次元配列
-            match = cv2.matchTemplate(match_img,temp_th,cv2.TM_CCORR_NORMED)
-            #返り値は最小類似点、最大類似点、最小の場所、最大の場所
-            min_value, max_value, min_pt, max_pt = cv2.minMaxLoc(match)
-            # ptに類似度が最大(値が最小だから)のmin_valueの場所min_ptを格納
-            pt = max_pt
-            #からのリストに
-            s.setdefault(max_value,i)
-            #類似度が最大のもの順にソート
-        new_d = sorted(s.items(), reverse = True)
-        #print(label_temp[new_d[0][1]])
-        like.setdefault(new_d[0][0],new_d[0][1])
-        if l == 0:
-            l = 1
-            break
-        elif l == 1:
-            l = 2
-        elif l == 2:
-            l = -1
-        elif l == -1:
-            l = -2
-        elif l == -2:
-            break
-    x , y , w , h = f
-    
-    max_v = sorted(like.items(),reverse = True)
-    if max_v[0][0] < 0.7:
+    mid_v = sorted(like_x.items(),reverse = True)
+    if new_d[0][0] < 0.7:
         
         if head == 0:
             out = out + ' '
@@ -288,7 +249,7 @@ for f in window_z:
         continue
         
     if head == 0:
-        out_modify = out_modify + label_temp[max_v[0][1]]
+        out_modify = out_modify + label_temp[new_d[0][1]]
         head = 1
         like = {}
     
@@ -306,7 +267,7 @@ for f in window_z:
         
         
     if x == 558:
-        out_modify = out_modify + label_temp[max_v[0][1]]
+        out_modify = out_modify + label_temp[new_d[0][1]]
         #out_modify = speling.correct(out_modify)
         output_text.append(out_modify)
         output_text.append("\n")
@@ -316,7 +277,7 @@ for f in window_z:
         head = 0
         continue
         
-    out_modify = out_modify + label_temp[max_v[0][1]]
+    out_modify = out_modify + label_temp[new_d[0][1]]
     print(out_modify)
     like = {}
     continue
