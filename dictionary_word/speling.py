@@ -10,7 +10,7 @@ def train(features):
 file = open("./dictionary_word/train.txt",'r',encoding = "utf-8")
 data = file.read()
 NWORDS = train(words(data))
-alphabet = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ.,->0123456789'
+alphabet = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
 
 def edits1(word):
     n = len(word)

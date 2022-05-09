@@ -1811,3 +1811,76 @@ watanabe.Schnecke2_
 watanabe.Schnecke_0
 >watanabe.Schnecke_0
 
+virusx0.45_0.15mm_s
+watanabe.Schnecke2_
+watanabe.Schnecke_0
+>watanabe.Schnecke_0
+
+Sorting files
+
+Sorting files
+
+ERROR:
+Preheat the nozzle!
+
+prusa3d.com ⤴
+forum.prusa3d.com ⤴
+howto.prusa3d.com ⤴
+>------------ ⤴
+
+3D_Printer_test_wit
+3DBenchy_0.15mm_PLA
+MK3_PLA_3DBenchy_l5
+>MK3_PLA_3DNubs_Marv
+
+MK3.PRUSA_dual_colo
+modei2.0.3mm_PLA_MK
+model1.0.3mm_PLA_MK
+>model3.0.3mm_PLA_MK
+
+
+X-correct: [0ff]
+Y-correct: [0ff]
+Z-correct: [0ff]
+>[-correct: [0ff]
+
+X-correct: [0ff]
+Y-correct: [0ff]
+Z-correct: [0ff]
+>E-correct: [0ff]
+
+1_75mm_MK3 ⤴
+[lNSy_l0a ⤴
+E3Dv6full ⤴
+>------------ ⤴
+
+1_75mm_MK3 ⤴
+[lNSy_l0a ⤴
+E3Dv6full ⤴
+>------------ ⤴
+
+X-correct: [0ff]
+Y-correct: [0ff]
+Z-correct: [0ff]
+>E-correct: [0ff]
+
+correct: [Off]
+correct: [Off]
+correct: [Off]
+>E-correct: [Off]
+
+X-correct: [0ff]
+Y-correct: [0ff]
+Z-correct: [0ff]
+>E-correct: [0ff]
+
+Crash det. [0ff]
+NW Setup →
+Mesh bed leveling →
+>Lin. correction →
+
+Calibration →
+Statistics →
+Fail stats →
+>Support →
+

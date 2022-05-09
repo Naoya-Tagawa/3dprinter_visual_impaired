@@ -166,7 +166,7 @@ def Detect_WidthPosition(W_THRESH, width, array_V):
 if __name__ == "__main__":
     count = 0
     # input image
-    img = cv2.imread('./camera1/camera49.jpg')
+    img = cv2.imread('./camera1/camera10.jpg')
     #対象画像をロード
     #青い部分のみを二値化
     close_img = cut_blue_img(img)
@@ -176,6 +176,7 @@ if __name__ == "__main__":
     #img_k = img[p1[1]:p2[1],p2[0]:p3[0]]
     #射影変換
     syaei_img = syaei(img,p1,p2,p3,p4)
+    cv2.imwrite("llo.jpg",syaei_img)
     # convert gray scale image
     kernel = np.ones((3,3),np.uint8)
     gray_img = cv2.cvtColor(syaei_img, cv2.COLOR_RGB2GRAY)

@@ -314,11 +314,8 @@ def match_text(frame,before_text,before_kersol):
 
             #行の最後の時
             if (j+1) == len(char_List2)-1:
-                start = time.perf_counter()
-                #out_modify = speling.correct(out_modify)
-                #end = time.perf_counter()
-                #print(end-start)
                 out_modify = out_modify + label_temp[new_d[0][1]]
+                #out_modify = speling.correct(out_modify)
                 out = out + out_modify + "\n"
                 output_text.append(out_modify)
                 output_text.append('\n')
@@ -536,7 +533,7 @@ def file_w(text,output_text):
 
 if __name__ == "__main__":
     #対象画像をロード
-    img = cv2.imread("./camera1/camera25.jpg")
+    img = cv2.imread("./camera1/camera10.jpg")
     #テンプレートをロード
     temp = np.load(r'./dataset2.npz')
     #テンプレート画像を格納

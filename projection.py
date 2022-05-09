@@ -235,6 +235,7 @@ if __name__ == "__main__":
                 #k += 1
 
         cv2.imwrite("result1.jpg", syaei_img)
+        cv2.imwrite("jj.jpg",syaei_img[int(char_List1[0]):int(char_List1[1]),:])
         
     else:
         print("Failed to detect characters")
