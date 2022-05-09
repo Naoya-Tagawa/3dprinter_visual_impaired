@@ -236,8 +236,7 @@ def match_text(frame,before_text,before_kersol):
     #print(char_List2)
     h_position = [[int(char_List1[i]),int(char_List1[i+1])] for i in range(0,len(char_List1)-1,2)]
     w_position = [[int(char_List2[i]),int(char_List2[i+1])] for i in range(0,len(char_List2)-1,2)]
-    print(h_position)
-    print(w_position)
+    print(len(char_List2))
     window_position = list(itertools.product(h_position,w_position))
     pprint.pprint(window_position)
     head = 0
@@ -251,18 +250,20 @@ def match_text(frame,before_text,before_kersol):
     like_x = {}
     out = "" #読み取ったテキスト
     kersol = "" 
-    #end_time = time.perf_counter()
-    #print(end_time-start_time)
+    end_time = time.perf_counter()
+    print(end_time-start_time)
+    count = 1
     for i in window_position:
-        print(i[0][1])
-        #img_h = img_mask[i[]]
+        img_h = img_mask[i[0][0]-1:i[0][1]+1,i[1][0]-1:i[1][1]+1]
+        img_h = cv2.resize(img_h,dsize=(26,36))
+        height_m, width_m = img_h.shape
         for f in range(len(temp['x'])):
             #end_time = time.perf_counter()
             #print(end_time-start_time)
             temp_th = img_temp[f]
             temp_th = cv2.resize(temp_th,dsize=(26,36))
             #テンプレートマッチング
-        #     入力画像、テンプレート画像、類似度の計算方法が引数 返り値は検索窓の各市でのテンプレート画像との類似度を表す二次元配列
+        #入力画像、テンプレート画像、類似度の計算方法が引数 返り値は検索窓の各市でのテンプレート画像との類似度を表す二次元配列
             match = cv2.matchTemplate(img_h,temp_th,cv2.TM_CCORR_NORMED)
             #返り値は最小類似点、最大類似点、最小の場所、最大の場所
             min_value, max_value, min_pt, max_pt = cv2.minMaxLoc(match)
@@ -273,25 +274,27 @@ def match_text(frame,before_text,before_kersol):
                 
             #類似度が最大のもの順にソート
         new_d = sorted(s.items(), reverse = True)
-            #print(label_temp[new_d[0][1]])
-            #print(new_d[0][0])
-            #print(label_temp[new_d[1][1]])
-            #print(new_d[1][0])     
-            #new_d[0][1]がlabelの番号、new_d[0][0]が最大類似度
+        print(label_temp[new_d[0][1]])
+        print(new_d[0][0])
+        print(label_temp[new_d[1][1]])
+        print(new_d[1][0])     
+        #new_d[0][1]がlabelの番号、new_d[0][0]が最大類似度
             #print(char_List2)
             #print(width_m)
             #空白があるとき
         if new_d[0][0] < 0.7:
-                continue
-        if (j != 0) & (char_List2[j] > (width_m + char_List2[j-1])):
+            new_d = {}
+            continue
+        if (count!= 1) & (char_List2[count] > (width_m + char_List2[count-1])):
 
-            if (j+1) == len(char_List2)-1:
+            if (count+1) == len(char_List2):
                 out_modify = out_modify+ ' ' + label_temp[new_d[0][1]]
                 out = out + out_modify + "\n"
                 output_text.append(out_modify)
                 output_text.append('\n')
                 out_modify = ""
                 new_d = {}
+                count = 1
                 continue
                 #out_modify = speling.correct(out_modify)
                 #out_modify += label_temp[new_d[0][1]]
@@ -301,8 +304,8 @@ def match_text(frame,before_text,before_kersol):
             out_modify = ""
                 
 
-            #行の最後の時
-        if (j+1) == len(char_List2)-1:
+                #行の最後の時
+        if (count+1) == len(char_List2):
             start = time.perf_counter()
             #out_modify = speling.correct(out_modify)
             #end = time.perf_counter()
@@ -313,14 +316,15 @@ def match_text(frame,before_text,before_kersol):
             output_text.append('\n')
             out_modify = ""
             new_d = {}
-            end = time.perf_counter()
-            print(end-start)
+            count = 1
             continue
             #print(label_temp[new_d[0][1]])
         out_modify = out_modify + label_temp[new_d[0][1]]
         # print(out_modify)
         new_d = {}
+        count = 1
         continue
+    count += 1
 
     print(output_text)
     print(out)
