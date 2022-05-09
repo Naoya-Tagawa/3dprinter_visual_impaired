@@ -126,23 +126,24 @@ def Projection_V(img, height, width):
  
  
 def Detect_HeightPosition(H_THRESH, height, array_H):
-    lower_posi = 0
-    upper_posi = 0
+    char_List = np.array([])
  
+    flg = False
+    posi1 = 0
+    posi2 = 0
     for i in range(height):
         val = array_H[i]
-        if (val > H_THRESH):
-            lower_posi = i
-            break
+        if (flg==False and val >= H_THRESH):
+            flg = True
+            posi1 = i
  
-    for i in reversed(range(height)):
-        val = array_H[i]
-        if (val > H_THRESH):
-            upper_posi = i
-            break
+        if (flg == True and val < H_THRESH):
+            flg = False
+            posi2 = i
+            char_List = np.append(char_List, posi1)
+            char_List = np.append(char_List, posi2)
  
-    return lower_posi, upper_posi
- 
+    return char_List
  
 def Detect_WidthPosition(W_THRESH, width, array_V):
     char_List = np.array([])
@@ -196,23 +197,22 @@ if __name__ == "__main__":
     array_V = Projection_V(bw_img, height, width)
  
     # detect character height position
-    H_THRESH = 5
-    lower_posi, upper_posi = Detect_HeightPosition(H_THRESH, height, array_H)
+    H_THRESH = max(array_H)
+    char_List1 = Detect_HeightPosition(H_THRESH, height, array_H)
  
     # detect character width position
     W_THRESH = max(array_V)
-    char_List = Detect_WidthPosition(W_THRESH, width, array_V)
+    char_List2 = Detect_WidthPosition(W_THRESH, width, array_V)
     print(array_V)
     print(array_H)
-    print(char_List)
-    print(upper_posi)
-    print(lower_posi)
+    
     # draw image
-    if (len(char_List) % 2) == 0:
+    if (len(char_List1) % 2) == 0:
         print("Succeeded in character detection")
-        for i in range(0, (len(char_List)-1), 2):
-            img_k = cv2.rectangle(img_k, (int(char_List[i]), int(upper_posi)), (int(char_List[i+1]), int(lower_posi)), (0,0,255), 2)
-        cv2.imwrite("result.jpg", img_k)
+        for j in range(0,len(char_List1)-1,2):
+            for i in range(0, (len(char_List2)-1), 2):
+                syaei_img = cv2.rectangle(syaei_img, (int(char_List2[i]), int(char_List1[j])), (int(char_List2[i+1]), int(char_List1[j+1])), (0,0,255), 2)
+        cv2.imwrite("result1.jpg", syaei_img)
         
     else:
         print("Failed to detect characters")
