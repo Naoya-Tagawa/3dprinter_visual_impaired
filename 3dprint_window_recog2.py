@@ -238,7 +238,6 @@ def match_text(frame,before_text,before_kersol):
     w_position = [[int(char_List2[i]),int(char_List2[i+1])] for i in range(0,len(char_List2)-1,2)]
     print(len(char_List2))
     window_position = list(itertools.product(h_position,w_position))
-    pprint.pprint(window_position)
     head = 0
     index = []
     out_modify = "" #修正したテキスト

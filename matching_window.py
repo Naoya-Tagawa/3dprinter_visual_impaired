@@ -97,7 +97,7 @@ def points_extract(img):
 
 #対象画像をロード
 start = time.perf_counter()
-img = cv2.imread(r".\camera1\camera11.jpg")
+img = cv2.imread(r".\camera1\camera64.jpg")
 c_img = cv2.cvtColor(img,cv2.COLOR_BGR2RGB)
 m_img = cv2.cvtColor(img,cv2.COLOR_BGR2RGB)
 #plt.imshow(c_img)
@@ -158,6 +158,7 @@ out = ""
 before_kersol =""
 kersol = ""
 before_text = ""
+start = time.perf_counter()
 for f in window_z:
     l = 0
     while True:
@@ -187,6 +188,7 @@ for f in window_z:
         like_x.setdefault(new_d[0][0],x)
         if l == 0:
             l = 1
+
         elif l == 1:
             l = 2
         elif l == 2:
