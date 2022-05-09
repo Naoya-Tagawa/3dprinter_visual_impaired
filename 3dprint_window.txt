@@ -1560,3 +1560,11 @@ sensor is not
 responding, please
 check connection.
 
+[RR0R: Filament
+sensor is not
+responding, please
+check connection.
+
+Set temperature:
+2ll
+

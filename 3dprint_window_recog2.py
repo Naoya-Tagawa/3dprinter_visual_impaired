@@ -1,5 +1,6 @@
-import itertools
 import numpy as np
+import itertools
+import pprint
 import cv2
 import matplotlib.pyplot as plt
 import math
@@ -18,7 +19,6 @@ from dictionary_word import speling
 import difflib
 import numpy as np
 import cv2
-from itertools import product
 import matplotlib.pyplot as plt
 def cut_blue_img(img):
     c_img = cv2.cvtColor(img,cv2.COLOR_BGR2RGB)
@@ -226,9 +226,20 @@ def match_text(frame,before_text,before_kersol):
     height,width = img_mask.shape
     #縦方向のProjection Profileを保持
     array_H = Projection_H(img_mask,height,width)
+    #横も
+    array_V = Projection_V(img_mask,height,width)
     #縦方向の最大値を保持
     H_THRESH = max(array_H)
+    W_THRESH = max(array_V)
     char_List1 = Detect_HeightPosition(H_THRESH,height,array_H)
+    char_List2 = Detect_WidthPosition(W_THRESH,width,array_V)
+    #print(char_List2)
+    h_position = [[int(char_List1[i]),int(char_List1[i+1])] for i in range(0,len(char_List1)-1,2)]
+    w_position = [[int(char_List2[i]),int(char_List2[i+1])] for i in range(0,len(char_List2)-1,2)]
+    print(h_position)
+    print(w_position)
+    window_position = list(itertools.product(h_position,w_position))
+    pprint.pprint(window_position)
     head = 0
     index = []
     out_modify = "" #修正したテキスト
@@ -242,97 +253,74 @@ def match_text(frame,before_text,before_kersol):
     kersol = "" 
     #end_time = time.perf_counter()
     #print(end_time-start_time)
-    for i in range(0,len(char_List1)-1,2):
-        #end_time = time.perf_counter()
-        #print(end_time-start_time)
-        #行ごとに画像を切り取る
-        img_h = img_mask[int(char_List1[i]):int(char_List1[i+1]),:]
-        height_h , width_h =img_h.shape
-        #横方向のProjection Profileを得る
-        array_V = Projection_V(img_h,height_h,width_h)
-        W_THRESH = max(array_V)
-        char_List2 = Detect_WidthPosition(W_THRESH,width_h,array_V)
-        #end_time = time.perf_counter()
-        #print(end_time-start_time)
-        char2 = range(0,len(char_List2)-1,2)
-        mat = range(len(temp['x']))
-        block = list(itertools.product(char2,mat))
-        count =1
-        for j, f in block:
-            #一文字ずつ切り取る
-            match_img = img_mask[int(char_List1[i])-1:int(char_List1[i+1])+1,int(char_List2[j])-1:int(char_List2[j+1])+1]
-            match_img = cv2.resize(match_img,dsize=(26,36))
-            height_m,width_m = match_img.shape
-            #plt.imshow(match_img)
-            #plt.show()
-            #start = time.perf_counter()
+    for i in window_position:
+        print(i[0][1])
+        #img_h = img_mask[i[]]
+        for f in range(len(temp['x'])):
+            #end_time = time.perf_counter()
+            #print(end_time-start_time)
             temp_th = img_temp[f]
-            #plt.imshow(temp_th)
-            #plt.show()
             temp_th = cv2.resize(temp_th,dsize=(26,36))
             #テンプレートマッチング
-            #入力画像、テンプレート画像、類似度の計算方法が引数 返り値は検索窓の各市でのテンプレート画像との類似度を表す二次元配列
-            match = cv2.matchTemplate(match_img,temp_th,cv2.TM_CCORR_NORMED)
+        #     入力画像、テンプレート画像、類似度の計算方法が引数 返り値は検索窓の各市でのテンプレート画像との類似度を表す二次元配列
+            match = cv2.matchTemplate(img_h,temp_th,cv2.TM_CCORR_NORMED)
             #返り値は最小類似点、最大類似点、最小の場所、最大の場所
             min_value, max_value, min_pt, max_pt = cv2.minMaxLoc(match)
             #からのリストに
             s.setdefault(max_value,f)
-            count += 1
             #end = time.perf_counter()
             #print(end-start)
-            if count == len(temp['x']):
-                print("yes")
-                count = 1
-                #類似度が最大のもの順にソート
-                new_d = sorted(s.items(), reverse = True)
-                s = {}
-                print(new_d[0][0])
-                print(label_temp[new_d[0][1]])
-                print(new_d[1][0])
-                print(label_temp[new_d[1][1]])
-                #new_d[0][1]がlabelの番号、new_d[0][0]が最大類似度
-                #print(char_List2)
-                #print(width_m)
-                #空白があるとき
-                if (j != 0) & (char_List2[j] > (width_m + char_List2[j-1])):
-
-                    if (j+1) == len(char_List2)-1:
-                        out_modify = out_modify+ ' ' + label_temp[new_d[0][1]]
-                        out = out + out_modify + "\n"
-                        output_text.append(out_modify)
-                        output_text.append('\n')
-                        out_modify = ""
-                        new_d = {}
-                        continue
-                    #out_modify = speling.correct(out_modify)
-                    #out_modify += label_temp[new_d[0][1]]
-                    out = out + out_modify + ' '
-                    output_text.append(' ')
-                    output_text.append(out_modify)
-                    out_modify = ""
                 
-
-                #行の最後の時
-                if (j+1) == len(char_List2)-1:
-                    start = time.perf_counter()
-                    #out_modify = speling.correct(out_modify)
-                    #end = time.perf_counter()
-                    #print(end-start)
-                    out_modify = out_modify + label_temp[new_d[0][1]]
-                    out = out + out_modify + "\n"
-                    output_text.append(out_modify)
-                    output_text.append('\n')
-                    out_modify = ""
-                    new_d = {}
-                    end = time.perf_counter()
-                    print(end-start)
-                    continue
-                #print(label_temp[new_d[0][1]])
-                out_modify = out_modify + label_temp[new_d[0][1]]
-                # print(out_modify)
-                new_d = {}
-                
+            #類似度が最大のもの順にソート
+        new_d = sorted(s.items(), reverse = True)
+            #print(label_temp[new_d[0][1]])
+            #print(new_d[0][0])
+            #print(label_temp[new_d[1][1]])
+            #print(new_d[1][0])     
+            #new_d[0][1]がlabelの番号、new_d[0][0]が最大類似度
+            #print(char_List2)
+            #print(width_m)
+            #空白があるとき
+        if new_d[0][0] < 0.7:
                 continue
+        if (j != 0) & (char_List2[j] > (width_m + char_List2[j-1])):
+
+            if (j+1) == len(char_List2)-1:
+                out_modify = out_modify+ ' ' + label_temp[new_d[0][1]]
+                out = out + out_modify + "\n"
+                output_text.append(out_modify)
+                output_text.append('\n')
+                out_modify = ""
+                new_d = {}
+                continue
+                #out_modify = speling.correct(out_modify)
+                #out_modify += label_temp[new_d[0][1]]
+            out = out + out_modify + ' '
+            output_text.append(' ')
+            output_text.append(out_modify)
+            out_modify = ""
+                
+
+            #行の最後の時
+        if (j+1) == len(char_List2)-1:
+            start = time.perf_counter()
+            #out_modify = speling.correct(out_modify)
+            #end = time.perf_counter()
+            #print(end-start)
+            out_modify = out_modify + label_temp[new_d[0][1]]
+            out = out + out_modify + "\n"
+            output_text.append(out_modify)
+            output_text.append('\n')
+            out_modify = ""
+            new_d = {}
+            end = time.perf_counter()
+            print(end-start)
+            continue
+            #print(label_temp[new_d[0][1]])
+        out_modify = out_modify + label_temp[new_d[0][1]]
+        # print(out_modify)
+        new_d = {}
+        continue
 
     print(output_text)
     print(out)
@@ -539,7 +527,7 @@ def file_w(text,output_text):
 
 if __name__ == "__main__":
     #対象画像をロード
-    img = cv2.imread("./camera1/camera69.jpg")
+    img = cv2.imread("./camera1/camera64.jpg")
     #テンプレートをロード
     temp = np.load(r'./dataset2.npz')
     #テンプレート画像を格納
