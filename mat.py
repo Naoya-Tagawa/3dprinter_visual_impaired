@@ -116,7 +116,7 @@ plt.imshow(s_img)
 plt.show()
 
 #テンプレートをロード
-temp = np.load(r"./dataset.npz")
+temp = np.load(r"./dataset2.npz")
 #テンプレート画像を格納
 img_temp = temp['x']
 #テンプレートのラベル(文)を格納
@@ -167,6 +167,7 @@ for f in window_z:
         x, y , w , h = f
         x = x + l
         match_img = img_mask[y:y+h,x:x+w]
+        #st = time.perf_counter()
         for i in range(len(temp['x'])):
             temp_th = img_temp[i]
             #plt.imshow(temp_th)
@@ -181,6 +182,8 @@ for f in window_z:
             #からのリストに
             s.setdefault(max_value,i)
             #類似度が最大のもの順にソート
+        tt = time.perf_counter()
+        #print(tt-st)
         new_d = sorted(s.items(), reverse = True)
         #print(label_temp[new_d[0][1]])
         #print(new_d[0][0])

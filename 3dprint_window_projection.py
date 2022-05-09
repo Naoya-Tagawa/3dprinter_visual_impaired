@@ -267,7 +267,7 @@ def match_text(frame,before_text,before_kersol):
             #dd.append([int(char_List1[i])-1,int(char_List1[i+1])+1,int(char_List2[j])-1,int(char_List2[j+1])-1])
             #plt.imshow(match_img)
             #plt.show()
-            start = time.perf_counter()
+            #start = time.perf_counter()
             for f in range(len(temp['x'])):
                 #end_time = time.perf_counter()
                 #print(end_time-start_time)
@@ -276,11 +276,12 @@ def match_text(frame,before_text,before_kersol):
                 #テンプレートマッチング
                 #入力画像、テンプレート画像、類似度の計算方法が引数 返り値は検索窓の各市でのテンプレート画像との類似度を表す二次元配列
                 match = cv2.matchTemplate(match_img,temp_th,cv2.TM_CCORR_NORMED)
+                en = time.perf_counter()
                 #返り値は最小類似点、最大類似点、最小の場所、最大の場所
                 min_value, max_value, min_pt, max_pt = cv2.minMaxLoc(match)
                 #からのリストに
                 s.setdefault(max_value,f)
-                
+            #print(end-start)
             #類似度が最大のもの順にソート
             new_d = sorted(s.items(), reverse = True)
             #print(label_temp[new_d[0][1]])
@@ -323,8 +324,6 @@ def match_text(frame,before_text,before_kersol):
                 output_text.append('\n')
                 out_modify = ""
                 new_d = {}
-                end = time.perf_counter()
-                print(end-start)
                 continue
             #print(label_temp[new_d[0][1]])
             out_modify = out_modify + label_temp[new_d[0][1]]

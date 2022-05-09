@@ -18,6 +18,7 @@ def read_image():
                 break
             num += 1
             img = Image.open(f)  #Pillow(PIL)で画像読み込み。
+            img = img.convert('P')
             img = np.asarray(img) #ndarray化
             #img = cv2.cvtColor(img,cv2.COLOR_BGR2GRAY) #グレイスケール化
             #ret, img = cv2.threshold(img,125,255,cv2.THRESH_BINARY) #二値化
@@ -29,7 +30,7 @@ def read_image():
             y.append(data)
             fa.close()
 
-    glob_files(r'.\imgx\*',r'.\exx',640,480)
+    glob_files(r'.\imgx\*',r'.\exx',26,36)
     np.savez(outfile,x=x,y=y)
 
 
