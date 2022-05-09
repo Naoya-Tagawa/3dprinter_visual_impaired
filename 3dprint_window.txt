@@ -1103,3 +1103,550 @@ Prusa i3 MK3 0
   E T e e          ⤴
   SUppep            ⤴
 
+
+
+
+
+
+
+
+
+
+
+
+
+ASA  200000 0  SSSSSS SSSSSS  SSSSSS >SD  SSSSSS 
+ASA  200000 0  SSSSSS SSSSSS  SSSSSS >SD  SSSSSS 
+ASA A 2200000 00 S SSSSSSS SSSSSSS S SSSSSSS SSD S SSSSSSS S
+Caaabbaaaoo→
+SSSSSSSSSS→
+SSSSSSSS→
+SSSSSSSSSS→
+
+Caaabbaaaoo→
+SSSSSSSSSS→
+SSSSSSSS→
+SSSSSSSSSS→
+
+Caaabbaaaoo →
+SSSSSSSSSS →
+SSSS SSSS →
+SSSSSSSSSS →
+
+Caaabbaaaoo →
+SSSSSSSSSS →
+SSSS SSSS →
+SSSSSSSSSS →
+
+Caaabbaaaoo →
+SSSSSSSSSS →
+SSSS SSSS →
+SSSSSSSSSS →
+
+Caaabbaaaoo →
+SSSSSSSSSS →
+SSSS SSSS →
+SSSSSSSSSS →
+
+Caaabbaaaoo →
+SSSSSSSSSS →
+SSSS SSSS →
+SSSSSSSSSS →
+
+Caaabbaaaoo →
+SSSSSSSSSSSSSS SSSS →
+SSSSSSSS →
+
+Caaabbaaaoo →
+SSSSSSSSSS SSSS SSSS →
+SSSSSSSS →
+
+Caaabbaaaoo →
+SSSSSSSSSS →
+SSSS SSSS →
+SSSSSSSS 
+Caaabbaaaoo →
+SSSSSSSSSS →
+SSSS SSSS →
+SSSSSSSSSS →
+
+Caaabbbtttt →
+tttttttttt →
+test test →
+tttttttttt →
+
+Caaabbbtttt →
+tttttttttt →
+test test →
+tttttttttt →
+
+Caaabbbtttt →
+tttttttttt →
+test test →
+tttttttttt →
+
+Caaabbbtttt →
+tttttttttt →
+test test →
+tttttttttt →
+
+Caaabbbtttt →
+tttttttttt →
+test test →
+tttttttttt →
+
+Caaabbbtttt →
+tttttttttt →
+test test →
+tttttttttt →
+
+Calibration →
+Statistics →
+Fail stats →
+>Support →
+
+prusa3d.com →
+forum.prusa3d.com →
+howto.prusa3d.com →
+>------------ →
+
+virusx0.45_0.15mm_s
+watanabe_Schnecke?_
+wytanaby_Schnecke_0
+>watanabe_Schnecke_0
+
+V3_solid_virus_2x3_
+V3_solid_virusx8.45
+V3_solid_virusx8.45
+>V3.so1id_virusx0.45
+
+modell_8.3mm_PLA_MK
+modell_8.3mm_PLA_MK
+qQ_J.gcode
+>test3_0.3mm_PLA_MK3
+
+modell_8.3mm_PLA_MK
+modell_8.3mm_PLA_MK
+qQ_J.gcode
+>test3_0.3mm_PLA_MK3
+
+modell_8.3mm_PLA_MK
+modell_8.3mm_PLA_MK
+qQ_J.gcode
+>test3_0.3mm_PLA_MK3
+
+modell_8.3mm_PLA_MK
+modell_8.3mm_PLA_MK
+qQ_J.gcode
+>test3_0.3mm_PLA_MK3
+
+modell_8.3mm_PLA_MK
+modell_8.3mm_PLA_MK
+qQ_J.gcode
+>test3_0.3mm_PLA_MK3
+
+modell_8.3mm_PLA_MK
+modell_8.3mm_PLA_MK
+qQ_J.gcode
+>test3_0.3mm_PLA_MK3
+
+modell_8.3mm_PLA_MK
+modell_8.3mm_PLA_MK
+qQ_J.gcode
+>test3_0.3mm_PLA_MK3
+
+modell_8.3mm_PLA_MK
+modell_8.3mm_PLA_MK
+qQ_J.gcode
+>test3_0.3mm_PLA_MK3
+
+modell_8.3mm_PLA_MK
+modell_8.3mm_PLA_MK
+qQ_J.gcode
+>test3_0.3mm_PLA_MK3
+
+modell_8.3mm_PLA_MK
+modell_8.3mm_PLA_MK
+qQ_J.gcode
+>test3_0.3mm_PLA_MK3
+
+modell_8.3mm_PLA_MK
+modell_8.3mm_PLA_MK
+qQ_J.gcode
+>test3_0.3mm_PLA_MK3
+
+modell_8.3mm_PLA_MK
+modell_8.3mm_PLA_MK
+qQ_J.gcode
+>test3_0.3mm_PLA_MK3
+
+modell_8.3mm_PLA_MK
+modell_8.3mm_PLA_MK
+qQ_J.gcode
+>test3_0.3mm_PLA_MK3
+
+modell_8.3mm_PLA_MK
+modell_8.3mm_PLA_MK
+qQ_J.gcode
+>test3_0.3mm_PLA_MK3
+
+modell_8.3mm_PLA_MK
+modell_8.3mm_PLA_MK
+qQ_J.gcode
+>test3_0.3mm_PLA_MK3
+
+modell_8.3mm_PLA_MK
+modell_8.3mm_PLA_MK
+qQ_J.gcode
+>test3_0.3mm_PLA_MK3
+
+modell_8.3mm_PLA_MK
+modell_8.3mm_PLA_MK
+qQ_J.gcode
+>test3_0.3mm_PLA_MK3
+
+modell_8.3mm_PLA_MK
+modell_8.3mm_PLA_MK
+qQ_J.gcode
+>test3_0.3mm_PLA_MK3
+
+modell_8.3mm_PLA_MK
+modell_8.3mm_PLA_MK
+qQ_J.gcode
+>test3_0.3mm_PLA_MK3
+
+modell_8.3mm_PLA_MK
+modell_8.3mm_PLA_MK
+qQ_J.gcode
+>test3_0.3mm_PLA_MK3
+
+modell_8.3mm_PLA_MK
+model3_0.3mm_PLA_MK
+qQ_J.gcode
+>test3_0.3mm_PLA_MK3
+
+ASA- ? 68/105→ →
+ABS- 2 55/l88→ →
+HIPS- 2 28/l88→ →
+>PP- ] 54/100→ →
+
+ ASA- ? 68/105→→
+ ABS- 2 55/l88→→
+ HIPS- 2 28/l88→→
+ >PP- ] 54/100→→
+
+ASA - ?68/105→
+ABS - 255/l88→
+HIPS - 228/l88→
+>PP - ]54/100→
+
+ASA - ?68/105→
+ABS - 255/l88→
+HIPS - 228/l88→
+>PP - ]54/100→
+
+ASA - ?68/105→
+ABS - 255/l88→
+HIPS - 228/l88→
+>PP - ]54/100→
+
+ASA - ?68/105→
+ABS - 255/l88→
+HIPS - 228/l88→
+>PP - ]54/100→
+
+ASA - ?68/105→
+ABS - 255/l88→
+HIPS - 228/l88→
+>PP - ]54/100→
+
+ASA - ?68/105 →
+ABS - 255/l88 →
+HIPS - 228/l88 →
+>PP - ]54/100 →
+
+ASA - 160/105 →
+ABS - ?55/100 →
+NIPS - ??0/100 →
+>PP - ?54/100 →
+
+ASA - 160/105 →
+ABS - ?55/100 →
+NIPS - ??0/100 →
+>PP - ?54/100 →
+
+ASA - ?60/105 →
+ABS - ?55/100 →
+HIPS - ??0/100 →
+>PP - ?54/100 →
+
+ASA - ?60/105 →
+ABS - ?55/100 →
+HIPS - ??0/100 →
+>PP - ?54/100 →
+
+Crash det. [0ff]
+HW Setup →
+Mesh bed 1eveling →
+>Lin. correction →
+
+ASA - ?60/105 →
+ABS - ?55/100 →
+HIPS - ??0/100 →
+>PP - ?54/100 →
+
+ASA - ?60/105 →
+ABS - ?55/100 →
+HIPS - ??0/100 →
+>PP - ?54/100 →
+
+Set temperature[H]
+?08
+
+>Settings ⤴
+[nglish
+Cestina
+Deutsch
+
+Origina1 Prusa i3
+Prusa Research
+
+Origina1 Prusa i3
+Prusa Research
+
+ASA - ?60/105 →
+ABS - ?55/100 →
+HIPS - ??0/100 →
+>PP - ?54/100 →
+
+ERROR:
+Preheat the nozzle!
+
+ASA - ?60/105 →
+ABS - ?55/100 →
+HIPS - ??0/100 →
+>PP - ?54/100 →
+
+Be1t test
+Selftest
+Calibrate XYZ
+>0a1ibrate Z →
+
+Main ⤴
+>Firmware: ⤴
+3.9.0-34?1 ⤴
+prusa3d.com ⤴
+
+Main ⤴
+>Firmware: ⤴
+3.9.0-34?1 ⤴
+prusa3d.com ⤴
+
+Main ⤴
+>Firmware: ⤴
+3.9.0-34?1 ⤴
+prusa3d.com ⤴
+
+Main ⤴
+>Firmware: ⤴
+3.9.0-34?1 ⤴
+prusa3d.com ⤴
+
+Main ⤴
+>Firmware: ⤴
+3.9.0-34?1 ⤴
+prusa3d.com ⤴
+
+Set temperature[H]
+?09
+
+インジケーター126/211° Z 0,1■°
+[H] ?1/0° ↓100%
+---% 〇--[H]--
+P1D cal. 0/5
+
+ASA - ?60/105 →
+ABS - ?55/100 →
+HIPS - ??0/100 →
+>PP - ?54/100 →
+
+ASA - ?60/105 →
+ABS - ?55/100 →
+HIPS - ??0/100 →
+>PP - ?54/100 →
+
+>Calibration ⤴
+Calibrate →
+
+>Calibration ⤴
+Calibrate →
+
+ASA - 260/105 →
+ABS - 255/l00 →
+HlPS - 220/l00 →
+>PP - 254/100 →
+
+Set temperature:
+210
+
+ERROR:
+Preheat the nozzle!
+
+>Settings ⤴
+[nglish
+Cestina
+Deutsch
+
+インジケーター126/211° Z 0,15?
+: 21/0° >>l00%
+---% 〇--:--
+PlD cal. 0/5
+
+MK3.PRUSA_dual_colo
+modei2.0.3mm_PLA_MK
+model1.0.3mm_PLA_MK
+>m〇del3.0.3mm_PLA_MK
+
+MK3.PRUSA_dual_colo
+modei2.0.3mm_PLA_MK
+model1.0.3mm_PLA_MK
+>model3.0.3mm_PLA_MK
+
+Set temperature:
+209
+
+Set temperature:
+209
+
+V3_solid_virus_2x3_
+V3_solid_virusx0.45
+V3.solid_virusx0.45
+>V3.solid.virusx0.45
+
+Main
+PLA - 2l5/60 →
+>PET - 230/05 +
+ASA - 260/105 +
+
+Crash det. [0ff]
+HW Setup →
+Mesh bed leveling →
+>Lin. correction →
+
+Sorting files
+000000
+
+ls filament loaded?
+>Yes
+No
+
+>Settings ⤴
+[nglish
+Cestina
+Deutsch
+
+Bed level correct →
+PlD calibration →
+Reset XYZ calibr.
+>Temp. calibration →
+
+Nozzle FAN: 0 RPM
+Print FAN: 0 RPM
+Filament sensor
+is disabled.
+
+[RR0R: Filament
+sensor is not
+responding, please
+check connection.
+
+[RR0R: Filament
+sensor is not
+responding, please
+check connection.
+
+Set temperature:
+2ll
+
+
+
+
+
+Set temperature:
+2ll
+
+
+
+
+
+Set temperature:
+2ll
+
+
+Set temmmmmmmmm:
+::: ::::::::::::
+
+Set temperature:
+
+Set temperature:
+
+Set temperature:
+
+Set temperature:
+
+Set temperature:
+
+Set temperature:
+2ll 2ll  2ll   2ll    2ll     2ll      2ll       2ll        2ll         2ll          2ll           2ll            
+Set temperature:
+2ll            
+Set temperature:
+2ll 
+ASA -2 6 0/105→ A B
+S -255 / l00→ HlP S
+-220/ l 00→>PP - 2
+54/10 0 
+ASA - 260/105 →
+ABS - 255/l00 →
+HlPS - 220/l00 →
+>PP - 254/100 →
+
+ASA - 260/105 →
+ABS - 255/l00 →
+HlPS - 220/l00 →
+>PP - 254/100 →
+
+ASA - 2 60/105→ ABS - 2 55/l00→ HlPS- 2 20/l00→ >
+PP -2 5 
+ASA - 2 60/105→ ABS - 2 55/l00→ HlPS- 2 20/l00→ >
+PP -2 5 
+ASA - 260/105 →
+ABS - 255/l00 →
+HlPS - 220/l00 →
+>PP - 254/100 →
+
+ASA - 260/105 →
+ABS - 255/l00 →
+HlPS - 220/l00 →
+>PP - 254/100 →
+
+ASA - 2 60/105→ ABS - 2 55/l00→ HlPS- 2 20/l00→ >
+PP -2 5 
+ASA - 260/105 →
+ABS - 255/l00 →
+HlPS - 220/l00 →
+>PP - 254/100 →
+
+virusx0.45_0.15mm_s
+watanabe.Schnecke2_
+watanabe.Schnecke_0
+>watanabe.Schnecke_0
+
+virus w
+atan wa
+tan>wat
+
+viruswa
+tanwata
+n>watan
+
