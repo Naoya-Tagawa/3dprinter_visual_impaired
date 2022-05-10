@@ -418,6 +418,8 @@ def kersol_search(text):
 #カーソルの位置をいう
 def kersol_read(text):
     engine = pyttsx3.init()
+    voice = engine.getProperty('voice')
+    engine.setProperty("voice",voice[1].id)
     #rateはデフォルトが200
     rate = engine.getProperty('rate')
     engine.setProperty('rate',150)
@@ -463,6 +465,8 @@ def kersol_read(text):
 #テキスト全部読み上げ
 def whole_text_read(text):
     engine = pyttsx3.init()
+    voices = engine.getProperty('voices')
+    engine.setProperty("voice",voices[1].id)
     #rateはデフォルトが200
     rate = engine.getProperty('rate')
     engine.setProperty('rate',150)
@@ -515,6 +519,8 @@ def kersol_exist_search(kersol,text):
 
 def partial_text_read(text):
     engine = pyttsx3.init()
+    voices = engine.getProperty('voices')
+    engine.setProperty("voice",voices[1].id)
     #rateはデフォルトが200
     rate = engine.getProperty('rate')
     engine.setProperty('rate',150)
