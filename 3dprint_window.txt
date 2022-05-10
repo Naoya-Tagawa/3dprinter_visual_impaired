@@ -197,3 +197,346 @@ Print from SD →
 ---% :--:--
 Prusa i3 MK3 OK,
 
+:,8---% :--:--
+
+インジケーター 25/0° Z 0,15?
+[H] 26/0° >>100%
+---% :--:--
+Prusa i3 MK3 OK.
+
+インジケーター 25/0° Z 015?
+[H] 25/0° >>100%
+---% >>--:--
+Prusa i3 MK3 OK.
+
+lnfo screen ⤴
+>Preheat →
+Prlnt from SD →
+Load filament →
+
+Info screen ⤴
+>Preheat →
+Print from ED ⤴
+Load f11am>>n ⤴
+
+Info screen ⤴
+>Preheat →
+Print from SD →
+Load filament →
+
+
+>Info screen ⤴
+Preheat →
+Print from SD →
+Load filament →
+
+>Info screen ⤴
+Preheat →
+Print from SD →
+Load filament →
+
+>1nfo screen ⤴
+Preheat +
+Print from SD +
+Load filament +
+
+Calibration →
+Statistics →
+Fail stats →
+>Support →
+
+Calibration →
+Statistics →
+Fail stats →
+>Support →
+
+Calibration →
+Statistics →
+Fail stats →
+>Support →
+
+Calibration →
+Statistics →
+Fail stats →
+>Support →
+
+
+Calibration →
+>Statistics →
+Fail stats →
+Support →
+
+
+Calibration →
+Statistics →
+Fail stats →
+>Support →
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+:,1 r:w i:[H][H],
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+インジケーター 25/0° Z 015?
+[H] 26/0° >>100%
+---% :--:--
+
+
+,:°---% :--:-usa i3 MK3 OK,
+
+::,°--% e,e°ry4e 1: :: 1.
+
+インジケーター 25/0° Z 015?
+[H] 26/0° >>100%
+---% :--:--
+Prusa i3 MK3 OK.
+
+インジケーター 25/0° Z 01?
+: 26/0° >>100%
+---% :--:--
+Prusa i3 MK3 OK.
+
+Info screen ⤴
+>Preheat →
+Print from SD →
+Load filament →
+
+lnfo screen ⤴
+>Preheat →
+Print from SD →
+Load filament →
+
+インジケーター 25/0° Z 0,15?
+[H] 25/0° >>100%
+---% :--:--
+Prusa i3 MK3 OK.
+
+インジケーター 25/0° Z 0,15?
+: 250° >>l00%
+---% >>--:--
+Prusa i3 MK3 OK.
+
+Info screen ⤴
+Preheat +
+>Print from SD →
+Load filament →
+
+Info screen ⤴
+Preheat +
+Print from SD →
+>Load filament →
+
+Info screen ⤴
+Preheat +
+Print from SD →
+>Load filament →
+
+Preheat →
+Print from SD →
+Load filament →
+>Unload filament →
+
+Print from SD +
+Load filament →
+Un1oad filament →
+>Settings →
+
+Load filament →
+Vn1oad filament →
+Settings →
+>Calibration →
+
+Vnload filament →
+Settings +
+Calibration →
+>Statistics →
+
+Settings +
+Calibration →
+Statistics →
+>Fail stats +
+
+Settings +
+Calibration +
+Statistics →
+>Fail stats →
+
+Settings →
+Calibration →
+Statistics →
+>Fail stats →
+
+Settings →
+Calibration →
+Statistics →
+>Fail stats →
+
+Settings →
+Calibration →
+Statistics →
+>Fail stats →
+
+インジケーター:,8°---% :--:--
+Prusa i3 MK3 OK.
+
+インジケーター28,8°---% :--:--
+Prusa i3 MK3 OK.
+
+インジケーター:,8°---% :--:--
+Prusa i3 MK3 OK.
+
+インジケーター 25/0° Z 015?
+: 260P >>100%
+---% :--:--
+Prusa i3 MK3 OK.
+
+インジケーター:,8°---% :--:--
+Prusa i3 MK3 OK.
+
+インジケーター:,8°---% :--:--
+Prusa i3 MK3 OK.
+
+インジケーター:,8°---% :--:--
+Prusa i3 MK3 OK.
+
+インジケーター2:,8°---% :--:--
+Prusa i3 MK3 OK.
+
+インジケーター:,8°---% :--:--
+Prusa i3 MK3 OK.
+
+インジケーター28,8°---% :--:--
+Prusa i3 MK3 OK.
+
+インジケーター 24/0° Z 015?
+: 260° >>100%
+---% :--:--
+Prusa i3 MK3 OK.
+
+Info screen ⤴
+Preheat →
+Print from SD →
+>Load filament →
+
+Info screen ⤴
+Preheat →
+Print from SD →
+>Load filament →
+
+Info screen ⤴
+Preheat →
+Print from SD →
+>Load filament →
+
+>Info screen ⤴
+Preheat →
+Print from SD →
+Load filament →
+
+>Info screen ⤴
+Preheat →
+Print from SD →
+Load filament →
+
+>Info screen ⤴
+Preheat →
+Print from SD →
+Load filament →
+
+>Info screen ⤴
+Preheat ⤴
+Pplnt from SD ⤴
+Load f11amen: ⤴
+
+>Info screen ⤴
+Preheat →
+Print from SD →
+Load filament →
+
+>Info screen ⤴
+Preheat →
+Print from SD →
+Load filament →
+
+>Info screen ⤴
+Preheat →
+Print from SD →
+Load filament →
+
+
+

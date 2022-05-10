@@ -111,13 +111,6 @@ def Projection_H(img, height, width):
             if (temp_pixVal == 0):
                 total_count += 1
         array_H[i] = total_count
- 
- 
-    fig = plt.figure()
-    ax = fig.add_subplot(1, 1, 1)
-    x_axis = np.arange(height)
-    ax.barh(x_axis, array_H)
-    fig.savefig("hist_H2.png")
     return array_H
  
 #横方向のProjection profileを得る
@@ -226,8 +219,6 @@ def match_text(frame,before_text,before_kersol):
     img_mask = cv2.medianBlur(img_mask,3)
     #膨張化
     img_mask = cv2.dilate(img_mask,kernel)
-    plt.imshow(img_mask)
-    plt.show()
     #高さ、幅を保持
     height,width = img_mask.shape
     #縦方向のProjection Profileを保持
@@ -361,7 +352,7 @@ def match_text(frame,before_text,before_kersol):
             engine = pyttsx3.init()
             #rateはデフォルトが200
             rate = engine.getProperty('rate')
-            engine.setProperty('rate',150)
+            engine.setProperty('rate',300)
             #volume デフォルトは1.0 設定は0.0~1.0
             volume = engine.getProperty('volume')
             engine.setProperty('volume',1.0)
@@ -431,7 +422,7 @@ def kersol_read(text):
     engine.setProperty("voice",voice[1].id)
     #rateはデフォルトが200
     rate = engine.getProperty('rate')
-    engine.setProperty('rate',150)
+    engine.setProperty('rate',300)
     #volume デフォルトは1.0 設定は0.0~1.0
     volume = engine.getProperty('volume')
     engine.setProperty('volume',1.0)
@@ -478,7 +469,7 @@ def whole_text_read(text):
     engine.setProperty("voice",voices[1].id)
     #rateはデフォルトが200
     rate = engine.getProperty('rate')
-    engine.setProperty('rate',150)
+    engine.setProperty('rate',300)
     #volume デフォルトは1.0 設定は0.0~1.0
     volume = engine.getProperty('volume')
     engine.setProperty('volume',1.0)
@@ -532,7 +523,7 @@ def partial_text_read(text):
     engine.setProperty("voice",voices[1].id)
     #rateはデフォルトが200
     rate = engine.getProperty('rate')
-    engine.setProperty('rate',150)
+    engine.setProperty('rate',300)
     #volume デフォルトは1.0 設定は0.0~1.0
     volume = engine.getProperty('volume')
     engine.setProperty('volume',1.0)
