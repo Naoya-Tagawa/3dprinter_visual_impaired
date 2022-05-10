@@ -18,6 +18,10 @@ import difflib
 import numpy as np
 import cv2
 import matplotlib.pyplot as plt
+#話すスピード
+speed = 200
+#ボリューム
+vol = 1.0
 def cut_blue_img(img):
     c_img = cv2.cvtColor(img,cv2.COLOR_BGR2RGB)
     img_hsv = cv2.cvtColor(img,cv2.COLOR_BGR2HSV)
@@ -341,26 +345,20 @@ def match_text(frame,before_text,before_kersol):
     #前と後のカーソルの類似度
     s = difflib.SequenceMatcher(None,before_kersol,present_kersol)
     if kersol_exist_search(before_kersol,out) == True: #前のカーソルがある(全画面変わっていない)
-        print("True")
-        if s.ratio() >= 0.95:
-            engine = pyttsx3.init()
-            engine.say("現在のカーソルは")
-            engine.runAndWait()
-            partial_text_read(present_kersol)
-        
-        else: #カーソルが変わっていたら
+        if s.ratio() <= 0.90: #カーソルが変わっていたら
             engine = pyttsx3.init()
             #rateはデフォルトが200
+            voice = engine.getProperty('voice')
+            engine.setProperty("voice",voice[1].id)
             rate = engine.getProperty('rate')
-            engine.setProperty('rate',300)
+            engine.setProperty('rate',speed)
             #volume デフォルトは1.0 設定は0.0~1.0
             volume = engine.getProperty('volume')
-            engine.setProperty('volume',1.0)
-            engine.say("カーソルが")
+            engine.setProperty('volume',vol)
+            engine.say("cursor was changed from")
             partial_text_read(before_kersol)
-            engine.say("から")
+            engine.say("to")
             partial_text_read(present_kersol)
-            engine.say("に変更されました")
             engine.runAndWait()
     
     elif (len(before_kersol) == 0) & (len(present_kersol) == 0): #前のカーソルも今のカーソルもない(数値の画面が変わった)
@@ -374,23 +372,34 @@ def match_text(frame,before_text,before_kersol):
                 after.append(word[2:])
         if (0< len(before) < 6) & (0 < len(after) < 6):
             engine = pyttsx3.init()
+            voice = engine.getProperty('voice')
+            engine.setProperty("voice",voice[1].id)
             #rateはデフォルトが200
             rate = engine.getProperty('rate')
-            engine.setProperty('rate',150)
+            engine.setProperty('rate',speed)
             #volume デフォルトは1.0 設定は0.0~1.0
             volume = engine.getProperty('volume')
-            engine.setProperty('volume',1.0)
+            engine.setProperty('volume',vol)
+            engine.say("Changed from")
             whole_text_read(before)
-            engine.say("から")
+            engine.say("to")
             whole_text_read(after)
-            engine.say("に変更になりました")
             engine.runAndWait()
-        
+        else:
+            whole_text_read(output_text)
+            
     else: #全画面変化
         whole_text_read(output_text)
         engine = pyttsx3.init()
+        voice = engine.getProperty('voice')
+        engine.setProperty("voice",voice[1].id)
+        rate = engine.getProperty('rate')
+        engine.setProperty('rate',speed)
+        #volume デフォルトは1.0 設定は0.0~1.0
+        volume = engine.getProperty('volume')
+        engine.setProperty('volume',vol)
         if kersol_exist_search == True:
-            engine.say("現在のカーソルは")
+            engine.say("The current cursor position is")
             partial_text_read(present_kersol)
             engine.runAndWait()
 
@@ -422,12 +431,12 @@ def kersol_read(text):
     engine.setProperty("voice",voice[1].id)
     #rateはデフォルトが200
     rate = engine.getProperty('rate')
-    engine.setProperty('rate',300)
+    engine.setProperty('rate',speed)
     #volume デフォルトは1.0 設定は0.0~1.0
     volume = engine.getProperty('volume')
-    engine.setProperty('volume',1.0)
+    engine.setProperty('volume',vol)
     count = 0
-    engine.say("現在のカーソルは")
+    engine.say("The current cursor position is")
     for word in text:
         if word == ' ':
             continue
@@ -469,10 +478,10 @@ def whole_text_read(text):
     engine.setProperty("voice",voices[1].id)
     #rateはデフォルトが200
     rate = engine.getProperty('rate')
-    engine.setProperty('rate',300)
+    engine.setProperty('rate',speed)
     #volume デフォルトは1.0 設定は0.0~1.0
     volume = engine.getProperty('volume')
-    engine.setProperty('volume',1.0)
+    engine.setProperty('volume',vol)
     count = 0
     for word in text:
         if word == ' ':
@@ -523,10 +532,10 @@ def partial_text_read(text):
     engine.setProperty("voice",voices[1].id)
     #rateはデフォルトが200
     rate = engine.getProperty('rate')
-    engine.setProperty('rate',300)
+    engine.setProperty('rate',speed)
     #volume デフォルトは1.0 設定は0.0~1.0
     volume = engine.getProperty('volume')
-    engine.setProperty('volume',1.0)
+    engine.setProperty('volume',vol)
     engine.say(text)
     engine.runAndWait()
 
