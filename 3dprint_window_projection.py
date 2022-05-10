@@ -381,7 +381,7 @@ def match_text(frame,before_text,before_kersol):
                 before.append(word[2:])
             elif word[0] == '+':
                 after.append(word[2:])
-        if (len(before) > 0) & (len(after) > 0):
+        if (0< len(before) < 6) & (0 < len(after) < 6):
             engine = pyttsx3.init()
             #rateはデフォルトが200
             rate = engine.getProperty('rate')
@@ -398,9 +398,10 @@ def match_text(frame,before_text,before_kersol):
     else: #全画面変化
         whole_text_read(output_text)
         engine = pyttsx3.init()
-        engine.say("現在のカーソルは")
-        partial_text_read(present_kersol)
-        engine.runAndWait()
+        if kersol_exist_search == True:
+            engine.say("現在のカーソルは")
+            partial_text_read(present_kersol)
+            engine.runAndWait()
 
     #前のテキストを保持
     print(present_kersol)
@@ -426,6 +427,8 @@ def kersol_search(text):
 #カーソルの位置をいう
 def kersol_read(text):
     engine = pyttsx3.init()
+    voice = engine.getProperty('voice')
+    engine.setProperty("voice",voice[1].id)
     #rateはデフォルトが200
     rate = engine.getProperty('rate')
     engine.setProperty('rate',150)
@@ -471,6 +474,8 @@ def kersol_read(text):
 #テキスト全部読み上げ
 def whole_text_read(text):
     engine = pyttsx3.init()
+    voices = engine.getProperty('voices')
+    engine.setProperty("voice",voices[1].id)
     #rateはデフォルトが200
     rate = engine.getProperty('rate')
     engine.setProperty('rate',150)
@@ -506,7 +511,7 @@ def whole_text_read(text):
             engine.say(r)
             engine.say("ドット")
             r = word[idx:]
-            engine.say(word)
+            engine.say(r)
             continue
         engine.say(word)
     
@@ -523,6 +528,8 @@ def kersol_exist_search(kersol,text):
 
 def partial_text_read(text):
     engine = pyttsx3.init()
+    voices = engine.getProperty('voices')
+    engine.setProperty("voice",voices[1].id)
     #rateはデフォルトが200
     rate = engine.getProperty('rate')
     engine.setProperty('rate',150)
