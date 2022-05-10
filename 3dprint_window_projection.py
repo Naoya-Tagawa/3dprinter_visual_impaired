@@ -240,7 +240,6 @@ def match_text(frame,before_text,before_kersol):
     kersol = "" 
     #end_time = time.perf_counter()
     #print(end_time-start_time)
-    start_time = time.perf_counter()
     for i in range(0,len(char_List1)-1,2):
         #end_time = time.perf_counter()
         #print(end_time-start_time)
@@ -261,7 +260,7 @@ def match_text(frame,before_text,before_kersol):
             new_d = {}
             s={}
             #一文字ずつ切り取る
-            match_img = img_mask[int(char_List1[i])-1:int(char_List1[i+1])+1,int(char_List2[j])-1:int(char_List2[j+1])+1]
+            match_img = img_mask[int(char_List1[i])-2:int(char_List1[i+1])+2,int(char_List2[j])-1:int(char_List2[j+1])+1]
             match_img = cv2.resize(match_img,dsize=(26,36))
             height_m,width_m = match_img.shape
             #dd.append([int(char_List1[i])-1,int(char_List1[i+1])+1,int(char_List2[j])-1,int(char_List2[j+1])-1])
@@ -306,10 +305,12 @@ def match_text(frame,before_text,before_kersol):
                     continue
                 #out_modify = speling.correct(out_modify)
                 #out_modify += label_temp[new_d[0][1]]
-                out = out + out_modify + ' '
-                output_text.append(' ')
-                output_text.append(out_modify)
-                out_modify = ""
+                out_modify += ' '
+                #out = out + out_modify
+                #output_text.append(' ')
+                #output_text.append(out_modify)
+                #print(out_modify)
+                #out_modify = ""
                 
 
             #行の最後の時
@@ -533,7 +534,7 @@ def file_w(text,output_text):
 
 if __name__ == "__main__":
     #対象画像をロード
-    img = cv2.imread("./camera1/camera10.jpg")
+    img = cv2.imread("./camera1/camera23.jpg")
     #テンプレートをロード
     temp = np.load(r'./dataset2.npz')
     #テンプレート画像を格納

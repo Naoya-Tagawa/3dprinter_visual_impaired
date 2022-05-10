@@ -6,7 +6,6 @@ import glob
 from natsort import natsorted
 import matplotlib.pyplot as plt
 from PIL import Image
-import datamake
 
 files = glob.glob(r'C:\Users\Naoya Tagawa\Desktop\ex4\*')
 files = natsorted(files)

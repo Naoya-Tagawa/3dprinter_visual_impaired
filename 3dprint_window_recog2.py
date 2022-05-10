@@ -543,7 +543,7 @@ if __name__ == "__main__":
     #対象画像をロード
     img = cv2.imread("./camera1/camera25.jpg")
     #テンプレートをロード
-    temp = np.load(r'./dataset2.npz')
+    temp = np.load(r'./dataset.npz')
     #テンプレート画像を格納
     img_temp = temp['x']
     #テンプレートのラベル(文)を格納

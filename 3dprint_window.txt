@@ -1884,3 +1884,161 @@ Statistics →
 Fail stats →
 >Support →
 
+Calibration →
+Statistics →
+Fail stats →
+>Support →
+
+Sorting files
+
+Sorting files
+
+Crash det. [0ff]
+NW Setup →
+Mesh bed leveling →
+>Lin. correction →
+
+Select language +
+SD card [Normal]
+>Eort [Alphabet]
+Eound [0nce]
+
+Select language +
+SD card [Normal]
+>Sort [Alphabet]
+Sound [Once]
+
+Orash det. [Off]
+NW Setup →
+Mesh bed leveling →
+>Lin. correction →
+
+Orash det. [Off]
+NW Setup →
+Mesh bed leveling →
+>Lin. correction →
+
+Select language +
+SD card [Normal]
+>Sort [Alphabet]
+Sound [Once]
+
+>Back ⤴
+Level Bright: 130
+Level Dimmed: 50
+Mode [Auto]
+
+[spanol
+Francais
+ltaliano
+>Polski
+
+Set temperature:
+209
+
+Last print failures
+Power failures 1
+Runouts N 0 S 0
+Crash X 0 Y 0
+
+>Main ⤴
+Last print →
+Total →
+
+>Main ⤴
+Last print →
+Total →
+
+>Main ⤴
+Last print →
+Total →
+
+>Main ⤴
+Last print →
+Total →
+
+>Main ⤴
+Last print →
+Total →
+
+>Main ⤴
+Last print →
+Total →
+
+>Main ⤴
+Last Last print →
+Total →
+
+>Main ⤴
+Last print →
+Total →
+
+Sensor state
+FlNDA: 0
+FlNDA: N/A
+lR: l
+
+Sensor state
+FINDA: 0
+FINDA: N/A
+IR: l
+
+Nozzle FAN: 0 RPM
+Frint FAN: 0 RPM
+Filament sensor
+is disabled.
+
+インジケーター126/2ll° Z 0,l?
+: 21/0° >>l00%
+---% :--:--
+FID cal. 0/5
+
+インジケーター12E/Zll° Z 0l?
+: 21/0° >>l00%
+---% :--:--
+FID cal. 0/5
+
+インジケーターl/ll° Z 0l: 21/0° >>l00%
+---% :--:--
+PID cal. 0/5
+
+Sensor state
+PINDA: 0
+FINDA: N/A
+IR: 1
+
+Sensor state
+FINDA: 0
+FINDA: N/A
+IR: 1
+
+Sensor state
+PINDA: 0
+FINDA: N/A
+IP: 1
+
+Crash det. [Off]
+NW Setup →
+Mesh bed leveling →
+>Lin. correction →
+
+Total failures
+Power failures 1
+Filam. runouts 0
+Crash X 0 Y 0
+
+Total failures
+Power failures 1
+Filam. runouts 0
+Crash X 0 Y 0
+
+Crash det. [Off]
+NW Setup →
+Mesh bed leveling →
+>Lin. correction →
+
+Last print failures
+Power failures 1
+Punouts H 0 S 0
+Crash X 0 Y 0
+
