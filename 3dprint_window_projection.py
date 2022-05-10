@@ -112,6 +112,12 @@ def Projection_H(img, height, width):
                 total_count += 1
         array_H[i] = total_count
  
+ 
+    fig = plt.figure()
+    ax = fig.add_subplot(1, 1, 1)
+    x_axis = np.arange(height)
+    ax.barh(x_axis, array_H)
+    fig.savefig("hist_H2.png")
     return array_H
  
 #横方向のProjection profileを得る
@@ -171,7 +177,7 @@ def Detect_WidthPosition(W_THRESH, width, array_V):
  
  
 def camera(cycle,count):
-    cap = cv2.VideoCapture(2)
+    cap = cv2.VideoCapture(0)
     read_fps = cap.get(cv2.CAP_PROP_FPS)
     print(read_fps)
     time_counter = 0
@@ -180,7 +186,7 @@ def camera(cycle,count):
         #フレームが取得できない場合は画面を閉じる
         if not ret:
             cv2.destroyAllWindows()
-        time_counter += 300
+        time_counter += 100
         cv2.imshow("frame",frame)
         if count == 0:
             b_text = []
@@ -190,7 +196,7 @@ def camera(cycle,count):
             time_counter = 0
             b_text , b_kersol = match_text(frame,b_text,b_kersol)
             
-            #count+=1
+            count = 1
         #qキーが入力されたら画面を閉じる
         if cv2.waitKey(1) & 0xFF == ord('q'):
             cap.release()
@@ -220,6 +226,8 @@ def match_text(frame,before_text,before_kersol):
     img_mask = cv2.medianBlur(img_mask,3)
     #膨張化
     img_mask = cv2.dilate(img_mask,kernel)
+    plt.imshow(img_mask)
+    plt.show()
     #高さ、幅を保持
     height,width = img_mask.shape
     #縦方向のProjection Profileを保持
@@ -227,6 +235,7 @@ def match_text(frame,before_text,before_kersol):
     #縦方向の最大値を保持
     H_THRESH = max(array_H)
     char_List1 = Detect_HeightPosition(H_THRESH,height,array_H)
+    print(char_List1)
     head = 0
     index = []
     out_modify = "" #修正したテキスト
@@ -543,4 +552,5 @@ if __name__ == "__main__":
     label_temp = temp['y']
     before_text = "Main   →"
     kersol = ">Main"
-    match_text(img,before_text,kersol)
+    #match_text(img,before_text,kersol)
+    camera(300,0)

@@ -2042,3 +2042,190 @@ Power failures 1
 Punouts H 0 S 0
 Crash X 0 Y 0
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+!
+
+
+Load filament →
+Unload filament →
+Settings →
+>Calibration →
+
+Calibration →
+Statistics →
+Fail stats →
+>Support →
+
+Info screen ⤴
+>Preheat →
+Print from SD →
+Load filament →
+
+Vnload filament →
+Settings +
+Calibration →
+>Statistics +
+
+>Main ⤴
+Last print →
+Total →
+
+Total failures
+Power failures 2
+Filam. runouts 0
+Crash X 0 Y 0
+
+Total failures
+Power failures 2
+Pilam. runouts 0
+Crash X 0 Y 0
+
+インジケーター 23/0° Z 015?
+: 250P >>100%
+---% :--:--
+Prusa i3 MK3 OK.
+
+
+
+
+
+
+
+
+-+,.prus0. ⤴
+-,oo.prwa%.cm ⤴
+,,,,,,,, ⤴
+1__:3 ⤴
+
+forum.prusa3d.com ⤴
+howto.prusa3d.com ⤴
+ +
+>1_75mm_MK3 ⤴
+
+FINSy_10a ⤴
+[3Dv6full ⤴
+ +
+>Date: ⤴
+
+インジケーター 23/0° Z 015?
+: 24/0° >>100%
+---% :--:--
+
+Calibration →
+Statistics →
+Fail stats →
+>Support →
+
+Main ⤴
+Temperature →
+Move axis →
+>Disable steppers
+
+SD card [Normal]
+Sort [Alphabet]
+Sound [Silent]
+0rightness →
+
+Back ⤴
+Level 0right: 130
+Level Dimmed: 50
+Mode [Auto]
+
+0ack ⤴
+Level Bright: 130
+>Level Dimmed: 50
+Mode [Auto]
+
+Level Pright: 130
+Level Dimmed: 50
+Mode [Auto]
+>T1meovt: 10
+
+>Temp. cal. [On]
+PPl port [Off]
+Llve ad5ust Z →
+Select language →
+
+>Maln ⤴
+Temperature →
+Move axis →
+Disable steppers
+
+Maln ⤴
+>Temperature →
+Move axis →
+Disable steppers
+
+インジケーター 24/0° Z 015?
+[H] 25/0° >>l00%
+---% >>--:--
+Prusa i3 MK3 OK.
+
+インジケーター/0° Z 0,15?
+[H] 24/0° >>100%
+---% >>--:--
+Prusa i3 MK3 OK.
+
+インジケーター4/0° Z 0,15?
+[H] 25/0° >>100%
+---% >>--:--
+Prusa i3 MK3 OK.
+
+>Info screen ⤴
+Preheat →
+Print from SD →
+Load filament →
+
+インジケーター4/0° Z 0,15?
+[H] 24/0° >>100%
+---% :--:--
+Prusa i3 MK3 OK.
+
+Calibration →
+Statistics →
+Pail stats +
+>Support +
+
+インジケーター4/0° Z 015?
+[H] 24/0° >>100%
+---% >>--:--
+Prusa i3 MK3 OK.
+
+Info screen ⤴
+Preheat →
+Print from SD →
+>Load filament →
+
+インジケーター 24/0° Z 015?
+: 25/0° >>100%
+---% :--:--
+Prusa i3 MK3 OK,
+
