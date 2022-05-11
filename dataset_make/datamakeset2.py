@@ -166,7 +166,7 @@ def Detect_WidthPosition(W_THRESH, width, array_V):
 if __name__ == "__main__":
     count = 0
     # input image
-    img = cv2.imread('./camera1/camera23.jpg')
+    img = cv2.imread('./camera1/camera51.jpg')
     #対象画像をロード
     #青い部分のみを二値化
     close_img = cut_blue_img(img)

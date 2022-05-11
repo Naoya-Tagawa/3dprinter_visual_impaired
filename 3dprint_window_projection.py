@@ -345,7 +345,7 @@ def match_text(frame,before_text,before_kersol):
     #前と後のカーソルの類似度
     s = difflib.SequenceMatcher(None,before_kersol,present_kersol)
     if kersol_exist_search(before_kersol,out) == True: #前のカーソルがある(全画面変わっていない)
-        if s.ratio() <= 0.90: #カーソルが変わっていたら
+        if s.ratio() <= 0.80: #カーソルが変わっていたら
             engine = pyttsx3.init()
             #rateはデフォルトが200
             voices = engine.getProperty('voices')
