@@ -348,8 +348,8 @@ def match_text(frame,before_text,before_kersol):
         if s.ratio() <= 0.90: #カーソルが変わっていたら
             engine = pyttsx3.init()
             #rateはデフォルトが200
-            voice = engine.getProperty('voice')
-            engine.setProperty("voice",voice[1].id)
+            voices = engine.getProperty('voices')
+            engine.setProperty("voice",voices[1].id)
             rate = engine.getProperty('rate')
             engine.setProperty('rate',speed)
             #volume デフォルトは1.0 設定は0.0~1.0
@@ -372,8 +372,8 @@ def match_text(frame,before_text,before_kersol):
                 after.append(word[2:])
         if (0< len(before) < 6) & (0 < len(after) < 6):
             engine = pyttsx3.init()
-            voice = engine.getProperty('voice')
-            engine.setProperty("voice",voice[1].id)
+            voices = engine.getProperty('voices')
+            engine.setProperty("voice",voices[1].id)
             #rateはデフォルトが200
             rate = engine.getProperty('rate')
             engine.setProperty('rate',speed)
@@ -391,8 +391,8 @@ def match_text(frame,before_text,before_kersol):
     else: #全画面変化
         whole_text_read(output_text)
         engine = pyttsx3.init()
-        voice = engine.getProperty('voice')
-        engine.setProperty("voice",voice[1].id)
+        voices = engine.getProperty('voices')
+        engine.setProperty("voices",voices[1].id)
         rate = engine.getProperty('rate')
         engine.setProperty('rate',speed)
         #volume デフォルトは1.0 設定は0.0~1.0
@@ -427,8 +427,8 @@ def kersol_search(text):
 #カーソルの位置をいう
 def kersol_read(text):
     engine = pyttsx3.init()
-    voice = engine.getProperty('voice')
-    engine.setProperty("voice",voice[1].id)
+    voices = engine.getProperty('voice')
+    engine.setProperty("voice",voices[1].id)
     #rateはデフォルトが200
     rate = engine.getProperty('rate')
     engine.setProperty('rate',speed)

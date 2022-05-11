@@ -540,3 +540,157 @@ Load filament →
 
 
 
+
+
+インジケーター 23/0° Z 015?
+[H] 24/0° >>100%
+---% >>--:--
+Prusa i3 MK3 OK.
+
+インジケーター 24/0° Z 015?
+: 24/0° >>l00%
+---% :--:--
+
+>Info screen ⤴
+Preheat →
+Print from SD →
+Load filament →
+
+Preheat +
+Print from SD →
+Load filament →
+>Unload filament →
+
+Preheat →
+Print from SD →
+Load filament →
+>Unload filament →
+
+Preheat →
+Print from SD →
+Load filament →
+>Unload filament →
+
+Preheat →
+Print from SD →
+Load filament →
+>Unload filament →
+
+Preheat →
+Print from SD →
+Load filament →
+>Unload filament →
+
+Preheat →
+Print from SD →
+Load filament →
+>Unload filament →
+
+Preheat →
+Print from SD →
+Load filament →
+>Unload filament →
+
+Preheat +
+Print from SD +
+Load filament +
+>Vn1oad filament +
+
+Preheat →
+Print from SD →
+>Load filament →
+Unload filament →
+
+Preheat ,
+Pr1nt fromD>Eoad f11amemtVn1oad filament +
+
+Preheat +
+Print from SD +
+>Load filament +
+Unload filament +
+
+Preheat +
+Print from SD +
+>Load filament +
+Unload filament →
+
+Preheat ,
+Pr1nt from SD +
+>Load filamemt +
+Unload filament +
+
+インジケーター 04/0° Z 0,15?
+[H] 24/0° >>100%
+---% :--:--
+Prusa i3 MK3 OK.
+
+Unload filament +
+Settings →
+Calibration →
+>Statistics →
+
+Unload filament →
+Settings +
+Calibration +
+>Statistics +
+
+Unload filament →
+Settings +
+Calibration +
+>Statistics +
+
+Unload filament →
+Settings →
+Calibration +
+>Statistics +
+
+Unload filament →
+Settings →
+Calibration →
+>Statistics +
+
+Unload filament →
+Settings →
+Calibration +
+>Statistics +
+
+Unload filament →
+Settings →
+Calibration +
+>Statistics +
+
+Unload filament →
+Settings →
+Calibration +
+>Statistics +
+
+Unload filament →
+Settings →
+Calibration →
+>Statistics →
+
+Unload filament →
+Settings →
+>Calibration →
+Statistics →
+
+Unload filament →
+Settings →
+>Calibration +
+Statistics +
+
+Unload filament →
+Settings →
+>Calibration +
+Statistics +
+
+Unload filament →
+Settings +
+>Calibration +
+Statistics +
+
+Unload filament →
+Settings →
+>Calibration +
+Statistics +
+
