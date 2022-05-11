@@ -540,3 +540,320 @@ Load filament →
 
 
 
+
+
+
+インジケーター 24/0° Z 0,15?
+[H] 24/0° >>l00%
+---% >>--:--
+Prusa i3 MK3 OK.
+:
+
+>1nfo screen ⤴
+Preheat +
+Print from SD +
+Eoad filament +
+
+Info screen ⤴
+>Preheat →
+Print from SD →
+Load filament +
+
+1nfo screen ⤴
+>Preheat +
+Print from SD +
+Eoad filament +
+
+Info screen ⤴
+>Preheat →
+Print from SD →
+Load filament →
+→
+
+Info screen ⤴
+>Preheat →
+Print from SD →
+Load filament →
+:
+
+lnfo screen ⤴
+>Preheat →
+Print from SD →
+Load filament →
+:
+
+lnfo screen ⤴
+>Preheat →
+Print from SD →
+Load filament →
+→
+
+Info screen ⤴
+>Preheat →
+Print from SD →
+Load filament →
+:
+
+Info screen ⤴
+>Preheat →
+Print from SD →
+Load filament →
+:
+
+Info screen ⤴
+>Preheat →
+Print from SD →
+Load filament →
+:
+
+Info screen ⤴
+>Preheat →
+Print from SD →
+Load filament →
+:
+
+Info screen ⤴
+>Preheat →
+Print from SD →
+Load filament →
+:
+
+Info screen ⤴
+>Preheat →
+Print from SD →
+Load filament →
+:
+
+Info screen ⤴
+>Preheat →
+Print from SD →
+Load filament →
+:
+
+インジケーター 24/0° Z 015?
+[H] 24/0° >>100%
+---% >>--:--
+Prusa 13 MK3 OK.
+
+インジケーター 23/0° Z 0,15?
+: 23/0P >>100%
+---% :--:--
+Prusa i3 MK3 OK.
+:
+
+lnfo screen ⤴
+Preheat →
+Print from SD →
+>Load filament +
+
+Preheat →
+Print from SD →
+Load filament →
+>Vn1oad filament +
+
+Preheat →
+Print from SD →
+Load filament →
+>Unload filament →
+:
+
+Preheat →
+Print from SD →
+Load filament →
+>Unload filament →
+:
+
+Preheat →
+Print from SD →
+Load filament →
+>Vn1oad filament +
+⤴
+
+インジケーター 24/0° Z 015?
+[H] 23/0° >>100%
+---% >>--:--
+Prusa i3 MK3 OK.
+:
+
+インジケーター 24/0° Z 015?
+[H] 24/0° >>100%
+---% >>--:--
+Prusa i3 MK3 OK.
+:
+
+Info screen ⤴
+Preheat →
+Print from SD →
+>Load filament →
+
+lmfo screen ⤴
+>Preheat →
+Print from SD →
+Load filament →
+
+Info screen ⤴
+>Preheat +
+Print from SD +
+Load filament →
++
+
+Info screen ⤴
+>Preheat +
+Print from SD +
+Eoad filament +
++
+
+Info screem ⤴
+>Preheat +
+Print from SD +
+Load filament +
+:
+
+Info screen ⤴
+>Preheat +
+Print from SD →
+Load filament →
+:
+
+Info screen ⤴
+>Preheat +
+Print from SD →
+Load filament →
++
+
+Info screen ⤴
+>Preheat →
+Print from SD →
+Load filament →
++
+
+インジケーター 23/0° Z 0,15?
+[H] 23/0° >>100%
+---% :--:--
+Prusa i3 MK3 OK.
+:
+
+Info screen ⤴
+>Preheat +
+Print from SD →
+Load filament →
+:
+
+Imfo screen ⤴
+Preheat →
+Print from SD →
+[oad filament →
+
+>Info screen ⤴
+Preheat →
+Print from SD →
+Eoad filament →
+→
+
+1nfo screem ⤴
+>Preheat +
+Pr1nt from SD →
+Load filament →
+
+Info screen ⤴
+>Preheat →
+Print from SD →
+Load filament →
+→
+
+Info screen ⤴
+>Preheat →
+Print from SD →
+Load filament →
+→
+
+Info screen ⤴
+>Preheat →
+Print from SD →
+Load filament →
+→
+
+Info screen ⤴
+>Preheat →
+Print from SD →
+Load filament →
+→
+
+Info screen ⤴
+>Preheat →
+Print from SD →
+Load filament →
+→
+
+Info screen ⤴
+>Preheat →
+Print from SD →
+Load filament →
+→
+
+Info screen ⤴
+>Preheat →
+Print from SD →
+Load filament →
+→
+
+Info screen ⤴
+>Preheat →
+Print from SD →
+Load filament →
+→
+
+Info screen ⤴
+>Preheat →
+Print from SD →
+Load filament →
+→
+
+Info screen ⤴
+>Preheat →
+Print from SD →
+Load filament →
+→
+
+Info screen ⤴
+>Preheat →
+Print from SD →
+Load filament →
+→
+
+Info screen ⤴
+>Preheat →
+Print from SD →
+Load filament →
+→
+
+Info screen ⤴
+>Preheat →
+Print from SD →
+Load filament →
+→
+
+Info screen ⤴
+>Preheat →
+Print from SD →
+Load filament →
+→
+
+Info screen ⤴
+>Preheat →
+Print from SD →
+Load filament →
+→
+
+Info screen ⤴
+>Preheat →
+Print from SD →
+Load filament →
+→
+
+Info screen ⤴
+>Preheat →
+Print from SD →
+Load filament →
+→
+

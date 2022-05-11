@@ -345,10 +345,10 @@ def match_text(frame,before_text,before_kersol):
     #前と後のカーソルの類似度
     s = difflib.SequenceMatcher(None,before_kersol,present_kersol)
     if kersol_exist_search(before_kersol,out) == True: #前のカーソルがある(全画面変わっていない)
-        if s.ratio() <= 0.90: #カーソルが変わっていたら
+        if s.ratio() <= 0.80: #カーソルが変わっていたら
             engine = pyttsx3.init()
             #rateはデフォルトが200
-            voice = engine.getProperty('voice')
+            voice = engine.getProperty('voices')
             engine.setProperty("voice",voice[1].id)
             rate = engine.getProperty('rate')
             engine.setProperty('rate',speed)
@@ -372,7 +372,7 @@ def match_text(frame,before_text,before_kersol):
                 after.append(word[2:])
         if (0< len(before) < 6) & (0 < len(after) < 6):
             engine = pyttsx3.init()
-            voice = engine.getProperty('voice')
+            voice = engine.getProperty('voices')
             engine.setProperty("voice",voice[1].id)
             #rateはデフォルトが200
             rate = engine.getProperty('rate')
@@ -391,7 +391,7 @@ def match_text(frame,before_text,before_kersol):
     else: #全画面変化
         whole_text_read(output_text)
         engine = pyttsx3.init()
-        voice = engine.getProperty('voice')
+        voice = engine.getProperty('voices')
         engine.setProperty("voice",voice[1].id)
         rate = engine.getProperty('rate')
         engine.setProperty('rate',speed)
@@ -427,7 +427,7 @@ def kersol_search(text):
 #カーソルの位置をいう
 def kersol_read(text):
     engine = pyttsx3.init()
-    voice = engine.getProperty('voice')
+    voice = engine.getProperty('voices')
     engine.setProperty("voice",voice[1].id)
     #rateはデフォルトが200
     rate = engine.getProperty('rate')
