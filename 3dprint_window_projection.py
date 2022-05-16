@@ -11,7 +11,7 @@ from natsort import natsorted
 import tkinter as tk
 import tkinter.ttk as ttk
 import threading
-from PIL import Image
+from PIL import Image , ImageTk , ImageOps
 import pyttsx3 
 from dictionary_word import speling
 import difflib
@@ -19,9 +19,14 @@ import numpy as np
 import cv2
 import matplotlib.pyplot as plt
 #話すスピード
-speed = 200
+speed = 150
 #ボリューム
 vol = 1.0
+
+global count
+global before_text
+global before_kersol
+global before_window_img
 def cut_blue_img(img):
     c_img = cv2.cvtColor(img,cv2.COLOR_BGR2RGB)
     img_hsv = cv2.cvtColor(img,cv2.COLOR_BGR2HSV)
@@ -42,8 +47,7 @@ def cut_blue_img(img):
     cnts = cv2.findContours(close_img, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
     cnts = cnts[0] if len(cnts) == 2 else cnts[1]
     cv2.fillPoly(close_img, cnts, [255,255,255])
-    #plt.imshow(close_img)
-    #plt.show()
+    
     return close_img
 
 def points_extract(img):
@@ -171,43 +175,43 @@ def Detect_WidthPosition(W_THRESH, width, array_V):
             char_List = np.append(char_List, posi2)
  
     return char_List
- 
- 
-def camera(cycle,count):
-    cap = cv2.VideoCapture(0)
+
+def camera():
+    cap = cv2.VideoCapture(1)
     read_fps = cap.get(cv2.CAP_PROP_FPS)
     print(read_fps)
-    time_counter = 0
     while True:
         ret , frame = cap.read()
         #フレームが取得できない場合は画面を閉じる
         if not ret:
             cv2.destroyAllWindows()
-        time_counter += 100
         cv2.imshow("frame",frame)
-        if count == 0:
-            b_text = []
-            b_kersol = []
         #フレームカウントがthreshを超えたら処理
-        if(time_counter >= cycle):
-            time_counter = 0
-            b_text , b_kersol = match_text(frame,b_text,b_kersol)
-            
-            count = 1
+        present_window_img, output_text , out = match_text(frame)
+        #画面が遷移したか調査
+        present_window_img_hist = cv2.calcHist([present_window_img],[0],None,[256],[0,256])
+        before_window_img_hist = cv2.calcHist([before_window_img],[0],None,[256],[0,256])
+        img_likely_ratio = cv2.compareHist(present_window_img_hist,before_window_img_hist,0)
+        #
+        voicethread = threading.Thread(target = voice, args=(img_likely_ratio,output_text,out))
         #qキーが入力されたら画面を閉じる
         if cv2.waitKey(1) & 0xFF == ord('q'):
             cap.release()
             cv2.destroyAllWindows()
 
-def match_text(frame,before_text,before_kersol):
+def match_text(frame):
     #カーネル
-    start_time = time.perf_counter()
     kernel = np.ones((3,3),np.uint8)
     window_img = frame
     #フレームの青い部分を二値化
     blue_threshold_img = cut_blue_img(window_img)
     #コーナー検出
-    p1,p2,p3,p4 = points_extract(blue_threshold_img)
+    try:
+        p1,p2,p3,p4 = points_extract(blue_threshold_img)
+    except TypeError:
+        print("Screen cannot be detected")
+        return [],[]
+
     #コーナーに従って画像の切り取り
     cut_img = window_img[p1[1]:p2[1],p2[0]:p3[0]]
     #射影変換
@@ -230,23 +234,17 @@ def match_text(frame,before_text,before_kersol):
     #縦方向の最大値を保持
     H_THRESH = max(array_H)
     char_List1 = Detect_HeightPosition(H_THRESH,height,array_H)
-    print(char_List1)
-    head = 0
-    index = []
+
+    if (len(char_List1) % 2) == 0:
+        print("Screen cannot be detected")
+        return [], []
+        
     out_modify = "" #修正したテキスト
     output_text = [] #読み取ったテキスト
     s = {}
     new_d = {}
-    like = {}
-    l = 0
-    like_x = {}
     out = "" #読み取ったテキスト
-    kersol = "" 
-    #end_time = time.perf_counter()
-    #print(end_time-start_time)
     for i in range(0,len(char_List1)-1,2):
-        #end_time = time.perf_counter()
-        #print(end_time-start_time)
         #行ごとに画像を切り取る
         img_h = img_mask[int(char_List1[i]):int(char_List1[i+1]),:]
         height_h , width_h =img_h.shape
@@ -254,10 +252,6 @@ def match_text(frame,before_text,before_kersol):
         array_V = Projection_V(img_h,height_h,width_h)
         W_THRESH = max(array_V)
         char_List2 = Detect_WidthPosition(W_THRESH,width_h,array_V)
-        #print(char_List2)
-        #end_time = time.perf_counter()
-        #print(end_time-start_time)
-        
         for j in range(0,len(char_List2)-1,2):
             #end_time = time.perf_counter()
             #print(end_time-start_time)
@@ -335,9 +329,10 @@ def match_text(frame,before_text,before_kersol):
 
     print(output_text)
     print(out)
-    end_time = time.perf_counter()
-    e_time = end_time - start_time
-    print(e_time)
+    return img_mask , output_text, out 
+
+    #
+def voice(img_likely_ratio,output_text,out):
     #現在のカーソル
     present_kersol = kersol_search(output_text)
     before = []
@@ -408,7 +403,6 @@ def match_text(frame,before_text,before_kersol):
     before_text = output_text
     before_kersol = present_kersol
     file_w(out,output_text)
-    return before_text , before_kersol
 
 #カーソルの表示を探す
 def kersol_search(text):
@@ -559,5 +553,10 @@ if __name__ == "__main__":
     label_temp = temp['y']
     before_text = "Main   →"
     kersol = ">Main"
+    count = 0
+    print(count)
+    camera_thread = threading.Thread(target = camera)
+    match_thread = threading.Thread(target = match_text)
+    camera_thread.start()
     #match_text(img,before_text,kersol)
-    camera(300,0)
+    #camera(300,0)
