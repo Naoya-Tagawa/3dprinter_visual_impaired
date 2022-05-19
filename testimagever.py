@@ -177,30 +177,82 @@ def Detect_WidthPosition(W_THRESH, width, array_V):
     return char_List
 
 def camera():
-    cap = cv2.VideoCapture(1)
-    read_fps = cap.get(cv2.CAP_PROP_FPS)
-    print(read_fps)
-    while True:
-        ret , frame = cap.read()
-        #フレームが取得できない場合は画面を閉じる
-        if not ret:
-            cv2.destroyAllWindows()
-        cv2.imshow("frame",frame)
-        #フレームカウントがthreshを超えたら処理
-        present_window_img, output_text , out = match_text(frame)
-        #画面が遷移したか調査
-        present_window_img_hist = cv2.calcHist([present_window_img],[0],None,[256],[0,256])
-        before_window_img_hist = cv2.calcHist([before_window_img],[0],None,[256],[0,256])
-        img_likely_ratio = cv2.compareHist(present_window_img_hist,before_window_img_hist,0)
-        #音声出力用スレッド
-        voicethread = threading.Thread(target = voice, args=(img_likely_ratio,output_text,out))
+    kernel = np.ones((3,3),np.uint8)
+    #フレームの青い部分を二値化
+    blue_threshold_img = cut_blue_img(img1)
+    #コーナー検出
+    try:
+        p1,p2,p3,p4 = points_extract(blue_threshold_img)
+    except TypeError:
+        print("Screen cannot be detected")
+        return before_window_img,[] ,[]
 
+    #コーナーに従って画像の切り取り
+    cut_img = img1[p1[1]:p2[1],p2[0]:p3[0]]
+    #射影変換
+    syaei_img = syaei(img1,p1,p2,p3,p4)
+    #対象画像をリサイズ
+    syaei_resize_img = cv2.resize(syaei_img,dsize=(610,211))
+    #対象画像をグレイスケール化
+    gray_img1 = cv2.cvtColor(syaei_resize_img,cv2.COLOR_BGR2GRAY)
+    #二値画像へ
+    ret, img_mask = cv2.threshold(gray_img1,0,255,cv2.THRESH_OTSU)
+    #img_mask = cv2.adaptiveThreshold(gray_img,255,cv2.ADAPTIVE_THRESH_MEAN_C,cv2.THRESH_BINARY,7,-3)
+    #ノイズ除去
+    img_mask = cv2.medianBlur(img_mask,3)
+    #膨張化
+    img_mask1 = cv2.dilate(img_mask,kernel)
+    kernel = np.ones((3,3),np.uint8)
+    #フレームの青い部分を二値化
+    blue_threshold_img = cut_blue_img(img2)
+    #コーナー検出
+    try:
+        p1,p2,p3,p4 = points_extract(blue_threshold_img)
+    except TypeError:
+        print("Screen cannot be detected")
+        return before_window_img,[] ,[]
 
-        before_window_img = present_window_img
-        #qキーが入力されたら画面を閉じる
-        if cv2.waitKey(1) & 0xFF == ord('q'):
-            cap.release()
-            cv2.destroyAllWindows()
+    #コーナーに従って画像の切り取り
+    cut_img = img1[p1[1]:p2[1],p2[0]:p3[0]]
+    #射影変換
+    syaei_img = syaei(img1,p1,p2,p3,p4)
+    #対象画像をリサイズ
+    syaei_resize_img = cv2.resize(syaei_img,dsize=(610,211))
+    #対象画像をグレイスケール化
+    gray_img2 = cv2.cvtColor(syaei_resize_img,cv2.COLOR_BGR2GRAY)
+    #二値画像へ
+    ret, img_mask = cv2.threshold(gray_img2,0,255,cv2.THRESH_OTSU)
+    #img_mask = cv2.adaptiveThreshold(gray_img,255,cv2.ADAPTIVE_THRESH_MEAN_C,cv2.THRESH_BINARY,7,-3)
+    #ノイズ除去
+    img_mask = cv2.medianBlur(img_mask,3)
+    #膨張化
+    img_mask2 = cv2.dilate(img_mask,kernel)
+    #cap = cv2.VideoCapture(1)
+    #read_fps = cap.get(cv2.CAP_PROP_FPS)
+    #print(read_fps)
+    #画面が遷移したか調査
+    plt.imshow(img_mask1)
+    plt.show()
+    plt.imshow(img_mask2)
+    plt.show()
+    
+    #comparison = np.where(img_mask1 == img_mask2,0,1)
+    #dif = np.array(img_mask1*comparison,dtype = np.uint8)
+    comparison = np.where(gray_img1 == gray_img2,0,1)
+    dif = np.array(gray_img1*comparison,dtype = np.uint8)
+    cv2.imwrite('difference.png',dif)
+    ret, img_mask = cv2.threshold(dif,0,255,cv2.THRESH_OTSU)
+    #img_mask = cv2.adaptiveThreshold(gray_img,255,cv2.ADAPTIVE_THRESH_MEAN_C,cv2.THRESH_BINARY,7,-3)
+    #ノイズ除去
+    img_mask = cv2.medianBlur(img_mask,3)
+    #膨張化
+    img_mask = cv2.dilate(img_mask,kernel)
+    plt.imshow(img_mask)
+    plt.show()
+    present_window_img_hist = cv2.calcHist([img_mask1],[0],None,[256],[0,256])
+    before_window_img_hist = cv2.calcHist([img_mask2],[0],None,[256],[0,256])
+    img_likely_ratio = cv2.compareHist(present_window_img_hist,before_window_img_hist,0)
+    print(img_likely_ratio)
 
 def match_text(frame):
     #カーネル
@@ -547,7 +599,8 @@ def file_w(text,output_text):
 
 if __name__ == "__main__":
     #対象画像をロード
-    img = cv2.imread("./camera1/camera23.jpg")
+    img1 = cv2.imread("./camera1/camera63.jpg")
+    img2 = cv2.imread("./camera1/camera64.jpg")
     #テンプレートをロード
     temp = np.load(r'./dataset2.npz')
     #テンプレート画像を格納
@@ -558,8 +611,8 @@ if __name__ == "__main__":
     kersol = ">Main"
     count = 0
     print(count)
-    camera_thread = threading.Thread(target = camera)
-    match_thread = threading.Thread(target = match_text)
-    camera_thread.start()
+    #camera_thread = threading.Thread(target = camera)
+    #match_thread = threading.Thread(target = match_text)
+    #camera_thread.start()
     #match_text(img,before_text,kersol)
-    #camera(300,0)
+    camera()
