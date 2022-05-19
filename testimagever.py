@@ -18,6 +18,7 @@ import difflib
 import numpy as np
 import cv2
 import matplotlib.pyplot as plt
+import imagehash
 #話すスピード
 speed = 150
 #ボリューム
@@ -235,7 +236,9 @@ def camera():
     plt.show()
     plt.imshow(img_mask2)
     plt.show()
-    
+    hash = imagehash.average_hash(Image.open("./camera1/camera63.jpg"))
+    ha = imagehash.average_hash(Image.open("./camera1/camera62.jpg"))
+    print(hash == ha)
     #comparison = np.where(img_mask1 == img_mask2,0,1)
     #dif = np.array(img_mask1*comparison,dtype = np.uint8)
     comparison = np.where(gray_img1 == gray_img2,0,1)
