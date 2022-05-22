@@ -18,7 +18,8 @@ import difflib
 import numpy as np
 import cv2
 import matplotlib.pyplot as plt
-import imagehash
+import os
+os.environ["DISPLAY"] = ":0"
 #話すスピード
 speed = 150
 #ボリューム
@@ -196,8 +197,7 @@ def diff_match_text(before_frame,present_frame):
     #フレームの青い部分を二値化
     blue_threshold_before_img = cut_blue_img(before_frame)
     blue_threshold_present_img = cut_blue_img(present_frame)
-    plt.imshow(blue_threshold_present_img)
-    plt.show()
+    cv2.imwrite("result0.jpg",blue_threshold_present_img)
     #コーナー検出
     try:
         before_p1,before_p2,before_p3,before_p4 = points_extract(blue_threshold_before_img)
@@ -245,7 +245,7 @@ def diff_match_text(before_frame,present_frame):
             #一文字ずつ切り取る
             img_f = cv2.rectangle(present_frame, (int(char_List2[j]) ,int(char_List1[i])), (int(char_List2[j+1]), int(char_List1[i+1])), (0,0,255), 2)
     
-    cv2.imwrite("difference.png",img_f)
+    cv2.imwrite("difference2.png",img_f)
 def match_text(frame):
     #カーネル
     kernel = np.ones((3,3),np.uint8)
