@@ -189,7 +189,7 @@ def diff_match_text(before_frame,present_frame):
     out_modify = ""
     s = {}
     new_d = {}
-#カーネル
+    #カーネル
     kernel = np.ones((3,3),np.uint8)
     #フレームの青い部分を二値化
     blue_threshold_before_img = cut_blue_img(before_frame)
