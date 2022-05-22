@@ -178,85 +178,74 @@ def Detect_WidthPosition(W_THRESH, width, array_V):
     return char_List
 
 def camera():
-    kernel = np.ones((3,3),np.uint8)
-    #フレームの青い部分を二値化
-    blue_threshold_img = cut_blue_img(img1)
-    #コーナー検出
-    try:
-        p1,p2,p3,p4 = points_extract(blue_threshold_img)
-    except TypeError:
-        print("Screen cannot be detected")
-        return before_window_img,[] ,[]
-
-    #コーナーに従って画像の切り取り
-    cut_img = img1[p1[1]:p2[1],p2[0]:p3[0]]
-    #射影変換
-    syaei_img = syaei(img1,p1,p2,p3,p4)
-    #対象画像をリサイズ
-    syaei_resize_img = cv2.resize(syaei_img,dsize=(610,211))
-    #対象画像をグレイスケール化
-    gray_img1 = cv2.cvtColor(syaei_resize_img,cv2.COLOR_BGR2GRAY)
-    #二値画像へ
-    ret, img_mask = cv2.threshold(gray_img1,0,255,cv2.THRESH_OTSU)
-    #img_mask = cv2.adaptiveThreshold(gray_img,255,cv2.ADAPTIVE_THRESH_MEAN_C,cv2.THRESH_BINARY,7,-3)
-    #ノイズ除去
-    img_mask = cv2.medianBlur(img_mask,3)
-    #膨張化
-    img_mask1 = cv2.dilate(img_mask,kernel)
-    kernel = np.ones((3,3),np.uint8)
-    #フレームの青い部分を二値化
-    blue_threshold_img = cut_blue_img(img2)
-    #コーナー検出
-    try:
-        p1,p2,p3,p4 = points_extract(blue_threshold_img)
-    except TypeError:
-        print("Screen cannot be detected")
-        return before_window_img,[] ,[]
-
-    #コーナーに従って画像の切り取り
-    cut_img = img1[p1[1]:p2[1],p2[0]:p3[0]]
-    #射影変換
-    syaei_img = syaei(img1,p1,p2,p3,p4)
-    #対象画像をリサイズ
-    syaei_resize_img = cv2.resize(syaei_img,dsize=(610,211))
-    #対象画像をグレイスケール化
-    gray_img2 = cv2.cvtColor(syaei_resize_img,cv2.COLOR_BGR2GRAY)
-    #二値画像へ
-    ret, img_mask = cv2.threshold(gray_img2,0,255,cv2.THRESH_OTSU)
-    #img_mask = cv2.adaptiveThreshold(gray_img,255,cv2.ADAPTIVE_THRESH_MEAN_C,cv2.THRESH_BINARY,7,-3)
-    #ノイズ除去
-    img_mask = cv2.medianBlur(img_mask,3)
-    #膨張化
-    img_mask2 = cv2.dilate(img_mask,kernel)
     #cap = cv2.VideoCapture(1)
     #read_fps = cap.get(cv2.CAP_PROP_FPS)
     #print(read_fps)
     #画面が遷移したか調査
-    plt.imshow(img_mask1)
+    diff_match_text(img1,img2)
+
+
+def diff_match_text(before_frame,present_frame):
+    output_text = []
+    out = ""
+    out_modify = ""
+    s = {}
+    new_d = {}
+#カーネル
+    kernel = np.ones((3,3),np.uint8)
+    #フレームの青い部分を二値化
+    blue_threshold_before_img = cut_blue_img(before_frame)
+    blue_threshold_present_img = cut_blue_img(present_frame)
+    plt.imshow(blue_threshold_present_img)
     plt.show()
-    plt.imshow(img_mask2)
+    #コーナー検出
+    try:
+        before_p1,before_p2,before_p3,before_p4 = points_extract(blue_threshold_before_img)
+        present_p1,present_p2,present_p3,present_p4 = points_extract(blue_threshold_present_img)
+    except TypeError:
+        print("Screen cannot be detected")
+        return before_window_img,[] ,[]
+
+    #コーナーに従って画像の切り取り
+    #cut_img = window_img[p1[1]:p2[1],p2[0]:p3[0]]
+    #射影変換
+    syaei_before_img = syaei(before_frame,before_p1,before_p2,before_p3,before_p4)
+    syaei_present_img = syaei(present_frame,present_p1,present_p2,present_p3,present_p4)
+    #対象画像をリサイズ
+    syaei_resize_before_img = cv2.resize(syaei_before_img,dsize=(610,211))
+    syaei_resize_present_img = cv2.resize(syaei_present_img,dsize=(610,211))
+    plt.imshow(syaei_present_img)
     plt.show()
-    hash = imagehash.average_hash(Image.open("./camera1/camera63.jpg"))
-    ha = imagehash.average_hash(Image.open("./camera1/camera62.jpg"))
-    print(hash == ha)
-    #comparison = np.where(img_mask1 == img_mask2,0,1)
-    #dif = np.array(img_mask1*comparison,dtype = np.uint8)
-    comparison = np.where(gray_img1 == gray_img2,0,1)
-    dif = np.array(gray_img1*comparison,dtype = np.uint8)
-    cv2.imwrite('difference.png',dif)
-    ret, img_mask = cv2.threshold(dif,0,255,cv2.THRESH_OTSU)
-    #img_mask = cv2.adaptiveThreshold(gray_img,255,cv2.ADAPTIVE_THRESH_MEAN_C,cv2.THRESH_BINARY,7,-3)
+    frame_diff = cv2.absdiff(syaei_resize_before_img,syaei_resize_present_img)
+    plt.imshow(frame_diff)
+    plt.show()
+    #グレイスケール化
+    gray_frame_diff = cv2.cvtColor(frame_diff,cv2.COLOR_BGR2GRAY)
+    #二値画像へ
+    ret, img_mask = cv2.threshold(gray_frame_diff,0,255,cv2.THRESH_OTSU)
     #ノイズ除去
     img_mask = cv2.medianBlur(img_mask,3)
     #膨張化
     img_mask = cv2.dilate(img_mask,kernel)
-    plt.imshow(img_mask)
-    plt.show()
-    present_window_img_hist = cv2.calcHist([img_mask1],[0],None,[256],[0,256])
-    before_window_img_hist = cv2.calcHist([img_mask2],[0],None,[256],[0,256])
-    img_likely_ratio = cv2.compareHist(present_window_img_hist,before_window_img_hist,0)
-    print(img_likely_ratio)
 
+    gray_frame = cv2.cvtColor(present_frame,cv2.COLOR_BGR2GRAY)
+
+    height , width = img_mask.shape
+    array_H = Projection_H(img_mask,height,width)
+    H_THRESH = max(array_H)
+    char_List1 = Detect_HeightPosition(H_THRESH,height,array_H)
+    for i in range(0,len(char_List1)-1,2):
+        img_h = img_mask[int(char_List1[i]):int(char_List1[i+1]),:]
+        height_h , width_h =img_h.shape
+        #横方向のProjection Profileを得る
+        array_V = Projection_V(img_h,height_h,width_h)
+        W_THRESH = max(array_V)
+        char_List2 = Detect_WidthPosition(W_THRESH,width_h,array_V)
+        for j in range(0,len(char_List2)-1,2):
+            #一文字ずつ切り取る
+            img_f = cv2.rectangle(present_frame, (int(char_List2[j]) ,int(char_List1[i])), (int(char_List2[j+1]), int(char_List1[i+1])), (0,0,255), 2)
+    
+    cv2.imwrite("difference.png",img_f)
 def match_text(frame):
     #カーネル
     kernel = np.ones((3,3),np.uint8)
@@ -293,9 +282,9 @@ def match_text(frame):
     H_THRESH = max(array_H)
     char_List1 = Detect_HeightPosition(H_THRESH,height,array_H)
 
-    if (len(char_List1) % 2) == 0:
-        print("Screen cannot be detected")
-        return [], []
+    #if (len(char_List1) % 2) == 0:
+        #print("Screen cannot be detected")
+        #return [], []
         
     out_modify = "" #修正したテキスト
     output_text = [] #読み取ったテキスト
@@ -319,13 +308,8 @@ def match_text(frame):
             match_img = img_mask[int(char_List1[i])-2:int(char_List1[i+1])+2,int(char_List2[j])-1:int(char_List2[j+1])+1]
             match_img = cv2.resize(match_img,dsize=(26,36))
             height_m,width_m = match_img.shape
-            #dd.append([int(char_List1[i])-1,int(char_List1[i+1])+1,int(char_List2[j])-1,int(char_List2[j+1])-1])
-            #plt.imshow(match_img)
-            #plt.show()
-            #start = time.perf_counter()
+            img_g = cv2.rectangle(syaei_resize_img, (int(char_List2[j]) ,int(char_List1[i])), (int(char_List2[j+1]), int(char_List1[i+1])), (0,0,255), 2)
             for f in range(len(temp['x'])):
-                #end_time = time.perf_counter()
-                #print(end_time-start_time)
                 temp_th = img_temp[f]
                 temp_th = cv2.resize(temp_th,dsize=(26,36))
                 #テンプレートマッチング
@@ -387,6 +371,7 @@ def match_text(frame):
 
     print(output_text)
     print(out)
+    cv2.imwrite("difference1.jpg",img_g)
     return img_mask , output_text, out 
 
     #
@@ -603,7 +588,7 @@ def file_w(text,output_text):
 if __name__ == "__main__":
     #対象画像をロード
     img1 = cv2.imread("./camera1/camera63.jpg")
-    img2 = cv2.imread("./camera1/camera64.jpg")
+    img2 = cv2.imread("./camera1/camera70.jpg")
     #テンプレートをロード
     temp = np.load(r'./dataset2.npz')
     #テンプレート画像を格納
@@ -618,4 +603,5 @@ if __name__ == "__main__":
     #match_thread = threading.Thread(target = match_text)
     #camera_thread.start()
     #match_text(img,before_text,kersol)
-    camera()
+    #camera()
+    match_text(img2)

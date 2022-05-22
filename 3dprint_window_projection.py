@@ -217,6 +217,8 @@ def match_text(frame):
 
     #コーナーに従って画像の切り取り
     cut_img = window_img[p1[1]:p2[1],p2[0]:p3[0]]
+    plt.imshow(cut_img)
+    plt.show()
     #射影変換
     syaei_img = syaei(window_img,p1,p2,p3,p4)
     #対象画像をリサイズ
@@ -238,9 +240,9 @@ def match_text(frame):
     H_THRESH = max(array_H)
     char_List1 = Detect_HeightPosition(H_THRESH,height,array_H)
 
-    if (len(char_List1) % 2) == 0:
-        print("Screen cannot be detected")
-        return [], []
+    #if (len(char_List1) % 2) == 0:
+        #print("Screen cannot be detected")
+        #return [], []
         
     out_modify = "" #修正したテキスト
     output_text = [] #読み取ったテキスト
@@ -547,7 +549,7 @@ def file_w(text,output_text):
 
 if __name__ == "__main__":
     #対象画像をロード
-    img = cv2.imread("./camera1/camera23.jpg")
+    img = cv2.imread("./camera1/camera10.jpg")
     #テンプレートをロード
     temp = np.load(r'./dataset2.npz')
     #テンプレート画像を格納
@@ -558,8 +560,8 @@ if __name__ == "__main__":
     kersol = ">Main"
     count = 0
     print(count)
-    camera_thread = threading.Thread(target = camera)
-    match_thread = threading.Thread(target = match_text)
-    camera_thread.start()
-    #match_text(img,before_text,kersol)
+    #camera_thread = threading.Thread(target = camera)
+    #match_thread = threading.Thread(target = match_text)
+    #camera_thread.start()
+    match_text(img)
     #camera(300,0)
