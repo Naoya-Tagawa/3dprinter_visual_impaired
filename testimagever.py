@@ -204,41 +204,58 @@ def diff_match_text(before_frame,present_frame):
 
     #コーナーに従って画像の切り取り
     #cut_img = window_img[p1[1]:p2[1],p2[0]:p3[0]]
+    cut_present = present_frame[present_p1[1]:present_p2[1],present_p2[0]:present_p3[0]]
+    cut_before = before_frame[before_p1[1]:before_p2[1],before_p2[0]:before_p3[0]]
     #射影変換
-    syaei_before_img = syaei(before_frame,before_p1,before_p2,before_p3,before_p4)
-    syaei_present_img = syaei(present_frame,present_p1,present_p2,present_p3,present_p4)
+    #syaei_before_img = syaei(before_frame,before_p1,before_p2,before_p3,before_p4)
+    #syaei_present_img = syaei(present_frame,present_p1,present_p2,present_p3,present_p4)
     #対象画像をリサイズ
-    syaei_resize_before_img = cv2.resize(syaei_before_img,dsize=(610,211))
-    syaei_resize_present_img = cv2.resize(syaei_present_img,dsize=(610,211))
-    plt.imshow(syaei_present_img)
-    plt.show()
+    syaei_resize_before_img = cv2.resize(cut_before,dsize=(610,211))
+    syaei_resize_present_img = cv2.resize(cut_present,dsize=(610,211))
+    copy =syaei_resize_present_img
+    #plt.imshow(syaei_resize_present_img)
+    #plt.show()
+    frame_diff = cv2.absdiff(syaei_resize_present_img,syaei_resize_before_img)
     #グレイスケール化
-    gray_frame_before_diff = cv2.cvtColor(syaei_resize_before_img,cv2.COLOR_BGR2GRAY)
-    #二値画像へ
-    ret, img_before_mask = cv2.threshold(gray_frame_before_diff,0,255,cv2.THRESH_OTSU)
+    gray_frame_diff = cv2.cvtColor(frame_diff,cv2.COLOR_BGR2GRAY)
     #ノイズ除去
-    img_before_mask = cv2.medianBlur(img_before_mask,3)
-    #膨張化
-    img_before_mask = cv2.dilate(img_before_mask,kernel)
-    #グレイスケール化
-    gray_frame_present_diff = cv2.cvtColor(syaei_resize_present_img,cv2.COLOR_BGR2GRAY)
+    gray_frame_diff = cv2.medianBlur(gray_frame_diff,3)
     #二値画像へ
-    ret, img_present_mask = cv2.threshold(gray_frame_present_diff,0,255,cv2.THRESH_OTSU)
-    #ノイズ除去
-    img_present_mask = cv2.medianBlur(img_present_mask,3)
-    #膨張化
-    img_present_mask = cv2.dilate(img_present_mask,kernel)
-
-    frame_diff = cv2.absdiff(img_before_mask,img_present_mask)
+    ret, mask_frame_diff = cv2.threshold(gray_frame_diff,0,255,cv2.THRESH_OTSU)
+    #ret, mask_frame_diff = cv2.threshold(gray_frame_diff,32,255,cv2.THRESH_BINARY)
+    #gray_frame = cv2.cvtColor(frame_diff,cv2.COLOR_BGR2GRAY)
+    frame_diff = (frame_diff > 32) *255
     cv2.imwrite("frame_diff.jpg",frame_diff)
-    gray_frame = cv2.cvtColor(present_frame,cv2.COLOR_BGR2GRAY)
+    #mask_frame_diff = cv2.dilate(mask_frame_diff,kernel)
+    cv2.imwrite("frame_diff1.jpg",mask_frame_diff)
+    #グレイスケール化
+    #gray_frame_before_diff = cv2.cvtColor(syaei_resize_before_img,cv2.COLOR_BGR2GRAY)
+    #二値画像へ
+    #ret, img_before_mask = cv2.threshold(gray_frame_before_diff,0,255,cv2.THRESH_OTSU)
+    #ノイズ除去
+    #img_before_mask = cv2.medianBlur(img_before_mask,3)
+    #膨張化
+    #img_before_mask = cv2.dilate(img_before_mask,kernel)
+    #グレイスケール化
+    #gray_frame_present_diff = cv2.cvtColor(syaei_resize_present_img,cv2.COLOR_BGR2GRAY)
+    #二値画像へ
+    #ret, #img_present_mask = cv2.threshold(gray_frame_present_diff,0,255,cv2.THRESH_OTSU)
+    #ノイズ除去
+    #img_present_mask = cv2.medianBlur(#img_present_mask,3)
+    #膨張化
+    #img_present_mask = cv2.dilate(#img_present_mask,kernel)
 
-    height , width = frame_diff.shape
-    array_H = Projection_H(frame_diff,height,width)
+    #frame_diff = cv2.absdiff(img_before_mask,#img_present_mask)
+    #frame_diff = (frame_diff > 32) *255
+    #cv2.imwrite("frame_diff.jpg",frame_diff)
+    #gray_frame = cv2.cvtColor(frame_diff,cv2.COLOR_BGR2GRAY)
+    height , width = mask_frame_diff.shape
+    array_H = Projection_H(mask_frame_diff,height,width)
     H_THRESH = max(array_H)
     char_List1 = Detect_HeightPosition(H_THRESH,height,array_H)
     for i in range(0,len(char_List1)-1,2):
-        img_h = frame_diff[int(char_List1[i]):int(char_List1[i+1]),:]
+        img_h = mask_frame_diff[int(char_List1[i]):int(char_List1[i+1]),:]
+        img_j = cv2.rectangle(copy, (0 ,int(char_List1[i])), (610, int(char_List1[i+1])), (0,0,255), 2)
         height_h , width_h =img_h.shape
         #横方向のProjection Profileを得る
         array_V = Projection_V(img_h,height_h,width_h)
@@ -246,9 +263,10 @@ def diff_match_text(before_frame,present_frame):
         char_List2 = Detect_WidthPosition(W_THRESH,width_h,array_V)
         for j in range(0,len(char_List2)-1,2):
             #一文字ずつ切り取る
-            img_f = cv2.rectangle(syaei_resize_present_img, (int(char_List2[j]) ,int(char_List1[i])), (int(char_List2[j+1]), int(char_List1[i+1])), (0,0,255), 2)
-    
-    cv2.imwrite("difference2.png",img_f)
+            #img_f = cv2.rectangle(syaei_resize_present_img, (int(char_List2[j]) ,int(char_List1[i])), (int(char_List2[j+1]), int(char_List1[i+1])), (0,0,255), 2)
+            print("k")
+    #cv2.imwrite("difference2.png",img_f)
+    cv2.imwrite("diffecence3.jpg",img_j)
 def match_text(frame):
     #カーネル
     kernel = np.ones((3,3),np.uint8)
@@ -590,8 +608,8 @@ def file_w(text,output_text):
 
 if __name__ == "__main__":
     #対象画像をロード
-    img1 = cv2.imread("./camera1/camera63.jpg")
-    img2 = cv2.imread("./camera1/camera70.jpg")
+    img1 = cv2.imread("./camera1/camera62.jpg")
+    img2 = cv2.imread("./camera1/camera63.jpg")
     #テンプレートをロード
     temp = np.load(r'./dataset2.npz')
     #テンプレート画像を格納
