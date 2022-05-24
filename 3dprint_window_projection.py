@@ -349,8 +349,8 @@ def voice(img_likely_ratio,output_text,out):
         if s.ratio() <= 0.50: #カーソルが変わっていたら
             engine = pyttsx3.init()
             #rateはデフォルトが200
-            voice = engine.getProperty('voices')
-            engine.setProperty("voice",voice[1].id)
+            voices = engine.getProperty('voices')
+            engine.setProperty("voice",voices[1].id)
             rate = engine.getProperty('rate')
             engine.setProperty('rate',speed)
             #volume デフォルトは1.0 設定は0.0~1.0
@@ -372,8 +372,8 @@ def voice(img_likely_ratio,output_text,out):
                 after.append(word[2:])
         if (0< len(before) < 6) & (0 < len(after) < 6):
             engine = pyttsx3.init()
-            voice = engine.getProperty('voices')
-            engine.setProperty("voice",voice[1].id)
+            voices = engine.getProperty('voices')
+            engine.setProperty("voice",voices[1].id)
             #rateはデフォルトが200
             rate = engine.getProperty('rate')
             engine.setProperty('rate',speed)
@@ -391,8 +391,8 @@ def voice(img_likely_ratio,output_text,out):
     else: #全画面変化
         whole_text_read(output_text)
         engine = pyttsx3.init()
-        voice = engine.getProperty('voices')
-        engine.setProperty("voice",voice[1].id)
+        voices = engine.getProperty('voices')
+        engine.setProperty("voices",voices[1].id)
         rate = engine.getProperty('rate')
         engine.setProperty('rate',speed)
         #volume デフォルトは1.0 設定は0.0~1.0
@@ -426,8 +426,8 @@ def kersol_search(text):
 #カーソルの位置をいう
 def kersol_read(text):
     engine = pyttsx3.init()
-    voice = engine.getProperty('voices')
-    engine.setProperty("voice",voice[1].id)
+    voices = engine.getProperty('voice')
+    engine.setProperty("voice",voices[1].id)
     #rateはデフォルトが200
     rate = engine.getProperty('rate')
     engine.setProperty('rate',speed)
@@ -549,7 +549,7 @@ def file_w(text,output_text):
 
 if __name__ == "__main__":
     #対象画像をロード
-    img = cv2.imread("./camera1/camera10.jpg")
+    img = cv2.imread("./camera1/camera63.jpg")
     #テンプレートをロード
     temp = np.load(r'./dataset2.npz')
     #テンプレート画像を格納
