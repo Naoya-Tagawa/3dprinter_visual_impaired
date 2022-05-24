@@ -212,10 +212,11 @@ def diff_match_text(before_frame,present_frame):
     #対象画像をリサイズ
     syaei_resize_before_img = cv2.resize(cut_before,dsize=(610,211))
     syaei_resize_present_img = cv2.resize(cut_present,dsize=(610,211))
-    copy =syaei_resize_present_img
+    copy =present_frame
     #plt.imshow(syaei_resize_present_img)
     #plt.show()
-    frame_diff = cv2.absdiff(syaei_resize_present_img,syaei_resize_before_img)
+    #frame_diff = cv2.absdiff(syaei_resize_present_img,syaei_resize_before_img)
+    frame_diff = cv2.absdiff(present_frame,before_frame)
     #グレイスケール化
     gray_frame_diff = cv2.cvtColor(frame_diff,cv2.COLOR_BGR2GRAY)
     #ノイズ除去
@@ -395,7 +396,6 @@ def match_text(frame):
     cv2.imwrite("difference1.jpg",img_g)
     return img_mask , output_text, out 
 
-    #
 def voice(img_likely_ratio,output_text,out):
     #現在のカーソル
     present_kersol = kersol_search(output_text)
