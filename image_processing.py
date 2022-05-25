@@ -8,8 +8,6 @@ import cv2
 import numpy as np
 import glob
 from natsort import natsorted
-import tkinter as tk
-import tkinter.ttk as ttk
 import threading
 from PIL import Image , ImageTk , ImageOps
 import pyttsx3 
@@ -18,15 +16,7 @@ import difflib
 import numpy as np
 import cv2
 import matplotlib.pyplot as plt
-#話すスピード
-speed = 150
-#ボリューム
-vol = 1.0
-
-global count
-global before_text
-global before_kersol
-global before_window_img
+#アオイ部分を切り抜く
 def cut_blue_img(img):
     c_img = cv2.cvtColor(img,cv2.COLOR_BGR2RGB)
     img_hsv = cv2.cvtColor(img,cv2.COLOR_BGR2HSV)
@@ -50,6 +40,7 @@ def cut_blue_img(img):
     
     return close_img
 
+#コーナー検出
 def points_extract(img):
     #コーナー検出
     dst = cv2.goodFeaturesToTrack(img,25,0.01,10)
@@ -91,7 +82,7 @@ def points_extract(img):
     p4 = p[-1]
     return p1,p2,p3,p4
 
-def syaei(img1,p1,p2,p3,p4):
+def projective_transformation(img1,p1,p2,p3,p4):
     #座標
     #p1 左上
     #p2 左下
@@ -176,33 +167,7 @@ def Detect_WidthPosition(W_THRESH, width, array_V):
  
     return char_List
 
-def camera():
-    cap = cv2.VideoCapture(1)
-    read_fps = cap.get(cv2.CAP_PROP_FPS)
-    print(read_fps)
-    while True:
-        ret , frame = cap.read()
-        #フレームが取得できない場合は画面を閉じる
-        if not ret:
-            cv2.destroyAllWindows()
-        cv2.imshow("frame",frame)
-        #フレームカウントがthreshを超えたら処理
-        present_window_img, output_text , out = match_text(frame)
-        #画面が遷移したか調査
-        present_window_img_hist = cv2.calcHist([present_window_img],[0],None,[256],[0,256])
-        before_window_img_hist = cv2.calcHist([before_window_img],[0],None,[256],[0,256])
-        img_likely_ratio = cv2.compareHist(present_window_img_hist,before_window_img_hist,0)
-        #音声出力用スレッド
-        voicethread = threading.Thread(target = voice, args=(img_likely_ratio,output_text,out))
-
-
-        before_window_img = present_window_img
-        #qキーが入力されたら画面を閉じる
-        if cv2.waitKey(1) & 0xFF == ord('q'):
-            cap.release()
-            cv2.destroyAllWindows()
-
-def match_text(frame):
+def match_text(img_temp,label_temp,frame):
     #カーネル
     kernel = np.ones((3,3),np.uint8)
     window_img = frame
@@ -211,19 +176,14 @@ def match_text(frame):
     #コーナー検出
     try:
         p1,p2,p3,p4 = points_extract(blue_threshold_img)
-        print(p1,p2,p3,p4)
     except TypeError:
         print("Screen cannot be detected")
-        return before_window_img,[] ,[]
+        return [] ,[]
 
     #コーナーに従って画像の切り取り
     cut_img = window_img[p1[1]:p2[1],p2[0]:p3[0]]
-    plt.imshow(cut_img)
-    plt.show()
     #射影変換
-    syaei_img = syaei(window_img,p1,p2,p3,p4)
-    plt.imshow(cut_img)
-    plt.show()
+    syaei_img = projective_transformation(window_img,p1,p2,p3,p4)
     #対象画像をリサイズ
     syaei_resize_img = cv2.resize(syaei_img,dsize=(610,211))
     #対象画像をグレイスケール化
@@ -269,13 +229,8 @@ def match_text(frame):
             match_img = img_mask[int(char_List1[i])-2:int(char_List1[i+1])+2,int(char_List2[j])-1:int(char_List2[j+1])+1]
             match_img = cv2.resize(match_img,dsize=(26,36))
             height_m,width_m = match_img.shape
-            #dd.append([int(char_List1[i])-1,int(char_List1[i+1])+1,int(char_List2[j])-1,int(char_List2[j+1])-1])
-            #plt.imshow(match_img)
-            #plt.show()
-            #start = time.perf_counter()
-            for f in range(len(temp['x'])):
-                #end_time = time.perf_counter()
-                #print(end_time-start_time)
+            img_g = cv2.rectangle(syaei_resize_img, (int(char_List2[j]) ,int(char_List1[i])), (int(char_List2[j+1]), int(char_List1[i+1])), (0,0,255), 2)
+            for f in range(len(label_temp)):
                 temp_th = img_temp[f]
                 temp_th = cv2.resize(temp_th,dsize=(26,36))
                 #テンプレートマッチング
@@ -337,234 +292,4 @@ def match_text(frame):
 
     print(output_text)
     print(out)
-    return img_mask , output_text, out 
-
-    #
-def voice(img_likely_ratio,output_text,out):
-    #現在のカーソル
-    present_kersol = kersol_search(output_text)
-    before = []
-    after = []
-    #前と後のカーソルの類似度
-    s = difflib.SequenceMatcher(None,before_kersol,present_kersol)
-    #print(s.ratio())
-    if kersol_exist_search(before_kersol,out) == True: #前のカーソルがある(全画面変わっていない)
-        if s.ratio() <= 0.50: #カーソルが変わっていたら
-            engine = pyttsx3.init()
-            #rateはデフォルトが200
-            voices = engine.getProperty('voices')
-            engine.setProperty("voice",voices[1].id)
-            rate = engine.getProperty('rate')
-            engine.setProperty('rate',speed)
-            #volume デフォルトは1.0 設定は0.0~1.0
-            volume = engine.getProperty('volume')
-            engine.setProperty('volume',vol)
-            engine.say("cursor was changed from")
-            partial_text_read(before_kersol)
-            engine.say("to")
-            partial_text_read(present_kersol)
-            engine.runAndWait()
-    
-    elif (len(before_kersol) == 0) & (len(present_kersol) == 0): #前のカーソルも今のカーソルもない(数値の画面が変わった)
-    #類似度90%は変化部分を読む
-        res = difflib.ndiff(before_text,output_text)
-        for word in res:
-            if (word[0] == '-'):
-                before.append(word[2:])
-            elif word[0] == '+':
-                after.append(word[2:])
-        if (0< len(before) < 6) & (0 < len(after) < 6):
-            engine = pyttsx3.init()
-            voices = engine.getProperty('voices')
-            engine.setProperty("voice",voices[1].id)
-            #rateはデフォルトが200
-            rate = engine.getProperty('rate')
-            engine.setProperty('rate',speed)
-            #volume デフォルトは1.0 設定は0.0~1.0
-            volume = engine.getProperty('volume')
-            engine.setProperty('volume',vol)
-            engine.say("Changed from")
-            whole_text_read(before)
-            engine.say("to")
-            whole_text_read(after)
-            engine.runAndWait()
-        else:
-            whole_text_read(output_text)
-            
-    else: #全画面変化
-        whole_text_read(output_text)
-        engine = pyttsx3.init()
-        voices = engine.getProperty('voices')
-        engine.setProperty("voices",voices[1].id)
-        rate = engine.getProperty('rate')
-        engine.setProperty('rate',speed)
-        #volume デフォルトは1.0 設定は0.0~1.0
-        volume = engine.getProperty('volume')
-        engine.setProperty('volume',vol)
-        if kersol_exist_search == True:
-            engine.say("The current cursor position is")
-            partial_text_read(present_kersol)
-            engine.runAndWait()
-
-    #前のテキストを保持
-    print(present_kersol)
-    before_text = output_text
-    before_kersol = present_kersol
-    file_w(out,output_text)
-
-#カーソルの表示を探す
-def kersol_search(text):
-    i = 0
-    kersol1 = ""
-    for word in text:
-        if word[0] == ">":
-            i = 1
-            kersol1 += word + ' '
-        elif (i == 1) & (word == '\n'):
-            i = 0
-        elif i == 1:
-            kersol1 += word
-    return kersol1
-
-#カーソルの位置をいう
-def kersol_read(text):
-    engine = pyttsx3.init()
-    voices = engine.getProperty('voice')
-    engine.setProperty("voice",voices[1].id)
-    #rateはデフォルトが200
-    rate = engine.getProperty('rate')
-    engine.setProperty('rate',speed)
-    #volume デフォルトは1.0 設定は0.0~1.0
-    volume = engine.getProperty('volume')
-    engine.setProperty('volume',vol)
-    count = 0
-    engine.say("The current cursor position is")
-    for word in text:
-        if word == ' ':
-            continue
-        if '/' in word:
-            target = '/'
-            idx = word.find(target)
-            r = word[:idx]
-            engine.say(r)
-            engine.say("スラッシュ")
-            r = word[idx:]
-            engine.say(r)
-            continue
-        if ',' in word:
-            target = ','
-            idx = word.find(target)
-            r = word[:idx]
-            engine.say(r)
-            engine.say("カンマ")
-            r = word[idx:]
-            engine.say(r)
-            continue
-        if "." in word:
-            target = '.'
-            idx = word.find(target)
-            r = word[:idx]
-            engine.say(r)
-            engine.say("ドット")
-            r = word[idx:]
-            engine.say(word)
-            continue
-        engine.say(word)
-    
-    engine.runAndWait()
-
-#テキスト全部読み上げ
-def whole_text_read(text):
-    engine = pyttsx3.init()
-    voices = engine.getProperty('voices')
-    engine.setProperty("voice",voices[1].id)
-    #rateはデフォルトが200
-    rate = engine.getProperty('rate')
-    engine.setProperty('rate',speed)
-    #volume デフォルトは1.0 設定は0.0~1.0
-    volume = engine.getProperty('volume')
-    engine.setProperty('volume',vol)
-    count = 0
-    for word in text:
-        if word == ' ':
-            continue
-        if '/' in word:
-            target = '/'
-            idx = word.find(target)
-            r = word[:idx]
-            engine.say(r)
-            engine.say("スラッシュ")
-            r = word[idx:]
-            engine.say(r)
-            continue
-        if ',' in word:
-            target = ','
-            idx = word.find(target)
-            r = word[:idx]
-            engine.say(r)
-            engine.say("カンマ")
-            r = word[idx:]
-            engine.say(r)
-            continue
-        if "." in word:
-            target = '.'
-            idx = word.find(target)
-            r = word[:idx]
-            engine.say(r)
-            engine.say("ドット")
-            r = word[idx:]
-            engine.say(r)
-            continue
-        engine.say(word)
-    
-    engine.runAndWait()
-
-#カーソルがテキストにあるか
-def kersol_exist_search(kersol,text):
-    text = text.splitlines()
-    for word in text:
-        s = difflib.SequenceMatcher(None,kersol[1:],word)
-        if s.ratio() >= 0.90:
-            return True
-    return False
-
-def partial_text_read(text):
-    engine = pyttsx3.init()
-    voices = engine.getProperty('voices')
-    engine.setProperty("voice",voices[1].id)
-    #rateはデフォルトが200
-    rate = engine.getProperty('rate')
-    engine.setProperty('rate',speed)
-    #volume デフォルトは1.0 設定は0.0~1.0
-    volume = engine.getProperty('volume')
-    engine.setProperty('volume',vol)
-    engine.say(text)
-    engine.runAndWait()
-
-
-
-def file_w(text,output_text):
-    f = open('3dprint_window.txt',mode='a',encoding = 'UTF-8')
-    f.write(text)
-    f.write('\n')
-    f.close()
-        
-
-if __name__ == "__main__":
-    #対象画像をロード
-    img = cv2.imread("./camera3/camera15.jpg")
-    #テンプレートをロード
-    temp = np.load(r'./dataset2.npz')
-    #テンプレート画像を格納
-    img_temp = temp['x']
-    #テンプレートのラベル(文)を格納
-    label_temp = temp['y']
-    before_text = "Main   →"
-    kersol = ">Main"
-    count = 0
-    print(count)
-    #camera_thread = threading.Thread(target = camera)
-    #match_thread = threading.Thread(target = match_text)
-    #camera_thread.start()
-    match_text(img)
-    #camera(300,0)
+    return output_text, out 

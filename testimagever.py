@@ -201,7 +201,6 @@ def diff_match_text(before_frame,present_frame):
     except TypeError:
         print("Screen cannot be detected")
         return before_window_img,[] ,[]
-<<<<<<< HEAD
 
     #コーナーに従って画像の切り取り
     #cut_img = window_img[p1[1]:p2[1],p2[0]:p3[0]]
@@ -214,11 +213,6 @@ def diff_match_text(before_frame,present_frame):
     syaei_resize_before_img = cv2.resize(cut_before,dsize=(610,211))
     syaei_resize_present_img = cv2.resize(cut_present,dsize=(610,211))
     copy =present_frame
-=======
-    syaei_resize_before_img = cv2.resize(before_frame,dsize=(610,211))
-    syaei_resize_present_img = cv2.resize(present_frame,dsize=(610,211))
-    copy =syaei_resize_present_img
->>>>>>> 6f643b9fd8a5b30d51bbe06423feea41ef9fabcc
     #plt.imshow(syaei_resize_present_img)
     #plt.show()
     #frame_diff = cv2.absdiff(syaei_resize_present_img,syaei_resize_before_img)
@@ -369,7 +363,7 @@ def match_text(frame):
             match_img = cv2.resize(match_img,dsize=(26,36))
             height_m,width_m = match_img.shape
             img_g = cv2.rectangle(syaei_resize_img, (int(char_List2[j]) ,int(char_List1[i])), (int(char_List2[j+1]), int(char_List1[i+1])), (0,0,255), 2)
-            for f in range(len(temp['x'])):
+            for f in range(len(label_temp)):
                 temp_th = img_temp[f]
                 temp_th = cv2.resize(temp_th,dsize=(26,36))
                 #テンプレートマッチング
