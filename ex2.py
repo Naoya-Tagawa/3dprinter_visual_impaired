@@ -90,7 +90,7 @@ def say(ph):
     engine = pyttsx3.init()
     #rate デフォルト値は200
     rate = engine.getProperty('rate')
-    engine.setProperty('rate',300)
+    engine.setProperty('rate',200)
     volume = engine.getProperty('volume')
     engine.setProperty('volume',1.0)
     engine.say(ph)
@@ -98,14 +98,18 @@ def say(ph):
 
 
 if __name__ == '__main__':
-    q = multiprocessing.Queue()
+    q = multiprocessing.Queue(10)
+    q.put(False)
     while True:
         count +=1
         print(count)
         judge = check()
         
         if judge == True:
-            voice1 = multiprocessing.Process(target=sayfunc,args=(q,"YYYYYYYYYYYYYYYYyyayayay",))
+            st = q.get()
+            if st == True:
+                voice1.terminate()
+            voice1 = multiprocessing.Process(target=sayfunc,args=(q,"あのかきはよく柿食うきゃくだ",))
             voice1.start()
             q.put(True)
         else:
@@ -114,8 +118,8 @@ if __name__ == '__main__':
                 print("yyy")
                 voice1.terminate()
                 
-            voice = multiprocessing.Process(target=sayfunc,args=(q,"go",))
-            voice.start()
+            voice1 = multiprocessing.Process(target=sayfunc,args=(q,"go",))
+            voice1.start()
             q.put(True)
         time.sleep(1)
 #car = threading.Thread(target=car, args=("MINI",))
