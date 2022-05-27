@@ -1,45 +1,56 @@
-
-import threading
+from cmath import e
+import pyttsx3
+from numpy import char
+import multiprocessing
 import time
 
-event = threading.Event()
+event = multiprocessing.Event()
+count = 0
 
-
-def lighter():
+def lighter(q):
     '''
     flag=True: 青信号
     flag=False: 赤信号
     '''
     count = 0
-    event.set()  # 初期値は青信号
+    event.set()
     while True:
-        if 5 < count <= 10:
-            event.clear()  # 赤信号にする
-            print("\33[41;1m赤信号...\033[0m")
-        elif count > 10:
-            event.set()  # 青信号にする
-            count = 0
-        else:
-            print("\33[42;1m青信号...\033[0m")
-
-        time.sleep(1)
+        q.put(count)
         count += 1
+        time.sleep(1)
 
-
-def car(name):
+def car(q):
+    engine = pyttsx3.init()
+    engine.setProperty('rate', 160)
+    global count
     while True:
-        if event.is_set():  # 青信号がどうかをチェック
-            print("[{}] 前進する...".format(name))
-            time.sleep(1)
+        if q.get < 5:
+            event.set()
+        elif 5 <= q.get <10:
+            event.clear()
         else:
-            print("[{}] 赤信号のため、信号を待つ...".format(name))
+            event.set()
+            q.put(0)
+
+def sayFunc(phrase):
+    engine = pyttsx3.init()
+    engine.setProperty('rate', 160)
+    engine.say(phrase)
+    engine.runAndWait()
+
+if __name__ == '__main__':
+    q = multiprocessing.Queue()
+    light = multiprocessing.Process(target=lighter,args=(q,))
+    light.start()
+
+    car = multiprocessing.Process(target=car, args=(q,))
+    car.start()
+    while True:
+        if event.is_set():
+            v = multiprocessing.Process(target=sayFunc,args=("blue",))
+            v.start()
+            while v.is_alive():
+                if event.is_set == False:
+                    v.terminate()
+        else:
             event.wait()
-            # flag=Trueになるまでここでブロッキングする
-            print("[{}] 青信号のため、前進開始...".format(name))
-
-
-light = threading.Thread(target=lighter,)
-light.start()
-
-car = threading.Thread(target=car, args=("MINI",))
-car.start()

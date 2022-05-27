@@ -28,9 +28,11 @@ speed = 150
 #ボリューム
 vol = 1.0
 
-global present_img 
+global present_frame
+global before_frame 
 
 def camera():
+    global before_frame
     cap = cv2.VideoCapture(1)
     read_fps = cap.get(cv2.CAP_PROP_FPS)
     print(read_fps)
