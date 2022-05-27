@@ -640,8 +640,8 @@ def file_w(text,output_text):
 
 if __name__ == "__main__":
     #対象画像をロード
-    img1 = cv2.imread("./camera1/camera62.jpg")
-    img2 = cv2.imread("./camera1/camera63.jpg")
+    img1 = cv2.imread("./camera1/camera60.jpg")
+    img2 = cv2.imread("./camera1/camera61.jpg")
     #テンプレートをロード
     temp = np.load(r'./dataset2.npz')
     #テンプレート画像を格納

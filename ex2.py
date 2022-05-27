@@ -105,6 +105,7 @@ if __name__ == '__main__':
         print(count)
         judge = check()
         
+        
         if judge == True:
             st = q.get()
             if st == True:
