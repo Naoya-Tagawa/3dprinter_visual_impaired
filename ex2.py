@@ -73,28 +73,50 @@ def car():
     engine.runAndWait()
     
     #engine.endLoop()
-def sayfunc(phrase):
+
+def sayfunc(q,ph):
     engine = pyttsx3.init()
     #rate デフォルト値は200
     rate = engine.getProperty('rate')
     engine.setProperty('rate',300)
     volume = engine.getProperty('volume')
     engine.setProperty('volume',1.0)
-    engine.say(phrase)
+    engine.say(ph)
+    engine.runAndWait()
+    q.put(False)
+
+
+def say(ph):
+    engine = pyttsx3.init()
+    #rate デフォルト値は200
+    rate = engine.getProperty('rate')
+    engine.setProperty('rate',300)
+    volume = engine.getProperty('volume')
+    engine.setProperty('volume',1.0)
+    engine.say(ph)
     engine.runAndWait()
 
+
 if __name__ == '__main__':
+    q = multiprocessing.Queue()
     while True:
         count +=1
         print(count)
         judge = check()
         
         if judge == True:
-            voice = multiprocessing.Process(target=sayfunc,args=("とまれ",))
+            voice1 = multiprocessing.Process(target=sayfunc,args=(q,"YYYYYYYYYYYYYYYYyyayayay",))
+            voice1.start()
+            q.put(True)
+        else:
+            st = q.get()
+            if st == True:
+                print("yyy")
+                voice1.terminate()
+                
+            voice = multiprocessing.Process(target=sayfunc,args=(q,"go",))
             voice.start()
-        else: 
-            voice = multiprocessing.Process(target=sayfunc,args=("すすめ",))
-            voice.start()
+            q.put(True)
         time.sleep(1)
 #car = threading.Thread(target=car, args=("MINI",))
 #car.start()
