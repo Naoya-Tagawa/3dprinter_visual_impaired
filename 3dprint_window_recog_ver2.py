@@ -93,7 +93,7 @@ def diff_image_search(before_frame,present_frame):
     #コーナーに従って画像の切り取り
     #cut_img = window_img[p1[1]:p2[1],p2[0]:p3[0]
     mask_cut_diff_frame = mask_frame_diff[present_p1[1]:present_p2[1],present_p2[0]:present_p3[0]]
-    
+    cv2.imwrite("frame_diff4.jpg",mask_cut_diff_frame)
     height , width = mask_cut_diff_frame.shape
     array_H = image_processing.Projection_H(mask_cut_diff_frame,height,width)
     H_THRESH = max(array_H)
@@ -102,21 +102,17 @@ def diff_image_search(before_frame,present_frame):
         img_j = cv2.rectangle(syaei_resize_present_img, (0 ,int(char_List1[i])), (610, int(char_List1[i+1])), (0,0,255), 2)
     cv2.imwrite("diffecence3.jpg",img_j)
     
-    if not char_List1: #差分がなければ
+    if char_List1.size == 0: #差分がなければ
         return False #音声出力しない
     else:
         present_img = present_frame
         return True #音声出力する
 
 def voice(frame,voice_flag):
-    while True:
-        if event.is_set(): #音声出力するかどうかチェック
-            print("k")
-            #output_text , out = image_processing.match_text(img_temp,label_temp,present_img)
-            #現在のカーソル
-            #present_kersol = audio_output.kersol_search(output_text)
-        else:
-            event.wait()
+    #文字認識
+    output_text , out = image_processing.match_text(img_temp,label_temp,frame)
+    #現在のカーソル
+    present_kersol = audio_output.kersol_search(output_text)
     before = []
     after = []
     #前と後のカーソルの類似度
