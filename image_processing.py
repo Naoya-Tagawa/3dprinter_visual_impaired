@@ -293,6 +293,111 @@ def match_text(img_temp,label_temp,frame):
     print(output_text)
     print(out)
     return output_text, out 
-#一列のリストを多次元に
-def convert_1d_to_2d(l, cols):
-    return [l[i:i + cols] for i in range(0, len(l), cols)]
+#二次元リストから同じものを削除
+def get_unique_list(seq):
+    seen = []
+    return [x for x in seq if x not in seen and not seen.append(x)]
+def match_text2(img_temp,label_temp,frame):
+    #カーネル
+    kernel = np.ones((3,3),np.uint8)
+    #対象画像をリサイズ
+    syaei_resize_img = cv2.resize(frame,dsize=(610,211))
+    #対象画像をグレイスケール化
+    gray_img = cv2.cvtColor(syaei_resize_img,cv2.COLOR_BGR2GRAY)
+    #二値画像へ
+    ret, img_mask = cv2.threshold(gray_img,0,255,cv2.THRESH_OTSU)
+    #img_mask = cv2.adaptiveThreshold(gray_img,255,cv2.ADAPTIVE_THRESH_MEAN_C,cv2.THRESH_BINARY,7,-3)
+    #ノイズ除去
+    img_mask = cv2.medianBlur(img_mask,3)
+    #膨張化
+    img_mask = cv2.dilate(img_mask,kernel)
+    #高さ、幅を保持
+    height,width = img_mask.shape
+    #if (len(char_List1) % 2) == 0:
+        #print("Screen cannot be detected")
+        #return [], []
+        
+    out_modify = "" #修正したテキスト
+    output_text = [] #読み取ったテキスト
+    s = {}
+    new_d = {}
+    out = "" #読み取ったテキスト
+        #横方向のProjection Profileを得る
+    array_V = Projection_V(img_mask,height,width)
+    W_THRESH = max(array_V)
+    char_List2 = Detect_WidthPosition(W_THRESH,width,array_V)
+    for j in range(0,len(char_List2)-1,2):
+            #end_time = time.perf_counter()
+            #print(end_time-start_time)
+        new_d = {}
+        s={}
+        #一文字ずつ切り取る
+        match_img = img_mask[:,int(char_List2[j])-1:int(char_List2[j+1])+1]
+        match_img = cv2.resize(match_img,dsize=(26,36))
+        plt.imshow(match_img)
+        plt.show()
+        height_m,width_m = match_img.shape
+        #img_g = cv2.rectangle(syaei_resize_img, (int(char_List2[j]) ,int(char_List2[j])), (int(char_List2[j+1]), int(char_List1[i+1])), (0,0,255), 2)
+        for f in range(len(label_temp)):
+            temp_th = img_temp[f]
+            temp_th = cv2.resize(temp_th,dsize=(26,36))
+            #テンプレートマッチング
+            #入力画像、テンプレート画像、類似度の計算方法が引数 返り値は検索窓の各市でのテンプレート画像との類似度を表す二次元配列
+            match = cv2.matchTemplate(match_img,temp_th,cv2.TM_CCORR_NORMED)
+            en = time.perf_counter()
+            #返り値は最小類似点、最大類似点、最小の場所、最大の場所
+            min_value, max_value, min_pt, max_pt = cv2.minMaxLoc(match)
+            #からのリストに
+            s.setdefault(max_value,f)
+            #print(end-start)
+            #類似度が最大のもの順にソート
+        new_d = sorted(s.items(), reverse = True)
+            #print(label_temp[new_d[0][1]])
+            #print(new_d[0][0])
+            #print(label_temp[new_d[1][1]])
+            #print(new_d[1][0])     
+            #new_d[0][1]がlabelの番号、new_d[0][0]が最大類似度
+            #print(char_List2)
+            #print(width_m)
+            #空白があるとき
+        if new_d[0][0] < 0.7:
+            continue
+        if (j != 0) & (char_List2[j] > (width_m + char_List2[j-1])):
+
+            if (j+1) == len(char_List2)-1:
+                out_modify = out_modify+ ' ' + label_temp[new_d[0][1]]
+                out = out + out_modify + "\n"
+                output_text.append(out_modify)
+                output_text.append('\n')
+                out_modify = ""
+                new_d = {}
+                continue
+                #out_modify = speling.correct(out_modify)
+                #out_modify += label_temp[new_d[0][1]]
+            out_modify += ' '
+                #out = out + out_modify
+                #output_text.append(' ')
+                #output_text.append(out_modify)
+                #print(out_modify)
+                #out_modify = ""
+                
+
+        #行の最後の時
+        if (j+1) == len(char_List2)-1:
+            out_modify = out_modify + label_temp[new_d[0][1]]
+            #out_modify = speling.correct(out_modify)
+            out = out + out_modify + "\n"
+            output_text.append(out_modify)
+            output_text.append('\n')
+            out_modify = ""
+            new_d = {}
+            continue
+        #print(label_temp[new_d[0][1]])
+        out_modify = out_modify + label_temp[new_d[0][1]]
+        # print(out_modify)
+        new_d = {}
+        continue
+
+    print(output_text)
+    print(out)
+    return output_text, out

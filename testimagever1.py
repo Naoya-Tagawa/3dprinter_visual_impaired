@@ -53,7 +53,7 @@ def camera():
         time.sleep(1)
 
 
-def diff_image_search(before_frame,present_frame):
+def diff_image_search(before_frame,present_frame,img_temp,label_temp):
     global present_img
     #カーネル
     kernel = np.ones((3,3),np.uint8)
@@ -77,6 +77,8 @@ def diff_image_search(before_frame,present_frame):
     #syaei_before_img = syaei(before_frame,before_p1,before_p2,before_p3,before_p4)
     syaei_present_img = image_processing.projective_transformation(present_frame,present_p1,present_p2,present_p3,present_p4)
     #対象画像をリサイズ
+    plt.imshow(syaei_present_img)
+    plt.show()
     #syaei_resize_before_img = cv2.resize(cut_before,dsize=(610,211))
     #syaei_resize_present_img = cv2.resize(syaei_present_img,dsize=(610,211))
     gray_present_img = cv2.cvtColor(syaei_present_img,cv2.COLOR_BGR2GRAY)
@@ -92,7 +94,6 @@ def diff_image_search(before_frame,present_frame):
     present_char_List = np.reshape(present_char_List,[int(len(present_char_List)/2),2])
     #present_char_List = image_processing.convert_1d_to_2d(present_char_List,2)
     print(present_char_List)
-    copy =present_frame
 
     #plt.imshow(syaei_resize_present_img)
     #plt.show()
@@ -121,12 +122,18 @@ def diff_image_search(before_frame,present_frame):
     print(char_List1)
     knn_model = NearestNeighbors(n_neighbors=1, algorithm='ball_tree').fit(present_char_List) 
     distances, indices = knn_model.kneighbors(char_List1)
+    #print(indices)
+    indices = image_processing.get_unique_list(indices)
     print(indices)
     for  i  in indices:
         print(i[0])
         img_j = cv2.rectangle(syaei_present_img, (0,int(present_char_List[i[0]][0])), (610, int(present_char_List[i[0]][1])), (0,0,255), 2)
     cv2.imwrite("diffecence3.jpg",img_j)
-    
+    for i in indices:
+        cut_present_img = syaei_present_img[int(present_char_List[i[0]][0]):int(present_char_List[i[0]][1]),]
+        image_processing.match_text2(img_temp,label_temp,cut_present_img)
+        plt.imshow(cut_present_img)
+        plt.show()
     if char_List1.size == 0: #差分がなければ
         return False #音声出力しない
     else:
@@ -171,11 +178,11 @@ def voice(frame,voice_flag):
 
 if __name__ == "__main__":
     #テンプレートをロード
-    img1 = cv2.imread("./camera1/camera2.jpg")
-    img2 = cv2.imread("./camera1/camera3.jpg")
+    img1 = cv2.imread("./camera1/camera76.jpg")
+    img2 = cv2.imread("./camera1/camera77.jpg")
     temp = np.load(r'./dataset2.npz')
     #テンプレート画像を格納
     img_temp = temp['x']
     #テンプレートのラベル(文)を格納
     label_temp = temp['y']
-    diff_image_search(img1,img2)
+    diff_image_search(img1,img2,img_temp,label_temp)
