@@ -293,3 +293,6 @@ def match_text(img_temp,label_temp,frame):
     print(output_text)
     print(out)
     return output_text, out 
+#一列のリストを多次元に
+def convert_1d_to_2d(l, cols):
+    return [l[i:i + cols] for i in range(0, len(l), cols)]
