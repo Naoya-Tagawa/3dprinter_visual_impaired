@@ -17,7 +17,7 @@ import numpy as np
 import cv2
 import matplotlib.pyplot as plt
 #話すスピード
-speed = 150
+speed = 300
 #ボリューム
 vol = 1.0
 #カーソルの表示を探す

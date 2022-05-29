@@ -334,8 +334,8 @@ def match_text2(img_temp,label_temp,frame):
         #一文字ずつ切り取る
         match_img = img_mask[:,int(char_List2[j])-1:int(char_List2[j+1])+1]
         match_img = cv2.resize(match_img,dsize=(26,36))
-        plt.imshow(match_img)
-        plt.show()
+        #plt.imshow(match_img)
+        #plt.show()
         height_m,width_m = match_img.shape
         #img_g = cv2.rectangle(syaei_resize_img, (int(char_List2[j]) ,int(char_List2[j])), (int(char_List2[j+1]), int(char_List1[i+1])), (0,0,255), 2)
         for f in range(len(label_temp)):
@@ -368,7 +368,7 @@ def match_text2(img_temp,label_temp,frame):
                 out_modify = out_modify+ ' ' + label_temp[new_d[0][1]]
                 out = out + out_modify + "\n"
                 output_text.append(out_modify)
-                output_text.append('\n')
+                #output_text.append('\n')
                 out_modify = ""
                 new_d = {}
                 continue
@@ -388,7 +388,7 @@ def match_text2(img_temp,label_temp,frame):
             #out_modify = speling.correct(out_modify)
             out = out + out_modify + "\n"
             output_text.append(out_modify)
-            output_text.append('\n')
+            #output_text.append('\n')
             out_modify = ""
             new_d = {}
             continue

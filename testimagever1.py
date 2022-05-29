@@ -129,11 +129,14 @@ def diff_image_search(before_frame,present_frame,img_temp,label_temp):
         print(i[0])
         img_j = cv2.rectangle(syaei_present_img, (0,int(present_char_List[i[0]][0])), (610, int(present_char_List[i[0]][1])), (0,0,255), 2)
     cv2.imwrite("diffecence3.jpg",img_j)
+    engine = pyttsx3.init()
     for i in indices:
         cut_present_img = syaei_present_img[int(present_char_List[i[0]][0]):int(present_char_List[i[0]][1]),]
-        image_processing.match_text2(img_temp,label_temp,cut_present_img)
-        plt.imshow(cut_present_img)
-        plt.show()
+        output_text ,out = image_processing.match_text2(img_temp,label_temp,cut_present_img)
+        #plt.imshow(cut_present_img)
+        #plt.show()
+        audio_output.partial_text_read(output_text)
+        #engine.runAndWait()
     if char_List1.size == 0: #差分がなければ
         return False #音声出力しない
     else:
