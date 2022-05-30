@@ -291,8 +291,6 @@ def match_text(img_temp,label_temp,frame):
             new_d = {}
             continue
 
-    print(output_text)
-    print(out)
     return output_text, out 
 #二次元リストから同じものを削除
 def get_unique_list(seq):

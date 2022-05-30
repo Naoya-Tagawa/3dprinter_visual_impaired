@@ -33,7 +33,15 @@ def kersol_search(text):
         elif i == 1:
             kersol1 += word
     return kersol1
-
+def cusor_search(text):
+    for word in text:
+        
+        try:
+            if ">" in word[0]:
+                return word
+        except: IndexError
+        continue
+    return []
 #カーソルの位置をいう
 def kersol_read(text):
     engine = pyttsx3.init()
