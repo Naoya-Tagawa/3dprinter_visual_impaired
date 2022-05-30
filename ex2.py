@@ -80,7 +80,7 @@ def sayfunc(q,ph):
     rate = engine.getProperty('rate')
     engine.setProperty('rate',300)
     volume = engine.getProperty('volume')
-    engine.setProperty('volume',1.0)
+    engine.setProperty('volume',3.0)
     engine.say(ph)
     engine.runAndWait()
     q.put(False)
@@ -98,7 +98,7 @@ def say(ph):
 
 
 if __name__ == '__main__':
-    q = multiprocessing.Queue(10)
+    q = multiprocessing.Queue()
     q.put(False)
     while True:
         count +=1
@@ -108,20 +108,21 @@ if __name__ == '__main__':
         
         if judge == True:
             st = q.get()
+            print(st)
+            #print(len(q))
             if st == True:
                 voice1.terminate()
-            voice1 = multiprocessing.Process(target=sayfunc,args=(q,"あのかきはよく柿食うきゃくだ",))
+            voice1 = multiprocessing.Process(target=sayfunc,args=(q,"あの客はよく柿食う客だ",))
             voice1.start()
             q.put(True)
         else:
             st = q.get()
             if st == True:
-                print("yyy")
                 voice1.terminate()
                 
             voice1 = multiprocessing.Process(target=sayfunc,args=(q,"go",))
             voice1.start()
             q.put(True)
-        time.sleep(1)
+        time.sleep(2)
 #car = threading.Thread(target=car, args=("MINI",))
 #car.start()

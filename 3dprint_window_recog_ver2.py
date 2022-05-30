@@ -58,20 +58,20 @@ def diff_image_search(before_frame,present_frame):
     #カーネル
     kernel = np.ones((3,3),np.uint8)
     #フレームの青い部分を二値化
-    blue_threshold_before_img = image_processing.cut_blue_img(before_frame)
+    #blue_threshold_before_img = image_processing.cut_blue_img(before_frame)
     blue_threshold_present_img = image_processing.cut_blue_img(present_frame)
     #コーナー検出
     try:
-        before_p1,before_p2,before_p3,before_p4 = image_processing.points_extract(blue_threshold_before_img)
+        #before_p1,before_p2,before_p3,before_p4 = image_processing.points_extract(blue_threshold_before_img)
         present_p1,present_p2,present_p3,present_p4 = image_processing.points_extract(blue_threshold_present_img)
     except TypeError:
         print("Screen cannot be detected")
-        return before_frame,[] ,[]
+        return False,[],[],[]
 
     #コーナーに従って画像の切り取り
     #cut_img = window_img[p1[1]:p2[1],p2[0]:p3[0]]
     cut_present = present_frame[present_p1[1]:present_p2[1],present_p2[0]:present_p3[0]]
-    cut_before = before_frame[before_p1[1]:before_p2[1],before_p2[0]:before_p3[0]]
+    #cut_before = before_frame[before_p1[1]:before_p2[1],before_p2[0]:before_p3[0]]
     #射影変換
     #syaei_before_img = syaei(before_frame,before_p1,before_p2,before_p3,before_p4)
     syaei_present_img = image_processing.projective_transformation(present_frame,present_p1,present_p2,present_p3,present_p4)
@@ -107,33 +107,30 @@ def diff_image_search(before_frame,present_frame):
     array_H = image_processing.Projection_H(mask_cut_diff_frame,height,width)
     H_THRESH = max(array_H)
     char_List1 = image_processing.Detect_HeightPosition(H_THRESH,height,array_H)
-    print(char_List1)
     char_List1 = np.reshape(char_List1,[int(len(char_List1)/2),2])
     print(char_List1)
-    knn_model = NearestNeighbors(n_neighbors=1, algorithm='ball_tree').fit(present_char_List) 
-    distances, indices = knn_model.kneighbors(char_List1)
+    #knn_model = NearestNeighbors(n_neighbors=1, algorithm='ball_tree').fit(present_char_List) 
+    #distances, indices = knn_model.kneighbors(char_List1)
     #print(indices)
-    indices = image_processing.get_unique_list(indices)
-    print(indices)
-    for i in indices:
-        img_j = cv2.rectangle(syaei_present_img, (0 ,int(present_char_List[i[0]][0])), (610, int(present_char_List[i[0]][1])), (0,0,255), 2)
-    cv2.imwrite("diffecence3.jpg",img_j)
+    #indices = image_processing.get_unique_list(indices)
+    #print(indices)
+    #for i in indices:
+        #img_j = cv2.rectangle(syaei_present_img, (0 ,int(present_char_List[i[0]][0])), (610, int(present_char_List[i[0]][1])), (0,0,255), 2)
+    #cv2.imwrite("diffecence3.jpg",img_j)
     
     if char_List1.size == 0: #差分がなければ
-        return False,present_char_List,indices #音声出力しない
+        return False,present_char_List,[],syaei_present_img #音声出力しない
     else:
-        present_img = syaei_present_img
-        return True,present_char_List,indices #音声出力する
+        knn_model = NearestNeighbors(n_neighbors=1, algorithm='ball_tree').fit(present_char_List) 
+        distances, indices = knn_model.kneighbors(char_List1)
+        indices = image_processing.get_unique_list(indices)
 
-def voice(frame,voice_flag,present_char_List,indices):
-    #差分をとるための準備
-    global present_img
-    global img_temp
-    global label_temp
-    #rateはデフォルトが200
+        return True,present_char_List,indices,syaei_present_img #音声出力する
+
+def voice(frame,voice_flag,present_char_List,indices,img_temp,label_temp,present_img):
+    start = time.perf_counter()
     engine = pyttsx3.init()
-    voice = engine.getProperty('voices')
-    engine.setProperty("voice",voice[1].id)
+    #rateはデフォルトが200
     rate = engine.getProperty('rate')
     engine.setProperty('rate',speed)
     #volume デフォルトは1.0 設定は0.0~1.0
@@ -141,31 +138,39 @@ def voice(frame,voice_flag,present_char_List,indices):
     engine.setProperty('volume',vol)
     #文字認識
     output_text , out = image_processing.match_text(img_temp,label_temp,frame)
+    cv2.imwrite("present.jpg",frame)
     #現在のカーソル
+    end = time.perf_counter()
+    print(end-start)
     present_kersol = audio_output.kersol_search(output_text)
-    before = []
-    after = []
     if len(present_kersol) == 0: # カーソルがない
         for i in indices:
+            print("カーソルなし")
             cut_present_img = present_img[int(present_char_List[i[0]][0]):int(present_char_List[i[0]][1]),]
-            output_text,out = image_processing.match_text(img_temp,label_temp,cut_present_img)
-            print(out)
+            cv2.imwrite("cut_present.jpg",cut_present_img)
+            output_text,out = image_processing.match_text2(img_temp,label_temp,cut_present_img)
+            #print(out)
             audio_output.partial_text_read(output_text)
-            engine.runAndWait()
+            end = time.perf_counter()
+            print(end-start)
+            #engine.runAndWait()
             
         voice_flag.put(False) #音声終了
 
     
     else: #カーソルがあるとき
         audio_output.partial_text_read(present_kersol)
-        engine.runAndWait()
         voice_flag.put(False)
 
     #前のテキストを保持
     print(present_kersol)
     #file_w(out,output_text)
 
-      
+def first_voice(frame,voice_flag,img_temp,label_temp):
+    output_text,out = image_processing.match_text(img_temp,label_temp,frame)
+    audio_output.whole_text_read(output_text)
+    voice_flag.put(False)
+
 
 if __name__ == "__main__":
     #テンプレートをロード
@@ -176,33 +181,50 @@ if __name__ == "__main__":
     img_temp = temp['x']
     #テンプレートのラベル(文)を格納
     label_temp = temp['y']
-    diff_image_search(img1,img2)
-    cap = cv2.VideoCapture(1)
+    #diff_image_search(img1,img2)
+    cap = cv2.VideoCapture(0)
     read_fps = cap.get(cv2.CAP_PROP_FPS)
     print(read_fps)
     voice_flag = multiprocessing.Queue()
     voice_flag.put(False)
     #voice_flagがTrueなら今発話中,Falseなら発話していない
+    count = 0
     while True:
+        start = time.perf_counter()
         ret , frame = cap.read()
         #フレームが取得できない場合は画面を閉じる
         if not ret:
             cv2.destroyAllWindows()
         cv2.imshow("frame",frame)
+        if count == 0:
+            count += 1
+            voice1 = multiprocessing.Process(target =first_voice,args = (frame,voice_flag,img_temp,label_temp))
+            voice1.start()
+            voice_flag.put(True)
+            before_frame = frame
+            end = time.perf_counter()
+            print(end-start)
+            continue
+
         #画面が遷移したか調査
-        diff_flag,present_char_List,indices= diff_image_search(before_frame,frame)
+        diff_flag,present_char_List,indices,present_img= diff_image_search(before_frame,frame)
+        end = time.perf_counter()
+        print(end-start)
         #diff_flag = Trueなら画面遷移,diff_flag=Falseなら画面遷移していない
         before_frame = frame
         if diff_flag == True:
             st = voice_flag.get()
             if st == True:
-                voice1.terminate()
-            voice1 = multiprocessing.Process(target=voice,args=(frame,voice_flag,present_char_List,indices))
-            voice1.start()
+                print("pp")
+                #voice1.terminate()
+            #voice1 = multiprocessing.Process(target=voice,args=(frame,voice_flag,present_char_List,indices,img_temp,label_temp,present_img))
+            #voice1.start()
+            voice(frame,voice_flag,present_char_List,indices,img_temp,label_temp,present_img)
             voice_flag.put(True)
-
+        end = time.perf_counter()
+        print(end-start)
         #qキーが入力されたら画面を閉じる
         if cv2.waitKey(1) & 0xFF == ord('q'):
             cap.release()
             cv2.destroyAllWindows()
-        time.sleep(1)
+        #time.sleep(1)
