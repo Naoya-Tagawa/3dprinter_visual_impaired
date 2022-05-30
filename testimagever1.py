@@ -181,8 +181,8 @@ def voice(frame,voice_flag):
 
 if __name__ == "__main__":
     #テンプレートをロード
-    img1 = cv2.imread("./camera1/camera76.jpg")
-    img2 = cv2.imread("./camera1/camera77.jpg")
+    img1 = cv2.imread("./camera1/camera73.jpg")
+    img2 = cv2.imread("./camera1/camera74.jpg")
     temp = np.load(r'./dataset2.npz')
     #テンプレート画像を格納
     img_temp = temp['x']
