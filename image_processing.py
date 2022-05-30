@@ -227,6 +227,7 @@ def match_text(img_temp,label_temp,frame):
             s={}
             #一文字ずつ切り取る
             match_img = img_mask[int(char_List1[i])-2:int(char_List1[i+1])+2,int(char_List2[j])-1:int(char_List2[j+1])+1]
+            cv2.imwrite("match.jpg",match_img)
             match_img = cv2.resize(match_img,dsize=(26,36))
             height_m,width_m = match_img.shape
             img_g = cv2.rectangle(syaei_resize_img, (int(char_List2[j]) ,int(char_List1[i])), (int(char_List2[j+1]), int(char_List1[i+1])), (0,0,255), 2)
