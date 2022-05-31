@@ -20,6 +20,7 @@ import matplotlib.pyplot as plt
 import image_processing
 import audio_output
 from sklearn.neighbors import NearestNeighbors 
+from concurrent.futures import ThreadPoolExecutor
 #flag = True: 音声出力
 #flag = false: 音声出力しない
 
@@ -198,8 +199,10 @@ if __name__ == "__main__":
         #フレームが取得できない場合は画面を閉じる
         #if not ret:
             #cv2.destroyAllWindows()
-        cv2.imshow("frame",frame)
-        cv2.destroyAllWindows()
+        #cv2.imshow("frame",frame)
+        #cv2.destroyAllWindows()
+        plt.imshow(frame)
+        plt.show()
         if count == 0:
             count += 1
             voice1 = multiprocessing.Process(target =first_voice,args = (frame,voice_flag,img_temp,label_temp))
@@ -217,13 +220,16 @@ if __name__ == "__main__":
         #diff_flag = Trueなら画面遷移,diff_flag=Falseなら画面遷移していない
         before_frame = frame
         if diff_flag == True:
+            print(diff_flag)
             st = voice_flag.get()
-            if st == True:
-                print("pp")
+            #if st == True:
+                #print(future.cancel())
+            #future.cancel()
             #voice1 = multiprocessing.Process(target=voice,args=(frame,voice_flag,output_text))
             #voice1.start()
-            voice(frame,voice_flag,output_text)
+            executor = ThreadPoolExecutor(max_workers=1)
+            future = executor.submit(voice,(frame,voice_flag,output_text,))
             voice_flag.put(True)
         end = time.perf_counter()
         print(end-start)
-        #time.sleep(1)
+        time.sleep(1)
