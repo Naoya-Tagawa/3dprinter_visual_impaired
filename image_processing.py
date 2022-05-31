@@ -228,7 +228,10 @@ def match_text(img_temp,label_temp,frame):
             #一文字ずつ切り取る
             match_img = img_mask[int(char_List1[i])-2:int(char_List1[i+1])+2,int(char_List2[j])-1:int(char_List2[j+1])+1]
             cv2.imwrite("match.jpg",match_img)
-            match_img = cv2.resize(match_img,dsize=(26,36))
+            try:
+                match_img = cv2.resize(match_img,dsize=(26,36))
+            except cv2.error:
+                return False,[]
             height_m,width_m = match_img.shape
             img_g = cv2.rectangle(syaei_resize_img, (int(char_List2[j]) ,int(char_List1[i])), (int(char_List2[j+1]), int(char_List1[i+1])), (0,0,255), 2)
             for f in range(len(label_temp)):
@@ -307,7 +310,7 @@ def match_text2(img_temp,label_temp,frame):
     ret, img_mask = cv2.threshold(gray_img,0,255,cv2.THRESH_OTSU)
     #img_mask = cv2.adaptiveThreshold(gray_img,255,cv2.ADAPTIVE_THRESH_MEAN_C,cv2.THRESH_BINARY,7,-3)
     #ノイズ除去
-    img_mask = cv2.medianBlur(img_mask,3)
+    img_mask = cv2.medianBlur(img_mask,5)
     #膨張化
     img_mask = cv2.dilate(img_mask,kernel)
     #高さ、幅を保持
@@ -332,7 +335,10 @@ def match_text2(img_temp,label_temp,frame):
         s={}
         #一文字ずつ切り取る
         match_img = img_mask[:,int(char_List2[j])-1:int(char_List2[j+1])+1]
-        match_img = cv2.resize(match_img,dsize=(26,36))
+        try:
+            match_img = cv2.resize(match_img,dsize=(26,36))
+        except cv2.error:
+            return [], ""
         #plt.imshow(match_img)
         #plt.show()
         height_m,width_m = match_img.shape

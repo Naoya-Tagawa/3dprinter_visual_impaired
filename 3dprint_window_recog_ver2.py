@@ -81,12 +81,14 @@ def diff_image_search(before_frame,present_frame,img_temp,label_temp):
     gray_present_img = cv2.cvtColor(syaei_present_img,cv2.COLOR_BGR2GRAY)
     gray_present_img = cv2.medianBlur(gray_present_img,3)
     ret, mask_present_img = cv2.threshold(gray_present_img,0,255,cv2.THRESH_OTSU)
-    mask_present_img = cv2.dilate(mask_present_img,kernel)
+    #mask_present_img = cv2.adaptiveThreshold(gray_present_img,255,cv2.ADAPTIVE_THRESH_MEAN_C,cv2.THRESH_BINARY,7,-3)
+    #mask_present_img = cv2.dilate(mask_present_img,kernel)
     height_present,width_present = mask_present_img.shape
     array_present_H = image_processing.Projection_H(mask_present_img,height_present,width_present)
     presentH_THRESH = max(array_present_H)
     present_char_List = image_processing.Detect_HeightPosition(presentH_THRESH,height_present,array_present_H)
     print(present_char_List)
+    cv2.imwrite("present_imh.jpg",mask_present_img)
     present_char_List = np.reshape(present_char_List,[int(len(present_char_List)/2),2])
     #plt.imshow(syaei_resize_present_img)
     #plt.show()
@@ -95,7 +97,7 @@ def diff_image_search(before_frame,present_frame,img_temp,label_temp):
     #グレイスケール化
     gray_frame_diff = cv2.cvtColor(frame_diff,cv2.COLOR_BGR2GRAY)
     #ノイズ除去
-    gray_frame_diff = cv2.medianBlur(gray_frame_diff,3)
+    gray_frame_diff = cv2.medianBlur(gray_frame_diff,5)
     #二値画像へ
     ret, mask_frame_diff = cv2.threshold(gray_frame_diff,0,255,cv2.THRESH_OTSU)
     #膨張処理
@@ -123,18 +125,17 @@ def diff_image_search(before_frame,present_frame,img_temp,label_temp):
     if char_List1.size == 0: #差分がなければ
         return False,[] #音声出力しない
     else:
+        cv2.imwrite("frame.jpg",syaei_present_img)
         knn_model = NearestNeighbors(n_neighbors=1, algorithm='ball_tree').fit(present_char_List) 
         distances, indices = knn_model.kneighbors(char_List1)
         indices = image_processing.get_unique_list(indices)
-        
+        print(indices)
         for i in indices:
             cut_present_img = syaei_present_img[int(present_char_List[i[0]][0]):int(present_char_List[i[0]][1]),]
             cv2.imwrite("cut_present.jpg",cut_present_img)
             output_text1,out1 = image_processing.match_text2(img_temp,label_temp,cut_present_img)
             output_text.append(output_text1)
             out += out1
-            end = time.perf_counter()
-            print(end-start)
         print(output_text)
         return True,output_text #音声出力する
 
@@ -154,7 +155,7 @@ def voice(frame,voice_flag,output_text):
     #現在のカーソル
     end = time.perf_counter()
     print(end-start)
-    present_kersol = audio_output.kersol_search(output_text)
+    present_kersol = audio_output.cusor_search(output_text)
     if len(present_kersol) == 0: # カーソルがない
         engine.say(output_text)
         engine.runAndWait()
@@ -185,7 +186,7 @@ if __name__ == "__main__":
     img_temp = temp['x']
     #テンプレートのラベル(文)を格納
     label_temp = temp['y']
-    diff_image_search(img1,img2)
+    #diff_image_search(img1,img2)
     cap = cv2.VideoCapture(0)
     read_fps = cap.get(cv2.CAP_PROP_FPS)
     print(read_fps)
@@ -221,10 +222,10 @@ if __name__ == "__main__":
             st = voice_flag.get()
             if st == True:
                 print("pp")
-                voice1.terminate()
-            voice1 = multiprocessing.Process(target=voice,args=(frame,voice_flag,output_text))
-            voice1.start()
-            #voice(frame,voice_flag,present_char_List,indices,img_temp,label_temp,present_img)
+                #voice1.terminate()
+            #voice1 = multiprocessing.Process(target=voice,args=(frame,voice_flag,output_text))
+            #oice1.start()
+            voice(frame,voice_flag,output_text)
             voice_flag.put(True)
         end = time.perf_counter()
         print(end-start)
@@ -232,4 +233,4 @@ if __name__ == "__main__":
         if cv2.waitKey(1) & 0xFF == ord('q'):
             cap.release()
             cv2.destroyAllWindows()
-        time.sleep(1)
+        time.sleep(2)

@@ -179,7 +179,7 @@ def first_voice(frame,voice_flag,img_temp,label_temp):
 
 if __name__ == "__main__":
     #テンプレートをロード
-    files = glob.glob('./camera1/*')
+    files = glob.glob('./camera3/*')
     img1 = cv2.imread("./camera1/camera62.jpg")
     img2 = cv2.imread("./camera1/camera63.jpg")
     temp = np.load(r'./dataset2.npz')
