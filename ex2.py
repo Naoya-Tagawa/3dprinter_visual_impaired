@@ -75,12 +75,9 @@ def car():
     #engine.endLoop()
 
 def sayfunc(q,ph):
-    engine = pyttsx3.init()
+    engine = q.get()
+    #engine = pyttsx3.init()
     #rate デフォルト値は200
-    rate = engine.getProperty('rate')
-    engine.setProperty('rate',300)
-    volume = engine.getProperty('volume')
-    engine.setProperty('volume',3.0)
     engine.say(ph)
     engine.runAndWait()
     q.put(False)
@@ -99,7 +96,15 @@ def say(ph):
 
 if __name__ == '__main__':
     q = multiprocessing.Queue()
-    q.put(False)
+    engine = pyttsx3.init()
+    #engine = pyttsx3.init()
+    #rate デフォルト値は200
+    rate = engine.getProperty('rate')
+    engine.setProperty('rate',300)
+    volume = engine.getProperty('volume')
+    engine.setProperty('volume',3.0)
+    #rate デフォルト値は200
+    q.put(engine)
     while True:
         count +=1
         print(count)
@@ -110,19 +115,21 @@ if __name__ == '__main__':
             st = q.get()
             print(st)
             #print(len(q))
-            if st == True:
+            if st == engine:
+                engine.stop()
                 voice1.terminate()
-            voice1 = multiprocessing.Process(target=sayfunc,args=(q,"あの客はよく柿食う客だ",))
+            voice1 = multiprocessing.Process(target=sayfunc,args=(q,"あの客はよく柿食う客だ"))
             voice1.start()
-            q.put(True)
+            q.put(engine)
         else:
             st = q.get()
-            if st == True:
+            if st == engine:
+                engine.stop()
                 voice1.terminate()
                 
-            voice1 = multiprocessing.Process(target=sayfunc,args=(q,"go",))
+            voice1 = multiprocessing.Process(target=sayfunc,args=(q,"go"))
             voice1.start()
-            q.put(True)
+            q.put(engine)
         time.sleep(2)
 #car = threading.Thread(target=car, args=("MINI",))
 #car.start()

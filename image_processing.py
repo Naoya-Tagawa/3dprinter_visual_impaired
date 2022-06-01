@@ -16,6 +16,7 @@ import difflib
 import numpy as np
 import cv2
 import matplotlib.pyplot as plt
+from Pylsd.lsd import lsd
 #アオイ部分を切り抜く
 def cut_blue_img(img):
     c_img = cv2.cvtColor(img,cv2.COLOR_BGR2RGB)
@@ -81,6 +82,28 @@ def points_extract(img):
     #右下
     p4 = p[-1]
     return p1,p2,p3,p4
+#コーナー検出
+def points_extract1(img):
+    #コーナー検出
+    linesL = lsd(img)
+    #コーナーの中でx座標が最小、最大
+
+    #Smin_p= np.min(dst,axis=0)
+    #max_p = np.max(dst,axis=0)
+    
+    mi_x =[]
+    ma_x = []
+    for line in linesL:
+        x1, y1, x2, y2 = map(int,line[:4])
+        img3 = cv2.line(img, (x1,y1), (x2,y2), (0,0,255), 3)
+        if (x2-x1)**2 + (y2-y1)**2 > 100:
+        # 赤線を引く
+            img3 = cv2.line(img3, (x1,y1), (x2,y2), (0,0,255), 3)
+    #mi_x.append([min_p[0,0],min_p[0,1]])
+    #ma_x.append([max_p[0,0],max_p[0,1]])
+    
+    plt.imshow(img3)
+    plt.show()
 
 def projective_transformation(img1,p1,p2,p3,p4):
     #座標

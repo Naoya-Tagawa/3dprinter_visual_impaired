@@ -59,6 +59,8 @@ def diff_image_search(before_frame,present_frame,img_temp,label_temp):
     kernel = np.ones((3,3),np.uint8)
     #フレームの青い部分を二値化
     blue_threshold_before_img = image_processing.cut_blue_img(before_frame)
+    plt.imshow(blue_threshold_before_img)
+    plt.show()
     blue_threshold_present_img = image_processing.cut_blue_img(present_frame)
     #コーナー検出
     try:
@@ -181,8 +183,8 @@ def voice(frame,voice_flag):
 
 if __name__ == "__main__":
     #テンプレートをロード
-    img1 = cv2.imread("./camera1/camera62.jpg")
-    img2 = cv2.imread("./camera1/camera63.jpg")
+    img1 = cv2.imread("./camera3/camera5.jpg")
+    img2 = cv2.imread("./camera3/camera6.jpg")
     temp = np.load(r'./dataset2.npz')
     #テンプレート画像を格納
     img_temp = temp['x']

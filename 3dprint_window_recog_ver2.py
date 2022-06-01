@@ -222,10 +222,10 @@ if __name__ == "__main__":
             st = voice_flag.get()
             if st == True:
                 print("pp")
-                #voice1.terminate()
-            #voice1 = multiprocessing.Process(target=voice,args=(frame,voice_flag,output_text))
-            #oice1.start()
-            voice(frame,voice_flag,output_text)
+                voice1.terminate()
+            voice1 = multiprocessing.Process(target=voice,args=(frame,voice_flag,output_text))
+            voice1.start()
+            #voice(frame,voice_flag,output_text)
             voice_flag.put(True)
         end = time.perf_counter()
         print(end-start)
@@ -233,4 +233,4 @@ if __name__ == "__main__":
         if cv2.waitKey(1) & 0xFF == ord('q'):
             cap.release()
             cv2.destroyAllWindows()
-        time.sleep(2)
+        time.sleep(1)
