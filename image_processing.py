@@ -16,7 +16,7 @@ import difflib
 import numpy as np
 import cv2
 import matplotlib.pyplot as plt
-from Pylsd.lsd import lsd
+from pylsd.lsd import lsd
 #アオイ部分を切り抜く
 def cut_blue_img(img):
     c_img = cv2.cvtColor(img,cv2.COLOR_BGR2RGB)
