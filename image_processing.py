@@ -114,12 +114,22 @@ def points_extract(img):
 # 点p0に一番近い点を取得
 def func_search_neighbourhood(p0, ps):
     L = np.array([])
+    s = {}
     for i in range(ps.shape[0]):
         norm = np.sqrt( (ps[i][0] - p0[0])*(ps[i][0] - p0[0]) +
                         (ps[i][1] - p0[1])*(ps[i][1] - p0[1]) )
-        L = np.append(L, norm)
-    return np.argmin(L) ,ps[np.argmin(L)]
+        #print(norm)
+        if norm <= 10:
+            s.setdefault(norm,i)
+    new_d = sorted(s.items())
+    if len(s) == 0:
+        
+        return p0
+    else:
+        return ps[new_d[0][1]]
+
 def points_extract1(img,img2):
+    img = cv2.cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
     #コーナー検出
     #img_1 = cv2.Canny(img,50,150)
     #linesH = cv2.HoughLinesP(img,rho=1,theta = np.pi/360,threshold=50,minLineLength=50,maxLineGap=10)
@@ -146,12 +156,7 @@ def points_extract1(img,img2):
         # 赤線を引く
             #img3 = cv2.line(img2, (x1,y1), (x2,y2), (0,0,255), 3)
     #mi_x.append([min_p[0,0],min_p[0,1]])
-    #ma_x.append([max_p[0,0],max_p[0,1]])
-# 輪郭を抽出する。
-    ret, mask_img = cv2.threshold(img,0,255,cv2.THRESH_OTSU)
-    contours, hierarchy = cv2.findContours(
-    mask_img, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE
-)
+    #ma_x.append([max_p[0,0],max_p[0,1]
     #plt.imshow(mask_img)
     #plt.show()
     #print(ly)
@@ -178,43 +183,50 @@ def points_extract1(img,img2):
                 #cv2.circle(img,(x,y),3,255,1)
     mi_x = mi_x.reshape(int(len(mi_x)/2),2)
     ma_x = ma_x.reshape(int(len(ma_x)/2),2)
-    print(ma_x)
-    print(mi_x)
-    min_1 = [int(mi_x[0][0]),int(mi_x[0][1])]
-    idx , near_min_1 = func_search_neighbourhood(min_1,mi_x[1:])
-    max_1 = [int(ma_x[0][0]),int(ma_x[0][1])]
-    idx , near_max_1 = func_search_neighbourhood(max_1,ma_x[1:])
-    
+    #print(ma_x)
+    #print(mi_x)
     ma_x = ma_x[np.argsort(ma_x[:,1])]
     mi_x = mi_x[np.argsort(mi_x[:,1])] 
-    
-    min_2 = [int(mi_x[-1][0]),int(mi_x[-1][1])]
-    idx , near_min_2 = func_search_neighbourhood(min_2,mi_x[:-1])
-    max_2 = [int(ma_x[-1][0]),int(mi_x[-1][1])]
-    idx , near_max_2 = func_search_neighbourhood(max_2,ma_x[:-1])
-    print(min_1)
-    print(near_min_1)  
-    print(min_2)
-    print(near_min_2) 
-    print(max_1)
-    print(near_max_1) 
-    print(max_2)
-    print(near_max_2) 
-  
-    #ひだりうえ
-    p1 = [(min_1[0]+near_min_1[0])/2,(min_1[1]+near_min_1[1])/2]
-    #左下
-    p2 = [(min_2[0]+near_min_2[0])/2,(min_2[1]+near_min_2[1])/2]
+    print(ma_x)
+    print(mi_x)
+    #左うえ
+    min_1 = [int(mi_x[0][0]),int(mi_x[0][1])]
+    near_min_1 = func_search_neighbourhood(min_1,mi_x[1:])
     #右上
-    p3 = [(max_1[0]+near_max_1[0])/2,(max_1[1]+near_max_1[1])/2]
+    max_1 = [int(ma_x[0][0]),int(ma_x[0][1])]
+    near_max_1 = func_search_neighbourhood(max_1,ma_x[1:])
+    #左下
+    min_2 = [int(mi_x[-1][0]),int(mi_x[-1][1])]
+    near_min_2 = func_search_neighbourhood(min_2,mi_x[:-1])
     #右下
-    p4 = [(max_2[0]+near_max_2[0])/2,(max_2[1]+near_max_2[1])/2]
+    max_2 = [int(ma_x[-1][0]),int(ma_x[-1][1])]
+    near_max_2 = func_search_neighbourhood(max_2,ma_x[:-1])
+    print(near_max_2)
+    print(max_2)
+    #ひだりうえ
+    p1 = [int((min_1[0]+near_min_1[0])/2),int((min_1[1]+near_min_1[1])/2)]
+    #左下
+    p2 = [int((min_2[0]+near_min_2[0])/2),int((min_2[1]+near_min_2[1])/2)]
+    #右上
+    p3 = [int((max_1[0]+near_max_1[0])/2),int((max_1[1]+near_max_1[1])/2)]
+    #右下
+    p4 = [int((max_2[0]+near_max_2[0])/2),int((max_2[1]+near_max_2[1])/2)]
+    if img[p1[1]][p1[0]] == 0:
+        p1 = [int(min_1[0]),int(min_1[1])]
+    if img[p2[1]][p2[0]] == 0:
+        p2 = [int(min_2[0]),int(min_2[1])]
+    if img[p3[1]][p3[0]] == 0:
+        p3 = [int(max_1[0]),int(max_1[1])]
+    if img[p4[1]][p4[0]] == 0:
+        p4 = [int(max_2[0]),int(max_2[1])]
+    print(p1)
+    print(p2)
+    print(p3)
+    print(p4)
     cv2.circle(img2,(int(p1[0]),int(p1[1])),3,255,1)
     cv2.circle(img2,(int(p2[0]),int(p2[1])),3,255,1)
     cv2.circle(img2,(int(p3[0]),int(p3[1])),3,255,1)
     cv2.circle(img2,(int(p4[0]),int(p4[1])),3,255,1)
-    plt.imshow(img2)
-    plt.show()
     #de_position = pd.read_csv(io.BytesIO(ly))
     #print(de_position)
 # 小さい輪郭は誤検出として削除する
@@ -225,11 +237,7 @@ def points_extract1(img,img2):
 
     plt.imshow(img2)
     plt.show()
-    new_d = sorted(s.items(), reverse = True)
-    line_first = new_d[0][1]
-    line_second = new_d[1][1]
-    line_third = new_d[2][1]
-    line_forth = new_d[3][1]
+    return p1,p2,p3,p4
     
 
 def projective_transformation(img1,p1,p2,p3,p4):

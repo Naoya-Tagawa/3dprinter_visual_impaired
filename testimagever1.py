@@ -62,29 +62,32 @@ def diff_image_search(before_frame,present_frame,img_temp,label_temp):
     blue_threshold_before_img = image_processing.cut_blue_img1(before_frame)
     plt.imshow(blue_threshold_before_img)
     plt.show()
-    blue_threshold_before_img = cv2.cv2.cvtColor(blue_threshold_before_img,cv2.COLOR_BGR2GRAY)
-    image_processing.points_extract1(blue_threshold_before_img,before_frame)
     blue_threshold_present_img = image_processing.cut_blue_img1(present_frame)
-    blue_threshold_present_img = cv2.cv2.cvtColor(blue_threshold_present_img,cv2.COLOR_BGR2GRAY)
-    image_processing.points_extract1(blue_threshold_present_img,present_frame)
+    plt.imshow(blue_threshold_present_img)
+    plt.show()
     #コーナー検出
-    try:
-        before_p1,before_p2,before_p3,before_p4 = image_processing.points_extract(blue_threshold_before_img)
-        present_p1,present_p2,present_p3,present_p4 = image_processing.points_extract(blue_threshold_present_img)
-    except TypeError:
-        print("Screen cannot be detected")
-        return before_frame,[] ,[]
+    #try:
+    before_p1,before_p2,before_p3,before_p4 = image_processing.points_extract1(blue_threshold_before_img,before_frame)
+    present_p1,present_p2,present_p3,present_p4 = image_processing.points_extract1(blue_threshold_present_img,present_frame)
+    #except TypeError:
+        #print("Screen cannot be detected")
+        #return before_frame,[] ,[]
     #before_frame = cv2.resize(before_frame,dsize=(610,211))
     #present_frame = cv2.resize(present_frame,dsize=(610,211))
     #コーナーに従って画像の切り取り
-    #cut_img = window_img[p1[1]:p2[1],p2[0]:p3[0]]
     cut_present = present_frame[present_p1[1]:present_p2[1],present_p2[0]:present_p3[0]]
     cut_before = before_frame[before_p1[1]:before_p2[1],before_p2[0]:before_p3[0]]
     #射影変換
-    #syaei_before_img = syaei(before_frame,before_p1,before_p2,before_p3,before_p4)
+    syaei_before_img = image_processing.projective_transformation(before_frame,before_p1,before_p2,before_p3,before_p4)
+    plt.imshow(syaei_before_img)
+    plt.show()
     syaei_present_img = image_processing.projective_transformation(present_frame,present_p1,present_p2,present_p3,present_p4)
     #対象画像をリサイズ
+    syaei_before_img = cv2.resize(syaei_before_img,dsize=(610,211))
+    syaei_present_img = cv2.resize(syaei_present_img,dsize=(610,211))
     plt.imshow(syaei_present_img)
+    plt.show()
+    plt.imshow(syaei_before_img)
     plt.show()
     #syaei_resize_before_img = cv2.resize(cut_before,dsize=(610,211))
     #syaei_resize_present_img = cv2.resize(syaei_present_img,dsize=(610,211))
@@ -104,8 +107,8 @@ def diff_image_search(before_frame,present_frame,img_temp,label_temp):
 
     #plt.imshow(syaei_resize_present_img)
     #plt.show()
-    #frame_diff = cv2.absdiff(syaei_resize_present_img,syaei_resize_before_img)
-    frame_diff = cv2.absdiff(present_frame,before_frame)
+    frame_diff = cv2.absdiff(syaei_present_img,syaei_before_img)
+    #frame_diff = cv2.absdiff(present_frame,before_frame)
     #グレイスケール化
     gray_frame_diff = cv2.cvtColor(frame_diff,cv2.COLOR_BGR2GRAY)
     #ノイズ除去
@@ -188,7 +191,7 @@ def voice(frame,voice_flag):
 
 if __name__ == "__main__":
     #テンプレートをロード
-    img1 = cv2.imread("./camera1/camera55.jpg")
+    img1 = cv2.imread("./camera3/camera5.jpg")
     img2 = cv2.imread("./camera3/camera6.jpg")
     temp = np.load(r'./dataset2.npz')
     #テンプレート画像を格納
