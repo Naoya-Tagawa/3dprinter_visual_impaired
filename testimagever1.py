@@ -20,6 +20,7 @@ import matplotlib.pyplot as plt
 import image_processing
 import audio_output
 from sklearn.neighbors import NearestNeighbors 
+from io import BytesIO
 #flag = True: 音声出力
 #flag = false: 音声出力しない
 
@@ -63,7 +64,8 @@ def diff_image_search(before_frame,present_frame,img_temp,label_temp):
     plt.show()
     blue_threshold_before_img = cv2.cv2.cvtColor(blue_threshold_before_img,cv2.COLOR_BGR2GRAY)
     image_processing.points_extract1(blue_threshold_before_img,before_frame)
-    blue_threshold_present_img = image_processing.cut_blue_img(present_frame)
+    blue_threshold_present_img = image_processing.cut_blue_img1(present_frame)
+    blue_threshold_present_img = cv2.cv2.cvtColor(blue_threshold_present_img,cv2.COLOR_BGR2GRAY)
     image_processing.points_extract1(blue_threshold_present_img,present_frame)
     #コーナー検出
     try:
@@ -186,7 +188,7 @@ def voice(frame,voice_flag):
 
 if __name__ == "__main__":
     #テンプレートをロード
-    img1 = cv2.imread("./camera3/camera5.jpg")
+    img1 = cv2.imread("./camera1/camera55.jpg")
     img2 = cv2.imread("./camera3/camera6.jpg")
     temp = np.load(r'./dataset2.npz')
     #テンプレート画像を格納

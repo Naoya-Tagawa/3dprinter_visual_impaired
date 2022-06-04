@@ -1,3 +1,4 @@
+from hashlib import new
 import numpy as np
 import cv2
 import matplotlib.pyplot as plt
@@ -7,6 +8,8 @@ import time
 import cv2
 import numpy as np
 import glob
+import pandas as pd
+from io import BytesIO
 from natsort import natsorted
 import threading
 from PIL import Image , ImageTk , ImageOps
@@ -104,7 +107,18 @@ def points_extract(img):
     #右下
     p4 = p[-1]
     return p1,p2,p3,p4
+
+
 #コーナー検出
+
+# 点p0に一番近い点を取得
+def func_search_neighbourhood(p0, ps):
+    L = np.array([])
+    for i in range(ps.shape[0]):
+        norm = np.sqrt( (ps[i][0] - p0[0])*(ps[i][0] - p0[0]) +
+                        (ps[i][1] - p0[1])*(ps[i][1] - p0[1]) )
+        L = np.append(L, norm)
+    return np.argmin(L) ,ps[np.argmin(L)]
 def points_extract1(img,img2):
     #コーナー検出
     #img_1 = cv2.Canny(img,50,150)
@@ -117,18 +131,106 @@ def points_extract1(img,img2):
     linsl = lsd(img)
     mi_x =[]
     ma_x = []
+    #print(linsl)
+    s = {}
+    ly = np.empty(0)
     for line in linsl:
         x1, y1, x2, y2 = map(int,line[:4])
-        img3 = cv2.circle(img2, (x1,y1),3,255, 5)
-        img3 = cv2.circle(img2,  (x2,y2), 3,255, 5)
-        if (x2-x1)**2 + (y2-y1)**2 > 100:
+        l = (x2-x1)**2 + (y2-y1)**2 
+        ly = np.append(ly,[x1,y1])
+        ly = np.append(ly,[x2,y2])
+        s.setdefault(l,line)
+        #img3 = cv2.circle(img2, (x1,y1),3,255, 5)
+        #img3 = cv2.circle(img2,  (x2,y2), 3,255, 5)
+        #if (x2-x1)**2 + (y2-y1)**2 > 100:
         # 赤線を引く
-            img3 = cv2.line(img3, (x1,y1), (x2,y2), (0,0,255), 3)
+            #img3 = cv2.line(img2, (x1,y1), (x2,y2), (0,0,255), 3)
     #mi_x.append([min_p[0,0],min_p[0,1]])
     #ma_x.append([max_p[0,0],max_p[0,1]])
+# 輪郭を抽出する。
+    ret, mask_img = cv2.threshold(img,0,255,cv2.THRESH_OTSU)
+    contours, hierarchy = cv2.findContours(
+    mask_img, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE
+)
+    #plt.imshow(mask_img)
+    #plt.show()
+    #print(ly)
+    #print(len(ly))
+    ly = ly.reshape(int(len(ly)/2),2)
+    #print(ly)
+    #data = BytesIO(ly)
+    p = ly[:,0]
+    ly = ly[np.argsort(p)]
+    #print(ly)
+    min_x = int(ly[0][0])
+    max_x = int(ly[-1][0])
+    mi_x = np.empty(0)
+    ma_x = np.empty(0)
+    for i in ly:
+        x,y = i.ravel()
+        x = int(x)
+        y = int(y)
+        if (x-min_x) <=10:
+                mi_x = np.append(mi_x,[x,y])
+                #cv2.circle(img,(x,y),3,255,1)
+        if (max_x-x) <=10:
+                ma_x = np.append(ma_x,[x,y])
+                #cv2.circle(img,(x,y),3,255,1)
+    mi_x = mi_x.reshape(int(len(mi_x)/2),2)
+    ma_x = ma_x.reshape(int(len(ma_x)/2),2)
+    print(ma_x)
+    print(mi_x)
+    min_1 = [int(mi_x[0][0]),int(mi_x[0][1])]
+    idx , near_min_1 = func_search_neighbourhood(min_1,mi_x[1:])
+    max_1 = [int(ma_x[0][0]),int(ma_x[0][1])]
+    idx , near_max_1 = func_search_neighbourhood(max_1,ma_x[1:])
     
-    plt.imshow(img3)
+    ma_x = ma_x[np.argsort(ma_x[:,1])]
+    mi_x = mi_x[np.argsort(mi_x[:,1])] 
+    
+    min_2 = [int(mi_x[-1][0]),int(mi_x[-1][1])]
+    idx , near_min_2 = func_search_neighbourhood(min_2,mi_x[:-1])
+    max_2 = [int(ma_x[-1][0]),int(mi_x[-1][1])]
+    idx , near_max_2 = func_search_neighbourhood(max_2,ma_x[:-1])
+    print(min_1)
+    print(near_min_1)  
+    print(min_2)
+    print(near_min_2) 
+    print(max_1)
+    print(near_max_1) 
+    print(max_2)
+    print(near_max_2) 
+  
+    #ひだりうえ
+    p1 = [(min_1[0]+near_min_1[0])/2,(min_1[1]+near_min_1[1])/2]
+    #左下
+    p2 = [(min_2[0]+near_min_2[0])/2,(min_2[1]+near_min_2[1])/2]
+    #右上
+    p3 = [(max_1[0]+near_max_1[0])/2,(max_1[1]+near_max_1[1])/2]
+    #右下
+    p4 = [(max_2[0]+near_max_2[0])/2,(max_2[1]+near_max_2[1])/2]
+    cv2.circle(img2,(int(p1[0]),int(p1[1])),3,255,1)
+    cv2.circle(img2,(int(p2[0]),int(p2[1])),3,255,1)
+    cv2.circle(img2,(int(p3[0]),int(p3[1])),3,255,1)
+    cv2.circle(img2,(int(p4[0]),int(p4[1])),3,255,1)
+    plt.imshow(img2)
     plt.show()
+    #de_position = pd.read_csv(io.BytesIO(ly))
+    #print(de_position)
+# 小さい輪郭は誤検出として削除する
+    #contours = list(filter(lambda x: cv2.contourArea(x) > 100, contours))
+
+    # 輪郭を描画する。
+    #cv2.drawContours(img2, contours, -1, color=(0, 0, 255), thickness=3)
+
+    plt.imshow(img2)
+    plt.show()
+    new_d = sorted(s.items(), reverse = True)
+    line_first = new_d[0][1]
+    line_second = new_d[1][1]
+    line_third = new_d[2][1]
+    line_forth = new_d[3][1]
+    
 
 def projective_transformation(img1,p1,p2,p3,p4):
     #座標
