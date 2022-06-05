@@ -60,12 +60,12 @@ def diff_image_search(before_frame,present_frame,img_temp,label_temp):
     out = ""
     kernel = np.ones((3,3),np.uint8)
     #フレームの青い部分を二値化
-    #blue_threshold_before_img = image_processing.cut_blue_img(before_frame)
-    blue_threshold_present_img = image_processing.cut_blue_img(present_frame)
+    blue_threshold_before_img = image_processing.cut_blue_img1(before_frame)
+    blue_threshold_present_img = image_processing.cut_blue_img1(present_frame)
     #コーナー検出
     try:
-        #before_p1,before_p2,before_p3,before_p4 = image_processing.points_extract(blue_threshold_before_img)
-        present_p1,present_p2,present_p3,present_p4 = image_processing.points_extract(blue_threshold_present_img)
+        before_p1,before_p2,before_p3,before_p4 = image_processing.points_extract1(blue_threshold_before_img)
+        present_p1,present_p2,present_p3,present_p4 = image_processing.points_extract1(blue_threshold_present_img)
     except TypeError:
         print("Screen cannot be detected")
         return False,[]
@@ -75,9 +75,13 @@ def diff_image_search(before_frame,present_frame,img_temp,label_temp):
     #cut_present = present_frame[present_p1[1]:present_p2[1],present_p2[0]:present_p3[0]]
     #cut_before = before_frame[before_p1[1]:before_p2[1],before_p2[0]:before_p3[0]]
     #射影変換
-    #syaei_before_img = syaei(before_frame,before_p1,before_p2,before_p3,before_p4)
+    syaei_before_img = image_processing.projective_transformation(before_frame,before_p1,before_p2,before_p3,before_p4)
     syaei_present_img = image_processing.projective_transformation(present_frame,present_p1,present_p2,present_p3,present_p4)
     #対象画像をリサイズ
+    #対象画像をリサイズ
+    syaei_before_img = cv2.resize(syaei_before_img,dsize=(610,211))
+    syaei_present_img = cv2.resize(syaei_present_img,dsize=(610,211))
+    
     gray_present_img = cv2.cvtColor(syaei_present_img,cv2.COLOR_BGR2GRAY)
     gray_present_img = cv2.medianBlur(gray_present_img,3)
     ret, mask_present_img = cv2.threshold(gray_present_img,0,255,cv2.THRESH_OTSU)
@@ -93,7 +97,8 @@ def diff_image_search(before_frame,present_frame,img_temp,label_temp):
     #plt.imshow(syaei_resize_present_img)
     #plt.show()
     #frame_diff = cv2.absdiff(syaei_resize_present_img,syaei_resize_before_img)
-    frame_diff = cv2.absdiff(present_frame,before_frame)
+    #frame_diff = cv2.absdiff(present_frame,before_frame)
+    frame_diff = cv2.absdiff(blue_threshold_present_img,blue_threshold_before_img)
     #グレイスケール化
     gray_frame_diff = cv2.cvtColor(frame_diff,cv2.COLOR_BGR2GRAY)
     #ノイズ除去
@@ -106,6 +111,7 @@ def diff_image_search(before_frame,present_frame,img_temp,label_temp):
     #コーナーに従って画像の切り取り
     #cut_img = window_img[p1[1]:p2[1],p2[0]:p3[0]
     mask_cut_diff_frame = mask_frame_diff[present_p1[1]:present_p2[1],present_p2[0]:present_p3[0]]
+    mask_cut_diff_frame = cv2.resize(mask_cut_diff_frame,dsize=(610,211))
     cv2.imwrite("frame_diff4.jpg",mask_cut_diff_frame)
     height , width = mask_cut_diff_frame.shape
     array_H = image_processing.Projection_H(mask_cut_diff_frame,height,width)
@@ -125,6 +131,7 @@ def diff_image_search(before_frame,present_frame,img_temp,label_temp):
     if char_List1.size == 0: #差分がなければ
         return False,[] #音声出力しない
     else:
+        
         cv2.imwrite("frame.jpg",syaei_present_img)
         knn_model = NearestNeighbors(n_neighbors=1, algorithm='ball_tree').fit(present_char_List) 
         distances, indices = knn_model.kneighbors(char_List1)
@@ -229,7 +236,11 @@ if __name__ == "__main__":
             voice_flag.put(True)
         end = time.perf_counter()
         print(end-start)
-        #qキーが入力されたら画面を閉じる
+            # 背景画像の更新（一定間隔）
+        if(count > 10):
+            ret, frame = cap.read()
+            count = 0  # カウント変数の初期化
+            #qキーが入力されたら画面を閉じる
         if cv2.waitKey(1) & 0xFF == ord('q'):
             cap.release()
             cv2.destroyAllWindows()
