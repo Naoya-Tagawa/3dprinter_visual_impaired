@@ -20,6 +20,30 @@ import numpy as np
 import cv2
 import matplotlib.pyplot as plt
 from pylsd.lsd import lsd
+
+def mask_make(blue_threshold_present_img):
+    kernel = np.ones((3,3),np.uint8)
+    hsvLower = np.array([70, 25, 25])    # 抽出する色の下限(HSV)
+    hsvUpper = np.array([255, 222, 255])    # 抽出する色の上限(HSV)
+    hsv = cv2.cvtColor(blue_threshold_present_img, cv2.COLOR_BGR2HSV) # 画像をHSVに変換
+    hsv_mask = cv2.inRange(hsv, hsvLower, hsvUpper)    # HSVからマスクを作成
+    result = cv2.bitwise_and(blue_threshold_present_img, blue_threshold_present_img, mask=hsv_mask) # 元画像とマスクを合成
+    hsv_mask = cv2.medianBlur(hsv_mask,3)
+    #mask_present_img2 = cv2.dilate(mask_present_img2,kernel)
+    #ret, mask_present_img2 = cv2.threshold(hsv_mask,0,255,cv2.THRESH_OTSU)
+    mask_present_img2 = cv2.dilate(hsv_mask,kernel)
+    #plt.imshow(mask_present_img2)
+    #plt.show()
+    height_present , width_present = mask_present_img2.shape
+    
+    array_present_H = Projection_H(mask_present_img2,height_present,width_present)
+    presentH_THRESH = max(array_present_H)
+    present_char_List = Detect_HeightPosition(presentH_THRESH,height_present,array_present_H)
+    #print(present_char_List)
+    present_char_List = np.reshape(present_char_List,[int(len(present_char_List)/2),2])
+    #present_char_List = image_processing.convert_1d_to_2d(present_char_List,2)
+    return present_char_List , mask_present_img2
+
 #アオイ部分を切り抜く
 def cut_blue_img(img):
     c_img = cv2.cvtColor(img,cv2.COLOR_BGR2RGB)
@@ -187,8 +211,8 @@ def points_extract1(img,img2):
     #print(mi_x)
     ma_x = ma_x[np.argsort(ma_x[:,1])]
     mi_x = mi_x[np.argsort(mi_x[:,1])] 
-    print(ma_x)
-    print(mi_x)
+    #print(ma_x)
+    #print(mi_x)
     #左うえ
     min_1 = [int(mi_x[0][0]),int(mi_x[0][1])]
     near_min_1 = func_search_neighbourhood(min_1,mi_x[1:])
@@ -201,8 +225,8 @@ def points_extract1(img,img2):
     #右下
     max_2 = [int(ma_x[-1][0]),int(ma_x[-1][1])]
     near_max_2 = func_search_neighbourhood(max_2,ma_x[:-1])
-    print(near_max_2)
-    print(max_2)
+    #print(near_max_2)
+    #print(max_2)
     #ひだりうえ
     p1 = [int((min_1[0]+near_min_1[0])/2),int((min_1[1]+near_min_1[1])/2)]
     #左下
@@ -235,8 +259,8 @@ def points_extract1(img,img2):
     # 輪郭を描画する。
     #cv2.drawContours(img2, contours, -1, color=(0, 0, 255), thickness=3)
 
-    plt.imshow(img2)
-    plt.show()
+    #plt.imshow(img2)
+    #plt.show()
     return p1,p2,p3,p4
     
 
@@ -463,9 +487,10 @@ def match_text2(img_temp,label_temp,frame):
     #対象画像をリサイズ
     syaei_resize_img = cv2.resize(frame,dsize=(610,211))
     #対象画像をグレイスケール化
-    gray_img = cv2.cvtColor(syaei_resize_img,cv2.COLOR_BGR2GRAY)
+    #gray_img = cv2.cvtColor(syaei_resize_img,cv2.COLOR_BGR2GRAY)
     #二値画像へ
-    ret, img_mask = cv2.threshold(gray_img,0,255,cv2.THRESH_OTSU)
+    #ret, img_mask = cv2.threshold(gray_img,0,255,cv2.THRESH_OTSU)
+    img_mask = frame
     #img_mask = cv2.adaptiveThreshold(gray_img,255,cv2.ADAPTIVE_THRESH_MEAN_C,cv2.THRESH_BINARY,7,-3)
     #ノイズ除去
     img_mask = cv2.medianBlur(img_mask,5)

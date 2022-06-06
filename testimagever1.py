@@ -142,47 +142,33 @@ def diff_image_search1(before_frame,present_frame,img_temp,label_temp):
         #print(i[0])
         #img_j = cv2.rectangle(syaei_present_img, (0,int(present_char_List[i[0]][0])), (610, int(present_char_List[i[0]][1])), (0,0,255), 2)
     #cv2.imwrite("diffecence3.jpg",img_j)
+    #文字のみのマスク画像生成
+    present_char_List , mask_present_img2 = image_processing.mask_make(blue_threshold_present_img)
+    
     engine = pyttsx3.init()
     before_frame_row = []
     for i in indices:
         cut_present_img = syaei_present_img[int(present_char_List[i[0]][0]):int(present_char_List[i[0]][1]),]
-        output_text ,out = image_processing.match_text2(img_temp,label_temp,cut_present_img)
+        #output_text ,out = image_processing.match_text2(img_temp,label_temp,cut_present_img)
         #plt.imshow(cut_present_img)
         #before_frame_row.append(cut_present_img)
         #plt.show()
-        audio_output.partial_text_read(output_text)
+        #audio_output.partial_text_read(output_text)
         #engine.runAndWait()
         cv2,imwrite("yuu.jpg",cut_present_img)
     
-    hsvLower = np.array([70, 25, 25])    # 抽出する色の下限(HSV)
-    hsvUpper = np.array([255, 150, 255])    # 抽出する色の上限(HSV)
-    hsv = cv2.cvtColor(blue_threshold_present_img, cv2.COLOR_BGR2HSV) # 画像をHSVに変換
-    hsv_mask = cv2.inRange(hsv, hsvLower, hsvUpper)    # HSVからマスクを作成
-    result = cv2.bitwise_and(blue_threshold_present_img, blue_threshold_present_img, mask=hsv_mask) # 元画像とマスクを合成
-    #gray_present_img = cv2.medianBlur(hsv_mask,3)
-    #mask_present_img2 = cv2.dilate(mask_present_img2,kernel)
-    #ret, mask_present_img2 = cv2.threshold(hsv_mask,0,255,cv2.THRESH_OTSU)
-    mask_present_img2 = cv2.dilate(hsv_mask,kernel)
-    plt.imshow(mask_present_img2)
-    plt.show()
-    height_present , width_present = mask_present_img2.shape
-    array_present_H = image_processing.Projection_H(mask_present_img2,height_present,width_present)
-    presentH_THRESH = max(array_present_H)
-    present_char_List = image_processing.Detect_HeightPosition(presentH_THRESH,height_present,array_present_H)
-    print(present_char_List)
-    present_char_List = np.reshape(present_char_List,[int(len(present_char_List)/2),2])
-    #present_char_List = image_processing.convert_1d_to_2d(present_char_List,2)
-    print(present_char_List)
-    
+
     for i in present_char_List:
         normal = mask_present_img2.copy()
+        cut_present = mask_present_img2[int(i[0]):int(i[1]),]
         cv2.rectangle(normal,(0,0),(w-1,int(i[0])-1),(0,0,0),-1)
         cv2.rectangle(normal,(0,int(i[1])-1),(w-1,h-1),(0,0,0),-1)
         plt.imshow(normal)
         plt.show()
         #cut_present_img = syaei_present_img[int(i[0]):int(i[1]),]
-
-        before_frame_row.append(cut_present_img)
+        #before_frame_row.append(normal)
+        before_frame_row.append(cut_present)
+        
     print(len(before_frame_row))
     if len(present_char_List) == 0:
         return img,img,img,img
@@ -201,6 +187,7 @@ def diff_image_search(before_frame,present_frame,img_temp,label_temp,before_fram
     img = cv2.imread("./balck_img.jpg")
     #カーネル
     kernel = np.ones((3,3),np.uint8)
+    h,w,d = present_frame.shape
     #フレームの青い部分を二値化
     blue_threshold_before_img = image_processing.cut_blue_img1(before_frame)
     plt.imshow(blue_threshold_before_img)
@@ -215,8 +202,6 @@ def diff_image_search(before_frame,present_frame,img_temp,label_temp,before_fram
     #except TypeError:
         #print("Screen cannot be detected")
         #return before_frame,[] ,[]
-    #before_frame = cv2.resize(before_frame,dsize=(610,211))
-    #present_frame = cv2.resize(present_frame,dsize=(610,211))
     #コーナーに従って画像の切り取り
     cut_present = present_frame[present_p1[1]:present_p2[1],present_p2[0]:present_p3[0]]
     cut_before = before_frame[before_p1[1]:before_p2[1],before_p2[0]:before_p3[0]]
@@ -285,27 +270,34 @@ def diff_image_search(before_frame,present_frame,img_temp,label_temp,before_fram
     engine = pyttsx3.init()
     before_frame_row = []
     sabun_count = 0
-    for i in indices:
-        cut_present_img = syaei_present_img[int(present_char_List[i[0]][0]):int(present_char_List[i[0]][1]),]
-        plt.imshow(cut_present_img)
+    present_char_List , mask_present_img2 = image_processing.mask_make(blue_threshold_present_img)
+    for i in present_char_List:
+        normal = mask_present_img2.copy()
+        cut_present = mask_present_img2[int(i[0]):int(i[1]),]
+        cv2.rectangle(normal,(0,0),(w-1,int(i[0])-1),(0,0,0),-1)
+        cv2.rectangle(normal,(0,int(i[1])-1),(w-1,h-1),(0,0,0),-1)
+        plt.imshow(normal)
         plt.show()
-        if not sabun(before_frame_row1,cut_present_img):
+        #cut_present_img = syaei_present_img[int(i[0]):int(i[1]),]
+        before_frame_row.append(cut_present)
+        if not sabun(before_frame_row1,cut_present):
             sabun_count += 1
 
-        if not sabun(before_frame_row2,cut_present_img):
+        if not sabun(before_frame_row2,cut_present):
             sabun_count += 1
     
-        if not sabun(before_frame_row3,cut_present_img):
+        if not sabun(before_frame_row3,cut_present):
             sabun_count += 1
             
-        if not sabun(before_frame_row4,cut_present_img):
+        if not sabun(before_frame_row4,cut_present):
             sabun_count += 1
 
         if sabun_count > 3:
-            output_text ,out = image_processing.match_text2(img_temp,label_temp,cut_present_img)
+            plt.imshow(cut_present)
+            plt.show()
+            output_text ,out = image_processing.match_text2(img_temp,label_temp,cut_present)
             audio_output.partial_text_read(output_text)
         #plt.imshow(cut_present_img)
-        before_frame_row.append(cut_present_img)
         sabun_count = 0
         #plt.show()
         #engine.runAndWait()
@@ -325,28 +317,29 @@ def diff_image_search(before_frame,present_frame,img_temp,label_temp,before_fram
     elif len(indices) == 3:
         return before_frame_row[0] , before_frame_row[1] ,before_frame_row[2] ,img
     elif len(indices) == 4:
-        return before_frame_row[0] , before_frame_row[1],before_frame_row[2],before_frame_row[3],before_frame_row[4]    
+        return before_frame_row[0] , before_frame_row[1],before_frame_row[2],before_frame_row[3] 
         
 
 
 #列ごとに差分をとる
 def sabun(before_frame_row,present_frame_row):
     kernel = np.ones((3,3),np.uint8)
-    gray_present_img = cv2.cvtColor(present_frame_row,cv2.COLOR_BGR2GRAY)
-    gray_present_img = cv2.medianBlur(gray_present_img,3)
-    ret, present_frame_row = cv2.threshold(gray_present_img,0,255,cv2.THRESH_OTSU)
+    #gray_present_img = cv2.cvtColor(present_frame_row,cv2.COLOR_BGR2GRAY)
+    present_frame_row = cv2.medianBlur(present_frame_row,3)
+    #ret, present_frame_row = cv2.threshold(gray_present_img,0,255,cv2.THRESH_OTSU)
     #膨張処理
-    present_frame_row = cv2.dilate(present_frame_row,kernel)
+    #present_frame_row = cv2.dilate(present_frame_row,kernel)
     
     h ,w = present_frame_row.shape
     print(before_frame_row.shape)
     before_frame_row = cv2.resize(before_frame_row,dsize=(w,h))
-    gray_before_img = cv2.cvtColor(before_frame_row,cv2.COLOR_BGR2GRAY)
-    gray_before_img = cv2.medianBlur(gray_before_img,3)
-    ret, before_frame_row = cv2.threshold(gray_before_img,0,255,cv2.THRESH_OTSU)
+    #gray_before_img = cv2.cvtColor(before_frame_row,cv2.COLOR_BGR2GRAY)
+    before_frame_row = cv2.medianBlur(before_frame_row,3)
+    #ret, before_frame_row = cv2.threshold(gray_before_img,0,255,cv2.THRESH_OTSU)
     print(present_frame_row.shape)
     print(before_frame_row.shape)
     frame_diff = cv2.absdiff(present_frame_row,before_frame_row)
+    frame_diff = cv2.medianBlur(frame_diff,5)
     #frame_diff = cv2.absdiff(present_frame,before_frame)
     plt.imshow(frame_diff)
     plt.show()
@@ -355,9 +348,9 @@ def sabun(before_frame_row,present_frame_row):
     W_THRESH = max(array_V)
     char_List2 = image_processing.Detect_WidthPosition(W_THRESH,width,array_V)
     if len(char_List2) == 0:
-        print("True")
+        return True
     else:
-        print("False")
+        return False
 
 def voice(frame,voice_flag):
     #準備
