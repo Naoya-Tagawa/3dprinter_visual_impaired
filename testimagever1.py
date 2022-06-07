@@ -401,12 +401,16 @@ if __name__ == "__main__":
     print("yy")
     plt.imshow(before_frame_row1)
     plt.show()
+    cv2.imwrite("before_frame_row1.jpg",before_frame_row1)
     plt.imshow(before_frame_row2)
     plt.show()
+    cv2.imwrite("before_frame_row2.jpg",before_frame_row2)
     plt.imshow(before_frame_row3)
     plt.show()
+    cv2.imwrite("before_frame_row3.jpg",before_frame_row3)
     plt.imshow(before_frame_row4)
-    plt.show()    
+    plt.show()
+    cv2.imwrite("before_frame_row4.jpg",before_frame_row4)
 
     
     before_frame_row1,before_frame_row2,before_frame_row3,before_frame_row4 =diff_image_search(img1,img2,img_temp,label_temp,before_frame_row1,before_frame_row2,before_frame_row3,before_frame_row4)
