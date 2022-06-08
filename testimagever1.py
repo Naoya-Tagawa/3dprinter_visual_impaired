@@ -336,8 +336,6 @@ def sabun(before_frame_row,present_frame_row):
     #gray_before_img = cv2.cvtColor(before_frame_row,cv2.COLOR_BGR2GRAY)
     before_frame_row = cv2.medianBlur(before_frame_row,3)
     #ret, before_frame_row = cv2.threshold(gray_before_img,0,255,cv2.THRESH_OTSU)
-    print(present_frame_row.shape)
-    print(before_frame_row.shape)
     frame_diff = cv2.absdiff(present_frame_row,before_frame_row)
     frame_diff = cv2.medianBlur(frame_diff,5)
     #frame_diff = cv2.absdiff(present_frame,before_frame)
@@ -347,6 +345,9 @@ def sabun(before_frame_row,present_frame_row):
     array_V = image_processing.Projection_V(frame_diff,height,width)
     W_THRESH = max(array_V)
     char_List2 = image_processing.Detect_WidthPosition(W_THRESH,width,array_V)
+    white_pixcels = np.count_nonzero(frame_diff)
+    black_pixcels = frame_diff.size - white_pixcels
+    print(white_pixcels/black_pixcels * 100)
     if len(char_List2) == 0:
         return True
     else:
