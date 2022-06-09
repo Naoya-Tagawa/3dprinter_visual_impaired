@@ -22,12 +22,12 @@ import matplotlib.pyplot as plt
 from pylsd.lsd import lsd
 
 def mask_make(blue_threshold_present_img):
-    kernel = np.ones((3,3),np.uint8)
+    kernel = np.ones((1,1),np.uint8)
     hsvLower = np.array([70, 25, 25])    # 抽出する色の下限(HSV)
     hsvUpper = np.array([255, 222, 255])    # 抽出する色の上限(HSV)
     hsv = cv2.cvtColor(blue_threshold_present_img, cv2.COLOR_BGR2HSV) # 画像をHSVに変換
     hsv_mask = cv2.inRange(hsv, hsvLower, hsvUpper)    # HSVからマスクを作成
-    result = cv2.bitwise_and(blue_threshold_present_img, blue_threshold_present_img, mask=hsv_mask) # 元画像とマスクを合成
+    #result = cv2.bitwise_and(blue_threshold_present_img, blue_threshold_present_img, mask=hsv_mask) # 元画像とマスクを合成
     hsv_mask = cv2.medianBlur(hsv_mask,3)
     #mask_present_img2 = cv2.dilate(mask_present_img2,kernel)
     #ret, mask_present_img2 = cv2.threshold(hsv_mask,0,255,cv2.THRESH_OTSU)
@@ -493,9 +493,9 @@ def match_text2(img_temp,label_temp,frame):
     img_mask = frame
     #img_mask = cv2.adaptiveThreshold(gray_img,255,cv2.ADAPTIVE_THRESH_MEAN_C,cv2.THRESH_BINARY,7,-3)
     #ノイズ除去
-    img_mask = cv2.medianBlur(img_mask,5)
+    img_mask = cv2.medianBlur(img_mask,3)
     #膨張化
-    img_mask = cv2.dilate(img_mask,kernel)
+    #img_mask = cv2.dilate(img_mask,kernel)
     #高さ、幅を保持
     height,width = img_mask.shape
     #if (len(char_List1) % 2) == 0:
@@ -520,10 +520,9 @@ def match_text2(img_temp,label_temp,frame):
         match_img = img_mask[:,int(char_List2[j])-1:int(char_List2[j+1])+1]
         try:
             match_img = cv2.resize(match_img,dsize=(26,36))
+            match_img = cv2.dilate(match_img,kernel)
         except cv2.error:
             return [], ""
-        #plt.imshow(match_img)
-        #plt.show()
         height_m,width_m = match_img.shape
         #img_g = cv2.rectangle(syaei_resize_img, (int(char_List2[j]) ,int(char_List2[j])), (int(char_List2[j+1]), int(char_List1[i+1])), (0,0,255), 2)
         for f in range(len(label_temp)):
@@ -548,7 +547,8 @@ def match_text2(img_temp,label_temp,frame):
             #print(char_List2)
             #print(width_m)
             #空白があるとき
-        if new_d[0][0] < 0.7:
+        #print(new_d[0][0])
+        if new_d[0][0] < 0.6:
             continue
         if (j != 0) & (char_List2[j] > (width_m + char_List2[j-1])):
 
@@ -582,7 +582,7 @@ def match_text2(img_temp,label_temp,frame):
             continue
         #print(label_temp[new_d[0][1]])
         out_modify = out_modify + label_temp[new_d[0][1]]
-        # print(out_modify)
+        print(out_modify)
         new_d = {}
         continue
 

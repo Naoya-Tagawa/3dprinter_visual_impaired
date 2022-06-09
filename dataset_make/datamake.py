@@ -5,6 +5,7 @@ import matplotlib.pyplot as plt
 from PIL import Image
 from natsort import natsorted
 def read_image():
+    kernel = np.ones((3,3),np.uint8)
     x = [] #画像データ用
     y = [] #らべる
     #ファイルの保存先
@@ -20,7 +21,7 @@ def read_image():
             img = Image.open(f)  #Pillow(PIL)で画像読み込み。
             img = img.convert('P')
             img = np.asarray(img) #ndarray化
-            #img = cv2.cvtColor(img,cv2.COLOR_BGR2GRAY) #グレイスケール化
+            #img = cv2.cv2.dilate(img,kernel)
             #ret, img = cv2.threshold(img,125,255,cv2.THRESH_BINARY) #二値化
             img = cv2.resize(img,dsize=(w,h))
             #画像データ、ラベルデータを保存
