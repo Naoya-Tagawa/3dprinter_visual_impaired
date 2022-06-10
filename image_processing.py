@@ -31,7 +31,8 @@ def mask_make(blue_threshold_present_img):
     hsv_mask = cv2.medianBlur(hsv_mask,3)
     #mask_present_img2 = cv2.dilate(mask_present_img2,kernel)
     #ret, mask_present_img2 = cv2.threshold(hsv_mask,0,255,cv2.THRESH_OTSU)
-    mask_present_img2 = cv2.dilate(hsv_mask,kernel)
+    #mask_present_img2 = cv2.dilate(hsv_mask,kernel)
+    mask_present_img2 = hsv_mask
     #plt.imshow(mask_present_img2)
     #plt.show()
     height_present , width_present = mask_present_img2.shape
@@ -354,13 +355,13 @@ def match_text(img_temp,label_temp,frame):
     kernel = np.ones((3,3),np.uint8)
     window_img = frame
     #フレームの青い部分を二値化
-    blue_threshold_img = cut_blue_img(window_img)
+    blue_threshold_img = cut_blue_img1(window_img)
     #コーナー検出
     try:
-        p1,p2,p3,p4 = points_extract(blue_threshold_img)
+        p1,p2,p3,p4 = points_extract1(blue_threshold_img)
     except TypeError:
         print("Screen cannot be detected")
-        return [] ,[]
+        return [],[]
 
     #コーナーに従って画像の切り取り
     cut_img = window_img[p1[1]:p2[1],p2[0]:p3[0]]
@@ -409,11 +410,11 @@ def match_text(img_temp,label_temp,frame):
             s={}
             #一文字ずつ切り取る
             match_img = img_mask[int(char_List1[i])-2:int(char_List1[i+1])+2,int(char_List2[j])-1:int(char_List2[j+1])+1]
-            cv2.imwrite("match.jpg",match_img)
+            #cv2.imwrite("match.jpg",match_img)
             try:
                 match_img = cv2.resize(match_img,dsize=(26,36))
             except cv2.error:
-                return False,[]
+                return [],[]
             height_m,width_m = match_img.shape
             img_g = cv2.rectangle(syaei_resize_img, (int(char_List2[j]) ,int(char_List1[i])), (int(char_List2[j+1]), int(char_List1[i+1])), (0,0,255), 2)
             for f in range(len(label_temp)):
