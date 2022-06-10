@@ -340,8 +340,7 @@ def arrow_exist(frame_row):
     kernel = np.ones((3,3),np.uint8)
     arrow_img = cv2.imread("./ex6/ex63.jpg")
     arrow_img = cv2.cvtColor(arrow_img,cv2.COLOR_BGR2GRAY)
-    plt.imshow(arrow_img)
-    plt.show()
+    
     height,width = frame_row.shape
     frame_row = cv2.medianBlur(frame_row,3)
     array_V = image_processing.Projection_V(frame_row,height,width)
@@ -385,8 +384,8 @@ def sabun(before_frame_row,present_frame_row):
     frame_diff = cv2.absdiff(present_frame_row,before_frame_row)
     frame_diff = cv2.medianBlur(frame_diff,5)
     #frame_diff = cv2.absdiff(present_frame,before_frame)
-    #plt.imshow(frame_diff)
-    #plt.show()
+    plt.imshow(frame_diff)
+    plt.show()
     height , width = frame_diff.shape
     array_V = image_processing.Projection_V(frame_diff,height,width)
     W_THRESH = max(array_V)
@@ -447,8 +446,8 @@ def voice(frame,voice_flag):
 
 if __name__ == "__main__":
     #テンプレートをロード
-    img1 = cv2.imread("./camera3/camera11.jpg")
-    img2 = cv2.imread("./camera3/camera12.jpg")
+    img1 = cv2.imread("./camera3/camera1.jpg")
+    img2 = cv2.imread("./camera1/camera1.jpg")
     temp = np.load(r'./dataset2.npz')
     #テンプレート画像を格納
     img_temp = temp['x']
