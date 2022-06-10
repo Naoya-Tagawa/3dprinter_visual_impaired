@@ -259,11 +259,23 @@ def diff_image_search(before_frame,present_frame,img_temp,label_temp,before_fram
     #print(indices)
     #indices = image_processing.get_unique_list(indices)
     #print(indices)
-    
     engine = pyttsx3.init()
     before_frame_row = []
     sabun_count = 0
     output_text = []
+    before_row1_arrow_exist = False
+    before_row2_arrow_exist = False
+    before_row3_arrow_exist = False
+    before_row4_arrow_exist = False
+    if arrow_exist(before_frame_row1):
+        before_row1_arrow_exist = True
+    if arrow_exist(before_frame_row2):
+        before_row2_arrow_exist = True
+    if arrow_exist(before_frame_row3):
+        before_row3_arrow_exist = True
+    if arrow_exist(before_frame_row4):
+        before_row4_arrow_exist = True
+        
     present_char_List , mask_present_img2 = image_processing.mask_make(blue_threshold_present_img)
     for i in present_char_List:
         normal = mask_present_img2.copy()
@@ -272,28 +284,36 @@ def diff_image_search(before_frame,present_frame,img_temp,label_temp,before_fram
         cv2.rectangle(normal,(0,int(i[1])-1),(w-1,h-1),(0,0,0),-1)
         plt.imshow(cut_present)
         plt.show()
+        flag = arrow_exist(cut_present)
         #cut_present_img = syaei_present_img[int(i[0]):int(i[1]),]
         before_frame_row.append(cut_present)
         if not sabun(before_frame_row1,cut_present):
+            if (before_row1_arrow_exist == True) & (flag == False):
+                sabun_count = sabun_count -1
             sabun_count += 1
 
         if not sabun(before_frame_row2,cut_present):
+            if (before_row2_arrow_exist == True) & (flag == False):
+                sabun_count = sabun_count -1
             sabun_count += 1
     
         if not sabun(before_frame_row3,cut_present):
+            if (before_row3_arrow_exist == True) & (flag == False):
+                sabun_count = sabun_count -1
             sabun_count += 1
             
         if not sabun(before_frame_row4,cut_present):
+            if (before_row4_arrow_exist == True) & (flag == False):
+                sabun_count = sabun_count -1
             sabun_count += 1
 
         if sabun_count > 3:
             print(sabun_count)
-            plt.imshow(cut_present)
-            plt.show()
+            #plt.imshow(cut_present)
+            #plt.show()
             output_text_p,out = image_processing.match_text2(img_temp,label_temp,cut_present)
             output_text.append(output_text_p)
         
-    
         sabun_count = 0
         #engine.runAndWait()
         #cv2,imwrite("yuu.jpg",cut_present_img)
@@ -316,7 +336,34 @@ def diff_image_search(before_frame,present_frame,img_temp,label_temp,before_fram
     elif len(present_char_List) == 4:
         return before_frame_row[0] , before_frame_row[1],before_frame_row[2],before_frame_row[3] 
         
-
+def arrow_exist(frame_row):
+    kernel = np.ones((3,3),np.uint8)
+    arrow_img = cv2.imread("./ex6/ex63.jpg")
+    arrow_img = cv2.cvtColor(arrow_img,cv2.COLOR_BGR2GRAY)
+    plt.imshow(arrow_img)
+    plt.show()
+    height,width = frame_row.shape
+    frame_row = cv2.medianBlur(frame_row,3)
+    array_V = image_processing.Projection_V(frame_row,height,width)
+    W_THRESH = max(array_V)
+    char_List2 = image_processing.Detect_WidthPosition(W_THRESH,width,array_V)
+    if len(char_List2) == 0:
+        return False
+    
+    match_img = frame_row[:,int(char_List2[0])-1:int(char_List2[1])+1]
+    try:
+        match_img = cv2.resize(match_img,dsize=(26,36))
+        match_img = cv2.dilate(match_img,kernel)
+    except cv2.error:
+        return False
+    match = cv2.matchTemplate(match_img,arrow_img,cv2.TM_CCORR_NORMED)
+    #返り値は最小類似点、最大類似点、最小の場所、最大の場所
+    min_value, max_value, min_pt, max_pt = cv2.minMaxLoc(match)
+    print(max_value)
+    if max_value > 0.5:#なぜかめっちゃ小さい
+        return True
+    else:
+        return False
 
 #列ごとに差分をとる
 def sabun(before_frame_row,present_frame_row):
@@ -338,8 +385,8 @@ def sabun(before_frame_row,present_frame_row):
     frame_diff = cv2.absdiff(present_frame_row,before_frame_row)
     frame_diff = cv2.medianBlur(frame_diff,5)
     #frame_diff = cv2.absdiff(present_frame,before_frame)
-    plt.imshow(frame_diff)
-    plt.show()
+    #plt.imshow(frame_diff)
+    #plt.show()
     height , width = frame_diff.shape
     array_V = image_processing.Projection_V(frame_diff,height,width)
     W_THRESH = max(array_V)
@@ -400,8 +447,8 @@ def voice(frame,voice_flag):
 
 if __name__ == "__main__":
     #テンプレートをロード
-    img1 = cv2.imread("./camera3/camera14.jpg")
-    img2 = cv2.imread("./camera3/camera16.jpg")
+    img1 = cv2.imread("./camera3/camera11.jpg")
+    img2 = cv2.imread("./camera3/camera12.jpg")
     temp = np.load(r'./dataset2.npz')
     #テンプレート画像を格納
     img_temp = temp['x']

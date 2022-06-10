@@ -129,28 +129,38 @@ def diff_image_search_first(present_frame,img_temp,label_temp):
 def diff_image_search(before_frame,present_frame,img_temp,label_temp,before_frame_row1,before_frame_row2,before_frame_row3,before_frame_row4):
     global present_img
     img = cv2.imread("./balck_img.jpg")
+    arrow_img = cv2.imread("./ex6/ex63.jpg")
+    img = cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
+    print(img.shape)
+    cv2.imwrite("black_img.jpg",img)
     #カーネル
     kernel = np.ones((3,3),np.uint8)
     h,w,d = present_frame.shape
     #フレームの青い部分を二値化
     blue_threshold_before_img = image_processing.cut_blue_img1(before_frame)
+    plt.imshow(blue_threshold_before_img)
+    plt.show()
     blue_threshold_present_img = image_processing.cut_blue_img1(present_frame)
+    plt.imshow(blue_threshold_present_img)
+    plt.show()
     #コーナー検出
     try:
         before_p1,before_p2,before_p3,before_p4 = image_processing.points_extract1(blue_threshold_before_img,before_frame)
         present_p1,present_p2,present_p3,present_p4 = image_processing.points_extract1(blue_threshold_present_img,present_frame)
     except TypeError:
         print("Screen cannot be detected")
-        return []
+        return before_frame,[] ,[]
     #コーナーに従って画像の切り取り
     cut_present = present_frame[present_p1[1]:present_p2[1],present_p2[0]:present_p3[0]]
     cut_before = before_frame[before_p1[1]:before_p2[1],before_p2[0]:before_p3[0]]
     #射影変換
     syaei_before_img = image_processing.projective_transformation(before_frame,before_p1,before_p2,before_p3,before_p4)
+    plt.imshow(syaei_before_img)
+    plt.show()
     syaei_present_img = image_processing.projective_transformation(present_frame,present_p1,present_p2,present_p3,present_p4)
     #対象画像をリサイズ
-    #syaei_before_img = cv2.resize(syaei_before_img,dsize=(610,211))
-    #syaei_present_img = cv2.resize(syaei_present_img,dsize=(610,211))
+    syaei_before_img = cv2.resize(syaei_before_img,dsize=(610,211))
+    syaei_present_img = cv2.resize(syaei_present_img,dsize=(610,211))
     plt.imshow(syaei_present_img)
     plt.show()
     plt.imshow(syaei_before_img)
@@ -166,13 +176,13 @@ def diff_image_search(before_frame,present_frame,img_temp,label_temp,before_fram
     array_present_H = image_processing.Projection_H(mask_present_img,height_present,width_present)
     presentH_THRESH = max(array_present_H)
     present_char_List = image_processing.Detect_HeightPosition(presentH_THRESH,height_present,array_present_H)
-    print(present_char_List)
     present_char_List = np.reshape(present_char_List,[int(len(present_char_List)/2),2])
     #present_char_List = image_processing.convert_1d_to_2d(present_char_List,2)
     print(present_char_List)
 
     #plt.imshow(syaei_resize_present_img)
     #plt.show()
+    #差分
     frame_diff = cv2.absdiff(blue_threshold_present_img,blue_threshold_before_img)
     #frame_diff = cv2.absdiff(present_frame,before_frame)
     #グレイスケール化
@@ -192,58 +202,82 @@ def diff_image_search(before_frame,present_frame,img_temp,label_temp,before_fram
     array_H = image_processing.Projection_H(mask_cut_diff_frame,height,width)
     H_THRESH = max(array_H)
     char_List1 = image_processing.Detect_HeightPosition(H_THRESH,height,array_H)
-    print(char_List1)
     #char_List1 = image_processing.convert_1d_to_2d(char_List1,2)
     char_List1 = np.reshape(char_List1,[int(len(char_List1)/2),2])
     print(char_List1)
-    knn_model = NearestNeighbors(n_neighbors=1, algorithm='ball_tree').fit(present_char_List) 
-    distances, indices = knn_model.kneighbors(char_List1)
+    #knn_model = NearestNeighbors(n_neighbors=1, algorithm='ball_tree').fit(present_char_List) 
+    #distances, indices = knn_model.kneighbors(char_List1)
     #print(indices)
-    indices = image_processing.get_unique_list(indices)
-    print(indices)
-
+    #indices = image_processing.get_unique_list(indices)
+    #print(indices)
     engine = pyttsx3.init()
     before_frame_row = []
     sabun_count = 0
+    output_text = []
+    before_row1_arrow_exist = False
+    before_row2_arrow_exist = False
+    before_row3_arrow_exist = False
+    before_row4_arrow_exist = False
+    if arrow_exist(before_frame_row1):
+        before_row1_arrow_exist = True
+    if arrow_exist(before_frame_row2):
+        before_row2_arrow_exist = True
+    if arrow_exist(before_frame_row3):
+        before_row3_arrow_exist = True
+    if arrow_exist(before_frame_row4):
+        before_row4_arrow_exist = True
+        
     present_char_List , mask_present_img2 = image_processing.mask_make(blue_threshold_present_img)
-    
     for i in present_char_List:
         normal = mask_present_img2.copy()
         cut_present = mask_present_img2[int(i[0]):int(i[1]),]
         cv2.rectangle(normal,(0,0),(w-1,int(i[0])-1),(0,0,0),-1)
         cv2.rectangle(normal,(0,int(i[1])-1),(w-1,h-1),(0,0,0),-1)
-        plt.imshow(normal)
+        plt.imshow(cut_present)
         plt.show()
         #cut_present_img = syaei_present_img[int(i[0]):int(i[1]),]
         before_frame_row.append(cut_present)
         if not sabun(before_frame_row1,cut_present):
+            if (before_row1_arrow_exist == True) & (arrow_exist(cut_present) == True):
+                sabun_count -= 1
             sabun_count += 1
 
         if not sabun(before_frame_row2,cut_present):
+            if (before_row2_arrow_exist == True) & (arrow_exist(cut_present) == True):
+                sabun_count -= 1
             sabun_count += 1
     
         if not sabun(before_frame_row3,cut_present):
+            if (before_row3_arrow_exist == True) & (arrow_exist(cut_present) == True):
+                sabun_count -= 1
             sabun_count += 1
             
         if not sabun(before_frame_row4,cut_present):
+            if (before_row4_arrow_exist == True) & (arrow_exist(cut_present) == True):
+                sabun_count -= 1
             sabun_count += 1
 
         if sabun_count > 3:
+            print(sabun_count)
             plt.imshow(cut_present)
             plt.show()
-            output_text_p ,out = image_processing.match_text2(img_temp,label_temp,cut_present)
+            output_text_p,out = image_processing.match_text2(img_temp,label_temp,cut_present)
             output_text.append(output_text_p)
+        
     
         sabun_count = 0
-    
+        #engine.runAndWait()
+        #cv2,imwrite("yuu.jpg",cut_present_img)
     #if char_List1.size == 0: #差分がなければ
         #return False #音声出力しない
     #else:
         #present_img = present_frame
         #return True #音声出力する
-    
+    #sabun(img,cut_present_img)
+    print(output_text)
+    engine.say(output_text)
     if len(present_char_List) == 0:
-        return output_text,img,img,img,img
+        return img,img,img,img
     elif len(present_char_List) == 1:
         return before_frame_row[0] , img,img,img
     elif len(present_char_List) == 2:
@@ -260,13 +294,15 @@ def sabun(before_frame_row,present_frame_row):
     kernel = np.ones((3,3),np.uint8)
     #gray_present_img = cv2.cvtColor(present_frame_row,cv2.COLOR_BGR2GRAY)
     present_frame_row = cv2.medianBlur(present_frame_row,3)
+    #print(present_frame_row.shape)
     #ret, present_frame_row = cv2.threshold(gray_present_img,0,255,cv2.THRESH_OTSU)
     #膨張処理
-    #present_frame_row = cv2.dilate(present_frame_row,kernel)
+    present_frame_row = cv2.dilate(present_frame_row,kernel)
     
     h ,w = present_frame_row.shape
-    print(before_frame_row.shape)
+    #print(before_frame_row.shape)
     before_frame_row = cv2.resize(before_frame_row,dsize=(w,h))
+    before_frame_row = cv2.dilate(before_frame_row,kernel)
     #gray_before_img = cv2.cvtColor(before_frame_row,cv2.COLOR_BGR2GRAY)
     before_frame_row = cv2.medianBlur(before_frame_row,3)
     #ret, before_frame_row = cv2.threshold(gray_before_img,0,255,cv2.THRESH_OTSU)
@@ -279,17 +315,33 @@ def sabun(before_frame_row,present_frame_row):
     array_V = image_processing.Projection_V(frame_diff,height,width)
     W_THRESH = max(array_V)
     char_List2 = image_processing.Detect_WidthPosition(W_THRESH,width,array_V)
-    white_pixcels = np.count_nonzero(frame_diff)
-    black_pixcels = frame_diff.size - white_pixcels
+    white_pixels1 = np.count_nonzero(present_frame_row)
+    white_pixels2 = np.count_nonzero(before_frame_row)
+    sum_white_pixels = white_pixels1 + white_pixels2
+    white_pixels = np.count_nonzero(frame_diff)
+    diff_white_pixels = sum_white_pixels - white_pixels
+    if diff_white_pixels < 0:
+        diff_white_pixels = - diff_white_pixels
+        
+    black_pixels = frame_diff.size - white_pixels
     print("前のフレームとの変化量%")
-    print(white_pixcels/black_pixcels * 100)
-    percent = white_pixcels/black_pixcels *100
-    if percent < 5:
+    #percent = white_pixels/frame_diff.size *100
+    percent = white_pixels / sum_white_pixels * 100
+    print(percent)
+    if percent < 4:
         return True
     else:
         return False
 
-
+def arrow_exist(frame_row):
+    arrow_img = cv2.imread("./ex6/ex63.jpg")
+    match = cv2.matchTemplate(frame_row,arrow_img,cv2.TM_CCORR_NORMED)
+    #返り値は最小類似点、最大類似点、最小の場所、最大の場所
+    min_value, max_value, min_pt, max_pt = cv2.minMaxLoc(match)
+    if max_value > 0.7:
+        return True
+    else:
+        return False
 def voice(frame,voice_flag,output_text):
     start = time.perf_counter()
     engine = pyttsx3.init()
