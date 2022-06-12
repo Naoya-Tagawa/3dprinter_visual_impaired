@@ -16,7 +16,6 @@ from dictionary_word import speling
 import difflib
 import numpy as np
 import cv2
-import matplotlib.pyplot as plt
 import image_processing
 import audio_output
 from sklearn.neighbors import NearestNeighbors 
@@ -55,7 +54,8 @@ def camera():
 def diff_image_search_first(present_frame,img_temp,label_temp):
     global present_img
     img = cv2.imread("./black_img.jpg")
-    h,w,d = before_frame.shape
+    img = cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
+    h,w,d = present_frame.shape
     black_window = np.zeros((h,w))
     #カーネル
     kernel = np.ones((3,3),np.uint8)
@@ -64,8 +64,8 @@ def diff_image_search_first(present_frame,img_temp,label_temp):
     #フレームの青い部分を二値化
     blue_threshold_present_img = image_processing.cut_blue_img1(present_frame)
     cv2.imwrite("blue_threshold_present.jpg",blue_threshold_present_img)
-    plt.imshow(blue_threshold_present_img)
-    plt.show()
+    ##plt.imshow(blue_threshold_present_img)
+    ##plt.show()
     #コーナー検出
     try:
         present_p1,present_p2,present_p3,present_p4 = image_processing.points_extract1(blue_threshold_present_img,present_frame)
@@ -80,8 +80,8 @@ def diff_image_search_first(present_frame,img_temp,label_temp):
     
     #射影変換
     syaei_present_img = image_processing.projective_transformation(present_frame,present_p1,present_p2,present_p3,present_p4)
-    plt.imshow(syaei_present_img)
-    plt.show()
+    #plt.imshow(syaei_present_img)
+    #plt.show()
     #syaei_resize_before_img = cv2.resize(cut_before,dsize=(610,211))
     #syaei_resize_present_img = cv2.resize(syaei_present_img,dsize=(610,211))
     gray_present_img = cv2.cvtColor(syaei_present_img,cv2.COLOR_BGR2GRAY)
@@ -94,12 +94,13 @@ def diff_image_search_first(present_frame,img_temp,label_temp):
     presentH_THRESH = max(array_present_H)
     present_char_List1 = image_processing.Detect_HeightPosition(presentH_THRESH,height_present,array_present_H)
     present_char_List1 = np.reshape(present_char_List1,[int(len(present_char_List1)/2),2])
-    print(present_char_List1)
+    
 
 
     #文字のみのマスク画像生成
     present_char_List2 , mask_present_img2 = image_processing.mask_make(blue_threshold_present_img)
-    
+    plt.imshow(mask_present_img2)
+    plt.show()
     engine = pyttsx3.init()
     before_frame_row = []
     #列ごとにマスク画像を取得
@@ -108,12 +109,13 @@ def diff_image_search_first(present_frame,img_temp,label_temp):
         cut_present_row = mask_present_img2[int(i[0]):int(i[1]),]
         cv2.rectangle(normal,(0,0),(w-1,int(i[0])-1),(0,0,0),-1)
         cv2.rectangle(normal,(0,int(i[1])-1),(w-1,h-1),(0,0,0),-1)
-        plt.imshow(normal)
-        plt.show()
+        #plt.imshow(normal)
+        #plt.show()
         before_frame_row.append(cut_present_row)
-    
-    output_text , out = image_processing.match_text2(img_temp,label_temp,cut_present)
-    
+    print(present_char_List2)
+    print("yes")
+    output_text , out = image_processing.match_text(img_temp,label_temp,cut_present)
+    print(len(present_char_List2))
     if len(present_char_List2) == 0:
         return output_text,img,img,img,img
     elif len(present_char_List2) == 1:
@@ -123,10 +125,13 @@ def diff_image_search_first(present_frame,img_temp,label_temp):
     elif len(present_char_List2) == 3:
         return output_text, before_frame_row[0] , before_frame_row[1] ,before_frame_row[2] ,img
     elif len(present_char_List2) == 4:
+        print("yes")
         return output_text ,before_frame_row[0] , before_frame_row[1],before_frame_row[2],before_frame_row[3] 
+    else:
+        return output_text,img,img,img,img
 
 
-def diff_image_search(before_frame,present_frame,img_temp,label_temp,before_frame_row1,before_frame_row2,before_frame_row3,before_frame_row4):
+def diff_image_search(present_frame,img_temp,label_temp,before_frame_row1,before_frame_row2,before_frame_row3,before_frame_row4):
     global present_img
     img = cv2.imread("./balck_img.jpg")
     arrow_img = cv2.imread("./ex6/ex63.jpg")
@@ -137,34 +142,33 @@ def diff_image_search(before_frame,present_frame,img_temp,label_temp,before_fram
     kernel = np.ones((3,3),np.uint8)
     h,w,d = present_frame.shape
     #フレームの青い部分を二値化
-    blue_threshold_before_img = image_processing.cut_blue_img1(before_frame)
-    plt.imshow(blue_threshold_before_img)
-    plt.show()
+    #plt.imshow(blue_threshold_before_img)
+    #plt.show()
     blue_threshold_present_img = image_processing.cut_blue_img1(present_frame)
-    plt.imshow(blue_threshold_present_img)
-    plt.show()
+    #plt.imshow(blue_threshold_present_img)
+    #plt.show()
     #コーナー検出
     try:
-        before_p1,before_p2,before_p3,before_p4 = image_processing.points_extract1(blue_threshold_before_img,before_frame)
+        #before_p1,before_p2,before_p3,before_p4 = image_processing.points_extract1(blue_threshold_before_img,before_frame)
         present_p1,present_p2,present_p3,present_p4 = image_processing.points_extract1(blue_threshold_present_img,present_frame)
     except TypeError:
         print("Screen cannot be detected")
-        return before_frame,[] ,[]
+        return [] ,img,img,img,img
     #コーナーに従って画像の切り取り
     cut_present = present_frame[present_p1[1]:present_p2[1],present_p2[0]:present_p3[0]]
-    cut_before = before_frame[before_p1[1]:before_p2[1],before_p2[0]:before_p3[0]]
+    #cut_before = before_frame[before_p1[1]:before_p2[1],before_p2[0]:before_p3[0]]
     #射影変換
-    syaei_before_img = image_processing.projective_transformation(before_frame,before_p1,before_p2,before_p3,before_p4)
-    plt.imshow(syaei_before_img)
-    plt.show()
+    #syaei_before_img = image_processing.projective_transformation(before_frame,before_p1,before_p2,before_p3,before_p4)
+    #plt.imshow(syaei_before_img)
+    #plt.show()
     syaei_present_img = image_processing.projective_transformation(present_frame,present_p1,present_p2,present_p3,present_p4)
     #対象画像をリサイズ
-    syaei_before_img = cv2.resize(syaei_before_img,dsize=(610,211))
+    #syaei_before_img = cv2.resize(syaei_before_img,dsize=(610,211))
     syaei_present_img = cv2.resize(syaei_present_img,dsize=(610,211))
-    plt.imshow(syaei_present_img)
-    plt.show()
-    plt.imshow(syaei_before_img)
-    plt.show()
+    #plt.imshow(syaei_present_img)
+    #plt.show()
+    #plt.imshow(syaei_before_img)
+    #plt.show()
     #syaei_resize_before_img = cv2.resize(cut_before,dsize=(610,211))
     #syaei_resize_present_img = cv2.resize(syaei_present_img,dsize=(610,211))
     gray_present_img = cv2.cvtColor(syaei_present_img,cv2.COLOR_BGR2GRAY)
@@ -180,31 +184,31 @@ def diff_image_search(before_frame,present_frame,img_temp,label_temp,before_fram
     #present_char_List = image_processing.convert_1d_to_2d(present_char_List,2)
     print(present_char_List)
 
-    #plt.imshow(syaei_resize_present_img)
-    #plt.show()
+    ##plt.imshow(syaei_resize_present_img)
+    ##plt.show()
     #差分
-    frame_diff = cv2.absdiff(blue_threshold_present_img,blue_threshold_before_img)
+    #frame_diff = cv2.absdiff(blue_threshold_present_img,blue_threshold_before_img)
     #frame_diff = cv2.absdiff(present_frame,before_frame)
     #グレイスケール化
-    gray_frame_diff = cv2.cvtColor(frame_diff,cv2.COLOR_BGR2GRAY)
+    #gray_frame_diff = cv2.cvtColor(frame_diff,cv2.COLOR_BGR2GRAY)
     #ノイズ除去
-    gray_frame_diff = cv2.medianBlur(gray_frame_diff,3)
+    #gray_frame_diff = cv2.medianBlur(gray_frame_diff,3)
     #二値画像へ
-    ret, mask_frame_diff = cv2.threshold(gray_frame_diff,0,255,cv2.THRESH_OTSU)
+    #ret, mask_frame_diff = cv2.threshold(gray_frame_diff,0,255,cv2.THRESH_OTSU)
     #膨張処理
-    mask_frame_diff = cv2.dilate(mask_frame_diff,kernel)
-    cv2.imwrite("frame_diff3.jpg",mask_frame_diff)
+    #mask_frame_diff = cv2.dilate(mask_frame_diff,kernel)
+    #cv2.imwrite("frame_diff3.jpg",mask_frame_diff)
     #コーナーに従って画像の切り取り
     #cut_img = window_img[p1[1]:p2[1],p2[0]:p3[0]
-    mask_cut_diff_frame = mask_frame_diff[present_p1[1]:present_p2[1],present_p2[0]:present_p3[0]]
-    cv2.imwrite("frame_diff4.jpg",mask_cut_diff_frame)
-    height , width = mask_cut_diff_frame.shape
-    array_H = image_processing.Projection_H(mask_cut_diff_frame,height,width)
-    H_THRESH = max(array_H)
-    char_List1 = image_processing.Detect_HeightPosition(H_THRESH,height,array_H)
+    #mask_cut_diff_frame = mask_frame_diff[present_p1[1]:present_p2[1],present_p2[0]:present_p3[0]]
+    #cv2.imwrite("frame_diff4.jpg",mask_cut_diff_frame)
+    #height , width = mask_cut_diff_frame.shape
+    #array_H = image_processing.Projection_H(mask_cut_diff_frame,height,width)
+    #H_THRESH = max(array_H)
+    #char_List1 = image_processing.Detect_HeightPosition(H_THRESH,height,array_H)
     #char_List1 = image_processing.convert_1d_to_2d(char_List1,2)
-    char_List1 = np.reshape(char_List1,[int(len(char_List1)/2),2])
-    print(char_List1)
+    #char_List1 = np.reshape(char_List1,[int(len(char_List1)/2),2])
+    #print(char_List1)
     #knn_model = NearestNeighbors(n_neighbors=1, algorithm='ball_tree').fit(present_char_List) 
     #distances, indices = knn_model.kneighbors(char_List1)
     #print(indices)
@@ -233,8 +237,8 @@ def diff_image_search(before_frame,present_frame,img_temp,label_temp,before_fram
         cut_present = mask_present_img2[int(i[0]):int(i[1]),]
         cv2.rectangle(normal,(0,0),(w-1,int(i[0])-1),(0,0,0),-1)
         cv2.rectangle(normal,(0,int(i[1])-1),(w-1,h-1),(0,0,0),-1)
-        plt.imshow(cut_present)
-        plt.show()
+        #plt.imshow(cut_present)
+        #plt.show()
         flag = arrow_exist(cut_present)
         #cut_present_img = syaei_present_img[int(i[0]):int(i[1]),]
         before_frame_row.append(cut_present)
@@ -260,8 +264,8 @@ def diff_image_search(before_frame,present_frame,img_temp,label_temp,before_fram
 
         if sabun_count > 3:
             print(sabun_count)
-            plt.imshow(cut_present)
-            plt.show()
+            #plt.imshow(cut_present)
+            #plt.show()
             output_text_p,out = image_processing.match_text2(img_temp,label_temp,cut_present)
             output_text.append(output_text_p)
         
@@ -278,16 +282,17 @@ def diff_image_search(before_frame,present_frame,img_temp,label_temp,before_fram
     print(output_text)
     engine.say(output_text)
     if len(present_char_List) == 0:
-        return img,img,img,img
+        return output_text,img,img,img,img
     elif len(present_char_List) == 1:
-        return before_frame_row[0] , img,img,img
+        return output_text,before_frame_row[0] , img,img,img
     elif len(present_char_List) == 2:
-        return before_frame_row[0] , before_frame_row[1] ,img,img
+        return output_text,before_frame_row[0] , before_frame_row[1] ,img,img
     elif len(present_char_List) == 3:
-        return before_frame_row[0] , before_frame_row[1] ,before_frame_row[2] ,img
+        return output_text,before_frame_row[0] , before_frame_row[1] ,before_frame_row[2] ,img
     elif len(present_char_List) == 4:
-        return before_frame_row[0] , before_frame_row[1],before_frame_row[2],before_frame_row[3] 
-        
+        return output_text,before_frame_row[0] , before_frame_row[1],before_frame_row[2],before_frame_row[3] 
+    else:
+        return output_text,img,img,img,img
 
 
 #列ごとに差分をとる
@@ -310,8 +315,10 @@ def sabun(before_frame_row,present_frame_row):
     frame_diff = cv2.absdiff(present_frame_row,before_frame_row)
     frame_diff = cv2.medianBlur(frame_diff,5)
     #frame_diff = cv2.absdiff(present_frame,before_frame)
-    plt.imshow(frame_diff)
-    plt.show()
+    #plt.imshow(frame_diff)
+    #plt.show()
+    cv2.imwrite("frame_diff.jpg",frame_diff)
+
     height , width = frame_diff.shape
     array_V = image_processing.Projection_V(frame_diff,height,width)
     W_THRESH = max(array_V)
@@ -338,8 +345,8 @@ def arrow_exist(frame_row):
     kernel = np.ones((3,3),np.uint8)
     arrow_img = cv2.imread("./ex6/ex63.jpg")
     arrow_img = cv2.cvtColor(arrow_img,cv2.COLOR_BGR2GRAY)
-    plt.imshow(arrow_img)
-    plt.show()
+    #plt.imshow(arrow_img)
+    #plt.show()
     height,width = frame_row.shape
     frame_row = cv2.medianBlur(frame_row,3)
     array_V = image_processing.Projection_V(frame_row,height,width)
@@ -422,7 +429,7 @@ if __name__ == "__main__":
     #最初のフレームを取得する
     ret , bg = cap.read()
     output_text , before_frame_row1,before_frame_row2,before_frame_row3,before_frame_row4 = diff_image_search_first(bg,img_temp,label_temp)
-    voice1 = multiprocessing.Process(target =first_voice,args = (bg,voice_flag,img_temp,label_temp))
+    #voice1 = multiprocessing.Process(target =first_voice,args = (bg,voice_flag,img_temp,label_temp))
     while True:
         start = time.perf_counter()
         ret , frame = cap.read()
@@ -430,39 +437,28 @@ if __name__ == "__main__":
         if not ret:
             cv2.destroyAllWindows()
         cv2.imshow("frame",frame)
-        if count == 0:
-            count += 1
-            voice1 = multiprocessing.Process(target =first_voice,args = (frame,voice_flag,img_temp,label_temp))
-            voice1.start()
-            voice_flag.put(True)
-            before_frame = frame
-            end = time.perf_counter()
-            print(end-start)
-            continue
-
         #画面が遷移したか調査
-        diff_flag,output_text= diff_image_search(before_frame,frame,img_temp,label_temp)
-        end = time.perf_counter()
-        print(end-start)
+        output_text,before_frame_row1,before_frame_row2,before_frame_row3,before_frame_row4= diff_image_search(frame,img_temp,label_temp,before_frame_row1,before_frame_row2,before_frame_row3,before_frame_row4)
         #diff_flag = Trueなら画面遷移,diff_flag=Falseなら画面遷移していない
-        before_frame = frame
-        if diff_flag == True:
-            st = voice_flag.get()
-            if st == True:
-                print("pp")
-                voice1.terminate()
-            voice1 = multiprocessing.Process(target=voice,args=(frame,voice_flag,output_text))
-            voice1.start()
+        
+        #if diff_flag == True:
+            #st = voice_flag.get()
+            #if st == True:
+                #print("pp")
+                #voice1.terminate()
+            #voice1 = multiprocessing.Process(target=voice,args=(frame,voice_flag,output_text))
+            #voice1.start()
             #voice(frame,voice_flag,output_text)
-            voice_flag.put(True)
-        end = time.perf_counter()
-        print(end-start)
+            #voice_flag.put(True)
+        
+        time.sleep(0.01)
+        count += 1
             # 背景画像の更新（一定間隔）
         if(count > 10):
+            bg = frame
             ret, frame = cap.read()
             count = 0  # カウント変数の初期化
             #qキーが入力されたら画面を閉じる
         if cv2.waitKey(1) & 0xFF == ord('q'):
             cap.release()
             cv2.destroyAllWindows()
-        time.sleep(1)
