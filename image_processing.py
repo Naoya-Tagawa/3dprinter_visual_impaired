@@ -519,8 +519,8 @@ def match_text2(img_temp,label_temp,frame):
         s={}
         #一文字ずつ切り取る
         match_img = img_mask[:,int(char_List2[j])-1:int(char_List2[j+1])+1]
-        plt.imshow(match_img)
-        plt.show()
+        #plt.imshow(match_img)
+        #plt.show()
         try:
             match_img = cv2.resize(match_img,dsize=(26,36))
             match_img = cv2.dilate(match_img,kernel)

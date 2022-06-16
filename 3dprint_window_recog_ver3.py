@@ -267,7 +267,7 @@ def diff_image_search(present_frame,img_temp,label_temp,before_frame_row1,before
             #plt.imshow(cut_present)
             #plt.show()
             output_text_p,out = image_processing.match_text2(img_temp,label_temp,cut_present)
-            output_text.append(output_text_p)
+            output_text.append(out)
         
     
         sabun_count = 0
@@ -371,35 +371,37 @@ def arrow_exist(frame_row):
         return False
     
 def voice(frame,voice_flag,output_text):
-    start = time.perf_counter()
-    engine = pyttsx3.init()
-    voices = engine.getProperty('voices')
-    engine.setProperty("voice",voices[1].id)
-    #rateはデフォルトが200
-    rate = engine.getProperty('rate')
-    engine.setProperty('rate',300)
-    #volume デフォルトは1.0 設定は0.0~1.0
-    volume = engine.getProperty('volume')
-    engine.setProperty('volume',1.0)
+        #準備
     #文字認識
-    cv2.imwrite("present.jpg",frame)
+    output_text , out = image_processing.match_text(img_temp,label_temp,frame)
     #現在のカーソル
-    end = time.perf_counter()
-    print(end-start)
-    present_kersol = audio_output.cusor_search(output_text)
+    present_kersol = audio_output.kersol_search(output_text)
+    before = []
+    after = []
     if len(present_kersol) == 0: # カーソルがない
-        engine.say(output_text)
+        engine = pyttsx3.init()
+        #rateはデフォルトが200
+        voice = engine.getProperty('voices')
+        engine.setProperty("voice",voice[1].id)
+        rate = engine.getProperty('rate')
+        engine.setProperty('rate',speed)
+        #volume デフォルトは1.0 設定は0.0~1.0
+        volume = engine.getProperty('volume')
+        engine.setProperty('volume',vol)
+        engine.say("window was changed to")
+        audio_output.whole_text_read(output_text)
         engine.runAndWait()
         voice_flag.put(False) #音声終了
-
     
     else: #カーソルがあるとき
-        engine.say(present_kersol)
+        audio_output.partial_text_read(present_kersol)
         engine.runAndWait()
         voice_flag.put(False)
 
     #前のテキストを保持
     print(present_kersol)
+    before_text = output_text
+    before_kersol = present_kersol
     #file_w(out,output_text)
 
 def first_voice(frame,voice_flag,img_temp,label_temp):
@@ -461,9 +463,5 @@ if __name__ == "__main__":
             #qキーが入力されたら画面を閉じる
         if cv2.waitKey(1) & 0xFF == ord('q'):
             cap.release()
-<<<<<<< HEAD
-            cv2.destroyAllWindows()
-=======
             cv2.destroyAllWindows()
         #time.sleep(1)
->>>>>>> 86b9321efa00902ebb3d7432b63d12b379397ad1

@@ -25,7 +25,7 @@ from sklearn.neighbors import NearestNeighbors
 from io import BytesIO
 #flag = True: 音声出力
 #flag = false: 音声出力しない
-
+import itertools
 #話すスピード
 speed = 150
 #ボリューム
@@ -90,10 +90,10 @@ def diff_image_search1(present_frame,before_frame,img_temp,label_temp):
     #対象画像をリサイズ
     #syaei_before_img = cv2.resize(syaei_before_img,dsize=(610,211))
     #syaei_present_img = cv2.resize(syaei_present_img,dsize=(610,211))
-    plt.imshow(syaei_present_img)
-    plt.show()
-    plt.imshow(syaei_before_img)
-    plt.show()
+    #plt.imshow(syaei_present_img)
+    #plt.show()
+    #plt.imshow(syaei_before_img)
+    #plt.show()
     #syaei_resize_before_img = cv2.resize(cut_before,dsize=(610,211))
     #syaei_resize_present_img = cv2.resize(syaei_present_img,dsize=(610,211))
     gray_present_img = cv2.cvtColor(syaei_present_img,cv2.COLOR_BGR2GRAY)
@@ -156,8 +156,8 @@ def diff_image_search1(present_frame,before_frame,img_temp,label_temp):
         cut_present = mask_present_img2[int(i[0]):int(i[1]),]
         cv2.rectangle(normal,(0,0),(w-1,int(i[0])-1),(0,0,0),-1)
         cv2.rectangle(normal,(0,int(i[1])-1),(w-1,h-1),(0,0,0),-1)
-        plt.imshow(normal)
-        plt.show()
+        #plt.imshow(normal)
+        #plt.show()
         #cut_present_img = syaei_present_img[int(i[0]):int(i[1]),]
         #before_frame_row.append(normal)
         before_frame_row.append(cut_present)
@@ -210,10 +210,10 @@ def diff_image_search(before_frame,present_frame,img_temp,label_temp,before_fram
     #対象画像をリサイズ
     syaei_before_img = cv2.resize(syaei_before_img,dsize=(610,211))
     syaei_present_img = cv2.resize(syaei_present_img,dsize=(610,211))
-    plt.imshow(syaei_present_img)
-    plt.show()
-    plt.imshow(syaei_before_img)
-    plt.show()
+    #plt.imshow(syaei_present_img)
+    #plt.show()
+    #plt.imshow(syaei_before_img)
+    #plt.show()
     #syaei_resize_before_img = cv2.resize(cut_before,dsize=(610,211))
     #syaei_resize_present_img = cv2.resize(syaei_present_img,dsize=(610,211))
     gray_present_img = cv2.cvtColor(syaei_present_img,cv2.COLOR_BGR2GRAY)
@@ -263,18 +263,18 @@ def diff_image_search(before_frame,present_frame,img_temp,label_temp,before_fram
     before_frame_row = []
     sabun_count = 0
     output_text = []
-    before_row1_arrow_exist = False
-    before_row2_arrow_exist = False
-    before_row3_arrow_exist = False
-    before_row4_arrow_exist = False
-    if arrow_exist(before_frame_row1):
-        before_row1_arrow_exist = True
-    if arrow_exist(before_frame_row2):
-        before_row2_arrow_exist = True
-    if arrow_exist(before_frame_row3):
-        before_row3_arrow_exist = True
-    if arrow_exist(before_frame_row4):
-        before_row4_arrow_exist = True
+    ###before_row1_arrow_exist = False
+    #before_row2_arrow_exist = False
+    #before_row3_arrow_exist = False
+    #before_row4_arrow_exist = False
+    #if arrow_exist(before_frame_row1):
+        #before_row1_arrow_exist = True
+    #if arrow_exist(before_frame_row2):
+        #before_row2_arrow_exist = True
+    #if arrow_exist(before_frame_row3):
+        #before_row3_arrow_exist = True
+    #if arrow_exist(before_frame_row4):
+        #before_row4_arrow_exist = True
         
     present_char_List , mask_present_img2 = image_processing.mask_make(blue_threshold_present_img)
     for i in present_char_List:
@@ -282,29 +282,29 @@ def diff_image_search(before_frame,present_frame,img_temp,label_temp,before_fram
         cut_present = mask_present_img2[int(i[0]):int(i[1]),]
         cv2.rectangle(normal,(0,0),(w-1,int(i[0])-1),(0,0,0),-1)
         cv2.rectangle(normal,(0,int(i[1])-1),(w-1,h-1),(0,0,0),-1)
-        plt.imshow(cut_present)
-        plt.show()
-        flag = arrow_exist(cut_present)
+        #plt.imshow(cut_present)
+        #plt.show()
+        #flag = arrow_exist(cut_present)
         #cut_present_img = syaei_present_img[int(i[0]):int(i[1]),]
         before_frame_row.append(cut_present)
         if not sabun(before_frame_row1,cut_present):
-            if (before_row1_arrow_exist == True) & (flag == False):
-                sabun_count = sabun_count -1
+            #if (before_row1_arrow_exist == True) & (flag == False):
+                #sabun_count = sabun_count -1
             sabun_count += 1
 
         if not sabun(before_frame_row2,cut_present):
-            if (before_row2_arrow_exist == True) & (flag == False):
-                sabun_count = sabun_count -1
+            #if (before_row2_arrow_exist == True) & (flag == False):
+                #sabun_count = sabun_count -1
             sabun_count += 1
     
         if not sabun(before_frame_row3,cut_present):
-            if (before_row3_arrow_exist == True) & (flag == False):
-                sabun_count = sabun_count -1
+            #if (before_row3_arrow_exist == True) & (flag == False):
+                #sabun_count = sabun_count -1
             sabun_count += 1
             
         if not sabun(before_frame_row4,cut_present):
-            if (before_row4_arrow_exist == True) & (flag == False):
-                sabun_count = sabun_count -1
+            #if (before_row4_arrow_exist == True) & (flag == False):
+                #sabun_count = sabun_count -1
             sabun_count += 1
 
         if sabun_count > 3:
@@ -312,7 +312,7 @@ def diff_image_search(before_frame,present_frame,img_temp,label_temp,before_fram
             #plt.imshow(cut_present)
             #plt.show()
             output_text_p,out = image_processing.match_text2(img_temp,label_temp,cut_present)
-            output_text.append(output_text_p)
+            output_text.append(out)
         
         sabun_count = 0
         #engine.runAndWait()
@@ -326,15 +326,15 @@ def diff_image_search(before_frame,present_frame,img_temp,label_temp,before_fram
     print(output_text)
     engine.say(output_text)
     if len(present_char_List) == 0:
-        return img,img,img,img
+        return output_text,img,img,img,img
     elif len(present_char_List) == 1:
-        return before_frame_row[0] , img,img,img
+        return output_text,before_frame_row[0] , img,img,img
     elif len(present_char_List) == 2:
-        return before_frame_row[0] , before_frame_row[1] ,img,img
+        return output_text,before_frame_row[0] , before_frame_row[1] ,img,img
     elif len(present_char_List) == 3:
-        return before_frame_row[0] , before_frame_row[1] ,before_frame_row[2] ,img
+        return output_text,before_frame_row[0] , before_frame_row[1] ,before_frame_row[2] ,img
     elif len(present_char_List) == 4:
-        return before_frame_row[0] , before_frame_row[1],before_frame_row[2],before_frame_row[3] 
+        return output_text,before_frame_row[0] , before_frame_row[1],before_frame_row[2],before_frame_row[3] 
         
 def arrow_exist(frame_row):
     kernel = np.ones((3,3),np.uint8)
@@ -384,8 +384,8 @@ def sabun(before_frame_row,present_frame_row):
     frame_diff = cv2.absdiff(present_frame_row,before_frame_row)
     frame_diff = cv2.medianBlur(frame_diff,5)
     #frame_diff = cv2.absdiff(present_frame,before_frame)
-    plt.imshow(frame_diff)
-    plt.show()
+    #plt.imshow(frame_diff)
+    #plt.show()
     height , width = frame_diff.shape
     array_V = image_processing.Projection_V(frame_diff,height,width)
     W_THRESH = max(array_V)
@@ -408,14 +408,14 @@ def sabun(before_frame_row,present_frame_row):
     else:
         return False
 
-def voice(frame,voice_flag):
+def voice(output_text,voice_flag):
     #準備
     #文字認識
-    output_text , out = image_processing.match_text(img_temp,label_temp,frame)
     #現在のカーソル
     present_kersol = audio_output.kersol_search(output_text)
     before = []
     after = []
+    print(output_text)
     if len(present_kersol) == 0: # カーソルがない
         engine = pyttsx3.init()
         #rateはデフォルトが200
@@ -437,7 +437,7 @@ def voice(frame,voice_flag):
         voice_flag.put(False)
 
     #前のテキストを保持
-    print(present_kersol)
+    #print(present_kersol)
     before_text = output_text
     before_kersol = present_kersol
     #file_w(out,output_text)
@@ -446,8 +446,8 @@ def voice(frame,voice_flag):
 
 if __name__ == "__main__":
     #テンプレートをロード
-    img1 = cv2.imread("./camera3/camera1.jpg")
-    img2 = cv2.imread("./camera3/camera2.jpg")
+    img1 = cv2.imread("./camera3/camera14.jpg")
+    img2 = cv2.imread("./camera3/camera15.jpg")
     temp = np.load(r'./dataset2.npz')
     #テンプレート画像を格納
     img_temp = temp['x']
@@ -457,17 +457,26 @@ if __name__ == "__main__":
     print("yy")
     plt.imshow(before_frame_row1)
     plt.show()
-    output_text , out= image_processing.match_text2(img_temp,label_temp,before_frame_row1)
-    cv2.imwrite("before_frame_row1.jpg",before_frame_row1)
-    plt.imshow(before_frame_row2)
-    plt.show()
-    cv2.imwrite("before_frame_row2.jpg",before_frame_row2)
-    plt.imshow(before_frame_row3)
-    plt.show()
-    cv2.imwrite("before_frame_row3.jpg",before_frame_row3)
-    plt.imshow(before_frame_row4)
-    plt.show()
-    cv2.imwrite("before_frame_row4.jpg",before_frame_row4)
+    voice_flag = multiprocessing.Queue()
+    #voice_flagがTrueなら今発話中,Falseなら発話していない
+    voice_flag.put(False)
+    output_text , out= image_processing.match_text(img_temp,label_temp,img2)
+    #voice1 = voice1 = multiprocessing.Process(target =voice,args = (output_text,voice_flag))
+    #cv2.imwrite("before_frame_row1.jpg",before_frame_row1)
+    #plt.imshow(before_frame_row2)
+    #plt.show()
+    #cv2.imwrite("before_frame_row2.jpg",before_frame_row2)
+    #plt.imshow(before_frame_row3)
+    #plt.show()
+    #cv2.imwrite("before_frame_row3.jpg",before_frame_row3)
+    #plt.imshow(before_frame_row4)
+    #plt.show()
+    #cv2.imwrite("before_frame_row4.jpg",before_frame_row4)
 
     
-    before_frame_row1,before_frame_row2,before_frame_row3,before_frame_row4 =diff_image_search(img1,img2,img_temp,label_temp,before_frame_row1,before_frame_row2,before_frame_row3,before_frame_row4)
+    output_text,before_frame_row1,before_frame_row2,before_frame_row3,before_frame_row4 =diff_image_search(img1,img2,img_temp,label_temp,before_frame_row1,before_frame_row2,before_frame_row3,before_frame_row4)
+    #list(itertools.chain.from_iterable(output_text))
+    #flat = [x for row in output_text for x in row]
+
+    voice1 = multiprocessing.Process(target =voice,args = (output_text,voice_flag))
+    voice1.start()
