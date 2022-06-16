@@ -447,7 +447,7 @@ def voice(frame,voice_flag):
 if __name__ == "__main__":
     #テンプレートをロード
     img1 = cv2.imread("./camera3/camera1.jpg")
-    img2 = cv2.imread("./camera1/camera1.jpg")
+    img2 = cv2.imread("./camera3/camera2.jpg")
     temp = np.load(r'./dataset2.npz')
     #テンプレート画像を格納
     img_temp = temp['x']
@@ -457,6 +457,7 @@ if __name__ == "__main__":
     print("yy")
     plt.imshow(before_frame_row1)
     plt.show()
+    output_text , out= image_processing.match_text2(img_temp,label_temp,before_frame_row1)
     cv2.imwrite("before_frame_row1.jpg",before_frame_row1)
     plt.imshow(before_frame_row2)
     plt.show()

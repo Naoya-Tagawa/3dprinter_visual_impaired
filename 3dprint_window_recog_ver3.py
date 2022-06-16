@@ -461,4 +461,9 @@ if __name__ == "__main__":
             #qキーが入力されたら画面を閉じる
         if cv2.waitKey(1) & 0xFF == ord('q'):
             cap.release()
+<<<<<<< HEAD
             cv2.destroyAllWindows()
+=======
+            cv2.destroyAllWindows()
+        #time.sleep(1)
+>>>>>>> 86b9321efa00902ebb3d7432b63d12b379397ad1

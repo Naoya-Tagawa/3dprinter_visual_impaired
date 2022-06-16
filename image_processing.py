@@ -496,7 +496,7 @@ def match_text2(img_temp,label_temp,frame):
     #ノイズ除去
     img_mask = cv2.medianBlur(img_mask,3)
     #膨張化
-    #img_mask = cv2.dilate(img_mask,kernel)
+    img_mask = cv2.dilate(img_mask,kernel)
     #高さ、幅を保持
     height,width = img_mask.shape
     #if (len(char_List1) % 2) == 0:
@@ -519,6 +519,8 @@ def match_text2(img_temp,label_temp,frame):
         s={}
         #一文字ずつ切り取る
         match_img = img_mask[:,int(char_List2[j])-1:int(char_List2[j+1])+1]
+        plt.imshow(match_img)
+        plt.show()
         try:
             match_img = cv2.resize(match_img,dsize=(26,36))
             match_img = cv2.dilate(match_img,kernel)
