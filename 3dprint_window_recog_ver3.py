@@ -12,6 +12,7 @@ import glob
 from natsort import natsorted
 import multiprocessing
 from PIL import Image , ImageTk , ImageOps
+from pandas import cut
 import pyttsx3 
 from dictionary_word import speling
 import difflib
@@ -230,9 +231,14 @@ def diff_image_search(present_frame,img_temp,label_temp,before_frame_row1,before
      #   before_row3_arrow_exist = True
     #if arrow_exist(before_frame_row4):
      #   before_row4_arrow_exist = True
-        
-    present_char_List , mask_present_img2 = image_processing.mask_make(blue_threshold_present_img)
-    for i in present_char_List:
+    l = len(present_char_List)
+    count = 0
+    present_char_List1 , mask_present_img2 = image_processing.mask_make(blue_threshold_present_img)
+    #print(present_char_List1)
+    #print(present_char_List1)
+    for (i,j) in zip(present_char_List1,present_char_List):
+        if l == count:
+            break 
         normal = mask_present_img2.copy()
         cut_present = mask_present_img2[int(i[0]):int(i[1]),]
         cv2.rectangle(normal,(0,0),(w-1,int(i[0])-1),(0,0,0),-1)
@@ -261,16 +267,25 @@ def diff_image_search(present_frame,img_temp,label_temp,before_frame_row1,before
             #if (before_row4_arrow_exist == True) & (flag == True):
                 #sabun_count -= 1
             sabun_count += 1
+        
+        cut_present1 = mask_present_img[int(j[0]):int(j[1]),]
+        if (arrow_exist(cut_present1) == True) & (sabun_count < 4):
+            output_text_p,out = image_processing.match_text2(img_temp,label_temp,cut_present1)
+            output_text.append(out)
+            continue
 
         if sabun_count > 3:
             #print(sabun_count)
             #plt.imshow(cut_present)
             #plt.show()
-            output_text_p,out = image_processing.match_text2(img_temp,label_temp,cut_present)
+            cv2.imwrite("cut_present.jpg",cut_present)
+            #cut_present1 = mask_present_img[int(j[0]):int(j[1]),]
+            output_text_p,out = image_processing.match_text2(img_temp,label_temp,cut_present1)
             output_text.append(out)
         
     
         sabun_count = 0
+        count += 1
         #engine.runAndWait()
         #cv2,imwrite("yuu.jpg",cut_present_img)
     #if char_List1.size == 0: #差分がなければ
@@ -281,15 +296,15 @@ def diff_image_search(present_frame,img_temp,label_temp,before_frame_row1,before
     #sabun(img,cut_present_img)
     print(output_text)
     #engine.say(output_text)
-    if len(present_char_List) == 0:
+    if len(present_char_List1) == 0:
         return output_text,img,img,img,img
-    elif len(present_char_List) == 1:
+    elif len(present_char_List1) == 1:
         return output_text,before_frame_row[0] , img,img,img
-    elif len(present_char_List) == 2:
+    elif len(present_char_List1) == 2:
         return output_text,before_frame_row[0] , before_frame_row[1] ,img,img
-    elif len(present_char_List) == 3:
+    elif len(present_char_List1) == 3:
         return output_text,before_frame_row[0] , before_frame_row[1] ,before_frame_row[2] ,img
-    elif len(present_char_List) == 4:
+    elif len(present_char_List1) == 4:
         return output_text,before_frame_row[0] , before_frame_row[1],before_frame_row[2],before_frame_row[3] 
     else:
         return output_text,img,img,img,img
@@ -332,15 +347,15 @@ def sabun(before_frame_row,present_frame_row):
         diff_white_pixels = - diff_white_pixels
         
     black_pixels = frame_diff.size - white_pixels
-    #print("前のフレームとの変化量%")
+    print("前のフレームとの変化量%")
     #percent = white_pixels/frame_diff.size *100
     try:
         percent = white_pixels / sum_white_pixels * 100
     except ZeroDivisionError:
         percent = 100
-    #print(percent)
+    print(percent)
     #print("%")
-    if percent < 5:
+    if percent < 3:
         return True
     else:
         return False
@@ -362,14 +377,14 @@ def arrow_exist(frame_row):
     match_img = frame_row[:,int(char_List2[0])-1:int(char_List2[1])+1]
     try:
         match_img = cv2.resize(match_img,dsize=(26,36))
-        match_img = cv2.dilate(match_img,kernel)
+        #match_img = cv2.dilate(match_img,kernel)
     except cv2.error:
         return False
     match = cv2.matchTemplate(match_img,arrow_img,cv2.TM_CCORR_NORMED)
     #返り値は最小類似点、最大類似点、最小の場所、最大の場所
     min_value, max_value, min_pt, max_pt = cv2.minMaxLoc(match)
     print(max_value)
-    if max_value > 0.5:#なぜかめっちゃ小さい
+    if max_value > 0.4:#なぜかめっちゃ小さい
         return True
     else:
         return False
@@ -427,8 +442,8 @@ if __name__ == "__main__":
     voice1.start()
     frame = bg
     while True:
-        start = time.perf_counter()
-        #ret , frame = cap.read()
+        #start = time.perf_counter()
+        ret , frame = cap.read()
         #フレームが取得できない場合は画面を閉じる
         if not ret:
             cv2.destroyAllWindows()
@@ -447,14 +462,14 @@ if __name__ == "__main__":
             #voice(frame,voice_flag,output_text)
         voice_flag.put(True)
         
-        time.sleep(0.01)
+        #time.sleep(0.001)
         count += 1
-        print("count = {0}".format(count))
+        #print("count = {0}".format(count))
             # 背景画像の更新（一定間隔）
-        if(count > 10):
+        #if(count > 1):
             #bg = frame
-            ret, frame = cap.read()
-            count = 0  # カウント変数の初期化
+            #ret, frame = cap.read()
+            #count = 0  # カウント変数の初期化
             #qキーが入力されたら画面を閉じる
         if cv2.waitKey(1) & 0xFF == ord('q'):
             cap.release()

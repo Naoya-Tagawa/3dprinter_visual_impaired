@@ -437,7 +437,7 @@ if __name__ == "__main__":
     frame = bg
     while True:
         start = time.perf_counter()
-        #ret , frame = cap.read()
+        ret , frame = cap.read()
         #フレームが取得できない場合は画面を閉じる
         if not ret:
             cv2.destroyAllWindows()
@@ -456,14 +456,14 @@ if __name__ == "__main__":
             #voice(frame,voice_flag,output_text)
         voice_flag.put(True)
         
-        time.sleep(0.01)
+        #time.sleep(0.001)
         count += 1
-        print("count = {0}".format(count))
+        #print("count = {0}".format(count))
             # 背景画像の更新（一定間隔）
-        if(count > 10):
+        #if(count > 1):
             #bg = frame
-            ret, frame = cap.read()
-            count = 0  # カウント変数の初期化
+            #ret, frame = cap.read()
+            #count = 0  # カウント変数の初期化
             #qキーが入力されたら画面を閉じる
         if cv2.waitKey(1) & 0xFF == ord('q'):
             cap.release()
