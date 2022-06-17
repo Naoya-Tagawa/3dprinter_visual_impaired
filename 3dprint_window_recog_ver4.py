@@ -12,6 +12,7 @@ import glob
 from natsort import natsorted
 import multiprocessing
 from PIL import Image , ImageTk , ImageOps
+from pandas import cut
 import pyttsx3 
 from dictionary_word import speling
 import difflib
@@ -230,9 +231,14 @@ def diff_image_search(present_frame,img_temp,label_temp,before_frame_row1,before
      #   before_row3_arrow_exist = True
     #if arrow_exist(before_frame_row4):
      #   before_row4_arrow_exist = True
-        
-    present_char_List , mask_present_img2 = image_processing.mask_make(blue_threshold_present_img)
-    for i in present_char_List:
+    l = len(present_char_List)
+    count = 0
+    present_char_List1 , mask_present_img2 = image_processing.mask_make(blue_threshold_present_img)
+    print(present_char_List1)
+    print(present_char_List1)
+    for (i,j) in zip(present_char_List1,present_char_List):
+        if l == count:
+            break 
         normal = mask_present_img2.copy()
         cut_present = mask_present_img2[int(i[0]):int(i[1]),]
         cv2.rectangle(normal,(0,0),(w-1,int(i[0])-1),(0,0,0),-1)
@@ -266,11 +272,14 @@ def diff_image_search(present_frame,img_temp,label_temp,before_frame_row1,before
             #print(sabun_count)
             #plt.imshow(cut_present)
             #plt.show()
+            cv2.imwrite("cut_present.jpg",cut_present)
+            cut_present = mask_present_img[int(j[0]):int(j[1]),]
             output_text_p,out = image_processing.match_text2(img_temp,label_temp,cut_present)
             output_text.append(out)
         
     
         sabun_count = 0
+        count += 1
         #engine.runAndWait()
         #cv2,imwrite("yuu.jpg",cut_present_img)
     #if char_List1.size == 0: #差分がなければ
@@ -281,15 +290,15 @@ def diff_image_search(present_frame,img_temp,label_temp,before_frame_row1,before
     #sabun(img,cut_present_img)
     print(output_text)
     #engine.say(output_text)
-    if len(present_char_List) == 0:
+    if len(present_char_List1) == 0:
         return output_text,img,img,img,img
-    elif len(present_char_List) == 1:
+    elif len(present_char_List1) == 1:
         return output_text,before_frame_row[0] , img,img,img
-    elif len(present_char_List) == 2:
+    elif len(present_char_List1) == 2:
         return output_text,before_frame_row[0] , before_frame_row[1] ,img,img
-    elif len(present_char_List) == 3:
+    elif len(present_char_List1) == 3:
         return output_text,before_frame_row[0] , before_frame_row[1] ,before_frame_row[2] ,img
-    elif len(present_char_List) == 4:
+    elif len(present_char_List1) == 4:
         return output_text,before_frame_row[0] , before_frame_row[1],before_frame_row[2],before_frame_row[3] 
     else:
         return output_text,img,img,img,img

@@ -244,10 +244,10 @@ def points_extract1(img,img2):
         p3 = [int(max_1[0]),int(max_1[1])]
     if img[p4[1]][p4[0]] == 0:
         p4 = [int(max_2[0]),int(max_2[1])]
-    print(p1)
-    print(p2)
-    print(p3)
-    print(p4)
+    #print(p1)
+    #print(p2)
+    #print(p3)
+    #print(p4)
     cv2.circle(img2,(int(p1[0]),int(p1[1])),3,255,1)
     cv2.circle(img2,(int(p2[0]),int(p2[1])),3,255,1)
     cv2.circle(img2,(int(p3[0]),int(p3[1])),3,255,1)
@@ -494,9 +494,9 @@ def match_text2(img_temp,label_temp,frame):
     img_mask = frame
     #img_mask = cv2.adaptiveThreshold(gray_img,255,cv2.ADAPTIVE_THRESH_MEAN_C,cv2.THRESH_BINARY,7,-3)
     #ノイズ除去
-    img_mask = cv2.medianBlur(img_mask,3)
+    #img_mask = cv2.medianBlur(img_mask,3)
     #膨張化
-    img_mask = cv2.dilate(img_mask,kernel)
+    #img_mask = cv2.dilate(img_mask,kernel)
     #高さ、幅を保持
     height,width = img_mask.shape
     #if (len(char_List1) % 2) == 0:
@@ -523,7 +523,7 @@ def match_text2(img_temp,label_temp,frame):
         #plt.show()
         try:
             match_img = cv2.resize(match_img,dsize=(26,36))
-            match_img = cv2.dilate(match_img,kernel)
+            #match_img = cv2.dilate(match_img,kernel)
         except cv2.error:
             return [], ""
         height_m,width_m = match_img.shape
@@ -585,10 +585,10 @@ def match_text2(img_temp,label_temp,frame):
             continue
         #print(label_temp[new_d[0][1]])
         out_modify = out_modify + label_temp[new_d[0][1]]
-        print(out_modify)
+        #print(out_modify)
         new_d = {}
         continue
 
-    print(output_text)
-    print(out)
+    #print(output_text)
+    #print(out)
     return output_text, out
