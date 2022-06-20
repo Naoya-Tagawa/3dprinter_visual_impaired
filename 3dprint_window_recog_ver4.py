@@ -109,12 +109,12 @@ def diff_image_search_first(present_frame,img_temp,label_temp):
     for i in present_char_List2:
         normal = mask_present_img2.copy()
         cut_present_row = mask_present_img2[int(i[0]):int(i[1]),]
-        cv2.rectangle(normal,(0,0),(w-1,int(i[0])-1),(0,0,0),-1)
-        cv2.rectangle(normal,(0,int(i[1])-1),(w-1,h-1),(0,0,0),-1)
+        #cv2.rectangle(normal,(0,0),(w-1,int(i[0])-1),(0,0,0),-1)
+        #cv2.rectangle(normal,(0,int(i[1])-1),(w-1,h-1),(0,0,0),-1)
         #plt.imshow(normal)
         #plt.show()
         before_frame_row.append(cut_present_row)
-    print(present_char_List2)
+    #print(present_char_List2)
     #print("yes")
     output_text , out = image_processing.match_text(img_temp,label_temp,cut_present)
     #print(len(present_char_List2))
@@ -156,7 +156,7 @@ def diff_image_search(present_frame,img_temp,label_temp,before_frame_row1,before
         print("Screen cannot be detected")
         return [] ,img,img,img,img
     #コーナーに従って画像の切り取り
-    cut_present = present_frame[present_p1[1]:present_p2[1],present_p2[0]:present_p3[0]]
+    #cut_present = present_frame[present_p1[1]:present_p2[1],present_p2[0]:present_p3[0]]
     #cut_before = before_frame[before_p1[1]:before_p2[1],before_p2[0]:before_p3[0]]
     #射影変換
     #syaei_before_img = image_processing.projective_transformation(before_frame,before_p1,before_p2,before_p3,before_p4)
@@ -239,10 +239,10 @@ def diff_image_search(present_frame,img_temp,label_temp,before_frame_row1,before
     for (i,j) in zip(present_char_List1,present_char_List):
         if l == count:
             break 
-        normal = mask_present_img2.copy()
+        #normal = mask_present_img2.copy()
         cut_present = mask_present_img2[int(i[0]):int(i[1]),]
-        cv2.rectangle(normal,(0,0),(w-1,int(i[0])-1),(0,0,0),-1)
-        cv2.rectangle(normal,(0,int(i[1])-1),(w-1,h-1),(0,0,0),-1)
+        #cv2.rectangle(normal,(0,0),(w-1,int(i[0])-1),(0,0,0),-1)
+        #cv2.rectangle(normal,(0,int(i[1])-1),(w-1,h-1),(0,0,0),-1)
         #plt.imshow(cut_present)
         #plt.show()
         #flag = arrow_exist(cut_present)
@@ -282,10 +282,10 @@ def diff_image_search(present_frame,img_temp,label_temp,before_frame_row1,before
             #plt.show()
             cv2.imwrite("cut_present.jpg",cut_present)
             #cut_present1 = mask_present_img[int(j[0]):int(j[1]),]
-            start = time.perf_counter()
+            #start = time.perf_counter()
             output_text_p,out = image_processing.match_text2(img_temp,label_temp,cut_present1)
-            en = time.perf_counter()
-            print(start-en)
+            #en = time.perf_counter()
+            #print(start-en)
             output_text.append(out)
         
     
@@ -459,7 +459,7 @@ if __name__ == "__main__":
         #画面が遷移したか調査
         output_text,before_frame_row1,before_frame_row2,before_frame_row3,before_frame_row4= diff_image_search(frame,img_temp,label_temp,before_frame_row1,before_frame_row2,before_frame_row3,before_frame_row4)
         #diff_flag = Trueなら画面遷移,diff_flag=Falseなら画面遷移していない
-        
+        audio_output.whole_text_read(output_text)
         #if diff_flag == True:
         #st = voice_flag.get()
         #if st == True:
