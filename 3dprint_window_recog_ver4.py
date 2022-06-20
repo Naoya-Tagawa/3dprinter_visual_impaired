@@ -436,7 +436,7 @@ if __name__ == "__main__":
     voice1.start()
     frame = bg
     while True:
-        start = time.perf_counter()
+        #start = time.perf_counter()
         ret , frame = cap.read()
         #フレームが取得できない場合は画面を閉じる
         if not ret:

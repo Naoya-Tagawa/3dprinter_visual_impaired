@@ -267,12 +267,14 @@ def diff_image_search(present_frame,img_temp,label_temp,before_frame_row1,before
             #if (before_row4_arrow_exist == True) & (flag == True):
                 #sabun_count -= 1
             sabun_count += 1
-        
+        print("sabun_count = {0}".format(sabun_count))
         cut_present1 = mask_present_img[int(j[0]):int(j[1]),]
-        if (arrow_exist(cut_present1) == True) & (sabun_count < 4):
-            output_text_p,out = image_processing.match_text2(img_temp,label_temp,cut_present1)
-            output_text.append(out)
-            continue
+        #if (arrow_exist(cut_present1) == True) & (sabun_count < 4):
+            #output_text_p,out = image_processing.match_text2(img_temp,label_temp,cut_present1)
+            #output_text.append(out)
+            #sabun_count = 0
+            #count += 1
+            #continue
 
         if sabun_count > 3:
             #print(sabun_count)
@@ -296,19 +298,21 @@ def diff_image_search(present_frame,img_temp,label_temp,before_frame_row1,before
     #sabun(img,cut_present_img)
     print(output_text)
     #engine.say(output_text)
-    if len(present_char_List1) == 0:
-        return output_text,img,img,img,img
-    elif len(present_char_List1) == 1:
-        return output_text,before_frame_row[0] , img,img,img
-    elif len(present_char_List1) == 2:
-        return output_text,before_frame_row[0] , before_frame_row[1] ,img,img
-    elif len(present_char_List1) == 3:
-        return output_text,before_frame_row[0] , before_frame_row[1] ,before_frame_row[2] ,img
-    elif len(present_char_List1) == 4:
-        return output_text,before_frame_row[0] , before_frame_row[1],before_frame_row[2],before_frame_row[3] 
-    else:
-        return output_text,img,img,img,img
-
+    try:
+        if len(present_char_List1) == 0:
+            return output_text,img,img,img,img
+        elif len(present_char_List1) == 1:
+            return output_text,before_frame_row[0] , img,img,img
+        elif len(present_char_List1) == 2:
+            return output_text,before_frame_row[0] , before_frame_row[1] ,img,img
+        elif len(present_char_List1) == 3:
+            return output_text,before_frame_row[0] , before_frame_row[1] ,before_frame_row[2] ,img
+        elif len(present_char_List1) == 4:
+            return output_text,before_frame_row[0] , before_frame_row[1],before_frame_row[2],before_frame_row[3] 
+        else:
+            return output_text,img,img,img,img
+    except IndexError:
+        return [],img,img,img,img
 
 #列ごとに差分をとる
 def sabun(before_frame_row,present_frame_row):
@@ -355,7 +359,7 @@ def sabun(before_frame_row,present_frame_row):
         percent = 100
     print(percent)
     #print("%")
-    if percent < 3:
+    if percent < 2:
         return True
     else:
         return False
@@ -364,10 +368,11 @@ def arrow_exist(frame_row):
     kernel = np.ones((3,3),np.uint8)
     arrow_img = cv2.imread("./ex6/ex63.jpg")
     arrow_img = cv2.cvtColor(arrow_img,cv2.COLOR_BGR2GRAY)
+    arrow_img = cv2.resize(arrow_img,dsize=(26,36))
     #plt.imshow(arrow_img)
     #plt.show()
     height,width = frame_row.shape
-    frame_row = cv2.medianBlur(frame_row,3)
+    #frame_row = cv2.medianBlur(frame_row,3)
     array_V = image_processing.Projection_V(frame_row,height,width)
     W_THRESH = max(array_V)
     char_List2 = image_processing.Detect_WidthPosition(W_THRESH,width,array_V)
@@ -384,7 +389,7 @@ def arrow_exist(frame_row):
     #返り値は最小類似点、最大類似点、最小の場所、最大の場所
     min_value, max_value, min_pt, max_pt = cv2.minMaxLoc(match)
     print(max_value)
-    if max_value > 0.4:#なぜかめっちゃ小さい
+    if max_value > 0.5:#なぜかめっちゃ小さい
         return True
     else:
         return False
