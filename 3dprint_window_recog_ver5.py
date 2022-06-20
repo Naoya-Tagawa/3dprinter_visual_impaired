@@ -1,3 +1,4 @@
+
 from msilib.schema import Error
 import multiprocessing
 import numpy as np
@@ -132,7 +133,7 @@ def diff_image_search_first(present_frame,img_temp,label_temp):
         return output_text,img,img,img,img
 
 
-def diff_image_search(present_frame,img_temp,label_temp,before_frame_row1,before_frame_row2,before_frame_row3,before_frame_row4):
+def diff_image_search(present_frame,img_temp,label_temp,before_frame_row1,before_frame_row2,before_frame_row3,before_frame_row4,voice_flag):
     global present_img
     img = cv2.imread("./balck_img.jpg")
     arrow_img = cv2.imread("./ex6/ex63.jpg")
@@ -154,7 +155,7 @@ def diff_image_search(present_frame,img_temp,label_temp,before_frame_row1,before
         present_p1,present_p2,present_p3,present_p4 = image_processing.points_extract1(blue_threshold_present_img,present_frame)
     except TypeError:
         print("Screen cannot be detected")
-        return [] ,img,img,img,img
+        return img,img,img,img
     #コーナーに従って画像の切り取り
     cut_present = present_frame[present_p1[1]:present_p2[1],present_p2[0]:present_p3[0]]
     #cut_before = before_frame[before_p1[1]:before_p2[1],before_p2[0]:before_p3[0]]
@@ -283,11 +284,9 @@ def diff_image_search(present_frame,img_temp,label_temp,before_frame_row1,before
             cv2.imwrite("cut_present.jpg",cut_present)
             #cut_present1 = mask_present_img[int(j[0]):int(j[1]),]
             start = time.perf_counter()
-            output_text_p,out = image_processing.match_text2(img_temp,label_temp,cut_present1)
-            en = time.perf_counter()
-            print(start-en)
-            output_text.append(out)
-        
+            #output_text_p,out = image_processing.match_text2(img_temp,label_temp,cut_present1)
+            mat = multiprocessing.Process(target=match_text3,args=(img_temp,label_temp,cut_present1,voice_flag))
+            mat.start()
     
         sabun_count = 0
         count += 1
@@ -299,23 +298,23 @@ def diff_image_search(present_frame,img_temp,label_temp,before_frame_row1,before
         #present_img = present_frame
         #return True #音声出力する
     #sabun(img,cut_present_img)
-    print(output_text)
+    #print(output_text)
     #engine.say(output_text)
     try:
         if len(present_char_List1) == 0:
-            return output_text,img,img,img,img
+            return img,img,img,img
         elif len(present_char_List1) == 1:
-            return output_text,before_frame_row[0] , img,img,img
+            return before_frame_row[0] , img,img,img
         elif len(present_char_List1) == 2:
-            return output_text,before_frame_row[0] , before_frame_row[1] ,img,img
+            return before_frame_row[0] , before_frame_row[1] ,img,img
         elif len(present_char_List1) == 3:
-            return output_text,before_frame_row[0] , before_frame_row[1] ,before_frame_row[2] ,img
+            return before_frame_row[0] , before_frame_row[1] ,before_frame_row[2] ,img
         elif len(present_char_List1) == 4:
-            return output_text,before_frame_row[0] , before_frame_row[1],before_frame_row[2],before_frame_row[3] 
+            return before_frame_row[0] , before_frame_row[1],before_frame_row[2],before_frame_row[3] 
         else:
-            return output_text,img,img,img,img
+            return img,img,img,img
     except IndexError:
-        return [],img,img,img,img
+        return img,img,img,img
 
 #列ごとに差分をとる
 def sabun(before_frame_row,present_frame_row):
@@ -423,7 +422,117 @@ def first_voice(output_text,voice_flag):
     #output_text,out = image_processing.match_text(img_temp,label_temp,frame)
     audio_output.whole_text_read(output_text)
     voice_flag.put(False)
+def match_text3(img_temp,label_temp,frame,voice_flag):
+    #カーネル
+    kernel = np.ones((3,3),np.uint8)
+    #対象画像をリサイズ
+    syaei_resize_img = cv2.resize(frame,dsize=(610,211))
+    #対象画像をグレイスケール化
+    #gray_img = cv2.cvtColor(syaei_resize_img,cv2.COLOR_BGR2GRAY)
+    #二値画像へ
+    #ret, img_mask = cv2.threshold(gray_img,0,255,cv2.THRESH_OTSU)
+    img_mask = frame
+    #img_mask = cv2.adaptiveThreshold(gray_img,255,cv2.ADAPTIVE_THRESH_MEAN_C,cv2.THRESH_BINARY,7,-3)
+    #ノイズ除去
+    #img_mask = cv2.medianBlur(img_mask,3)
+    #膨張化
+    #img_mask = cv2.dilate(img_mask,kernel)
+    #高さ、幅を保持
+    height,width = img_mask.shape
+    #if (len(char_List1) % 2) == 0:
+        #print("Screen cannot be detected")
+        #return [], []
+        
+    out_modify = "" #修正したテキスト
+    output_text = [] #読み取ったテキスト
+    s = {}
+    new_d = {}
+    out = "" #読み取ったテキスト
+        #横方向のProjection Profileを得る
+    array_V = image_processing.Projection_V(img_mask,height,width)
+    W_THRESH = max(array_V)
+    char_List2 = image_processing.Detect_WidthPosition(W_THRESH,width,array_V)
+    for j in range(0,len(char_List2)-1,2):
+            #end_time = time.perf_counter()
+            #print(end_time-start_time)
+        new_d = {}
+        s={}
+        #一文字ずつ切り取る
+        match_img = img_mask[:,int(char_List2[j])-1:int(char_List2[j+1])+1]
+        #plt.imshow(match_img)
+        #plt.show()
+        try:
+            match_img = cv2.resize(match_img,dsize=(26,36))
+            #match_img = cv2.dilate(match_img,kernel)
+        except cv2.error:
+            return [], ""
+        height_m,width_m = match_img.shape
+        #img_g = cv2.rectangle(syaei_resize_img, (int(char_List2[j]) ,int(char_List2[j])), (int(char_List2[j+1]), int(char_List1[i+1])), (0,0,255), 2)
+        for f in range(len(label_temp)):
+            temp_th = img_temp[f]
+            temp_th = cv2.resize(temp_th,dsize=(26,36))
+            #テンプレートマッチング
+            #入力画像、テンプレート画像、類似度の計算方法が引数 返り値は検索窓の各市でのテンプレート画像との類似度を表す二次元配列
+            match = cv2.matchTemplate(match_img,temp_th,cv2.TM_CCORR_NORMED)
+            en = time.perf_counter()
+            #返り値は最小類似点、最大類似点、最小の場所、最大の場所
+            min_value, max_value, min_pt, max_pt = cv2.minMaxLoc(match)
+            #からのリストに
+            s.setdefault(max_value,f)
+            #print(end-start)
+            #類似度が最大のもの順にソート
+        new_d = sorted(s.items(), reverse = True)
+            #print(label_temp[new_d[0][1]])
+            #print(new_d[0][0])
+            #print(label_temp[new_d[1][1]])
+            #print(new_d[1][0])     
+            #new_d[0][1]がlabelの番号、new_d[0][0]が最大類似度
+            #print(char_List2)
+            #print(width_m)
+            #空白があるとき
+        #print(new_d[0][0])
+        if new_d[0][0] < 0.6:
+            continue
+        if (j != 0) & (char_List2[j] > (width_m + char_List2[j-1])):
 
+            if (j+1) == len(char_List2)-1:
+                out_modify = out_modify+ ' ' + label_temp[new_d[0][1]]
+                out = out + out_modify + "\n"
+                output_text.append(out_modify)
+                #output_text.append('\n')
+                out_modify = ""
+                new_d = {}
+                continue
+                #out_modify = speling.correct(out_modify)
+                #out_modify += label_temp[new_d[0][1]]
+            out_modify += ' '
+                #out = out + out_modify
+                #output_text.append(' ')
+                #output_text.append(out_modify)
+                #print(out_modify)
+                #out_modify = ""
+                
+
+        #行の最後の時
+        if (j+1) == len(char_List2)-1:
+            out_modify = out_modify + label_temp[new_d[0][1]]
+            #out_modify = speling.correct(out_modify)
+            out = out + out_modify + "\n"
+            output_text.append(out_modify)
+            #output_text.append('\n')
+            out_modify = ""
+            new_d = {}
+            continue
+        #print(label_temp[new_d[0][1]])
+        out_modify = out_modify + label_temp[new_d[0][1]]
+        #print(out_modify)
+        new_d = {}
+        continue
+
+    #print(output_text)
+    #print(out)
+    voice_flag.put(out)
+    print(out)
 
 if __name__ == "__main__":
     #テンプレートをロード
@@ -445,7 +554,7 @@ if __name__ == "__main__":
     output_text = []
     #最初のフレームを取得する
     ret , bg = cap.read()
-    output_text , before_frame_row1,before_frame_row2,before_frame_row3,before_frame_row4 = diff_image_search_first(bg,img_temp,label_temp)
+    output_text,before_frame_row1,before_frame_row2,before_frame_row3,before_frame_row4 = diff_image_search_first(bg,img_temp,label_temp)
     #voice1 = multiprocessing.Process(target =first_voice,args = (output_text,voice_flag))
     #voice1.start()
     frame = bg
@@ -457,7 +566,7 @@ if __name__ == "__main__":
             cv2.destroyAllWindows()
         cv2.imshow("frame",frame)
         #画面が遷移したか調査
-        output_text,before_frame_row1,before_frame_row2,before_frame_row3,before_frame_row4= diff_image_search(frame,img_temp,label_temp,before_frame_row1,before_frame_row2,before_frame_row3,before_frame_row4)
+        before_frame_row1,before_frame_row2,before_frame_row3,before_frame_row4= diff_image_search(frame,img_temp,label_temp,before_frame_row1,before_frame_row2,before_frame_row3,before_frame_row4,voice_flag)
         #diff_flag = Trueなら画面遷移,diff_flag=Falseなら画面遷移していない
         
         #if diff_flag == True:
