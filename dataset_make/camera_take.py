@@ -2,7 +2,7 @@ import cv2
 def coordinates(event,x,y, flags,param):
     if event == cv2.EVENT_LBUTTONDOWN:
         print(x,y)
-cap = cv2.VideoCapture(0)
+cap = cv2.VideoCapture(1)
 count =1
 while True:
     ret, frame = cap.read()

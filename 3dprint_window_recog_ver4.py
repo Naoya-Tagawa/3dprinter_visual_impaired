@@ -267,7 +267,7 @@ def diff_image_search(present_frame,img_temp,label_temp,before_frame_row1,before
             #if (before_row4_arrow_exist == True) & (flag == True):
                 #sabun_count -= 1
             sabun_count += 1
-        print("sabun_count = {0}".format(sabun_count))
+        #print("sabun_count = {0}".format(sabun_count))
         cut_present1 = mask_present_img[int(j[0]):int(j[1]),]
         #if (arrow_exist(cut_present1) == True) & (sabun_count < 4):
             #output_text_p,out = image_processing.match_text2(img_temp,label_temp,cut_present1)
@@ -280,7 +280,7 @@ def diff_image_search(present_frame,img_temp,label_temp,before_frame_row1,before
             #print(sabun_count)
             #plt.imshow(cut_present)
             #plt.show()
-            cv2.imwrite("cut_present.jpg",cut_present)
+            #cv2.imwrite("cut_present.jpg",cut_present)
             #cut_present1 = mask_present_img[int(j[0]):int(j[1]),]
             #start = time.perf_counter()
             output_text_p,out = image_processing.match_text2(img_temp,label_temp,cut_present1)
@@ -299,7 +299,7 @@ def diff_image_search(present_frame,img_temp,label_temp,before_frame_row1,before
         #present_img = present_frame
         #return True #音声出力する
     #sabun(img,cut_present_img)
-    print(output_text)
+    #print(output_text)
     #engine.say(output_text)
     try:
         if len(present_char_List1) == 0:
@@ -354,13 +354,13 @@ def sabun(before_frame_row,present_frame_row):
         diff_white_pixels = - diff_white_pixels
         
     black_pixels = frame_diff.size - white_pixels
-    print("前のフレームとの変化量%")
+    #print("前のフレームとの変化量%")
     #percent = white_pixels/frame_diff.size *100
     try:
         percent = white_pixels / sum_white_pixels * 100
     except ZeroDivisionError:
         percent = 100
-    print(percent)
+    #print(percent)
     #print("%")
     if percent < 2:
         return True
@@ -458,8 +458,16 @@ if __name__ == "__main__":
         cv2.imshow("frame",frame)
         #画面が遷移したか調査
         output_text,before_frame_row1,before_frame_row2,before_frame_row3,before_frame_row4= diff_image_search(frame,img_temp,label_temp,before_frame_row1,before_frame_row2,before_frame_row3,before_frame_row4)
+        start = time.perf_counter()
         #diff_flag = Trueなら画面遷移,diff_flag=Falseなら画面遷移していない
         audio_output.whole_text_read(output_text)
+        present_kersol = audio_output.kersol_search(output_text)
+        if present_kersol == 1: # カーソルがない
+            print(output_text)
+        else:
+            print(present_kersol)
+        end = time.perf_counter()
+        print(end-start)
         #if diff_flag == True:
         #st = voice_flag.get()
         #if st == True:

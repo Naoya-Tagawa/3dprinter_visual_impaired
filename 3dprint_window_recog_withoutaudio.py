@@ -65,7 +65,7 @@ def diff_image_search_first(present_frame,img_temp,label_temp):
     out = ""
     #フレームの青い部分を二値化
     blue_threshold_present_img = image_processing.cut_blue_img1(present_frame)
-    #cv2.imwrite("blue_threshold_present.jpg",blue_threshold_present_img)
+    cv2.imwrite("blue_threshold_present.jpg",blue_threshold_present_img)
     ##plt.imshow(blue_threshold_present_img)
     ##plt.show()
     #コーナー検出
@@ -103,7 +103,7 @@ def diff_image_search_first(present_frame,img_temp,label_temp):
     present_char_List2 , mask_present_img2 = image_processing.mask_make(blue_threshold_present_img)
     #plt.imshow(mask_present_img2)
     #plt.show()
-    #engine = pyttsx3.init()
+    engine = pyttsx3.init()
     before_frame_row = []
     #列ごとにマスク画像を取得
     for i in present_char_List2:
@@ -114,7 +114,7 @@ def diff_image_search_first(present_frame,img_temp,label_temp):
         #plt.imshow(normal)
         #plt.show()
         before_frame_row.append(cut_present_row)
-    #print(present_char_List2)
+    print(present_char_List2)
     #print("yes")
     output_text , out = image_processing.match_text(img_temp,label_temp,cut_present)
     #print(len(present_char_List2))
@@ -165,7 +165,7 @@ def diff_image_search(present_frame,img_temp,label_temp,before_frame_row1,before
     syaei_present_img = image_processing.projective_transformation(present_frame,present_p1,present_p2,present_p3,present_p4)
     #対象画像をリサイズ
     #syaei_before_img = cv2.resize(syaei_before_img,dsize=(610,211))
-    syaei_present_img = cv2.resize(syaei_present_img,dsize=(610,211))
+    #syaei_present_img = cv2.resize(syaei_present_img,dsize=(610,211))
     #plt.imshow(syaei_present_img)
     #plt.show()
     #plt.imshow(syaei_before_img)
@@ -236,7 +236,6 @@ def diff_image_search(present_frame,img_temp,label_temp,before_frame_row1,before
     present_char_List1 , mask_present_img2 = image_processing.mask_make(blue_threshold_present_img)
     #print(present_char_List1)
     #print(present_char_List1)
-    start = time.perf_counter()
     for (i,j) in zip(present_char_List1,present_char_List):
         if l == count:
             break 
@@ -276,8 +275,7 @@ def diff_image_search(present_frame,img_temp,label_temp,before_frame_row1,before
             #sabun_count = 0
             #count += 1
             #continue
-        end = time.perf_counter()
-        print("Rap time:{0}".format(end-start))
+
         if sabun_count > 3:
             #print(sabun_count)
             #plt.imshow(cut_present)
@@ -290,7 +288,6 @@ def diff_image_search(present_frame,img_temp,label_temp,before_frame_row1,before
     
         sabun_count = 0
         count += 1
- 
         #engine.runAndWait()
         #cv2,imwrite("yuu.jpg",cut_present_img)
     #if char_List1.size == 0: #差分がなければ
@@ -299,7 +296,7 @@ def diff_image_search(present_frame,img_temp,label_temp,before_frame_row1,before
         #present_img = present_frame
         #return True #音声出力する
     #sabun(img,cut_present_img)
-    #print(output_text)
+    print(output_text)
     #engine.say(output_text)
     try:
         if len(present_char_List1) == 0:
@@ -354,7 +351,8 @@ def sabun(before_frame_row,present_frame_row):
         diff_white_pixels = - diff_white_pixels
         
     #black_pixels = frame_diff.size - white_pixels
-    ##percent = white_pixels/frame_diff.size *100
+    #print("前のフレームとの変化量%")
+    #percent = white_pixels/frame_diff.size *100
     try:
         percent = white_pixels / sum_white_pixels * 100
     except ZeroDivisionError:
@@ -390,7 +388,7 @@ def arrow_exist(frame_row):
     match = cv2.matchTemplate(match_img,arrow_img,cv2.TM_CCORR_NORMED)
     #返り値は最小類似点、最大類似点、最小の場所、最大の場所
     min_value, max_value, min_pt, max_pt = cv2.minMaxLoc(match)
-    print(max_value)
+    #print(max_value)
     if max_value > 0.5:#なぜかめっちゃ小さい
         return True
     else:
@@ -401,19 +399,22 @@ def voice(output_text,voice_flag):
     #文字認識
     #output_text , out = image_processing.match_text(img_temp,label_temp,frame)
     #現在のカーソル
-    #print("audio build")
-    #present_kersol = audio_output.kersol_search(output_text)
-    #if len(present_kersol) == 0: # カーソルがない
-    audio_output.whole_text_read(output_text)
-    #engine.runAndWait()
-        #voice_flag.put(False) #音声終了
+    present_kersol = audio_output.kersol_search(output_text)
+    before = []
+    after = []
+    if len(present_kersol) == 0: # カーソルがない
+        engine = pyttsx3.init()
+
+        audio_output.whole_text_read(output_text)
+        engine.runAndWait()
+        voice_flag.put(False) #音声終了
     
-    #else: #カーソルがあるとき
-        #audio_output.partial_text_read(present_kersol)
-        #engine.runAndWait()
-    voice_flag.put(False)
+    else: #カーソルがあるとき
+        audio_output.partial_text_read(present_kersol)
+        engine.runAndWait()
+        voice_flag.put(False)
     #file_w(out,output_text)
-    #print("voice finished")
+    print("voice finished")
 
 def first_voice(output_text,voice_flag):
     #output_text,out = image_processing.match_text(img_temp,label_temp,frame)
@@ -434,17 +435,16 @@ if __name__ == "__main__":
     cap = cv2.VideoCapture(1)
     read_fps = cap.get(cv2.CAP_PROP_FPS)
     print(read_fps)
-    voice_flag = multiprocessing.Queue()
-    voice_flag.put(False)
+    #voice_flag = multiprocessing.Queue()
+    #voice_flag.put(False)
     #voice_flagがTrueなら今発話中,Falseなら発話していない
     count = 0
     output_text = []
     #最初のフレームを取得する
     ret , bg = cap.read()
     output_text , before_frame_row1,before_frame_row2,before_frame_row3,before_frame_row4 = diff_image_search_first(bg,img_temp,label_temp)
-    voice1 = multiprocessing.Process(target =first_voice,args = (output_text,voice_flag))
-    voice1.start()
-    frame = bg
+    #voice1 = multiprocessing.Process(target =first_voice,args = (output_text,voice_flag))
+    #voice1.start()
     while True:
         #start = time.perf_counter()
         ret , frame = cap.read()
@@ -456,31 +456,15 @@ if __name__ == "__main__":
         start = time.perf_counter()
         output_text,before_frame_row1,before_frame_row2,before_frame_row3,before_frame_row4= diff_image_search(frame,img_temp,label_temp,before_frame_row1,before_frame_row2,before_frame_row3,before_frame_row4)
         #diff_flag = Trueなら画面遷移,diff_flag=Falseなら画面遷移していない
-        #present_kersol = audio_output.kersol_search(output_text)
+        #present_kersol = audio_output.cusor_search(output_text)
         #if present_kersol == 1: # カーソルがない
-        print(output_text)
-        end = time.perf_counter()
-        print("time :{0}".format(end-start))
+        #print(output_text)
         #else:
             #print(present_kersol)
-        st = voice_flag.get()
-        #present_cusor = audio_output.cusor_search(output_text)
-        #print(present_cusor)
-        #if len(present_cusor) != 0:
-            #output_text = present_cusor
-            
-        if len(output_text) != 0:
-            if st == True:
-                print("audio finished")
-                voice1.terminate()
-
-            voice1 = multiprocessing.Process(target=voice,args=(output_text,voice_flag))
-            voice1.start()
-            voice_flag.put(True)
-        voice_flag.put(False)
-            #voice(frame,voice_flag,output_text)
+        end = time.perf_counter()
+        print("recognition time:{0}".format(end-start))
+        #if diff_flag == True:
         #time.sleep(0.001)
-        count += 1
         #print("count = {0}".format(count))
             # 背景画像の更新（一定間隔）
         #if(count > 1):

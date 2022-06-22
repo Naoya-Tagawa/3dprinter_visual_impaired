@@ -25,14 +25,17 @@ def kersol_search(text):
     i = 0
     kersol1 = ""
     for word in text:
-        if word[0] == ">":
-            i = 1
-            kersol1 += word + ' '
-        elif (i == 1) & (word == '\n'):
-            i = 0
-        elif i == 1:
-            kersol1 += word
-    return kersol1
+        try:
+            if word[0] == ">":
+                i = 1
+                kersol1 += word + ' '
+            elif (i == 1) & (word == '\n'):
+                i = 0
+            elif i == 1:
+                kersol1 += word
+            return kersol1
+        except IndexError:
+            return 1
 def cusor_search(text):
     for word in text:
         
