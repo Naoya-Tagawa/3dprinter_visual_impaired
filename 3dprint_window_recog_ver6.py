@@ -1,3 +1,4 @@
+from asyncio import futures
 from msilib.schema import Error
 import multiprocessing
 import numpy as np
@@ -21,6 +22,8 @@ import cv2
 import image_processing
 import audio_output
 from sklearn.neighbors import NearestNeighbors 
+from concurrent.futures.process import ProcessPoolExecutor
+import concurrent
 #flag = True: 音声出力
 #flag = false: 音声出力しない
 
@@ -396,7 +399,7 @@ def arrow_exist(frame_row):
     else:
         return False
     
-def voice(output_text,voice_flag):
+def voice(output_text):
     #準備
     #文字認識
     #output_text , out = image_processing.match_text(img_temp,label_temp,frame)
@@ -411,14 +414,13 @@ def voice(output_text,voice_flag):
     #else: #カーソルがあるとき
         #audio_output.partial_text_read(present_kersol)
         #engine.runAndWait()
-    voice_flag.put(False)
     #file_w(out,output_text)
     #print("voice finished")
 
-def first_voice(output_text,voice_flag):
+def first_voice(output_text):
     #output_text,out = image_processing.match_text(img_temp,label_temp,frame)
     audio_output.whole_text_read(output_text)
-    voice_flag.put(False)
+    #voice_flag.put(False)
 
 
 if __name__ == "__main__":
@@ -428,6 +430,7 @@ if __name__ == "__main__":
     temp = np.load(r'./dataset2.npz')
     #テンプレート画像を格納
     img_temp = temp['x']
+    futures = []
     #テンプレートのラベル(文)を格納
     label_temp = temp['y']
     #diff_image_search(img1,img2)
@@ -442,9 +445,11 @@ if __name__ == "__main__":
     #最初のフレームを取得する
     ret , bg = cap.read()
     output_text , before_frame_row1,before_frame_row2,before_frame_row3,before_frame_row4 = diff_image_search_first(bg,img_temp,label_temp)
-    voice1 = multiprocessing.Process(target =first_voice,args = (output_text,voice_flag))
-    voice1.start()
+    executer = ProcessPoolExecutor(max_workers = 1)
+    future = executer.submit(voice,output_text)
+    futures.append(future)
     frame = bg
+    
     while True:
         #start = time.perf_counter()
         ret , frame = cap.read()
@@ -463,25 +468,33 @@ if __name__ == "__main__":
         print("time :{0}".format(end-start))
         #else:
             #print(present_kersol)
-        st = voice_flag.get()
         #present_cusor = audio_output.cusor_search(output_text)
         #print(present_cusor)
         #if len(present_cusor) != 0:
             #output_text = present_cusor
             
         if len(output_text) != 0:
-            if st == True:
-                print("audio finished")
-                voice1.terminate()
-                
+            try:
+                timeout = 0.01
+                future  = concurrent.futures.as_completed(futures, timeout)
 
-            voice1 = multiprocessing.Process(target=voice,args=(output_text,voice_flag))
-            voice1.start()
-            voice_flag.put(True)
-        voice_flag.put(True)
+            except concurrent.futures.TimeoutError as _:
+                # 現在のfutureの状態を表示
+
+                # Futureをキャンセル
+                for future in futures:
+                    if not future.running():
+                        future.cancel()
+
+            # プロセスをKill
+            # !! ここを追加 !!
+                for process in executer._processes.values():
+                    process.kill()
+
+            future = executer.submit(voice,output_text)
+            futures.append(future)
             #voice(frame,voice_flag,output_text)
         #time.sleep(0.001)
-        count += 1
         #print("count = {0}".format(count))
             # 背景画像の更新（一定間隔）
         #if(count > 1):
@@ -493,5 +506,5 @@ if __name__ == "__main__":
             cap.release()
             cv2.destroyAllWindows()
 
-        #time.sleep(0.1)
-        time.sleep(1)
+        time.sleep(0.1)
+        #time.sleep(1)
