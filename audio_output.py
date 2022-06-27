@@ -137,7 +137,7 @@ def whole_text_read(text):
         engine.say(word)
     
     engine.runAndWait()
-
+    engine.stop()
 #カーソルがテキストにあるか
 def kersol_exist_search(kersol,text):
     text = text.splitlines()
@@ -159,3 +159,4 @@ def partial_text_read(text):
     engine.setProperty('volume',vol)
     engine.say(text)
     engine.runAndWait()
+    engine.stop()

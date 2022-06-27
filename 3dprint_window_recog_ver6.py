@@ -24,6 +24,7 @@ import audio_output
 from sklearn.neighbors import NearestNeighbors 
 from concurrent.futures.process import ProcessPoolExecutor
 import concurrent
+from threading import Thread
 #flag = True: 音声出力
 #flag = false: 音声出力しない
 
@@ -417,11 +418,86 @@ def voice(output_text):
     #file_w(out,output_text)
     #print("voice finished")
 
-def first_voice(output_text):
-    #output_text,out = image_processing.match_text(img_temp,label_temp,frame)
-    audio_output.whole_text_read(output_text)
-    #voice_flag.put(False)
+def threaded(fn):
+    def wrapper(*args, **kwargs):
+        thread = Thread(target=fn, args=args, kwargs=kwargs)
+        thread.start()
+        return thread
+    return wrapper
 
+def speak(phrase):
+    engine = pyttsx3.init()
+    engine.say(phrase)
+    engine.runAndWait()
+    engine.stop()
+
+def stop_speaker():
+    global term
+    term = True
+    t.join()
+
+@threaded
+def manage_process(p):
+	global term
+	while p.is_alive():
+		if term:
+			p.terminate()
+			term = False
+		else:
+			continue
+
+def whole_text_read(text):
+    engine = pyttsx3.init()
+    voices = engine.getProperty('voices')
+    engine.setProperty("voice",voices[1].id)
+    #rateはデフォルトが200
+    rate = engine.getProperty('rate')
+    engine.setProperty('rate',speed)
+    #volume デフォルトは1.0 設定は0.0~1.0
+    volume = engine.getProperty('volume')
+    engine.setProperty('volume',vol)
+    count = 0
+    for word in text:
+        if word == ' ':
+            continue
+        if '/' in word:
+            target = '/'
+            idx = word.find(target)
+            r = word[:idx]
+            engine.say(r)
+            engine.say("スラッシュ")
+            r = word[idx:]
+            engine.say(r)
+            continue
+        if ',' in word:
+            target = ','
+            idx = word.find(target)
+            r = word[:idx]
+            engine.say(r)
+            engine.say("カンマ")
+            r = word[idx:]
+            engine.say(r)
+            continue
+        if "." in word:
+            target = '.'
+            idx = word.find(target)
+            r = word[:idx]
+            engine.say(r)
+            engine.say("ドット")
+            r = word[idx:]
+            engine.say(r)
+            continue
+        engine.say(word)
+    
+    engine.runAndWait()
+    engine.stop()
+def say(phrase):
+	global t
+	global term
+	term = False
+	p = multiprocessing.Process(target=whole_text_read, args=(phrase,))
+	p.start()
+	t = manage_process(p)
 
 if __name__ == "__main__":
     #テンプレートをロード
@@ -445,9 +521,7 @@ if __name__ == "__main__":
     #最初のフレームを取得する
     ret , bg = cap.read()
     output_text , before_frame_row1,before_frame_row2,before_frame_row3,before_frame_row4 = diff_image_search_first(bg,img_temp,label_temp)
-    executer = ProcessPoolExecutor(max_workers = 1)
-    future = executer.submit(voice,output_text)
-    futures.append(future)
+    say(output_text)
     frame = bg
     
     while True:
@@ -474,25 +548,11 @@ if __name__ == "__main__":
             #output_text = present_cusor
             
         if len(output_text) != 0:
-            try:
-                timeout = 0.01
-                future  = concurrent.futures.as_completed(futures, timeout)
-
-            except concurrent.futures.TimeoutError as _:
-                # 現在のfutureの状態を表示
-
-                # Futureをキャンセル
-                for future in futures:
-                    if not future.running():
-                        future.cancel()
+            stop_speaker()
+            say(output_text)
 
             # プロセスをKill
-            # !! ここを追加 !!
-                for process in executer._processes.values():
-                    process.kill()
-
-            future = executer.submit(voice,output_text)
-            futures.append(future)
+            # !! ここを追加 !
             #voice(frame,voice_flag,output_text)
         #time.sleep(0.001)
         #print("count = {0}".format(count))
@@ -506,5 +566,5 @@ if __name__ == "__main__":
             cap.release()
             cv2.destroyAllWindows()
 
-        time.sleep(0.1)
+        time.sleep(0.5)
         #time.sleep(1)
