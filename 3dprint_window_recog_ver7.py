@@ -439,6 +439,15 @@ def stop_speaker():
 
 @threaded
 
+def manage(p):
+    global engine
+    global term
+    while p.is_alive():
+        if term:
+            engine.stop()
+            term = False
+        else:
+            continue
 def manage_process(p):
 	global term
 	while p.is_alive():
@@ -450,7 +459,7 @@ def manage_process(p):
 
 def whole_text_read(text):
     #global engine
-    engine = pyttsx3.init()
+    #engine = pyttsx3.init()
     voices = engine.getProperty('voices')
     engine.setProperty("voice",voices[1].id)
     #rateはデフォルトが200
@@ -459,6 +468,7 @@ def whole_text_read(text):
     #volume デフォルトは1.0 設定は0.0~1.0
     volume = engine.getProperty('volume')
     engine.setProperty('volume',vol)
+    count = 0
     for word in text:
         if word == ' ':
             continue
@@ -494,7 +504,15 @@ def whole_text_read(text):
     engine.runAndWait()
     engine.stop()
 
-
+def sy(phrase):
+    global t 
+    global term
+    term = False
+    global engine
+    engine = pyttsx3.init()
+    p = Thread(target=whole_text_read,args=(phrase,engine))
+    p.start()
+    t = manage(p)
 def say(phrase):
 	global t
 	global term
@@ -553,8 +571,8 @@ if __name__ == "__main__":
             
         if len(output_text) != 0:
             stop_speaker()
-            say(output_text)
-            #sy(output_text)
+            #say(output_text)
+            sy(output_text)
 
             # プロセスをKill
             # !! ここを追加 !
@@ -571,5 +589,5 @@ if __name__ == "__main__":
             cap.release()
             cv2.destroyAllWindows()
 
-        #time.sleep(0.1)
+        time.sleep(0.5)
         #time.sleep(1)

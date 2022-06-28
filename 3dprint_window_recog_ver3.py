@@ -21,6 +21,7 @@ import cv2
 import image_processing
 import audio_output
 from sklearn.neighbors import NearestNeighbors 
+import subprocess
 #flag = True: 音声出力
 #flag = false: 音声出力しない
 
@@ -478,7 +479,7 @@ if __name__ == "__main__":
             voice1 = multiprocessing.Process(target=voice,args=(output_text,voice_flag))
             voice1.start()
             voice_flag.put(True)
-        voice_flag.put(True)
+        voice_flag.put(False)
             #voice(frame,voice_flag,output_text)
         #time.sleep(0.001)
         count += 1
@@ -494,4 +495,4 @@ if __name__ == "__main__":
             cv2.destroyAllWindows()
 
         #time.sleep(0.1)
-        time.sleep(1)
+        time.sleep(0.5)
