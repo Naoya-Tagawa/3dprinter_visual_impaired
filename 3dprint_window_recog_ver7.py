@@ -138,7 +138,7 @@ def diff_image_search_first(present_frame,img_temp,label_temp,output_text):
         return img,img,img,img
 
 
-def diff_image_search(present_frame,img_temp,label_temp,before_frame_row1,before_frame_row2,before_frame_row3,before_frame_row4,output_text):
+def diff_image_search(present_frame,img_temp,label_temp,before_frame_row1,before_frame_row2,before_frame_row3,before_frame_row4,output_text,voice_flag):
     global present_img
     img = cv2.imread("./balck_img.jpg")
     #arrow_img = cv2.imread("./ex6/ex63.jpg")
@@ -238,6 +238,7 @@ def diff_image_search(present_frame,img_temp,label_temp,before_frame_row1,before
      #   before_row4_arrow_exist = True
     l = len(present_char_List)
     count = 0
+    output_textx = []
     present_char_List1 , mask_present_img2 = image_processing.mask_make(blue_threshold_present_img)
     #print(present_char_List1)
     #print(present_char_List1)
@@ -290,12 +291,15 @@ def diff_image_search(present_frame,img_temp,label_temp,before_frame_row1,before
             #cv2.imwrite("cut_present.jpg",cut_present)
             #cut_present1 = mask_present_img[int(j[0]):int(j[1]),]
             output_text_p,out = image_processing.match_text2(img_temp,label_temp,cut_present1)
-            output_text.put(out)
+            if out != "":
+                output_textx.append(out)
         
     
         sabun_count = 0
         count += 1
- 
+    
+    output_text.put(output_textx)
+    voice_flag.value = 1
         #engine.runAndWait()
         #cv2,imwrite("yuu.jpg",cut_present_img)
     #if char_List1.size == 0: #差分がなければ
@@ -474,15 +478,17 @@ def text_read(output_text,voice_flag):
     engine.setProperty('volume',vol)
     while True:
         text = output_text.get()
+        voice_flag.value = 0
+        print(text)
+        print("flag :{0}".format(voice_flag.value))
+        print("queu size :{0}".format(output_text.qsize()))
         for word in text:
-            if word == ' ':
-                continue
-            
             if voice_flag.value == 1:
-                engine.stop()
-                voice_flag.clear()
+                if engine.isBusy() == False:
+                    engine.stop()
+                break
             engine.say(word)
-    
+
         engine.runAndWait()
         engine.stop()
 
@@ -536,16 +542,17 @@ if __name__ == "__main__":
         cv2.imshow("frame",frame)
         #画面が遷移したか調査
         start = time.perf_counter()
-        before_frame_row1,before_frame_row2,before_frame_row3,before_frame_row4= diff_image_search(frame,img_temp,label_temp,before_frame_row1,before_frame_row2,before_frame_row3,before_frame_row4,output_text)
+        before_frame_row1,before_frame_row2,before_frame_row3,before_frame_row4= diff_image_search(frame,img_temp,label_temp,before_frame_row1,before_frame_row2,before_frame_row3,before_frame_row4,output_text,voice_flag)
         #diff_flag = Trueなら画面遷移,diff_flag=Falseなら画面遷移していない
         #present_kersol = audio_output.kersol_search(output_text)
         #if present_kersol == 1: # カーソルがない
-        end = time.perf_counter()
-        print("time :{0}".format(end-start))
+        #end = time.perf_counter()
+        #print("time :{0}".format(end-start))
         #qキーが入力されたら画面を閉じる
         if cv2.waitKey(1) & 0xFF == ord('q'):
             cap.release()
             cv2.destroyAllWindows()
+            break
 
-        time.sleep(0.5)
+        time.sleep(0.3)
         #time.sleep(1)
