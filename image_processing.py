@@ -354,11 +354,13 @@ def match_text(img_temp,label_temp,frame):
     #カーネル
     kernel = np.ones((3,3),np.uint8)
     window_img = frame
-    #フレームの青い部分を二値化
+    #sフレームの青い部分を二値化
     blue_threshold_img = cut_blue_img1(window_img)
+    plt.imshow(blue_threshold_img)
+    plt.show()
     #コーナー検出
     try:
-        p1,p2,p3,p4 = points_extract1(blue_threshold_img)
+        p1,p2,p3,p4 = points_extract1(blue_threshold_img,frame)
     except TypeError:
         print("Screen cannot be detected")
         return [],[]
@@ -417,6 +419,7 @@ def match_text(img_temp,label_temp,frame):
                 return [],[]
             height_m,width_m = match_img.shape
             img_g = cv2.rectangle(syaei_resize_img, (int(char_List2[j]) ,int(char_List1[i])), (int(char_List2[j+1]), int(char_List1[i+1])), (0,0,255), 2)
+            cv2.imwrite("img90.jpg",img_g)
             for f in range(len(label_temp)):
                 temp_th = img_temp[f]
                 temp_th = cv2.resize(temp_th,dsize=(26,36))

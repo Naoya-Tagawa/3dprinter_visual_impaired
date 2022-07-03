@@ -2052,3 +2052,35 @@ qQ_J.gcode
 
 
 
+Set temperature:
+209
+
+Preheat →
+Print from SD →
+Load filament →
+>Unload filament →
+
+Set temperature:
+209
+
+Set temperature:
+209
+
+Set temperature:
+200
+
+Set temperature:
+209
+
+Set temperature:
+200
+
+Set temperature:
+209
+
+Set temperature:
+209
+
+Set temperature:
+209
+

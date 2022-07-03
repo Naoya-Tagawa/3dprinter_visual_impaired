@@ -87,6 +87,10 @@ def diff_image_search1(present_frame,before_frame,img_temp,label_temp):
     #射影変換
     syaei_before_img = image_processing.projective_transformation(before_frame,before_p1,before_p2,before_p3,before_p4)
     syaei_present_img = image_processing.projective_transformation(present_frame,present_p1,present_p2,present_p3,present_p4)
+    cv2.imwrite("syaei_present_frame.jpg",syaei_present_img)
+    output_text,out = image_processing.match_text(img_temp,label_temp,present_frame)
+    print(out)
+    file_w(out,output_text)
     #対象画像をリサイズ
     #syaei_before_img = cv2.resize(syaei_before_img,dsize=(610,211))
     #syaei_present_img = cv2.resize(syaei_present_img,dsize=(610,211))
@@ -161,7 +165,7 @@ def diff_image_search1(present_frame,before_frame,img_temp,label_temp):
         #cut_present_img = syaei_present_img[int(i[0]):int(i[1]),]
         #before_frame_row.append(normal)
         before_frame_row.append(cut_present)
-        
+    cv2.imwrite("cut_pre.jpg",before_frame_row[1])
     print(len(before_frame_row))
     if len(present_char_List) == 0:
         return img,img,img,img
@@ -207,6 +211,7 @@ def diff_image_search(before_frame,present_frame,img_temp,label_temp,before_fram
     plt.imshow(syaei_before_img)
     plt.show()
     syaei_present_img = image_processing.projective_transformation(present_frame,present_p1,present_p2,present_p3,present_p4)
+    cv2.imwrite("present_frame.jpg",syaei_present_img)
     #対象画像をリサイズ
     syaei_before_img = cv2.resize(syaei_before_img,dsize=(610,211))
     syaei_present_img = cv2.resize(syaei_present_img,dsize=(610,211))
@@ -407,7 +412,12 @@ def sabun(before_frame_row,present_frame_row):
         return True
     else:
         return False
-
+def file_w(text,output_text):
+    f = open('3dprint_window.txt',mode='a',encoding = 'UTF-8')
+    f.write(text)
+    f.write('\n')
+    f.close()
+        
 def voice(output_text,voice_flag):
     #準備
     #文字認識
@@ -446,8 +456,8 @@ def voice(output_text,voice_flag):
 
 if __name__ == "__main__":
     #テンプレートをロード
-    img1 = cv2.imread("./camera3/camera14.jpg")
-    img2 = cv2.imread("./camera3/camera15.jpg")
+    img1 = cv2.imread("./camera1/camera55.jpg")
+    img2 = cv2.imread("./camera1/camera56.jpg")
     temp = np.load(r'./dataset2.npz')
     #テンプレート画像を格納
     img_temp = temp['x']
