@@ -483,9 +483,12 @@ def text_read(output_text,voice_flag):
         print("flag :{0}".format(voice_flag.value))
         print("queu size :{0}".format(output_text.qsize()))
         for word in text:
+            print(voice_flag.value)
             if voice_flag.value == 1:
                 if engine.isBusy() == False:
                     engine.stop()
+                while output_text.qsize() < 2:
+                    text = output_text.get()
                 break
             engine.say(word)
 
