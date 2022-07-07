@@ -84,6 +84,11 @@ if __name__ == '__main__':
     #flg1 = False
     er.start()
     t = manage_process(er,flg1)
+    p1,p2 =multiprocessing.Pipe()
+    p1.send(1)
+    print(p2.recv())
+    p1.send(2)
+    print(p2.recv())
 #er = Thread(target=say,args=(q,))
 #er = multiprocessing.Process(target=sy,args=('The quick brown fox jumped over the lazy dog.',))
 #er.start()

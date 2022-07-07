@@ -58,7 +58,7 @@ def camera():
             cv2.destroyAllWindows()
         time.sleep(1)
         
-def diff_image_search_first(present_frame,img_temp,label_temp,output_text):
+def diff_image_search_first(present_frame,img_temp,label_temp):
     global present_img
     img = cv2.imread("./black_img.jpg")
     img = cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
@@ -66,7 +66,7 @@ def diff_image_search_first(present_frame,img_temp,label_temp,output_text):
     black_window = np.zeros((h,w))
     #カーネル
     kernel = np.ones((3,3),np.uint8)
-    #output_text = []
+    output_text = []
     out = ""
     #フレームの青い部分を二値化
     blue_threshold_present_img = image_processing.cut_blue_img1(present_frame)
@@ -78,7 +78,7 @@ def diff_image_search_first(present_frame,img_temp,label_temp,output_text):
         present_p1,present_p2,present_p3,present_p4 = image_processing.points_extract1(blue_threshold_present_img,present_frame)
     except TypeError:
         print("Screen cannot be detected")
-        return img,img,img,img
+        return [],img,img,img,img
     #before_frame = cv2.resize(before_frame,dsize=(610,211))
     #present_frame = cv2.resize(present_frame,dsize=(610,211))
     
@@ -121,24 +121,23 @@ def diff_image_search_first(present_frame,img_temp,label_temp,output_text):
         before_frame_row.append(cut_present_row)
     #print(present_char_List2)
     #print("yes")
-    output_text_p, out = image_processing.match_text(img_temp,label_temp,cut_present)
-    output_text.put(output_text_p)
+    output_text , out = image_processing.match_text(img_temp,label_temp,cut_present)
     #print(len(present_char_List2))
     if len(present_char_List2) == 0:
-        return img,img,img,img
+        return output_text,img,img,img,img
     elif len(present_char_List2) == 1:
-        return before_frame_row[0] , img,img,img
+        return output_text,before_frame_row[0] , img,img,img
     elif len(present_char_List2) == 2:
-        return before_frame_row[0] , before_frame_row[1] ,img,img
+        return output_text,before_frame_row[0] , before_frame_row[1] ,img,img
     elif len(present_char_List2) == 3:
-        return before_frame_row[0] , before_frame_row[1] ,before_frame_row[2] ,img
+        return output_text, before_frame_row[0] , before_frame_row[1] ,before_frame_row[2] ,img
     elif len(present_char_List2) == 4:
-        return before_frame_row[0] , before_frame_row[1],before_frame_row[2],before_frame_row[3] 
+        return output_text ,before_frame_row[0] , before_frame_row[1],before_frame_row[2],before_frame_row[3] 
     else:
-        return img,img,img,img
+        return output_text,img,img,img,img
 
 
-def diff_image_search(present_frame,img_temp,label_temp,before_frame_row1,before_frame_row2,before_frame_row3,before_frame_row4,output_text,voice_flag):
+def diff_image_search(present_frame,img_temp,label_temp,before_frame_row1,before_frame_row2,before_frame_row3,before_frame_row4):
     global present_img
     img = cv2.imread("./balck_img.jpg")
     #arrow_img = cv2.imread("./ex6/ex63.jpg")
@@ -160,7 +159,7 @@ def diff_image_search(present_frame,img_temp,label_temp,before_frame_row1,before
         present_p1,present_p2,present_p3,present_p4 = image_processing.points_extract1(blue_threshold_present_img,present_frame)
     except TypeError:
         print("Screen cannot be detected")
-        return img,img,img,img
+        return [] ,img,img,img,img
     #コーナーに従って画像の切り取り
     cut_present = present_frame[present_p1[1]:present_p2[1],present_p2[0]:present_p3[0]]
     #cut_before = before_frame[before_p1[1]:before_p2[1],before_p2[0]:before_p3[0]]
@@ -224,6 +223,7 @@ def diff_image_search(present_frame,img_temp,label_temp,before_frame_row1,before
     #engine = pyttsx3.init()
     before_frame_row = []
     sabun_count = 0
+    output_text = []
     #before_row1_arrow_exist = False
     #before_row2_arrow_exist = False
     #before_row3_arrow_exist = False
@@ -238,7 +238,6 @@ def diff_image_search(present_frame,img_temp,label_temp,before_frame_row1,before
      #   before_row4_arrow_exist = True
     l = len(present_char_List)
     count = 0
-    output_textx = []
     present_char_List1 , mask_present_img2 = image_processing.mask_make(blue_threshold_present_img)
     #print(present_char_List1)
     #print(present_char_List1)
@@ -282,8 +281,8 @@ def diff_image_search(present_frame,img_temp,label_temp,before_frame_row1,before
             #sabun_count = 0
             #count += 1
             #continue
-        #end = time.perf_counter()
-        #print("Rap time:{0}".format(end-start))
+        end = time.perf_counter()
+        print("Rap time:{0}".format(end-start))
         if sabun_count > 3:
             #print(sabun_count)
             #plt.imshow(cut_present)
@@ -291,16 +290,12 @@ def diff_image_search(present_frame,img_temp,label_temp,before_frame_row1,before
             #cv2.imwrite("cut_present.jpg",cut_present)
             #cut_present1 = mask_present_img[int(j[0]):int(j[1]),]
             output_text_p,out = image_processing.match_text2(img_temp,label_temp,cut_present1)
-            if out != "":
-                output_textx.append(out)
+            output_text.append(out)
         
     
         sabun_count = 0
         count += 1
-    
-    output_text.put(output_textx)
-    voice_flag.value = 1
-    #print(voice_flag.value)
+ 
         #engine.runAndWait()
         #cv2,imwrite("yuu.jpg",cut_present_img)
     #if char_List1.size == 0: #差分がなければ
@@ -313,19 +308,19 @@ def diff_image_search(present_frame,img_temp,label_temp,before_frame_row1,before
     #engine.say(output_text)
     try:
         if len(present_char_List1) == 0:
-            return img,img,img,img
+            return output_text,img,img,img,img
         elif len(present_char_List1) == 1:
-            return before_frame_row[0] , img,img,img
+            return output_text,before_frame_row[0] , img,img,img
         elif len(present_char_List1) == 2:
-            return before_frame_row[0] , before_frame_row[1] ,img,img
+            return output_text,before_frame_row[0] , before_frame_row[1] ,img,img
         elif len(present_char_List1) == 3:
-            return before_frame_row[0] , before_frame_row[1] ,before_frame_row[2] ,img
+            return output_text,before_frame_row[0] , before_frame_row[1] ,before_frame_row[2] ,img
         elif len(present_char_List1) == 4:
-            return before_frame_row[0] , before_frame_row[1],before_frame_row[2],before_frame_row[3] 
+            return output_text,before_frame_row[0] , before_frame_row[1],before_frame_row[2],before_frame_row[3] 
         else:
-            return img,img,img,img
+            return output_text,img,img,img,img
     except IndexError:
-        return img,img,img,img
+        return [],img,img,img,img
 
 #列ごとに差分をとる
 def sabun(before_frame_row,present_frame_row):
@@ -444,15 +439,6 @@ def stop_speaker():
 
 @threaded
 
-def manage(p):
-    global engine
-    global term
-    while p.is_alive():
-        if term:
-            engine.stop()
-            term = False
-        else:
-            continue
 def manage_process(p):
 	global term
 	while p.is_alive():
@@ -461,12 +447,8 @@ def manage_process(p):
 			term = False
 		else:
 			continue
-def speak_stop(voice_flag):
-    if voice_flag == 1:
-        print("stop")
-        engine.stop()
-        
-def text_read(output_text,voice_flag):
+
+def whole_text_read(text):
     #global engine
     engine = pyttsx3.init()
     voices = engine.getProperty('voices')
@@ -477,41 +459,19 @@ def text_read(output_text,voice_flag):
     #volume デフォルトは1.0 設定は0.0~1.0
     volume = engine.getProperty('volume')
     engine.setProperty('volume',vol)
-    while True:
-        text = output_text.get()
-        voice_flag.value = 0
-        print(text)
-        print("flag :{0}".format(voice_flag.value))
-        print("queu size :{0}".format(output_text.qsize()))
-        if output_text.qsize() >= 2:
-            while output_text.qsize() < 2:
-                text = output_text.get()
-        for word in text:
-            #print(voice_flag.value)
-            if voice_flag.value == 1:
-                if engine.isBusy() == True:
-                    print("stop")
-                    engine.stop()
-                break
-            engine.say(word)
+    for word in text:
+        
+        engine.say(word)
+    
+    engine.runAndWait()
+    engine.stop()
 
-        engine.runAndWait()
-        engine.stop()
 
-def sy(phrase):
-    global t 
-    global term
-    term = False
-    global engine
-    engine = pyttsx3.init()
-    p = Thread(target=text_read,args=(phrase,engine))
-    p.start()
-    t = manage(p)
 def say(phrase):
 	global t
 	global term
 	term = False
-	p = multiprocessing.Process(target=text_read, args=(phrase,))
+	p = multiprocessing.Process(target=whole_text_read, args=(phrase,))
 	p.start()
 	t = manage_process(p)
 
@@ -522,21 +482,22 @@ if __name__ == "__main__":
     temp = np.load(r'./dataset2.npz')
     #テンプレート画像を格納
     img_temp = temp['x']
+    futures = []
     #テンプレートのラベル(文)を格納
     label_temp = temp['y']
     #diff_image_search(img1,img2)
     cap = cv2.VideoCapture(0)
     read_fps = cap.get(cv2.CAP_PROP_FPS)
     print(read_fps)
-    voice_flag = multiprocessing.Value('i',0)
-    #voice_flagが1なら今発話中,0なら発話していない
+    voice_flag = multiprocessing.Queue()
+    voice_flag.put(False)
+    #voice_flagがTrueなら今発話中,Falseなら発話していない
     count = 0
-    output_text = multiprocessing.Queue()
-    read = multiprocessing.Process(target=text_read,args=(output_text,voice_flag,))
-    read.start()
+    output_text = []
     #最初のフレームを取得する
     ret , bg = cap.read()
-    before_frame_row1,before_frame_row2,before_frame_row3,before_frame_row4 = diff_image_search_first(bg,img_temp,label_temp,output_text)
+    output_text , before_frame_row1,before_frame_row2,before_frame_row3,before_frame_row4 = diff_image_search_first(bg,img_temp,label_temp)
+    say(output_text)
     frame = bg
     
     while True:
@@ -548,17 +509,36 @@ if __name__ == "__main__":
         cv2.imshow("frame",frame)
         #画面が遷移したか調査
         start = time.perf_counter()
-        before_frame_row1,before_frame_row2,before_frame_row3,before_frame_row4= diff_image_search(frame,img_temp,label_temp,before_frame_row1,before_frame_row2,before_frame_row3,before_frame_row4,output_text,voice_flag)
+        output_text,before_frame_row1,before_frame_row2,before_frame_row3,before_frame_row4= diff_image_search(frame,img_temp,label_temp,before_frame_row1,before_frame_row2,before_frame_row3,before_frame_row4)
         #diff_flag = Trueなら画面遷移,diff_flag=Falseなら画面遷移していない
         #present_kersol = audio_output.kersol_search(output_text)
         #if present_kersol == 1: # カーソルがない
-        #end = time.perf_counter()
-        #print("time :{0}".format(end-start))
-        #qキーが入力されたら画面を閉じる
+        print(output_text)
+        end = time.perf_counter()
+        print("time :{0}".format(end-start))
+        #else:
+            #print(present_kersol)
+        #present_cusor = audio_output.cusor_search(output_text)
+        #print(present_cusor)
+        #if len(present_cusor) != 0:
+            #output_text = present_cusor
+            
+        if len(output_text) != 0:
+            stop_speaker()
+            say(output_text)
+            #sy(output_text)
+            #voice(frame,voice_flag,output_text)
+        #time.sleep(0.001)
+        #print("count = {0}".format(count))
+            # 背景画像の更新（一定間隔）
+        #if(count > 1):
+            #bg = frame
+            #ret, frame = cap.read()
+            #count = 0  # カウント変数の初期化
+            #qキーが入力されたら画面を閉じる
         if cv2.waitKey(1) & 0xFF == ord('q'):
             cap.release()
             cv2.destroyAllWindows()
-            break
 
-        time.sleep(0.3)
+        #time.sleep(0.1)
         #time.sleep(1)
