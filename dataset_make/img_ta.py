@@ -177,21 +177,21 @@ def Detect_WidthPosition(W_THRESH, width, array_V):
 if __name__ == "__main__":
     count = 0
     # input image
-    img = cv2.imread("./kk.png")
+    img = cv2.imread("./camera1./camera63.jpg")
     #対象画像をロード
         #青い部分のみを二値化
-    #close_img = cut_blue_img(img)
+    close_img = cut_blue_img(img)
         #コーナー検出
-    #p1,p2,p3,p4 = points_extract(close_img)
+    p1,p2,p3,p4 = points_extract(close_img)
     
         #コーナーに従って画像の切り取り
         #img_k = img[p1[1]:p2[1],p2[0]:p3[0]]
         #射影変換
-    #syaei_img = syaei(img,p1,p2,p3,p4)
-    #cv2.imwrite("syaei.jpg",syaei_img)
+    syaei_img = syaei(img,p1,p2,p3,p4)
+    cv2.imwrite("syaei.jpg",syaei_img)
         # convert gray scale image
     kernel = np.ones((3,3),np.uint8)
-    gray_img = cv2.cvtColor(img, cv2.COLOR_RGB2GRAY)
+    gray_img = cv2.cvtColor(syaei_img, cv2.COLOR_RGB2GRAY)
         # black white
     ret, bw_img = cv2.threshold(gray_img, 0, 255, cv2.THRESH_OTSU)
         #ノイズ除去
