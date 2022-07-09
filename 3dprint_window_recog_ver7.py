@@ -36,7 +36,15 @@ vol = 1.0
 
 global present_img
 global before_frame 
-
+engine = pyttsx3.init()
+voices = engine.getProperty('voices')
+engine.setProperty("voice",voices[1].id)
+#rateはデフォルトが200
+rate = engine.getProperty('rate')
+engine.setProperty('rate',speed)
+#volume デフォルトは1.0 設定は0.0~1.0
+volume = engine.getProperty('volume')
+engine.setProperty('volume',vol)
 def camera():
     global before_frame
     cap = cv2.VideoCapture(1)
@@ -141,6 +149,7 @@ def diff_image_search_first(present_frame,img_temp,label_temp,output_text):
 def diff_image_search(present_frame,img_temp,label_temp,before_frame_row1,before_frame_row2,before_frame_row3,before_frame_row4,output_text,voice_flag):
     global present_img
     img = cv2.imread("./balck_img.jpg")
+    global term
     #arrow_img = cv2.imread("./ex6/ex63.jpg")
     img = cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
     #print(img.shape)
@@ -484,15 +493,19 @@ def text_read(output_text,voice_flag):
         print("flag :{0}".format(voice_flag.value))
         print("queu size :{0}".format(output_text.qsize()))
         if output_text.qsize() >= 2:
-            while output_text.qsize() < 2:
+            while output_text.qsize() > 2:
                 text = output_text.get()
         for word in text:
-            #print(voice_flag.value)
-            if voice_flag.value == 1:
-                if engine.isBusy() == True:
-                    print("stop")
-                    engine.stop()
-                break
+            if output_text.qsize() >= 2:
+                while output_text.qsize() > 1:
+                    text = output_text.get()
+            print(voice_flag.value)
+            #if voice_flag.value == 1:
+                #print("stop")
+                #voice_flag.value = 0
+                #break
+            #engine.say(word)
+            engine.connect('started-word', speak_stop(voice_flag))
             engine.say(word)
 
         engine.runAndWait()
@@ -534,6 +547,8 @@ if __name__ == "__main__":
     output_text = multiprocessing.Queue()
     read = multiprocessing.Process(target=text_read,args=(output_text,voice_flag,))
     read.start()
+    global t
+    global term
     #最初のフレームを取得する
     ret , bg = cap.read()
     before_frame_row1,before_frame_row2,before_frame_row3,before_frame_row4 = diff_image_search_first(bg,img_temp,label_temp,output_text)
@@ -560,5 +575,5 @@ if __name__ == "__main__":
             cv2.destroyAllWindows()
             break
 
-        time.sleep(0.3)
+        time.sleep(0.1)
         #time.sleep(1)

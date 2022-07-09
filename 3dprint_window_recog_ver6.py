@@ -36,7 +36,15 @@ vol = 1.0
 
 global present_img
 global before_frame 
-
+engine = pyttsx3.init()
+voices = engine.getProperty('voices')
+engine.setProperty("voice",voices[1].id)
+#rateはデフォルトが200
+rate = engine.getProperty('rate')
+engine.setProperty('rate',speed)
+#volume デフォルトは1.0 設定は0.0~1.0
+volume = engine.getProperty('volume')
+engine.setProperty('volume',vol)
 def camera():
     global before_frame
     cap = cv2.VideoCapture(1)
@@ -450,46 +458,8 @@ def manage_process(p):
 
 def whole_text_read(text):
     #global engine
-    engine = pyttsx3.init()
-    voices = engine.getProperty('voices')
-    engine.setProperty("voice",voices[1].id)
-    #rateはデフォルトが200
-    rate = engine.getProperty('rate')
-    engine.setProperty('rate',speed)
-    #volume デフォルトは1.0 設定は0.0~1.0
-    volume = engine.getProperty('volume')
-    engine.setProperty('volume',vol)
-    for word in text:
-        if word == ' ':
-            continue
-        if '/' in word:
-            target = '/'
-            idx = word.find(target)
-            r = word[:idx]
-            engine.say(r)
-            engine.say("スラッシュ")
-            r = word[idx:]
-            engine.say(r)
-            continue
-        if ',' in word:
-            target = ','
-            idx = word.find(target)
-            r = word[:idx]
-            engine.say(r)
-            engine.say("カンマ")
-            r = word[idx:]
-            engine.say(r)
-            continue
-        if "." in word:
-            target = '.'
-            idx = word.find(target)
-            r = word[:idx]
-            engine.say(r)
-            engine.say("ドット")
-            r = word[idx:]
-            engine.say(r)
-            continue
-        engine.say(word)
+
+    engine.say(text)
     
     engine.runAndWait()
     engine.stop()
@@ -572,4 +542,3 @@ if __name__ == "__main__":
             cv2.destroyAllWindows()
 
         #time.sleep(0.1)
-        #time.sleep(1)
