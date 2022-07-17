@@ -2087,3 +2087,118 @@ Set temperature:
 Set temperature:
 209
 
+Set temperature:
+209
+
+Set temperature:
+209
+
+Set temperature:
+209
+
+Set temperature:
+209
+
+Set temperature:
+209
+
+Set temperature:
+209
+
+Set temperature:
+209
+
+Set temperature:
+209
+
+Set temperature:
+209
+
+Set temperature:
+209
+
+Load filament →
+Onload f11ament ⤴
+Settings ⤴
+ca11brai>>n ⤴
+
+Load filament →
+Onload f11ament ⤴
+Settings ⤴
+ca11brai>>n ⤴
+
+>Main ⤴
+Last print →
+Total →
+
+>Main ⤴
+Last print →
+Total →
+
+>Main ⤴
+Last print →
+Total →
+
+>Main ⤴
+Last print →
+Total →
+
+>Main ⤴
+Last print →
+Total →
+
+>Main ⤴
+Last print →
+Total →
+
+>Main ⤴
+Last print →
+Total →
+
+>Main ⤴
+Last print →
+Total →
+
+>Main ⤴
+Last print →
+Total →
+
+>Main ⤴
+Last print →
+Total →
+
+>Main ⤴
+Last print →
+Total →
+
+>Main ⤴
+Last print →
+Total →
+
+>Main ⤴
+Last print →
+Total →
+
+>Main ⤴
+Last print →
+Total →
+
+>Main ⤴
+Last print →
+Total →
+
+MtFUJIx2_4h0m.gcode
+MtFUJIx3_6h11m.gcod
+MtFUJIx4_0h14m.gcod
+>MtFUJIx6_12h22m,gco
+
+MtFUJIx2_4h0m.gcode
+MtFUJIx3_6h11m.gcod
+MtFUJIx4_0h14m.gcod
+>MtFUJIx6_12h22m,gco
+
+MtFUJIx2_4h0m.gcode
+MtFUJIx3_6h11m.gcod
+MtFUJIx4_0h14m.gcod
+>MtFUJIx6_12h22m,gco
+
