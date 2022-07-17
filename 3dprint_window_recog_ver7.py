@@ -30,7 +30,7 @@ from threading import Thread
 #話すスピード
 speed = 300
 #ボリューム
-vol = 1.0
+vol = 10.0
 
 global present_img
 global before_frame 
@@ -304,9 +304,9 @@ def diff_image_search(present_frame,img_temp,label_temp,before_frame_row1,before
     
         sabun_count = 0
         count += 1
-    
-    output_text.put(output_textx)
-    voice_flag.value = 1
+    if len(output_textx) != 0:
+        output_text.put(output_textx)
+        voice_flag.value = 1
     #print(voice_flag.value)
         #engine.runAndWait()
         #cv2,imwrite("yuu.jpg",cut_present_img)
@@ -497,6 +497,7 @@ def text_read(output_text,voice_flag):
             if output_text.qsize() >= 2:
                 while output_text.qsize() > 1:
                     text = output_text.get()
+                    break
             print(voice_flag.value)
             #if voice_flag.value == 1:
                 #print("stop")
@@ -504,6 +505,7 @@ def text_read(output_text,voice_flag):
                 #break
             #engine.say(word)
             engine.connect('started-word', speak_stop(voice_flag))
+            print(word)
             engine.say(word)
 
         engine.runAndWait()
