@@ -14,7 +14,6 @@ import glob
 from natsort import natsorted
 import multiprocessing
 from PIL import Image , ImageTk , ImageOps
-from pandas import cut
 import pyttsx3 
 from dictionary_word import speling
 import difflib
@@ -22,7 +21,6 @@ import numpy as np
 import cv2
 import image_processing
 import audio_output
-from sklearn.neighbors import NearestNeighbors 
 from concurrent.futures.process import ProcessPoolExecutor
 import concurrent
 from threading import Thread

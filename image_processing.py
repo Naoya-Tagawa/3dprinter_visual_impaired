@@ -154,7 +154,7 @@ def func_search_neighbourhood(p0, ps):
         return ps[new_d[0][1]]
 
 def points_extract1(img,img2):
-    img = cv2.cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
+    img = cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
     #コーナー検出
     #img_1 = cv2.Canny(img,50,150)
     #linesH = cv2.HoughLinesP(img,rho=1,theta = np.pi/360,threshold=50,minLineLength=50,maxLineGap=10)
