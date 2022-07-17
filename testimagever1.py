@@ -139,11 +139,11 @@ def diff_image_search1(present_frame,before_frame,img_temp,label_temp):
     #char_List1 = image_processing.convert_1d_to_2d(char_List1,2)
     char_List1 = np.reshape(char_List1,[int(len(char_List1)/2),2])
     print(char_List1)
-    knn_model = NearestNeighbors(n_neighbors=1, algorithm='ball_tree').fit(present_char_List) 
-    distances, indices = knn_model.kneighbors(char_List1)
+    #knn_model = NearestNeighbors(n_neighbors=1, algorithm='ball_tree').fit(present_char_List) 
+    #distances, indices = knn_model.kneighbors(char_List1)
     #print(indices)
-    indices = image_processing.get_unique_list(indices)
-    print(indices)
+    #indices = image_processing.get_unique_list(indices)
+    #print(indices)
     #for  i  in indices:
         #print(i[0])
         #img_j = cv2.rectangle(syaei_present_img, (0,int(present_char_List[i[0]][0])), (610, int(present_char_List[i[0]][1])), (0,0,255), 2)
@@ -287,28 +287,28 @@ def diff_image_search(before_frame,present_frame,img_temp,label_temp,before_fram
         cut_present = mask_present_img2[int(i[0]):int(i[1]),]
         cv2.rectangle(normal,(0,0),(w-1,int(i[0])-1),(0,0,0),-1)
         cv2.rectangle(normal,(0,int(i[1])-1),(w-1,h-1),(0,0,0),-1)
-        plt.imshow(cut_present)
-        plt.show()
+        #plt.imshow(cut_present)
+        #plt.show()
         flag = arrow_exist(cut_present)
         cut_present_img = syaei_present_img[int(i[0]):int(i[1]),]
         before_frame_row.append(cut_present)
         if not sabun(before_frame_row1,cut_present):
-            if (before_row1_arrow_exist == True) & (flag == False):
+            if (before_row1_arrow_exist == True) & (flag == True):
                 sabun_count = sabun_count -1
             sabun_count += 1
 
         if not sabun(before_frame_row2,cut_present):
-            if (before_row2_arrow_exist == True) & (flag == False):
+            if (before_row2_arrow_exist == True) & (flag == True):
                 sabun_count = sabun_count -1
             sabun_count += 1
     
         if not sabun(before_frame_row3,cut_present):
-            if (before_row3_arrow_exist == True) & (flag == False):
+            if (before_row3_arrow_exist == True) & (flag == True):
                 sabun_count = sabun_count -1
             sabun_count += 1
             
         if not sabun(before_frame_row4,cut_present):
-            if (before_row4_arrow_exist == True) & (flag == False):
+            if (before_row4_arrow_exist == True) & (flag == True):
                 sabun_count = sabun_count -1
             sabun_count += 1
 
@@ -348,7 +348,7 @@ def arrow_exist(frame_row):
     arrow_img = cv2.resize(arrow_img,dsize=(26,36))
 
     height,width = frame_row.shape
-    #frame_row = cv2.medianBlur(frame_row,3)
+    frame_row = cv2.medianBlur(frame_row,3)
     array_V = image_processing.Projection_V(frame_row,height,width)
     W_THRESH = max(array_V)
     char_List2 = image_processing.Detect_WidthPosition(W_THRESH,width,array_V)
@@ -360,8 +360,8 @@ def arrow_exist(frame_row):
     try:
         match_img = cv2.resize(match_img,dsize=(26,36))
         match_img = cv2.dilate(match_img,kernel)
-        plt.imshow(match_img)
-        plt.show()
+        #plt.imshow(match_img)
+        #plt.show()
     except cv2.error:
         return False
     match = cv2.matchTemplate(match_img,arrow_img,cv2.TM_CCORR_NORMED)
@@ -460,8 +460,8 @@ def voice(output_text,voice_flag):
 
 if __name__ == "__main__":
     #テンプレートをロード
-    img1 = cv2.imread("./camera3/camera11.jpg")
-    img2 = cv2.imread("./camera3/camera12.jpg")
+    img1 = cv2.imread("./camera1/camera20.jpg")
+    img2 = cv2.imread("./camera1/camera21.jpg")
     temp = np.load(r'./dataset2.npz')
     #テンプレート画像を格納
     img_temp = temp['x']

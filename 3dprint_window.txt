@@ -2202,3 +2202,38 @@ MtFUJIx3_6h11m.gcod
 MtFUJIx4_0h14m.gcod
 >MtFUJIx6_12h22m,gco
 
+lnfo screen ⤴
+Preheat →
+Print from SD →
+>Load filament →
+
+>lnfo screen ⤴
+Preheat →
+Print from SD →
+Load filament +
+
+>lnfo screen ⤴
+Preheat →
+Print from SD →
+Load filament +
+
+>lnfo screen ⤴
+Preheat →
+Print from SD →
+Load filament +
+
+>lnfo screen ⤴
+Preheat →
+Print from SD →
+Load filament +
+
+MK3_PLA_Nefertiti.1
+MK3_PLA_Prusa.200um
+MK3_PLA_Prusa0eerOp
+>MK3.PLA.Treefrog.15
+
+MK3_PLA_Nefertiti.1
+MK3_PLA_Prusa.200um
+MK3_PLA_Prusa0eerOp
+>MK3.PLA.Treefrog.15
+
