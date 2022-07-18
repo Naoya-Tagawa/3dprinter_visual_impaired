@@ -274,50 +274,90 @@ def diff_image_search(before_frame,present_frame,img_temp,label_temp,before_fram
     before_row4_arrow_exist = False
     if arrow_exist(before_frame_row1):
         before_row1_arrow_exist = True
+        height,width = before_frame_row1.shape
+        #frame_row = cv2.medianBlur(frame_row,3)
+        array_V = image_processing.Projection_V(before_frame_row1,height,width)
+        W_THRESH = max(array_V)
+        char_List = image_processing.Detect_WidthPosition(W_THRESH,width,array_V)
+        before_arrow = before_frame_row1.copy()
+        cv2.rectangle(before_arrow,(0,0),(w-1,int(char_List[1]+1)),(0,0,0),-1)
     if arrow_exist(before_frame_row2):
         before_row2_arrow_exist = True
+        height,width = before_frame_row2.shape
+        #frame_row = cv2.medianBlur(frame_row,3)
+        array_V = image_processing.Projection_V(before_frame_row2,height,width)
+        W_THRESH = max(array_V)
+        char_List = image_processing.Detect_WidthPosition(W_THRESH,width,array_V)
+        before_arrow = before_frame_row2.copy()
+        cv2.rectangle(before_arrow,(0,0),(w-1,int(char_List[1]+1)),(0,0,0),-1)
     if arrow_exist(before_frame_row3):
         before_row3_arrow_exist = True
+        height,width = before_frame_row1.shape
+        #frame_row = cv2.medianBlur(frame_row,3)
+        array_V = image_processing.Projection_V(before_frame_row3,height,width)
+        W_THRESH = max(array_V)
+        char_List = image_processing.Detect_WidthPosition(W_THRESH,width,array_V)
+        before_arrow = before_frame_row3.copy()
+        cv2.rectangle(before_arrow,(0,0),(w-1,int(char_List[1]+1)),(0,0,0),-1)
     if arrow_exist(before_frame_row4):
         before_row4_arrow_exist = True
-        
+        height,width = before_frame_row1.shape
+        #frame_row = cv2.medianBlur(frame_row,3)
+        array_V = image_processing.Projection_V(before_frame_row4,height,width)
+        W_THRESH = max(array_V)
+        char_List = image_processing.Detect_WidthPosition(W_THRESH,width,array_V)
+        before_arrow = before_frame_row4.copy()
+        plt.imshow(before_arrow)
+        plt.show()
+        cv2.rectangle(before_arrow,(0,0),(int(char_List[1]+1),h-1),(0,0,0),-1)
+    
+    plt.imshow(before_arrow)
+    plt.show()
+
     present_char_List , mask_present_img2 = image_processing.mask_make(blue_threshold_present_img)
     for i in present_char_List:
         normal = mask_present_img2.copy()
         cut_present = mask_present_img2[int(i[0]):int(i[1]),]
+        #normal = cut_present.copy()
         cv2.rectangle(normal,(0,0),(w-1,int(i[0])-1),(0,0,0),-1)
         cv2.rectangle(normal,(0,int(i[1])-1),(w-1,h-1),(0,0,0),-1)
-        #plt.imshow(cut_present)
-        #plt.show()
+        plt.imshow(cut_present)
+        plt.show()
         flag = arrow_exist(cut_present)
+        print(flag)
         cut_present_img = syaei_present_img[int(i[0]):int(i[1]),]
         before_frame_row.append(cut_present)
         if not sabun(before_frame_row1,cut_present):
-            if (before_row1_arrow_exist == True) & (flag == True):
-                sabun_count = sabun_count -1
+            #if (before_row1_arrow_exist == True) & (flag == False):
+                #sabun_count = sabun_count -1
+                #print("row1")
             sabun_count += 1
 
         if not sabun(before_frame_row2,cut_present):
-            if (before_row2_arrow_exist == True) & (flag == True):
-                sabun_count = sabun_count -1
+            #if (before_row2_arrow_exist == True) & (flag == False):
+                #sabun_count = sabun_count -1
+                #print("row2")
             sabun_count += 1
     
         if not sabun(before_frame_row3,cut_present):
-            if (before_row3_arrow_exist == True) & (flag == True):
-                sabun_count = sabun_count -1
+            #if (before_row3_arrow_exist == True) & (flag == False):
+                #sabun_count = sabun_count -1
+                #print("row3")
             sabun_count += 1
             
         if not sabun(before_frame_row4,cut_present):
-            if (before_row4_arrow_exist == True) & (flag == True):
-                sabun_count = sabun_count -1
+            #if (before_row4_arrow_exist == True) & (flag == False):
+                #sabun_count = sabun_count -1
+                #print("row4")
             sabun_count += 1
 
         if sabun_count > 3:
             print(sabun_count)
-            plt.imshow(cut_present)
-            plt.show()
-            output_text_p,out = image_processing.match_text2(img_temp,label_temp,cut_present)
-            output_text.append(out)
+            #plt.imshow(cut_present)
+            #plt.show()
+            if not sabun(before_arrow,cut_present):
+                output_text_p,out = image_processing.match_text2(img_temp,label_temp,cut_present)
+                output_text.append(out)
         
         sabun_count = 0
         #engine.runAndWait()
