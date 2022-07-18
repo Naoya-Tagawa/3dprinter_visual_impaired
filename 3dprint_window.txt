@@ -2287,3 +2287,18 @@ MK3_PLA_Prusa.200um
 MK3_PLA_Prusa0eerOp
 >MK3.PLA.Treefrog.15
 
+>Settlngs ⤴
+[nglish
+Cestina
+Deutsch
+
+>Settlngs ⤴
+[nglish
+Cestina
+Deutsch
+
+>Settlngs ⤴
+[nglish
+Cestina
+Deutsch
+

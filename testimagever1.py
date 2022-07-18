@@ -280,7 +280,8 @@ def diff_image_search(before_frame,present_frame,img_temp,label_temp,before_fram
         W_THRESH = max(array_V)
         char_List = image_processing.Detect_WidthPosition(W_THRESH,width,array_V)
         before_arrow = before_frame_row1.copy()
-        cv2.rectangle(before_arrow,(0,0),(w-1,int(char_List[1]+1)),(0,0,0),-1)
+        cv2.rectangle(before_arrow,(0,0),(int(char_List[1]+1),h-1),(0,0,0),-1)
+        
     if arrow_exist(before_frame_row2):
         before_row2_arrow_exist = True
         height,width = before_frame_row2.shape
@@ -289,7 +290,8 @@ def diff_image_search(before_frame,present_frame,img_temp,label_temp,before_fram
         W_THRESH = max(array_V)
         char_List = image_processing.Detect_WidthPosition(W_THRESH,width,array_V)
         before_arrow = before_frame_row2.copy()
-        cv2.rectangle(before_arrow,(0,0),(w-1,int(char_List[1]+1)),(0,0,0),-1)
+        cv2.rectangle(before_arrow,(0,0),(int(char_List[1]+1),h-1),(0,0,0),-1)
+    
     if arrow_exist(before_frame_row3):
         before_row3_arrow_exist = True
         height,width = before_frame_row1.shape
@@ -298,7 +300,8 @@ def diff_image_search(before_frame,present_frame,img_temp,label_temp,before_fram
         W_THRESH = max(array_V)
         char_List = image_processing.Detect_WidthPosition(W_THRESH,width,array_V)
         before_arrow = before_frame_row3.copy()
-        cv2.rectangle(before_arrow,(0,0),(w-1,int(char_List[1]+1)),(0,0,0),-1)
+        cv2.rectangle(before_arrow,(0,0),(int(char_List[1]+1),h-1),(0,0,0),-1)
+    
     if arrow_exist(before_frame_row4):
         before_row4_arrow_exist = True
         height,width = before_frame_row1.shape
@@ -500,8 +503,8 @@ def voice(output_text,voice_flag):
 
 if __name__ == "__main__":
     #テンプレートをロード
-    img1 = cv2.imread("./camera1/camera20.jpg")
-    img2 = cv2.imread("./camera1/camera21.jpg")
+    img1 = cv2.imread("./camera1/camera39.jpg")
+    img2 = cv2.imread("./camera1/camera40.jpg")
     temp = np.load(r'./dataset2.npz')
     #テンプレート画像を格納
     img_temp = temp['x']
