@@ -381,7 +381,7 @@ def sabun(before_frame_row,present_frame_row):
 
 def arrow_exist(frame_row):
     kernel = np.ones((3,3),np.uint8)
-    arrow_img = cv2.imread("./ex6/ex63.jpg")
+    arrow_img = cv2.imread("./arrow.jpg")
     arrow_img = cv2.cvtColor(arrow_img,cv2.COLOR_BGR2GRAY)
     arrow_img = cv2.resize(arrow_img,dsize=(26,36))
     #plt.imshow(arrow_img)
@@ -451,7 +451,7 @@ def manage_process(p):
 	global term
 	while p.is_alive():
 		if term:
-			p.terminate()
+			p._stop()
 			term = False
 		else:
 			continue

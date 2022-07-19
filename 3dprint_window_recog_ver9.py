@@ -529,12 +529,12 @@ def text_read(output_text,voice_flag):
         print(text)
         print("flag :{0}".format(voice_flag.value))
         print("queu size :{0}".format(output_text.qsize()))
-        if output_text.qsize() >= 2:
+        if output_text.qsize() >= 1:
             while output_text.qsize() > 1:
                 text = output_text.get()
         for word in text:
             if output_text.qsize() >= 1:
-                while output_text.qsize() > 0:
+                while output_text.qsize() > 1:
                     text = output_text.get()
                 break
             #print(voice_flag.value)
