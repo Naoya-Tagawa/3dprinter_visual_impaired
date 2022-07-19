@@ -257,7 +257,7 @@ def diff_image_search(present_frame,img_temp,label_temp,before_frame_row1,before
     
     if arrow_exist(before_frame_row3):
         before_row3_arrow_exist = True
-        height,width = before_frame_row1.shape
+        height,width = before_frame_row3.shape
         #frame_row = cv2.medianBlur(frame_row,3)
         array_V = image_processing.Projection_V(before_frame_row3,height,width)
         W_THRESH = max(array_V)
@@ -267,14 +267,14 @@ def diff_image_search(present_frame,img_temp,label_temp,before_frame_row1,before
     
     if arrow_exist(before_frame_row4):
         before_row4_arrow_exist = True
-        height,width = before_frame_row1.shape
+        height,width = before_frame_row4.shape
         #frame_row = cv2.medianBlur(frame_row,3)
         array_V = image_processing.Projection_V(before_frame_row4,height,width)
         W_THRESH = max(array_V)
         char_List = image_processing.Detect_WidthPosition(W_THRESH,width,array_V)
         before_arrow = before_frame_row4.copy()
         cv2.rectangle(before_arrow,(0,0),(int(char_List[1]+1),h-1),(0,0,0),-1)
-    
+
     l = len(present_char_List)
     count = 0
     output_textx = []
@@ -329,10 +329,16 @@ def diff_image_search(present_frame,img_temp,label_temp,before_frame_row1,before
             #plt.show()
             #cv2.imwrite("cut_present.jpg",cut_present)
             #cut_present1 = mask_present_img[int(j[0]):int(j[1]),]
-            if not sabun(before_arrow,cut_present):
-                output_text_p,out = image_processing.match_text2(img_temp,label_temp,cut_present1)
-                if out != "":
-                    output_textx.append(out)
+            try:
+                if not sabun(before_arrow,cut_present):
+                    output_text_p,out = image_processing.match_text2(img_temp,label_temp,cut_present1)
+                    if out != "":
+                        output_textx.append(out)
+            except UnboundLocalError:
+                    output_text_p,out = image_processing.match_text2(img_temp,label_temp,cut_present1)
+                    if out != "":
+                        output_textx.append(out)
+
         
     
         sabun_count = 0
@@ -409,7 +415,7 @@ def sabun(before_frame_row,present_frame_row):
         percent = white_pixels / sum_white_pixels * 100
     except ZeroDivisionError:
         percent = 100
-    #print(percent)
+    #print(white_pixels)
     #print("%")
     if percent < 2:
         return True
@@ -434,14 +440,14 @@ def arrow_exist(frame_row):
     match_img = frame_row[:,int(char_List2[0])-1:int(char_List2[1])+1]
     try:
         match_img = cv2.resize(match_img,dsize=(26,36))
-        #match_img = cv2.dilate(match_img,kernel)
+        match_img = cv2.dilate(match_img,kernel)
     except cv2.error:
         return False
     match = cv2.matchTemplate(match_img,arrow_img,cv2.TM_CCORR_NORMED)
     #返り値は最小類似点、最大類似点、最小の場所、最大の場所
     min_value, max_value, min_pt, max_pt = cv2.minMaxLoc(match)
-    print(max_value)
-    if max_value > 0.8:#なぜかめっちゃ小さい
+    #print(max_value)
+    if max_value > 0.6:#なぜかめっちゃ小さい
         return True
     else:
         return False
@@ -524,14 +530,14 @@ def text_read(output_text,voice_flag):
         print("flag :{0}".format(voice_flag.value))
         print("queu size :{0}".format(output_text.qsize()))
         if output_text.qsize() >= 2:
-            while output_text.qsize() > 2:
+            while output_text.qsize() > 1:
                 text = output_text.get()
         for word in text:
-            if output_text.qsize() >= 2:
-                while output_text.qsize() > 1:
+            if output_text.qsize() >= 1:
+                while output_text.qsize() > 0:
                     text = output_text.get()
-                    break
-            print(voice_flag.value)
+                break
+            #print(voice_flag.value)
             #if voice_flag.value == 1:
                 #print("stop")
                 #voice_flag.value = 0
@@ -571,7 +577,7 @@ if __name__ == "__main__":
     #テンプレートのラベル(文)を格納
     label_temp = temp['y']
     #diff_image_search(img1,img2)
-    cap = cv2.VideoCapture(0)
+    cap = cv2.VideoCapture(1)
     read_fps = cap.get(cv2.CAP_PROP_FPS)
     print(read_fps)
     voice_flag = multiprocessing.Value('i',0)
