@@ -22,8 +22,3 @@ def speech(voice_file):
                     stdout=subprocess.DEVNULL,
                     stderr=subprocess.DEVNULL)
      
-    return 0
- 
- 
-if __name__ == "__main__":
-    sys.exit(main())

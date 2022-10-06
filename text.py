@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 from cmath import phase
 import multiprocessing
 import pyttsx3
@@ -19,3 +20,8 @@ engine.runAndWait()
 if engine.isBusy == True:
     print("jj")
 engine.stop()
+=======
+import subprocess
+subprocess.Popen('aplay C:\\Users\\naoya\\3dprinter_visual_impaired\\voice.wav',shell=True)
+#subprocess.run(['aplay', "C:\\Users\\naoya\\3dprinter_visual_impaired\\sample.mp3"],shell=True)
+>>>>>>> bf09c8666cb39ead9d2842cc7c484ef1083bf4ca
