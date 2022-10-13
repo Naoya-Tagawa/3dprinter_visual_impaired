@@ -12,6 +12,7 @@ import glob
 from natsort import natsorted
 import multiprocessing
 from PIL import Image , ImageTk , ImageOps
+from pandas import cut
 import pyttsx3 
 from dictionary_word import speling
 import numpy as np
@@ -169,42 +170,47 @@ def diff_image_search(present_frame,img_temp,label_temp,before_frame_row1,before
     before_row2_arrow_exist = False
     before_row3_arrow_exist = False
     before_row4_arrow_exist = False
+    before_arrow_exist = 0
     if arrow_exist(before_frame_row1):
-        before_row1_arrow_exist = True
+        before_arrow_exist = 1
         height,width = before_frame_row1.shape
         array_V = image_processing.Projection_V(before_frame_row1,height,width)
         W_THRESH = max(array_V)
         char_List = image_processing.Detect_WidthPosition(W_THRESH,width,array_V)
         before_arrow = before_frame_row1.copy()
         cv2.rectangle(before_arrow,(0,0),(int(char_List[1]+1),h-1),(0,0,0),-1)
-        
+        before_frame_row1 = before_arrow
+
     if arrow_exist(before_frame_row2):
-        before_row2_arrow_exist = True
+        before_arrow_exist = 2
         height,width = before_frame_row2.shape
         array_V = image_processing.Projection_V(before_frame_row2,height,width)
         W_THRESH = max(array_V)
         char_List = image_processing.Detect_WidthPosition(W_THRESH,width,array_V)
         before_arrow = before_frame_row2.copy()
         cv2.rectangle(before_arrow,(0,0),(int(char_List[1]+1),h-1),(0,0,0),-1)
+        before_frame_row2 = before_arrow
     
     if arrow_exist(before_frame_row3):
-        before_row3_arrow_exist = True
+        before_arrow_exist = 3
         height,width = before_frame_row3.shape
         array_V = image_processing.Projection_V(before_frame_row3,height,width)
         W_THRESH = max(array_V)
         char_List = image_processing.Detect_WidthPosition(W_THRESH,width,array_V)
         before_arrow = before_frame_row3.copy()
         cv2.rectangle(before_arrow,(0,0),(int(char_List[1]+1),h-1),(0,0,0),-1)
-    
+        before_frame_row3 = before_arrow
+
+
     if arrow_exist(before_frame_row4):
-        before_row4_arrow_exist = True
+        before_arrow_exist = 4
         height,width = before_frame_row4.shape
         array_V = image_processing.Projection_V(before_frame_row4,height,width)
         W_THRESH = max(array_V)
         char_List = image_processing.Detect_WidthPosition(W_THRESH,width,array_V)
         before_arrow = before_frame_row4.copy()
         cv2.rectangle(before_arrow,(0,0),(int(char_List[1]+1),h-1),(0,0,0),-1)
-
+        before_frame_row4 = before_arrow
     l = len(present_char_List)
     count = 0
     output_textx = []
@@ -214,7 +220,21 @@ def diff_image_search(present_frame,img_temp,label_temp,before_frame_row1,before
         if l == count:
             break
         cut_present = mask_present_img2[int(i[0]):int(i[1]),]
-        before_frame_row.append(cut_present)
+        flag = arrow_exist(cut_present)
+        if flag == True:
+            height,width = cut_present.shape
+            #frame_row = cv2.medianBlur(frame_row,3)
+            array_V = image_processing.Projection_V(cut_present,height,width)
+            W_THRESH = max(array_V)
+            char_List = image_processing.Detect_WidthPosition(W_THRESH,width,array_V)
+            cut_present_arrow = cut_present.copy()
+            #plt.imshow(before_arrow)
+            #plt.show()
+            cv2.rectangle(cut_present_arrow,(0,0),(int(char_List[1]+1),h-1),(0,0,0),-1)
+            cut_present1 = cut_present
+            cut_present = cut_present_arrow
+
+        #before_frame_row.append(cut_present)
         if not sabun(before_frame_row1,cut_present):
             sabun_count += 1
 
@@ -227,18 +247,26 @@ def diff_image_search(present_frame,img_temp,label_temp,before_frame_row1,before
         if not sabun(before_frame_row4,cut_present):
             sabun_count += 1
         
-        cut_present1 = mask_present_img[int(j[0]):int(j[1]),]
+        #cut_present1 = mask_present_img[int(j[0]):int(j[1]),]
     
         if sabun_count > 3:
-            try:
-                if not sabun(before_arrow,cut_present):
-                    output_text_p,out = image_processing.match_text2(img_temp,label_temp,cut_present1)
-                    if out != "":
-                        output_textx.append(out)
-            except UnboundLocalError:
-                    output_text_p,out = image_processing.match_text2(img_temp,label_temp,cut_present1)
-                    if out != "":
-                        output_textx.append(out)
+            if flag == True:
+                output_text_p,out = image_processing.match_text2(img_temp,label_temp,cut_present1)
+                output_text.append(out)
+                before_frame_row.append(cut_present1)
+            else:
+                output_text_p,out = image_processing.match_text2(img_temp,label_temp,cut_present)
+                output_text.append(out)
+                before_frame_row.append(cut_present)
+            #try:
+                #if not sabun(before_arrow,cut_present):
+                    #output_text_p,out = image_processing.match_text2(img_temp,label_temp,cut_present1)
+                    #if out != "":
+                        #output_textx.append(out)
+            #except UnboundLocalError:
+                    #output_text_p,out = image_processing.match_text2(img_temp,label_temp,cut_present1)
+                    #if out != "":
+                        #output_textx.append(out)
         #矢印があるかどうか判定
         #if arrow_exist(cut_present):
         
@@ -322,12 +350,6 @@ def arrow_exist(frame_row):
 
 def make_voice_file(text): #音声ファイル作成
     engine = pyttsx3.init()
-    voices = engine.getProperty('voices')
-    engine.setProperty("voice",voices[1].id)
-    speed = 250
-    rate = engine.getProperty('rate')
-    engine.setProperty('rate',speed)
-
     path = "./voice/"
     now = str(datetime.datetime.now())
     now_day , now_time = now.split()
@@ -338,7 +360,6 @@ def make_voice_file(text): #音声ファイル作成
     print(file_name)
     engine.save_to_file(text,file_name)
     engine.runAndWait()
-    return file_name
 
 def delete_voice_file(): #音声ファイルを5つになるまで削除
     file_list = []
@@ -424,8 +445,8 @@ def text_read(output_text,voice_flag):
         text = output_text.get()
         voice_flag.value = 0
         print(text)
-        file_name = make_voice_file(text)
-        #file_name = latest_play_voice_file()
+        make_voice_file(text)
+        file_name = latest_play_voice_file()
         if start !=0:
             player.stop()
         player = AudioPlayer(file_name)
@@ -444,7 +465,7 @@ if __name__ == "__main__":
     #テンプレートのラベル(文)を格納
     label_temp = temp['y']
     #diff_image_search(img1,img2)
-    cap = cv2.VideoCapture(0)
+    cap = cv2.VideoCapture(1)
     read_fps = cap.get(cv2.CAP_PROP_FPS)
     print(read_fps)
     voice_flag = multiprocessing.Value('i',0)
