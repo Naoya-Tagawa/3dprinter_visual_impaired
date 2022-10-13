@@ -252,11 +252,11 @@ def diff_image_search(present_frame,img_temp,label_temp,before_frame_row1,before
         if sabun_count > 3:
             if flag == True:
                 output_text_p,out = image_processing.match_text2(img_temp,label_temp,cut_present1)
-                output_text.append(out)
+                output_textx.append(out)
                 before_frame_row.append(cut_present1)
             else:
                 output_text_p,out = image_processing.match_text2(img_temp,label_temp,cut_present)
-                output_text.append(out)
+                output_textx.append(out)
                 before_frame_row.append(cut_present)
             #try:
                 #if not sabun(before_arrow,cut_present):
