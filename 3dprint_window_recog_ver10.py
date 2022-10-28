@@ -61,7 +61,7 @@ def camera():
         if cv2.waitKey(1) & 0xFF == ord('q'):
             cap.release()
             cv2.destroyAllWindows()
-        time.sleep(1)
+        #time.sleep(1)
         
 def diff_image_search_first(present_frame,img_temp,label_temp,output_text):
     global present_img
@@ -131,12 +131,14 @@ def diff_image_search_first(present_frame,img_temp,label_temp,output_text):
 
 def diff_image_search(present_frame,img_temp,label_temp,before_frame_row1,before_frame_row2,before_frame_row3,before_frame_row4,output_text,voice_flag):
     global present_img
+    start1 = time.perf_counter()
     img = cv2.imread("./balck_img.jpg")
     #arrow_img = cv2.imread("./ex6/ex63.jpg")
     img = cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
     #カーネル
     kernel = np.ones((3,3),np.uint8)
     h,w,d = present_frame.shape
+    start = time.perf_counter()
     #フレームの青い部分を二値化
     blue_threshold_present_img = image_processing.cut_blue_img1(present_frame)
     #コーナー検出
@@ -162,7 +164,9 @@ def diff_image_search(present_frame,img_temp,label_temp,before_frame_row1,before
     presentH_THRESH = max(array_present_H)
     present_char_List = image_processing.Detect_HeightPosition(presentH_THRESH,height_present,array_present_H)
     present_char_List = np.reshape(present_char_List,[int(len(present_char_List)/2),2])
-
+    end = time.perf_counter()
+    print("画像処理:"+str(end-start1))
+    start = time.perf_counter()
     before_frame_row = []
     sabun_count = 0
     before_row1_arrow_exist = False
@@ -204,7 +208,9 @@ def diff_image_search(present_frame,img_temp,label_temp,before_frame_row1,before
         char_List = image_processing.Detect_WidthPosition(W_THRESH,width,array_V)
         before_arrow = before_frame_row4.copy()
         cv2.rectangle(before_arrow,(0,0),(int(char_List[1]+1),h-1),(0,0,0),-1)
-
+    end = time.perf_counter()
+    print("yajirushi:"+ str(end-start))
+    start = time.perf_counter()
     l = len(present_char_List)
     count = 0
     output_textx = []
@@ -248,16 +254,34 @@ def diff_image_search(present_frame,img_temp,label_temp,before_frame_row1,before
     if len(output_textx) != 0:
         output_text.put(output_textx)
         voice_flag.value = 1
+    start1 = time.perf_counter()
+    uu = before_frame_row[0]
+    end1 = time.perf_counter()
+    print("hgh" + str(end1-start1))
+    end = time.perf_counter()
+    #print("diff")
+    print("diff" + str(end-start))
     try:
+        start = time.perf_counter()
         if len(present_char_List1) == 0:
+            end = time.perf_counter()
+            print("渡すやつ:" + str(end-start))
             return img,img,img,img
         elif len(present_char_List1) == 1:
+            end = time.perf_counter()
+            print("渡すやつ:" + str(end-start))
             return before_frame_row[0] , img,img,img
         elif len(present_char_List1) == 2:
+            end = time.perf_counter()
+            print("渡すやつ:" + str(end-start))
             return before_frame_row[0] , before_frame_row[1] ,img,img
         elif len(present_char_List1) == 3:
+            end = time.perf_counter()
+            print("渡すやつ:" + str(end-start))
             return before_frame_row[0] , before_frame_row[1] ,before_frame_row[2] ,img
         elif len(present_char_List1) == 4:
+            end = time.perf_counter()
+            print("渡すやつ:" + str(end-start))
             return before_frame_row[0] , before_frame_row[1],before_frame_row[2],before_frame_row[3] 
         else:
             return img,img,img,img
@@ -284,8 +308,8 @@ def sabun(before_frame_row,present_frame_row):
     except ZeroDivisionError:
         percent = 100
     
-    if percent < 2:
-        print(percent)
+    if percent < 1.5:
+        #print(percent)
         return True
     else:
         return False
@@ -321,13 +345,17 @@ def arrow_exist(frame_row):
 
 
 def make_voice_file(text): #音声ファイル作成
+    start = time.perf_counter()
     engine = pyttsx3.init()
     voices = engine.getProperty('voices')
     engine.setProperty("voice",voices[1].id)
+<<<<<<< HEAD
     speed = 250
     rate = engine.getProperty('rate')
     engine.setProperty('rate',speed)
 
+=======
+>>>>>>> 90487970fe5695d4e61a899d832b63a70abd0692
     path = "./voice/"
     now = str(datetime.datetime.now())
     now_day , now_time = now.split()
@@ -335,10 +363,15 @@ def make_voice_file(text): #音声ファイル作成
     sec , msec = s.split('.')
     now_time = sec + msec
     file_name = path + "voice_" + now_time + ".wav"
-    print(file_name)
+    #print(file_name)
     engine.save_to_file(text,file_name)
     engine.runAndWait()
+<<<<<<< HEAD
     return file_name
+=======
+    end =time.perf_counter()
+    print("makefile:" + str(end-start))
+>>>>>>> 90487970fe5695d4e61a899d832b63a70abd0692
 
 def delete_voice_file(): #音声ファイルを5つになるまで削除
     file_list = []
@@ -349,7 +382,7 @@ def delete_voice_file(): #音声ファイルを5つになるまで削除
             wav_file = path + file
             file_list.append([file,os.path.getctime(wav_file)])
     file_list.sort(key = itemgetter(1),reverse=True)
-    print(file_list)
+    #print(file_list)
     max_file = 3
     for i , file in enumerate(file_list):
         if i > max_file -1:
@@ -446,13 +479,13 @@ if __name__ == "__main__":
     #diff_image_search(img1,img2)
     cap = cv2.VideoCapture(0)
     read_fps = cap.get(cv2.CAP_PROP_FPS)
-    print(read_fps)
+    #print(read_fps)
     voice_flag = multiprocessing.Value('i',0)
     #voice_flagが1なら今発話中,0なら発話していない
     count = 0
     output_text = multiprocessing.Queue()
-    read = multiprocessing.Process(target=text_read,args=(output_text,voice_flag,))
-    read.start()
+    #read = multiprocessing.Process(target=text_read,args=(output_text,voice_flag,))
+    #read.start()
     global t
     #最初のフレームを取得する
     ret , bg = cap.read()
@@ -460,7 +493,7 @@ if __name__ == "__main__":
     frame = bg
     
     while True:
-        #start = time.perf_counter()
+        start = time.perf_counter()
         ret , frame = cap.read()
         #フレームが取得できない場合は画面を閉じる
         if not ret:
@@ -469,9 +502,13 @@ if __name__ == "__main__":
         #画面が遷移したか調査
         start = time.perf_counter()
         before_frame_row1,before_frame_row2,before_frame_row3,before_frame_row4= diff_image_search(frame,img_temp,label_temp,before_frame_row1,before_frame_row2,before_frame_row3,before_frame_row4,output_text,voice_flag)
+        end =  time.perf_counter()
+        print("全体:" + str(end-start))
         #diff_flag = Trueなら画面遷移,diff_flag=Falseなら画面遷移していない
         #present_kersol = audio_output.kersol_search(output_text)
         #if present_kersol == 1: # カーソルがない
+        #end = time.perf_counter()
+        #print("全体:" + str(end-start))
         #qキーが入力されたら画面を閉じる
         if cv2.waitKey(1) & 0xFF == ord('q'):
             cap.release()

@@ -13,6 +13,7 @@ import pyaudio
 import wave
 CHUNK = 1024
 def make_voice_file(text):
+    start = time.perf_counter()
     engine = pyttsx3.init()
     path = "./voice/"
     now = str(datetime.datetime.now())
@@ -21,10 +22,14 @@ def make_voice_file(text):
     sec , msec = s.split('.')
     now_time = sec + msec
     file_name = path + "voice_" + now_time + ".wav"
+
     print(file_name)
+    
     engine.save_to_file(text,file_name)
     engine.runAndWait()
-
+    end = time.perf_counter()
+    time = end -start
+    print(time)
 def delete_voice_file():
     file_list = []
     path = "./voice/"

@@ -20,6 +20,7 @@ import numpy as np
 import cv2
 import matplotlib.pyplot as plt
 from pylsd.lsd import lsd
+import itertools
 
 def mask_make(blue_threshold_present_img):
     kernel = np.ones((1,1),np.uint8)
@@ -46,34 +47,11 @@ def mask_make(blue_threshold_present_img):
     return present_char_List , mask_present_img2
 
 #アオイ部分を切り抜く
-def cut_blue_img(img):
-    c_img = cv2.cvtColor(img,cv2.COLOR_BGR2RGB)
-    img_hsv = cv2.cvtColor(img,cv2.COLOR_BGR2HSV)
-    #ブルーに近いものを切り抜く
-    average_color_per_row = np.average(c_img,axis=0)
-    average_color = np.average(average_color_per_row,axis=0)
-    average_color = np.uint8(average_color)
-    #ブルーの最小値
-    blue_min = np.array([100,130,180],np.uint8)
-    #ブルーの最大値
-    blue_max = np.array([120,255,255],np.uint8)
-    threshold_blue_img = cv2.inRange(img_hsv,blue_min,blue_max)
-    #threshold_blue_img = cv2.cvtColor(threshold_blue_img,cv2.COLOR_GRAY2RGB)
-    kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (7,7))
-    close_img = cv2.morphologyEx(threshold_blue_img, cv2.MORPH_CLOSE, kernel, iterations=1)
-
-    #文字の部分を塗りつぶす 
-    cnts = cv2.findContours(close_img, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
-    cnts = cnts[0] if len(cnts) == 2 else cnts[1]
-    cv2.fillPoly(close_img, cnts, [255,255,255])
-    
-    return close_img
 def cut_blue_img1(img):
     c_img = cv2.cvtColor(img,cv2.COLOR_BGR2RGB)
     img_hsv = cv2.cvtColor(img,cv2.COLOR_BGR2HSV)
     #ブルーに近いものを切り抜く
     average_color_per_row = np.average(c_img,axis=0)
-    print(average_color_per_row)
     average_color = np.average(average_color_per_row,axis=0)
     average_color = np.uint8(average_color)
     #ブルーの最小値
@@ -154,7 +132,7 @@ def func_search_neighbourhood(p0, ps):
     else:
         return ps[new_d[0][1]]
 
-def points_extract1(img,img2):
+def points_extract2(img,img2):
     img = cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
     #コーナー検出
     #img_1 = cv2.Canny(img,50,150)
@@ -165,6 +143,12 @@ def points_extract1(img,img2):
     #Smin_p= np.min(dst,axis=0)
     #max_p = np.max(dst,axis=0)
     linsl = lsd(img)
+    #x1だけスライス
+    line = linsl[:1]
+    print(line)
+    #4行目いらないのでスライス
+    line = linsl[:4]
+    #
     mi_x =[]
     ma_x = []
     #print(linsl)
@@ -264,6 +248,96 @@ def points_extract1(img,img2):
     #plt.imshow(img2)
     #plt.show()
     return p1,p2,p3,p4
+
+def points_extract1(img,img2):
+    img = cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
+    #コーナー検出
+    #img_1 = cv2.Canny(img,50,150)
+    #linesH = cv2.HoughLinesP(img,rho=1,theta = np.pi/360,threshold=50,minLineLength=50,maxLineGap=10)
+    
+    #コーナーの中でx座標が最小、最大
+
+    #Smin_p= np.min(dst,axis=0)
+    #max_p = np.max(dst,axis=0)
+    linsl = lsd(img)
+    #x1,y1の列のみ抽出
+    xy1_line = linsl[:,0:2]
+    #x2,y2の列のみ抽出
+    xy2_line = linsl[:,2:4]
+
+    la = np.vstack((xy1_line,xy2_line))
+    
+    la = np.asarray(la,dtype=int)
+    mi_x =[]
+    ma_x = []
+    #print(linsl)
+    #print(ly)
+    #data = BytesIO(ly)
+    x_point = la[:,0]
+    la = la[np.argsort(x_point)]
+
+    #print(ly)
+    min_x = int(la[0][0])
+    max_x = int(la[-1][0])
+    mi_x = [ [x,y] for x,y in la if x-min_x <=10]
+    mi_x = np.array(mi_x)
+    mi_x = mi_x.ravel()
+    ma_x = [ [x,y] for x,y in la if max_x-x <=10]
+    ma_x = np.array(ma_x)
+    ma_x = ma_x.ravel()
+    mi_x = mi_x.reshape(int(len(mi_x)/2),2)
+    ma_x = ma_x.reshape(int(len(ma_x)/2),2)
+    #print(ma_x)
+    #print(mi_x)
+    ma_x = ma_x[np.argsort(ma_x[:,1])]
+    mi_x = mi_x[np.argsort(mi_x[:,1])] 
+    #print(ma_x)
+    #print(mi_x)
+    #左うえ
+    min_1 = [int(mi_x[0][0]),int(mi_x[0][1])]
+    near_min_1 = func_search_neighbourhood(min_1,mi_x[1:])
+    #右上
+    max_1 = [int(ma_x[0][0]),int(ma_x[0][1])]
+    near_max_1 = func_search_neighbourhood(max_1,ma_x[1:])
+    #左下
+    min_2 = [int(mi_x[-1][0]),int(mi_x[-1][1])]
+    near_min_2 = func_search_neighbourhood(min_2,mi_x[:-1])
+    #右下
+    max_2 = [int(ma_x[-1][0]),int(ma_x[-1][1])]
+    near_max_2 = func_search_neighbourhood(max_2,ma_x[:-1])
+    #print(near_max_2)
+    #print(max_2)
+    #ひだりうえ
+    p1 = [int((min_1[0]+near_min_1[0])/2),int((min_1[1]+near_min_1[1])/2)]
+    #左下
+    p2 = [int((min_2[0]+near_min_2[0])/2),int((min_2[1]+near_min_2[1])/2)]
+    #右上
+    p3 = [int((max_1[0]+near_max_1[0])/2),int((max_1[1]+near_max_1[1])/2)]
+    #右下
+    p4 = [int((max_2[0]+near_max_2[0])/2),int((max_2[1]+near_max_2[1])/2)]
+    if img[p1[1]][p1[0]] == 0:
+        p1 = [int(min_1[0]),int(min_1[1])]
+    if img[p2[1]][p2[0]] == 0:
+        p2 = [int(min_2[0]),int(min_2[1])]
+    if img[p3[1]][p3[0]] == 0:
+        p3 = [int(max_1[0]),int(max_1[1])]
+    if img[p4[1]][p4[0]] == 0:
+        p4 = [int(max_2[0]),int(max_2[1])]
+    #print(p1)
+    #print(p2)
+    #print(p3)
+    #print(p4)
+    #de_position = pd.read_csv(io.BytesIO(ly))
+    #print(de_position)
+# 小さい輪郭は誤検出として削除する
+    #contours = list(filter(lambda x: cv2.contourArea(x) > 100, contours))
+
+    # 輪郭を描画する。
+    #cv2.drawContours(img2, contours, -1, color=(0, 0, 255), thickness=3)
+
+    #plt.imshow(img2)
+    #plt.show()
+    return p1,p2,p3,p4
     
 
 def projective_transformation(img1,p1,p2,p3,p4):
@@ -273,15 +347,15 @@ def projective_transformation(img1,p1,p2,p3,p4):
     #p3 右上
     #p4 右下
     #幅
-    print(p3)
-    print(p1)
+    #print(p3)
+    #print(p1)
     w = np.linalg.norm(p3[0]-p1[0])
     w = math.floor(w)
     h = np.linalg.norm(p2[1]-p1[1])
     h = math.floor(h)
     #pts1はカードの4辺、pts2は変換後の座標
     pts1 = np.float32([p1,p3,p2,p4])
-    print(pts1)
+    #print(pts1)
     pts2 = np.float32([[0,0], [w,0], [0,h], [w,h]])
     #射影変換を実施
     M = cv2.getPerspectiveTransform(pts1, pts2)
@@ -425,7 +499,7 @@ def match_text(img_temp,label_temp,frame):
                 return [],[]
             height_m,width_m = match_img.shape
             img_g = cv2.rectangle(syaei_resize_img, (int(char_List2[j]) ,int(char_List1[i])), (int(char_List2[j+1]), int(char_List1[i+1])), (0,0,255), 2)
-            cv2.imwrite("img90.jpg",img_g)
+            
             for f in range(len(label_temp)):
                 temp_th = img_temp[f]
                 temp_th = cv2.resize(temp_th,dsize=(26,36))
@@ -436,6 +510,7 @@ def match_text(img_temp,label_temp,frame):
                 #返り値は最小類似点、最大類似点、最小の場所、最大の場所
                 min_value, max_value, min_pt, max_pt = cv2.minMaxLoc(match)
                 #からのリストに
+                
                 s.setdefault(max_value,f)
             #print(end-start)
             #類似度が最大のもの順にソート
@@ -454,9 +529,7 @@ def match_text(img_temp,label_temp,frame):
 
                 if (j+1) == len(char_List2)-1:
                     out_modify = out_modify+ ' ' + label_temp[new_d[0][1]]
-                    out = out + out_modify + "\n"
-                    output_text.append(out_modify)
-                    output_text.append('\n')
+                    out = out + out_modify + ' '
                     out_modify = ""
                     new_d = {}
                     continue
@@ -474,9 +547,7 @@ def match_text(img_temp,label_temp,frame):
             if (j+1) == len(char_List2)-1:
                 out_modify = out_modify + label_temp[new_d[0][1]]
                 #out_modify = speling.correct(out_modify)
-                out = out + out_modify + "\n"
-                output_text.append(out_modify)
-                output_text.append('\n')
+                out = out + out_modify + " "
                 out_modify = ""
                 new_d = {}
                 continue
@@ -486,16 +557,13 @@ def match_text(img_temp,label_temp,frame):
             new_d = {}
             continue
 
-    return output_text, out
+    return out
 #二次元リストから同じものを削除
 def get_unique_list(seq):
     seen = []
     return [x for x in seq if x not in seen and not seen.append(x)]
 def match_text2(img_temp,label_temp,frame):
-    #カーネル
-    kernel = np.ones((3,3),np.uint8)
     #対象画像をリサイズ
-    syaei_resize_img = cv2.resize(frame,dsize=(610,211))
     #対象画像をグレイスケール化
     #gray_img = cv2.cvtColor(syaei_resize_img,cv2.COLOR_BGR2GRAY)
     #二値画像へ
@@ -513,7 +581,6 @@ def match_text2(img_temp,label_temp,frame):
         #return [], []
         
     out_modify = "" #修正したテキスト
-    output_text = [] #読み取ったテキスト
     s = {}
     new_d = {}
     out = "" #読み取ったテキスト
@@ -566,8 +633,7 @@ def match_text2(img_temp,label_temp,frame):
 
             if (j+1) == len(char_List2)-1:
                 out_modify = out_modify+ ' ' + label_temp[new_d[0][1]]
-                out = out + out_modify + "\n"
-                output_text.append(out_modify)
+                out = out + out_modify + ' '
                 #output_text.append('\n')
                 out_modify = ""
                 new_d = {}
@@ -585,8 +651,7 @@ def match_text2(img_temp,label_temp,frame):
         if (j+1) == len(char_List2)-1:
             out_modify = out_modify + label_temp[new_d[0][1]]
             #out_modify = speling.correct(out_modify)
-            out = out + out_modify + "\n"
-            output_text.append(out_modify)
+            out = out + out_modify + ' '
             #output_text.append('\n')
             out_modify = ""
             new_d = {}
@@ -597,9 +662,7 @@ def match_text2(img_temp,label_temp,frame):
         new_d = {}
         continue
 
-    #print(output_text)
-    #print(out)
-    return output_text, out
+    return out
 def arrow_exist(frame_row):
     kernel = np.ones((3,3),np.uint8)
     arrow_img = cv2.imread("./arrow.jpg")
@@ -669,8 +732,10 @@ def sabun(before_frame_row,present_frame_row):
     black_pixels = frame_diff.size - white_pixels
     #print("前のフレームとの変化量%")
     #percent = white_pixels/frame_diff.size *100
-    percent = white_pixels / sum_white_pixels * 100
-    #print(percent)
+    try:
+        percent = white_pixels / sum_white_pixels * 100
+    except ZeroDivisionError:
+        percent = 100
     if percent < 2:
         return True
     else:
