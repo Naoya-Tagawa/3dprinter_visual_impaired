@@ -46,34 +46,11 @@ def mask_make(blue_threshold_present_img):
     return present_char_List , mask_present_img2
 
 #アオイ部分を切り抜く
-def cut_blue_img(img):
-    c_img = cv2.cvtColor(img,cv2.COLOR_BGR2RGB)
-    img_hsv = cv2.cvtColor(img,cv2.COLOR_BGR2HSV)
-    #ブルーに近いものを切り抜く
-    average_color_per_row = np.average(c_img,axis=0)
-    average_color = np.average(average_color_per_row,axis=0)
-    average_color = np.uint8(average_color)
-    #ブルーの最小値
-    blue_min = np.array([100,130,180],np.uint8)
-    #ブルーの最大値
-    blue_max = np.array([120,255,255],np.uint8)
-    threshold_blue_img = cv2.inRange(img_hsv,blue_min,blue_max)
-    #threshold_blue_img = cv2.cvtColor(threshold_blue_img,cv2.COLOR_GRAY2RGB)
-    kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (7,7))
-    close_img = cv2.morphologyEx(threshold_blue_img, cv2.MORPH_CLOSE, kernel, iterations=1)
-
-    #文字の部分を塗りつぶす 
-    cnts = cv2.findContours(close_img, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
-    cnts = cnts[0] if len(cnts) == 2 else cnts[1]
-    cv2.fillPoly(close_img, cnts, [255,255,255])
-    
-    return close_img
 def cut_blue_img1(img):
     c_img = cv2.cvtColor(img,cv2.COLOR_BGR2RGB)
     img_hsv = cv2.cvtColor(img,cv2.COLOR_BGR2HSV)
     #ブルーに近いものを切り抜く
     average_color_per_row = np.average(c_img,axis=0)
-    print(average_color_per_row)
     average_color = np.average(average_color_per_row,axis=0)
     average_color = np.uint8(average_color)
     #ブルーの最小値
@@ -273,15 +250,15 @@ def projective_transformation(img1,p1,p2,p3,p4):
     #p3 右上
     #p4 右下
     #幅
-    print(p3)
-    print(p1)
+    #print(p3)
+    #print(p1)
     w = np.linalg.norm(p3[0]-p1[0])
     w = math.floor(w)
     h = np.linalg.norm(p2[1]-p1[1])
     h = math.floor(h)
     #pts1はカードの4辺、pts2は変換後の座標
     pts1 = np.float32([p1,p3,p2,p4])
-    print(pts1)
+    #print(pts1)
     pts2 = np.float32([[0,0], [w,0], [0,h], [w,h]])
     #射影変換を実施
     M = cv2.getPerspectiveTransform(pts1, pts2)
@@ -425,7 +402,7 @@ def match_text(img_temp,label_temp,frame):
                 return [],[]
             height_m,width_m = match_img.shape
             img_g = cv2.rectangle(syaei_resize_img, (int(char_List2[j]) ,int(char_List1[i])), (int(char_List2[j+1]), int(char_List1[i+1])), (0,0,255), 2)
-            cv2.imwrite("img90.jpg",img_g)
+            
             for f in range(len(label_temp)):
                 temp_th = img_temp[f]
                 temp_th = cv2.resize(temp_th,dsize=(26,36))
@@ -436,6 +413,7 @@ def match_text(img_temp,label_temp,frame):
                 #返り値は最小類似点、最大類似点、最小の場所、最大の場所
                 min_value, max_value, min_pt, max_pt = cv2.minMaxLoc(match)
                 #からのリストに
+                
                 s.setdefault(max_value,f)
             #print(end-start)
             #類似度が最大のもの順にソート
@@ -454,9 +432,7 @@ def match_text(img_temp,label_temp,frame):
 
                 if (j+1) == len(char_List2)-1:
                     out_modify = out_modify+ ' ' + label_temp[new_d[0][1]]
-                    out = out + out_modify + "\n"
-                    output_text.append(out_modify)
-                    output_text.append('\n')
+                    out = out + out_modify + ' '
                     out_modify = ""
                     new_d = {}
                     continue
@@ -474,9 +450,7 @@ def match_text(img_temp,label_temp,frame):
             if (j+1) == len(char_List2)-1:
                 out_modify = out_modify + label_temp[new_d[0][1]]
                 #out_modify = speling.correct(out_modify)
-                out = out + out_modify + "\n"
-                output_text.append(out_modify)
-                output_text.append('\n')
+                out = out + out_modify + " "
                 out_modify = ""
                 new_d = {}
                 continue
@@ -486,16 +460,13 @@ def match_text(img_temp,label_temp,frame):
             new_d = {}
             continue
 
-    return output_text, out
+    return out
 #二次元リストから同じものを削除
 def get_unique_list(seq):
     seen = []
     return [x for x in seq if x not in seen and not seen.append(x)]
 def match_text2(img_temp,label_temp,frame):
-    #カーネル
-    kernel = np.ones((3,3),np.uint8)
     #対象画像をリサイズ
-    syaei_resize_img = cv2.resize(frame,dsize=(610,211))
     #対象画像をグレイスケール化
     #gray_img = cv2.cvtColor(syaei_resize_img,cv2.COLOR_BGR2GRAY)
     #二値画像へ
@@ -513,7 +484,6 @@ def match_text2(img_temp,label_temp,frame):
         #return [], []
         
     out_modify = "" #修正したテキスト
-    output_text = [] #読み取ったテキスト
     s = {}
     new_d = {}
     out = "" #読み取ったテキスト
@@ -566,8 +536,7 @@ def match_text2(img_temp,label_temp,frame):
 
             if (j+1) == len(char_List2)-1:
                 out_modify = out_modify+ ' ' + label_temp[new_d[0][1]]
-                out = out + out_modify + "\n"
-                output_text.append(out_modify)
+                out = out + out_modify + ' '
                 #output_text.append('\n')
                 out_modify = ""
                 new_d = {}
@@ -585,8 +554,7 @@ def match_text2(img_temp,label_temp,frame):
         if (j+1) == len(char_List2)-1:
             out_modify = out_modify + label_temp[new_d[0][1]]
             #out_modify = speling.correct(out_modify)
-            out = out + out_modify + "\n"
-            output_text.append(out_modify)
+            out = out + out_modify + ' '
             #output_text.append('\n')
             out_modify = ""
             new_d = {}
@@ -597,9 +565,7 @@ def match_text2(img_temp,label_temp,frame):
         new_d = {}
         continue
 
-    #print(output_text)
-    #print(out)
-    return output_text, out
+    return out
 def arrow_exist(frame_row):
     kernel = np.ones((3,3),np.uint8)
     arrow_img = cv2.imread("./arrow.jpg")
@@ -669,8 +635,10 @@ def sabun(before_frame_row,present_frame_row):
     black_pixels = frame_diff.size - white_pixels
     #print("前のフレームとの変化量%")
     #percent = white_pixels/frame_diff.size *100
-    percent = white_pixels / sum_white_pixels * 100
-    #print(percent)
+    try:
+        percent = white_pixels / sum_white_pixels * 100
+    except ZeroDivisionError:
+        percent = 100
     if percent < 2:
         return True
     else:

@@ -276,6 +276,10 @@ def diff_image_search(present_frame,img_temp,label_temp,before_frame_row1,before
     if len(output_textx) != 0:
         output_text.put(output_textx)
         voice_flag.value = 1
+    start1 = time.perf_counter()
+    dd = before_frame_row[0]
+    end1 = time.perf_counter()
+    print("hhh" + str(end1-start1))
     try:
         if len(present_char_List1) == 0:
             return img,img,img,img

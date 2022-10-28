@@ -46,34 +46,11 @@ def mask_make(blue_threshold_present_img):
     return present_char_List , mask_present_img2
 
 #アオイ部分を切り抜く
-def cut_blue_img(img):
-    c_img = cv2.cvtColor(img,cv2.COLOR_BGR2RGB)
-    img_hsv = cv2.cvtColor(img,cv2.COLOR_BGR2HSV)
-    #ブルーに近いものを切り抜く
-    average_color_per_row = np.average(c_img,axis=0)
-    average_color = np.average(average_color_per_row,axis=0)
-    average_color = np.uint8(average_color)
-    #ブルーの最小値
-    blue_min = np.array([100,130,180],np.uint8)
-    #ブルーの最大値
-    blue_max = np.array([120,255,255],np.uint8)
-    threshold_blue_img = cv2.inRange(img_hsv,blue_min,blue_max)
-    #threshold_blue_img = cv2.cvtColor(threshold_blue_img,cv2.COLOR_GRAY2RGB)
-    kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (7,7))
-    close_img = cv2.morphologyEx(threshold_blue_img, cv2.MORPH_CLOSE, kernel, iterations=1)
-
-    #文字の部分を塗りつぶす 
-    cnts = cv2.findContours(close_img, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
-    cnts = cnts[0] if len(cnts) == 2 else cnts[1]
-    cv2.fillPoly(close_img, cnts, [255,255,255])
-    
-    return close_img
 def cut_blue_img1(img):
     c_img = cv2.cvtColor(img,cv2.COLOR_BGR2RGB)
     img_hsv = cv2.cvtColor(img,cv2.COLOR_BGR2HSV)
     #ブルーに近いものを切り抜く
     average_color_per_row = np.average(c_img,axis=0)
-    print(average_color_per_row)
     average_color = np.average(average_color_per_row,axis=0)
     average_color = np.uint8(average_color)
     #ブルーの最小値
