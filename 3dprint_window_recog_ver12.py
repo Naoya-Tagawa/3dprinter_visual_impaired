@@ -45,7 +45,7 @@ def diff_image_search_first(present_frame,img_temp,label_temp,text_img):
     
     #コーナー検出
     try:
-        present_p1,present_p2,present_p3,present_p4 = points_extract1(blue_threshold_present_img,present_frame)
+        present_p1,present_p2,present_p3,present_p4 = points_extract1(blue_threshold_present_img)
     except TypeError:
         print("Screen cannot be detected")
         return img,img,img,img
