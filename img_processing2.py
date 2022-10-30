@@ -69,6 +69,7 @@ def cut_blue_img1(img):
     cv2.fillPoly(close_img, cnts, [255,255,255])
     dst = cv2.bitwise_and(img,img,mask = close_img)
     return dst
+
 #コーナー検出
 def points_extract(img):
     #コーナー検出
@@ -245,31 +246,25 @@ def projective_transformation(img1,p1,p2,p3,p4):
     dst = cv2.warpPerspective(img1, M, (w, h))
     return dst
 #縦方向のProjection profileを得る
-def Projection_H(img, height, width):
-    array_H = np.zeros(height)
-    for i in range(height):
-        total_count = 0
-        for j in range(width):
-            temp_pixVal = img[i, j]
-        
-            if (temp_pixVal == 0):
-                total_count += 1
-        array_H[i] = total_count
+def Projection_H(img,h,w):
+    array_H = np.full(h,w)
+    count = [np.count_nonzero(img[i:i+1,]) for i in range(h)]
+    count = np.asarray(count,dtype=int)
+    array_H = array_H - count
+    #array_H = np.zeros(h)
+    #for i in range(h):
+    #    at = img[i:i+1,]
+    #    total_count = w - np.count_nonzero(at)
+    #    array_H[i] = total_count
+    
     return array_H
- 
 #横方向のProjection profileを得る
-def Projection_V(img, height, width):
-    array_V = np.zeros(width)
-    for i in range(width):
-        total_count = 0
-        for j in range(height):
-            temp_pixVal = img[j, i]
-            
-            if (temp_pixVal == 0):
-                total_count += 1
-        array_V[i] = total_count
+def Projection_V(img,h,w):
+    array_V = np.full(w,h)
+    count = [np.count_nonzero(img[:,i:i+1]) for i in range(w)]
+    count = np.asarray(count,dtype=int)
+    array_V = array_V - count
     return array_V
- 
  
 #Projection profileから縦方向の座標を得る
 def Detect_HeightPosition(H_THRESH, height, array_H):

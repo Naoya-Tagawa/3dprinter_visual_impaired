@@ -77,8 +77,8 @@ def diff_image_search1(present_frame,before_frame,img_temp,label_temp):
     #plt.show()
     #コーナー検出
     #try:
-    before_p1,before_p2,before_p3,before_p4 = points_extract1(blue_threshold_before_img,before_frame)
-    present_p1,present_p2,present_p3,present_p4 = points_extract1(blue_threshold_present_img,present_frame)
+    before_p1,before_p2,before_p3,before_p4 = points_extract1(blue_threshold_before_img)
+    present_p1,present_p2,present_p3,present_p4 = points_extract1(blue_threshold_present_img)
     #except TypeError:
         #print("Screen cannot be detected")
         #return before_frame,[] ,[]
@@ -203,8 +203,8 @@ def diff_image_search(before_frame,present_frame,img_temp,label_temp,before_fram
     #plt.show()
     #コーナー検出
     try:
-        before_p1,before_p2,before_p3,before_p4 = points_extract1(blue_threshold_before_img,before_frame)
-        present_p1,present_p2,present_p3,present_p4 = points_extract1(blue_threshold_present_img,present_frame)
+        before_p1,before_p2,before_p3,before_p4 = points_extract1(blue_threshold_before_img)
+        present_p1,present_p2,present_p3,present_p4 = points_extract1(blue_threshold_present_img)
     except TypeError:
         print("Screen cannot be detected")
         return before_frame,[] ,[]
