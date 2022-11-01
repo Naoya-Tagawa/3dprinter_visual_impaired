@@ -299,7 +299,7 @@ def Detect_WidthPosition(W_THRESH, width, array_V):
         if (flg==False and val < W_THRESH):
             flg = True
             posi1 = i
- 
+
         if (flg == True and val >= W_THRESH):
             flg = False
             posi2 = i
@@ -307,7 +307,235 @@ def Detect_WidthPosition(W_THRESH, width, array_V):
             char_List = np.append(char_List, posi2)
  
     return char_List
+def match(img_temp,label_temp,frame):
+    #カーネル
+    kernel = np.ones((3,3),np.uint8)
+    window_img = frame
+    #sフレームの青い部分を二値化
+    blue_threshold_img = cut_blue_img1(window_img)
+    #plt.imshow(blue_threshold_img)
+    #plt.show()
+    #コーナー検出
+    try:
+        p1,p2,p3,p4 = points_extract1(blue_threshold_img)
+    except TypeError:
+        print("point")
+        print("Screen cannot be detected")
+        return [],[]
 
+    #コーナーに従って画像の切り取り
+    cut_img = window_img[p1[1]:p2[1],p2[0]:p3[0]]
+    #射影変換
+    syaei_img = projective_transformation(window_img,p1,p2,p3,p4)
+    #対象画像をリサイズ
+    syaei_resize_img = cv2.resize(syaei_img,dsize=(610,211))
+    #対象画像をグレイスケール化
+    gray_img = cv2.cvtColor(syaei_resize_img,cv2.COLOR_BGR2GRAY)
+    #二値画像へ
+    ret, img_mask = cv2.threshold(gray_img,0,255,cv2.THRESH_OTSU)
+    #img_mask = cv2.adaptiveThreshold(gray_img,255,cv2.ADAPTIVE_THRESH_MEAN_C,cv2.THRESH_BINARY,7,-3)
+    #ノイズ除去
+    img_mask = cv2.medianBlur(img_mask,3)
+    #膨張化
+    img_mask = cv2.dilate(img_mask,kernel)
+    #高さ、幅を保持
+    height,width = img_mask.shape
+    #縦方向のProjection Profileを保持
+    array_H = Projection_H(img_mask,height,width)
+    #縦方向の最大値を保持
+    H_THRESH = max(array_H)
+    char_List1 = Detect_HeightPosition(H_THRESH,height,array_H)
+
+    #if (len(char_List1) % 2) == 0:
+        #print("Screen cannot be detected")
+        #return [], []
+        
+    out_modify = "" #修正したテキスト
+    output_text = [] #読み取ったテキスト
+    s = {}
+    new_d = {}
+    out = "" #読み取ったテキスト
+    #横方向にきって列ごとに保存
+    img_h = [img_mask[int(char_List1[i]):int(char_List1[i+1]),:] for i in range(0,len(char_List1)-1,2)]
+    height_h  = [img_h[i].shape[0] for i in range(len(img_h))]
+    width_h  = [img_h[i].shape[1] for i in range(len(img_h))]
+    array_V = [Projection_V(img_h[i],height_h[i],width_h[i]) for i in range(len(img_h))]
+    W_THRESH = [max(array_V[i]) for i in range(len(array_V))]
+    char_List2 = [Detect_WidthPosition(W_THRESH[i],width_h[i],array_V[i]) for i in range(len(W_THRESH))]
+    print(len(img_h))
+    print(char_List2)
+    print("新\n")
+    i = 0
+    temp_th = [ cv2.resize(img_temp[i],dsize=(26,36)) for i in range(len(img_temp))]
+    #print(len(temp_th))
+    for j in range(0,len(char_List2[0])-1,2):
+        #end_time = time.perf_counter()
+        #print(end_time-start_time)
+        #一文字ずつ切り取る
+        img_h1 = img_h[0]
+        match_img = img_h1[:,int(char_List2[0][j])-1:int(char_List2[0][j+1])+1]
+        #cv2.imwrite("match.jpg",match_img)
+        try:
+            match_img = cv2.resize(match_img,dsize=(26,36))
+        except cv2.error:
+            return [],[]
+        height_m,width_m = match_img.shape
+        match = [cv2.matchTemplate(match_img,temp_th[i],cv2.TM_CCORR_NORMED) for i in range(len(label_temp))]
+        max_value = [cv2.minMaxLoc(match[i])[1] for i in range(len(label_temp))]
+        print(len(max_value))
+        max_index = np.argmax(max_value)
+        max_v = max_value[max_index]
+        print(label_temp[max_index])
+        #空白があるとき
+        if max_v < 0.7:
+            i += 1
+            print("out!!")
+            continue
+        if (j != 0) & (char_List2[0][j] > (width_m + char_List2[0][j-1])):
+
+            if (j+1) == len(char_List2[0])-1:
+                out_modify = out_modify+ ' ' + label_temp[max_index]
+                out = out + out_modify + ' '
+                out_modify = ""
+                i += 1
+                continue
+                #out_modify = speling.correct(out_modify)
+                #out_modify += label_temp[new_d[0][1]]
+            out_modify += ' '
+                #out = out + out_modify
+                #output_text.append(' ')
+                #output_text.append(out_modify)
+                #print(out_modify)
+                #out_modify = ""
+                
+
+            #行の最後の時
+        if (j+1) == len(char_List2[0])-1:
+            out_modify = out_modify + label_temp[max_index]
+            #out_modify = speling.correct(out_modify)
+            out = out + out_modify + " "
+            out_modify = ""
+            i += 1
+            continue
+            #print(label_temp[new_d[0][1]])
+        out_modify = out_modify + label_temp[max_index]
+           # print(out_modify)
+        i += 1
+        continue
+    
+    for j in range(0,len(char_List2[1])-1,2):
+        #end_time = time.perf_counter()
+        #print(end_time-start_ti
+        #一文字ずつ切り取る
+        img_h1 = img_h[1]
+        match_img = img_h1[:,int(char_List2[1][j])-1:int(char_List2[1][j+1])+1]
+        #cv2.imwrite("match.jpg",match_img)
+        try:
+            match_img = cv2.resize(match_img,dsize=(26,36))
+        except cv2.error:
+            return [],[]
+        height_m,width_m = match_img.shape
+        match = [cv2.matchTemplate(match_img,temp_th[i],cv2.TM_CCORR_NORMED) for i in range(len(label_temp))]
+        max_value = [cv2.minMaxLoc(match[i])[1] for i in range(len(label_temp))]
+        print(len(max_value))
+        max_index = np.argmax(max_value)
+        max_v = max_value[max_index]
+        print(label_temp[max_index])
+        #空白があるとき
+        if max_v < 0.7:
+            i += 1
+            print("out!!")
+            continue
+        if (j != 0) & (char_List2[1][j] > (width_m + char_List2[1][j-1])):
+
+            if (j+1) == len(char_List2[1])-1:
+                out_modify = out_modify+ ' ' + label_temp[max_index]
+                out = out + out_modify + ' '
+                out_modify = ""
+                i += 1
+                continue
+                #out_modify = speling.correct(out_modify)
+                #out_modify += label_temp[new_d[0][1]]
+            out_modify += ' '
+                #out = out + out_modify
+                #output_text.append(' ')
+                #output_text.append(out_modify)
+                #print(out_modify)
+                #out_modify = ""
+
+            #行の最後の時
+        if (j+1) == len(char_List2[1])-1:
+            out_modify = out_modify + label_temp[max_index]
+            #out_modify = speling.correct(out_modify)
+            out = out + out_modify + " "
+            out_modify = ""
+            i += 1
+            continue
+            #print(label_temp[new_d[0][1]])
+        out_modify = out_modify + label_temp[max_index]
+           # print(out_modify)
+        i += 1
+        continue
+    
+    for j in range(0,len(char_List2[2])-1,2):
+        #end_time = time.perf_counter()
+        #print(end_time-start_time)
+        print(i)
+        #一文字ずつ切り取る
+        img_h1 = img_h[0]
+        match_img = img_h1[:,int(char_List2[0][j])-1:int(char_List2[0][j+1])+1]
+        #cv2.imwrite("match.jpg",match_img)
+        try:
+            match_img = cv2.resize(match_img,dsize=(26,36))
+        except cv2.error:
+            return [],[]
+        height_m,width_m = match_img.shape
+        match = [cv2.matchTemplate(match_img,temp_th[i],cv2.TM_CCORR_NORMED) for i in range(len(label_temp))]
+        max_value = [cv2.minMaxLoc(match[i])[1] for i in range(len(label_temp))]
+        print(len(max_value))
+        max_index = np.argmax(max_value)
+        max_v = max_value[max_index]
+        print(label_temp[max_index])
+        #空白があるとき
+        if max_v < 0.7:
+            i += 1
+            print("out!!")
+            continue
+        if (j != 0) & (char_List2[0][j] > (width_m + char_List2[0][j-1])):
+
+            if (j+1) == len(char_List2[0])-1:
+                out_modify = out_modify+ ' ' + label_temp[max_index]
+                out = out + out_modify + ' '
+                out_modify = ""
+                i += 1
+                continue
+                #out_modify = speling.correct(out_modify)
+                #out_modify += label_temp[new_d[0][1]]
+            out_modify += ' '
+                #out = out + out_modify
+                #output_text.append(' ')
+                #output_text.append(out_modify)
+                #print(out_modify)
+                #out_modify = ""
+                
+
+            #行の最後の時
+        if (j+1) == len(char_List2[0])-1:
+            out_modify = out_modify + label_temp[max_index]
+            #out_modify = speling.correct(out_modify)
+            out = out + out_modify + " "
+            out_modify = ""
+            i += 1
+            continue
+            #print(label_temp[new_d[0][1]])
+        out_modify = out_modify + label_temp[max_index]
+           # print(out_modify)
+        i += 1
+        continue
+
+
+    return out
+   
 def match_text(img_temp,label_temp,frame):
     #カーネル
     kernel = np.ones((3,3),np.uint8)
@@ -318,8 +546,9 @@ def match_text(img_temp,label_temp,frame):
     #plt.show()
     #コーナー検出
     try:
-        p1,p2,p3,p4 = points_extract1(blue_threshold_img,frame)
+        p1,p2,p3,p4 = points_extract1(blue_threshold_img)
     except TypeError:
+        print("jj")
         print("Screen cannot be detected")
         return [],[]
 

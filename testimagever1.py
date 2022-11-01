@@ -19,7 +19,7 @@ import difflib
 import numpy as np
 import cv2
 import matplotlib.pyplot as plt
-from img_processing2 import arrow_exist,mask_make,projective_transformation,points_extract1,cut_blue_img1,Projection_H,Projection_V,Detect_HeightPosition,Detect_WidthPosition,match_text,match_text2,sabun
+from img_processing2 import arrow_exist,mask_make,projective_transformation,points_extract1,cut_blue_img1,Projection_H,Projection_V,Detect_HeightPosition,Detect_WidthPosition,match_text,match_text2,sabun,match
 
 import audio_output
 from sklearn.neighbors import NearestNeighbors 
@@ -91,7 +91,7 @@ def diff_image_search1(present_frame,before_frame,img_temp,label_temp):
     syaei_before_img = projective_transformation(before_frame,before_p1,before_p2,before_p3,before_p4)
     syaei_present_img = projective_transformation(present_frame,present_p1,present_p2,present_p3,present_p4)
     #cv2.imwrite("syaei_present_frame.jpg",syaei_present_img)
-    out = match_text(img_temp,label_temp,present_frame)
+    #out = match_text(img_temp,label_temp,present_frame)
     #print(out)
     #file_w(out,output_text)
     #対象画像をリサイズ
@@ -481,12 +481,13 @@ if __name__ == "__main__":
     voice_flag = multiprocessing.Queue()
     #voice_flagがTrueなら今発話中,Falseなら発話していない
     voice_flag.put(False)
-    out= match_text(img_temp,label_temp,img2)
+    out= match(img_temp,label_temp,img2)
+    print(out)
     #voice1 = voice1 = multiprocessing.Process(target =voice,args = (output_text,voice_flag))
     #cv2.imwrite("before_frame_row1.jpg",before_frame_row1)
     ##plt.imshow(before_frame_row2)
     ##plt.show()
-    #cv2.imwrite("before_frame_row2.jpg",before_frame_row2)
+    #cv2.imwrite("before_frame_row2.jp3g",before_frame_row2)
     ##plt.imshow(before_frame_row3)
     ##plt.show()
     #cv2.imwrite("before_frame_row3.jpg",before_frame_row3)

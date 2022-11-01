@@ -4,6 +4,8 @@ import matplotlib
 import numpy as np
 kernel = np.ones((3,3),np.uint8)
 img = cv2.imread("./camera1/camera45.jpg")
+print("高さ")
+print(img.shape[1])
 blue_threshold_present_img = cut_blue_img1(img)
     
     #コーナー検出
@@ -22,7 +24,6 @@ array_present_H = Projection_V(mask_present_img,height_present,width_present)
 print(array_present_H)
 #array_present_l = Projection_V2(mask_present_img,height_present,width_present)
 #print(array_present_l)
-print(array_present_H == array_present_l)
 presentH_THRESH = max(array_present_H)
 present_char_List = Detect_HeightPosition(presentH_THRESH,height_present,array_present_H)
 present_char_List = np.reshape(present_char_List,[int(len(present_char_List)/2),2])
