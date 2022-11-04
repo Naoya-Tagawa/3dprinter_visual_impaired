@@ -362,12 +362,10 @@ def match(img_temp,label_temp,frame):
     array_V = [Projection_V(img_h[i],height_h[i],width_h[i]) for i in range(len(img_h))]
     W_THRESH = [max(array_V[i]) for i in range(len(array_V))]
     char_List2 = [Detect_WidthPosition(W_THRESH[i],width_h[i],array_V[i]) for i in range(len(W_THRESH))]
-    print(len(img_h))
-    print(char_List2)
-    print("新\n")
     i = 0
     temp_th = [ cv2.resize(img_temp[i],dsize=(26,36)) for i in range(len(img_temp))]
     #print(len(temp_th))
+
     for j in range(0,len(char_List2[0])-1,2):
         #end_time = time.perf_counter()
         #print(end_time-start_time)
@@ -382,10 +380,8 @@ def match(img_temp,label_temp,frame):
         height_m,width_m = match_img.shape
         match = [cv2.matchTemplate(match_img,temp_th[i],cv2.TM_CCORR_NORMED) for i in range(len(label_temp))]
         max_value = [cv2.minMaxLoc(match[i])[1] for i in range(len(label_temp))]
-        print(len(max_value))
         max_index = np.argmax(max_value)
         max_v = max_value[max_index]
-        print(label_temp[max_index])
         #空白があるとき
         if max_v < 0.7:
             i += 1
@@ -437,10 +433,8 @@ def match(img_temp,label_temp,frame):
         height_m,width_m = match_img.shape
         match = [cv2.matchTemplate(match_img,temp_th[i],cv2.TM_CCORR_NORMED) for i in range(len(label_temp))]
         max_value = [cv2.minMaxLoc(match[i])[1] for i in range(len(label_temp))]
-        print(len(max_value))
         max_index = np.argmax(max_value)
         max_v = max_value[max_index]
-        print(label_temp[max_index])
         #空白があるとき
         if max_v < 0.7:
             i += 1
@@ -480,10 +474,9 @@ def match(img_temp,label_temp,frame):
     for j in range(0,len(char_List2[2])-1,2):
         #end_time = time.perf_counter()
         #print(end_time-start_time)
-        print(i)
         #一文字ずつ切り取る
-        img_h1 = img_h[0]
-        match_img = img_h1[:,int(char_List2[0][j])-1:int(char_List2[0][j+1])+1]
+        img_h1 = img_h[2]
+        match_img = img_h1[:,int(char_List2[2][j])-1:int(char_List2[2][j+1])+1]
         #cv2.imwrite("match.jpg",match_img)
         try:
             match_img = cv2.resize(match_img,dsize=(26,36))
@@ -492,18 +485,16 @@ def match(img_temp,label_temp,frame):
         height_m,width_m = match_img.shape
         match = [cv2.matchTemplate(match_img,temp_th[i],cv2.TM_CCORR_NORMED) for i in range(len(label_temp))]
         max_value = [cv2.minMaxLoc(match[i])[1] for i in range(len(label_temp))]
-        print(len(max_value))
         max_index = np.argmax(max_value)
         max_v = max_value[max_index]
-        print(label_temp[max_index])
         #空白があるとき
         if max_v < 0.7:
             i += 1
             print("out!!")
             continue
-        if (j != 0) & (char_List2[0][j] > (width_m + char_List2[0][j-1])):
+        if (j != 0) & (char_List2[2][j] > (width_m + char_List2[2][j-1])):
 
-            if (j+1) == len(char_List2[0])-1:
+            if (j+1) == len(char_List2[2])-1:
                 out_modify = out_modify+ ' ' + label_temp[max_index]
                 out = out + out_modify + ' '
                 out_modify = ""
@@ -520,7 +511,7 @@ def match(img_temp,label_temp,frame):
                 
 
             #行の最後の時
-        if (j+1) == len(char_List2[0])-1:
+        if (j+1) == len(char_List2[2])-1:
             out_modify = out_modify + label_temp[max_index]
             #out_modify = speling.correct(out_modify)
             out = out + out_modify + " "
@@ -533,6 +524,57 @@ def match(img_temp,label_temp,frame):
         i += 1
         continue
 
+    for j in range(0,len(char_List2[3])-1,2):
+        #end_time = time.perf_counter()
+        #print(end_time-start_ti
+        #一文字ずつ切り取る
+        img_h1 = img_h[3]
+        match_img = img_h1[:,int(char_List2[3][j])-1:int(char_List2[3][j+1])+1]
+        #cv2.imwrite("match.jpg",match_img)
+        try:
+            match_img = cv2.resize(match_img,dsize=(26,36))
+        except cv2.error:
+            return [],[]
+        height_m,width_m = match_img.shape
+        match = [cv2.matchTemplate(match_img,temp_th[i],cv2.TM_CCORR_NORMED) for i in range(len(label_temp))]
+        max_value = [cv2.minMaxLoc(match[i])[1] for i in range(len(label_temp))]
+        max_index = np.argmax(max_value)
+        max_v = max_value[max_index]
+        #空白があるとき
+        if max_v < 0.7:
+            i += 1
+            print("out!!")
+            continue
+        if (j != 0) & (char_List2[3][j] > (width_m + char_List2[3][j-1])):
+
+            if (j+1) == len(char_List2[3])-1:
+                out_modify = out_modify+ ' ' + label_temp[max_index]
+                out = out + out_modify + ' '
+                out_modify = ""
+                i += 1
+                continue
+                #out_modify = speling.correct(out_modify)
+                #out_modify += label_temp[new_d[0][1]]
+            out_modify += ' '
+                #out = out + out_modify
+                #output_text.append(' ')
+                #output_text.append(out_modify)
+                #print(out_modify)
+                #out_modify = ""
+
+            #行の最後の時
+        if (j+1) == len(char_List2[3])-1:
+            out_modify = out_modify + label_temp[max_index]
+            #out_modify = speling.correct(out_modify)
+            out = out + out_modify + " "
+            out_modify = ""
+            i += 1
+            continue
+            #print(label_temp[new_d[0][1]])
+        out_modify = out_modify + label_temp[max_index]
+           # print(out_modify)
+        i += 1
+        continue
 
     return out
    
@@ -669,6 +711,7 @@ def match_text(img_temp,label_temp,frame):
 def get_unique_list(seq):
     seen = []
     return [x for x in seq if x not in seen and not seen.append(x)]
+
 def match_text2(img_temp,label_temp,frame):
     #対象画像をリサイズ
     #対象画像をグレイスケール化
@@ -683,67 +726,43 @@ def match_text2(img_temp,label_temp,frame):
     #img_mask = cv2.dilate(img_mask,kernel)
     #高さ、幅を保持
     height,width = img_mask.shape
-    #if (len(char_List1) % 2) == 0:
-        #print("Screen cannot be detected")
-        #return [], []
-        
     out_modify = "" #修正したテキスト
-    s = {}
-    new_d = {}
-    out = "" #読み取ったテキスト
-        #横方向のProjection Profileを得る
+    #横方向のProjection Profileを得る
     array_V = Projection_V(img_mask,height,width)
     W_THRESH = max(array_V)
     char_List2 = Detect_WidthPosition(W_THRESH,width,array_V)
+
+    out_modify = "" #修正したテキスト
+    out = "" #読み取ったテキスト
+    #横方向にきって列ごとに保存
+    temp_th = [ cv2.resize(img_temp[i],dsize=(26,36)) for i in range(len(img_temp))]
+    #print(len(temp_th))
+
     for j in range(0,len(char_List2)-1,2):
-            #end_time = time.perf_counter()
-            #print(end_time-start_time)
-        new_d = {}
-        s={}
+        #end_time = time.perf_counter()
+        #print(end_time-start_time)
         #一文字ずつ切り取る
         match_img = img_mask[:,int(char_List2[j])-1:int(char_List2[j+1])+1]
-        #plt.imshow(match_img)
-        #plt.show()
+        #cv2.imwrite("match.jpg",match_img)
         try:
             match_img = cv2.resize(match_img,dsize=(26,36))
-            #match_img = cv2.dilate(match_img,kernel)
         except cv2.error:
-            return [], ""
+            return ""
         height_m,width_m = match_img.shape
-        #img_g = cv2.rectangle(syaei_resize_img, (int(char_List2[j]) ,int(char_List2[j])), (int(char_List2[j+1]), int(char_List1[i+1])), (0,0,255), 2)
-        for f in range(len(label_temp)):
-            temp_th = img_temp[f]
-            temp_th = cv2.resize(temp_th,dsize=(26,36))
-            #テンプレートマッチング
-            #入力画像、テンプレート画像、類似度の計算方法が引数 返り値は検索窓の各市でのテンプレート画像との類似度を表す二次元配列
-            match = cv2.matchTemplate(match_img,temp_th,cv2.TM_CCORR_NORMED)
-            en = time.perf_counter()
-            #返り値は最小類似点、最大類似点、最小の場所、最大の場所
-            min_value, max_value, min_pt, max_pt = cv2.minMaxLoc(match)
-            #からのリストに
-            s.setdefault(max_value,f)
-            #print(end-start)
-            #類似度が最大のもの順にソート
-        new_d = sorted(s.items(), reverse = True)
-            #print(label_temp[new_d[0][1]])
-            #print(new_d[0][0])
-            #print(label_temp[new_d[1][1]])
-            #print(new_d[1][0])     
-            #new_d[0][1]がlabelの番号、new_d[0][0]が最大類似度
-            #print(char_List2)
-            #print(width_m)
-            #空白があるとき
-        #print(new_d[0][0])
-        if new_d[0][0] < 0.6:
+        match = [cv2.matchTemplate(match_img,temp_th[i],cv2.TM_CCORR_NORMED) for i in range(len(label_temp))]
+        max_value = [cv2.minMaxLoc(match[i])[1] for i in range(len(label_temp))]
+        max_index = np.argmax(max_value)
+        max_v = max_value[max_index]
+
+        if max_v < 0.6:
             continue
         if (j != 0) & (char_List2[j] > (width_m + char_List2[j-1])):
 
             if (j+1) == len(char_List2)-1:
-                out_modify = out_modify+ ' ' + label_temp[new_d[0][1]]
+                out_modify = out_modify+ ' ' + label_temp[max_index]
                 out = out + out_modify + ' '
                 #output_text.append('\n')
                 out_modify = ""
-                new_d = {}
                 continue
                 #out_modify = speling.correct(out_modify)
                 #out_modify += label_temp[new_d[0][1]]
@@ -756,7 +775,7 @@ def match_text2(img_temp,label_temp,frame):
                 
         #行の最後の時
         if (j+1) == len(char_List2)-1:
-            out_modify = out_modify + label_temp[new_d[0][1]]
+            out_modify = out_modify + label_temp[max_index]
             #out_modify = speling.correct(out_modify)
             out = out + out_modify + ' '
             #output_text.append('\n')
@@ -764,9 +783,8 @@ def match_text2(img_temp,label_temp,frame):
             new_d = {}
             continue
         #print(label_temp[new_d[0][1]])
-        out_modify = out_modify + label_temp[new_d[0][1]]
+        out_modify = out_modify + label_temp[max_index]
         #print(out_modify)
-        new_d = {}
         continue
 
     return out
