@@ -811,6 +811,7 @@ def match_text3(img_temp,label_temp,frame):
     out_modify = "" #修正したテキスト
     out = "" #読み取ったテキスト
     #横方向にきって列ごとに保存
+    
     temp_th = [ cv2.resize(img_temp[i],dsize=(26,36)) for i in range(len(img_temp))]
     #print(len(temp_th))
     for j in range(0,len(char_List2)-1,2):
@@ -852,7 +853,6 @@ def match_text3(img_temp,label_temp,frame):
             out = out + out_modify + ' '
             #output_text.append('\n')
             out_modify = ""
-            new_d = {}
             continue
         #print(label_temp[new_d[0][1]])
         out_modify = out_modify + label_temp[max_index]
@@ -924,10 +924,10 @@ def sabun(before_frame_row,present_frame_row):
     #frame_diff = cv2.absdiff(present_frame,before_frame)
     ##plt.imshow(frame_diff)
     ##plt.show()
-    height , width = frame_diff.shape
-    array_V = Projection_V(frame_diff,height,width)
-    W_THRESH = max(array_V)
-    char_List2 = Detect_WidthPosition(W_THRESH,width,array_V)
+    #height , width = frame_diff.shape
+    #array_V = Projection_V(frame_diff,height,width)
+    #W_THRESH = max(array_V)
+    #char_List2 = Detect_WidthPosition(W_THRESH,width,array_V)
     white_pixels1 = np.count_nonzero(present_frame_row)
     white_pixels2 = np.count_nonzero(before_frame_row)
     sum_white_pixels = white_pixels1 + white_pixels2
@@ -939,11 +939,16 @@ def sabun(before_frame_row,present_frame_row):
     black_pixels = frame_diff.size - white_pixels
     #print("前のフレームとの変化量%")
     #percent = white_pixels/frame_diff.size *100
+    print(white_pixels1)
+    print(white_pixels2)
     try:
         percent = white_pixels / sum_white_pixels * 100
     except ZeroDivisionError:
         percent = 100
+    
     if percent < 2:
+        
         return True
     else:
+        
         return False

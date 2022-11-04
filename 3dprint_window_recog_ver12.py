@@ -142,6 +142,7 @@ def diff_image_search(present_frame,img_temp,label_temp,before_frame_row1,before
     
     count = 0
     present_char_List1 , mask_present_img2 = mask_make(blue_threshold_present_img)
+    cv2.imwrite("realtimeimg.jpg",mask_present_img2)
     for i in present_char_List1:
         
         cut_present = mask_present_img2[int(i[0]):int(i[1]),]
@@ -311,6 +312,14 @@ def text_read(text_img,img_temp,label_temp):
     start = 0
     while True:
         img = text_img.get()
+        cv2.imwrite("real.jpg",img)
+        print("queu size :{0}".format(text_img.qsize()))
+        if text_img.qsize() >= 1:
+            while text_img.qsize() > 1:
+                img = text_img.get()
+                
+                cv2.imwrite("real.jpg",img)
+        
         out = match_text3(img_temp,label_temp,img)
         print(out)
         make_voice_file(out)
@@ -323,6 +332,7 @@ def text_read(text_img,img_temp,label_temp):
             delete_voice_file()
             start = 1
         start += 1
+        time.sleep(0.1)
 
 
 if __name__ == "__main__":
@@ -347,10 +357,7 @@ if __name__ == "__main__":
     ret , bg = cap.read()
     before_frame_row1,before_frame_row2,before_frame_row3,before_frame_row4 = diff_image_search_first(bg,img_temp,label_temp,text_img)
     frame = bg
-    start = time.perf_counter()
     while True:
-        end = time.perf_counter()
-        print(end-start)
         ret , frame = cap.read()
         #フレームが取得できない場合は画面を閉じる
         if not ret:
@@ -368,4 +375,4 @@ if __name__ == "__main__":
             cv2.destroyAllWindows()
             break
         
-        #time.sleep(0.1)
+        time.sleep(0.5)

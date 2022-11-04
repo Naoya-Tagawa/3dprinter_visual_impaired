@@ -17,7 +17,7 @@ import pyttsx3
 from dictionary_word import speling
 import numpy as np
 import cv2
-import image_processing
+import img_processing2
 import audio_output
 from threading import Thread
 import threading
@@ -75,11 +75,11 @@ def diff_image_search_first(present_frame,img_temp,label_temp,output_text):
     #output_text = []
     out = ""
     #フレームの青い部分を二値化
-    blue_threshold_present_img = image_processing.cut_blue_img1(present_frame)
+    blue_threshold_present_img = img_processing2.cut_blue_img1(present_frame)
     
     #コーナー検出
     try:
-        present_p1,present_p2,present_p3,present_p4 = image_processing.points_extract1(blue_threshold_present_img,present_frame)
+        present_p1,present_p2,present_p3,present_p4 = img_processing2.points_extract1(blue_threshold_present_img,present_frame)
     except TypeError:
         print("Screen cannot be detected")
         return img,img,img,img
@@ -88,7 +88,7 @@ def diff_image_search_first(present_frame,img_temp,label_temp,output_text):
     cut_present = present_frame[present_p1[1]:present_p2[1],present_p2[0]:present_p3[0]]
     
     #射影変換
-    syaei_present_img = image_processing.projective_transformation(present_frame,present_p1,present_p2,present_p3,present_p4)
+    syaei_present_img = img_processing2.projective_transformation(present_frame,present_p1,present_p2,present_p3,present_p4)
 
     gray_present_img = cv2.cvtColor(syaei_present_img,cv2.COLOR_BGR2GRAY)
     gray_present_img = cv2.medianBlur(gray_present_img,3)
@@ -96,15 +96,15 @@ def diff_image_search_first(present_frame,img_temp,label_temp,output_text):
     #膨張処理
     mask_present_img = cv2.dilate(mask_present_img,kernel)
     height_present,width_present = mask_present_img.shape
-    array_present_H = image_processing.Projection_H(mask_present_img,height_present,width_present)
+    array_present_H = img_processing2.Projection_H(mask_present_img,height_present,width_present)
     presentH_THRESH = max(array_present_H)
-    present_char_List1 = image_processing.Detect_HeightPosition(presentH_THRESH,height_present,array_present_H)
+    present_char_List1 = img_processing2.Detect_HeightPosition(presentH_THRESH,height_present,array_present_H)
     present_char_List1 = np.reshape(present_char_List1,[int(len(present_char_List1)/2),2])
     
 
 
     #文字のみのマスク画像生成
-    present_char_List2 , mask_present_img2 = image_processing.mask_make(blue_threshold_present_img)
+    present_char_List2 , mask_present_img2 = img_processing2.mask_make(blue_threshold_present_img)
     before_frame_row = []
     #列ごとにマスク画像を取得
     for i in present_char_List2:
@@ -114,7 +114,7 @@ def diff_image_search_first(present_frame,img_temp,label_temp,output_text):
         cv2.rectangle(normal,(0,int(i[1])-1),(w-1,h-1),(0,0,0),-1)
         before_frame_row.append(cut_present_row)
     
-    output_text_p, out = image_processing.match_text(img_temp,label_temp,cut_present)
+    output_text_p, out = img_processing2.match_text(img_temp,label_temp,cut_present)
     output_text.put(output_text_p)
     if len(present_char_List2) == 0:
         return img,img,img,img
@@ -139,44 +139,17 @@ def diff_image_search(present_frame,img_temp,label_temp,before_frame_row1,before
     kernel = np.ones((3,3),np.uint8)
     h,w,d = present_frame.shape
     #フレームの青い部分を二値化
-    blue_threshold_present_img = image_processing.cut_blue_img1(present_frame)
-    #コーナー検出
-    try:
-        present_p1,present_p2,present_p3,present_p4 = image_processing.points_extract1(blue_threshold_present_img,present_frame)
-
-    except TypeError:
-        print("Screen cannot be detected")
-        return img,img,img,img
-    #コーナーに従って画像の切り取り
-    cut_present = present_frame[present_p1[1]:present_p2[1],present_p2[0]:present_p3[0]]
-    #射影変換
-    syaei_present_img = image_processing.projective_transformation(present_frame,present_p1,present_p2,present_p3,present_p4)
-    #対象画像をリサイズ
-    syaei_present_img = cv2.resize(syaei_present_img,dsize=(610,211))
-    gray_present_img = cv2.cvtColor(syaei_present_img,cv2.COLOR_BGR2GRAY)
-    gray_present_img = cv2.medianBlur(gray_present_img,3)
-    ret, mask_present_img = cv2.threshold(gray_present_img,0,255,cv2.THRESH_OTSU)
-    #膨張処理
-    mask_present_img = cv2.dilate(mask_present_img,kernel)
-    height_present,width_present = mask_present_img.shape
-    array_present_H = image_processing.Projection_H(mask_present_img,height_present,width_present)
-    presentH_THRESH = max(array_present_H)
-    present_char_List = image_processing.Detect_HeightPosition(presentH_THRESH,height_present,array_present_H)
-    present_char_List = np.reshape(present_char_List,[int(len(present_char_List)/2),2])
-
+    blue_threshold_present_img = img_processing2.cut_blue_img1(present_frame)
+ 
     before_frame_row = []
     sabun_count = 0
-    before_row1_arrow_exist = False
-    before_row2_arrow_exist = False
-    before_row3_arrow_exist = False
-    before_row4_arrow_exist = False
-    before_arrow_exist = 0
+
     if arrow_exist(before_frame_row1):
         before_arrow_exist = 1
         height,width = before_frame_row1.shape
-        array_V = image_processing.Projection_V(before_frame_row1,height,width)
+        array_V = img_processing2.Projection_V(before_frame_row1,height,width)
         W_THRESH = max(array_V)
-        char_List = image_processing.Detect_WidthPosition(W_THRESH,width,array_V)
+        char_List = img_processing2.Detect_WidthPosition(W_THRESH,width,array_V)
         before_arrow = before_frame_row1.copy()
         cv2.rectangle(before_arrow,(0,0),(int(char_List[1]+1),h-1),(0,0,0),-1)
         before_frame_row1 = before_arrow
@@ -184,9 +157,9 @@ def diff_image_search(present_frame,img_temp,label_temp,before_frame_row1,before
     if arrow_exist(before_frame_row2):
         before_arrow_exist = 2
         height,width = before_frame_row2.shape
-        array_V = image_processing.Projection_V(before_frame_row2,height,width)
+        array_V = img_processing2.Projection_V(before_frame_row2,height,width)
         W_THRESH = max(array_V)
-        char_List = image_processing.Detect_WidthPosition(W_THRESH,width,array_V)
+        char_List = img_processing2.Detect_WidthPosition(W_THRESH,width,array_V)
         before_arrow = before_frame_row2.copy()
         cv2.rectangle(before_arrow,(0,0),(int(char_List[1]+1),h-1),(0,0,0),-1)
         before_frame_row2 = before_arrow
@@ -194,9 +167,9 @@ def diff_image_search(present_frame,img_temp,label_temp,before_frame_row1,before
     if arrow_exist(before_frame_row3):
         before_arrow_exist = 3
         height,width = before_frame_row3.shape
-        array_V = image_processing.Projection_V(before_frame_row3,height,width)
+        array_V = img_processing2.Projection_V(before_frame_row3,height,width)
         W_THRESH = max(array_V)
-        char_List = image_processing.Detect_WidthPosition(W_THRESH,width,array_V)
+        char_List = img_processing2.Detect_WidthPosition(W_THRESH,width,array_V)
         before_arrow = before_frame_row3.copy()
         cv2.rectangle(before_arrow,(0,0),(int(char_List[1]+1),h-1),(0,0,0),-1)
         before_frame_row3 = before_arrow
@@ -205,28 +178,26 @@ def diff_image_search(present_frame,img_temp,label_temp,before_frame_row1,before
     if arrow_exist(before_frame_row4):
         before_arrow_exist = 4
         height,width = before_frame_row4.shape
-        array_V = image_processing.Projection_V(before_frame_row4,height,width)
+        array_V = img_processing2.Projection_V(before_frame_row4,height,width)
         W_THRESH = max(array_V)
-        char_List = image_processing.Detect_WidthPosition(W_THRESH,width,array_V)
+        char_List = img_processing2.Detect_WidthPosition(W_THRESH,width,array_V)
         before_arrow = before_frame_row4.copy()
         cv2.rectangle(before_arrow,(0,0),(int(char_List[1]+1),h-1),(0,0,0),-1)
         before_frame_row4 = before_arrow
-    l = len(present_char_List)
+    
     count = 0
     output_textx = []
-    present_char_List1 , mask_present_img2 = image_processing.mask_make(blue_threshold_present_img)
+    present_char_List1 , mask_present_img2 = img_processing2.mask_make(blue_threshold_present_img)
     start = time.perf_counter()
-    for (i,j) in zip(present_char_List1,present_char_List):
-        if l == count:
-            break
+    for i in present_char_List1:
         cut_present = mask_present_img2[int(i[0]):int(i[1]),]
         flag = arrow_exist(cut_present)
         if flag == True:
             height,width = cut_present.shape
             #frame_row = cv2.medianBlur(frame_row,3)
-            array_V = image_processing.Projection_V(cut_present,height,width)
+            array_V = img_processing2.Projection_V(cut_present,height,width)
             W_THRESH = max(array_V)
-            char_List = image_processing.Detect_WidthPosition(W_THRESH,width,array_V)
+            char_List = img_processing2.Detect_WidthPosition(W_THRESH,width,array_V)
             cut_present_arrow = cut_present.copy()
             #plt.imshow(before_arrow)
             #plt.show()
@@ -251,20 +222,20 @@ def diff_image_search(present_frame,img_temp,label_temp,before_frame_row1,before
     
         if sabun_count > 3:
             if flag == True:
-                output_text_p,out = image_processing.match_text2(img_temp,label_temp,cut_present1)
+                out = img_processing2.match_text2(img_temp,label_temp,cut_present1)
                 output_textx.append(out)
                 before_frame_row.append(cut_present1)
             else:
-                output_text_p,out = image_processing.match_text2(img_temp,label_temp,cut_present)
+                out = img_processing2.match_text2(img_temp,label_temp,cut_present)
                 output_textx.append(out)
                 before_frame_row.append(cut_present)
             #try:
                 #if not sabun(before_arrow,cut_present):
-                    #output_text_p,out = image_processing.match_text2(img_temp,label_temp,cut_present1)
+                    #output_text_p,out = img_processing2.match_text2(img_temp,label_temp,cut_present1)
                     #if out != "":
                         #output_textx.append(out)
             #except UnboundLocalError:
-                    #output_text_p,out = image_processing.match_text2(img_temp,label_temp,cut_present1)
+                    #output_text_p,out = img_processing2.match_text2(img_temp,label_temp,cut_present1)
                     #if out != "":
                         #output_textx.append(out)
         #矢印があるかどうか判定
@@ -276,10 +247,6 @@ def diff_image_search(present_frame,img_temp,label_temp,before_frame_row1,before
     if len(output_textx) != 0:
         output_text.put(output_textx)
         voice_flag.value = 1
-    start1 = time.perf_counter()
-    dd = before_frame_row[0]
-    end1 = time.perf_counter()
-    print("hhh" + str(end1-start1))
     try:
         if len(present_char_List1) == 0:
             return img,img,img,img
@@ -329,9 +296,9 @@ def arrow_exist(frame_row):
     arrow_img = cv2.resize(arrow_img,dsize=(26,36))
 
     height,width = frame_row.shape
-    array_V = image_processing.Projection_V(frame_row,height,width)
+    array_V = img_processing2.Projection_V(frame_row,height,width)
     W_THRESH = max(array_V)
-    char_List2 = image_processing.Detect_WidthPosition(W_THRESH,width,array_V)
+    char_List2 = img_processing2.Detect_WidthPosition(W_THRESH,width,array_V)
     if len(char_List2) == 0:
         return False
     
