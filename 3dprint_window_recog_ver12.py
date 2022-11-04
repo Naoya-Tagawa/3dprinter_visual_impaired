@@ -97,39 +97,13 @@ def diff_image_search(present_frame,img_temp,label_temp,before_frame_row1,before
     img = cv2.imread("./balck_img.jpg")
     #arrow_img = cv2.imread("./ex6/ex63.jpg")
     img = cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
-    #カーネル
-    kernel = np.ones((3,3),np.uint8)
     h,w,d = present_frame.shape
     #フレームの青い部分を二値化
     blue_threshold_present_img = cut_blue_img1(present_frame)
-    #コーナー検出
-    try:
-        present_p1,present_p2,present_p3,present_p4 = points_extract1(blue_threshold_present_img,present_frame)
-
-    except TypeError:
-        print("Screen cannot be detected")
-        return img,img,img,img
-    #コーナーに従って画像の切り取り
-    cut_present = present_frame[present_p1[1]:present_p2[1],present_p2[0]:present_p3[0]]
-    #射影変換
-    syaei_present_img = projective_transformation(present_frame,present_p1,present_p2,present_p3,present_p4)
-    #対象画像をリサイズ
-    syaei_present_img = cv2.resize(syaei_present_img,dsize=(610,211))
-    gray_present_img = cv2.cvtColor(syaei_present_img,cv2.COLOR_BGR2GRAY)
-    gray_present_img = cv2.medianBlur(gray_present_img,3)
-    ret, mask_present_img = cv2.threshold(gray_present_img,0,255,cv2.THRESH_OTSU)
-    #膨張処理
-    mask_present_img = cv2.dilate(mask_present_img,kernel)
-    height_present,width_present = mask_present_img.shape
-    array_present_H = Projection_H(mask_present_img,height_present,width_present)
-    presentH_THRESH = max(array_present_H)
-    present_char_List = Detect_HeightPosition(presentH_THRESH,height_present,array_present_H)
-    present_char_List = np.reshape(present_char_List,[int(len(present_char_List)/2),2])
 
     before_frame_row = []
     sabun_count = 0
     if arrow_exist(before_frame_row1):
-        before_arrow_exist = 1
         height,width = before_frame_row1.shape
         array_V = Projection_V(before_frame_row1,height,width)
         W_THRESH = max(array_V)
@@ -139,7 +113,6 @@ def diff_image_search(present_frame,img_temp,label_temp,before_frame_row1,before
         before_frame_row1 = before_arrow
 
     if arrow_exist(before_frame_row2):
-        before_arrow_exist = 2
         height,width = before_frame_row2.shape
         array_V = Projection_V(before_frame_row2,height,width)
         W_THRESH = max(array_V)
@@ -149,7 +122,6 @@ def diff_image_search(present_frame,img_temp,label_temp,before_frame_row1,before
         before_frame_row2 = before_arrow
     
     if arrow_exist(before_frame_row3):
-        before_arrow_exist = 3
         height,width = before_frame_row3.shape
         array_V = Projection_V(before_frame_row3,height,width)
         W_THRESH = max(array_V)
@@ -160,7 +132,6 @@ def diff_image_search(present_frame,img_temp,label_temp,before_frame_row1,before
 
 
     if arrow_exist(before_frame_row4):
-        before_arrow_exist = 4
         height,width = before_frame_row4.shape
         array_V = Projection_V(before_frame_row4,height,width)
         W_THRESH = max(array_V)
@@ -168,14 +139,11 @@ def diff_image_search(present_frame,img_temp,label_temp,before_frame_row1,before
         before_arrow = before_frame_row4.copy()
         cv2.rectangle(before_arrow,(0,0),(int(char_List[1]+1),h-1),(0,0,0),-1)
         before_frame_row4 = before_arrow
-    l = len(present_char_List)
+    
     count = 0
-    output_textx = []
     present_char_List1 , mask_present_img2 = mask_make(blue_threshold_present_img)
-    start = time.perf_counter()
-    for (i,j) in zip(present_char_List1,present_char_List):
-        if l == count:
-            break
+    for i in present_char_List1:
+        
         cut_present = mask_present_img2[int(i[0]):int(i[1]),]
         flag = arrow_exist(cut_present)
         if flag == True:
@@ -365,7 +333,7 @@ if __name__ == "__main__":
     #テンプレートのラベル(文)を格納
     label_temp = temp['y']
     #diff_image_search(img1,img2)
-    cap = cv2.VideoCapture(1)
+    cap = cv2.VideoCapture(0)
     read_fps = cap.get(cv2.CAP_PROP_FPS)
     print(read_fps)
     voice_flag = multiprocessing.Value('i',0)
@@ -380,7 +348,7 @@ if __name__ == "__main__":
     before_frame_row1,before_frame_row2,before_frame_row3,before_frame_row4 = diff_image_search_first(bg,img_temp,label_temp,text_img)
     frame = bg
     start = time.perf_counter()
-    for i in range(10000000):
+    while True:
         end = time.perf_counter()
         print(end-start)
         ret , frame = cap.read()
