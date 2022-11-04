@@ -380,7 +380,7 @@ if __name__ == "__main__":
     before_frame_row1,before_frame_row2,before_frame_row3,before_frame_row4 = diff_image_search_first(bg,img_temp,label_temp,text_img)
     frame = bg
     start = time.perf_counter()
-    for i in range(10000000):
+    while True:
         end = time.perf_counter()
         print(end-start)
         ret , frame = cap.read()
@@ -400,4 +400,3 @@ if __name__ == "__main__":
             cv2.destroyAllWindows()
             break
         
-        #time.sleep(0.1)
