@@ -3,7 +3,7 @@ import numpy as np
 import cv2
 import matplotlib.pyplot as plt
 import time
-from img_processing2 import arrow_exist,mask_make,projective_transformation,points_extract1,cut_blue_img1,Projection_H,Projection_V,Detect_HeightPosition,Detect_WidthPosition,match_text,match_text2,sabun
+from img_processing2 import arrow_exist,mask_make, match_text3,projective_transformation,points_extract1,cut_blue_img1,Projection_H,Projection_V,Detect_HeightPosition,Detect_WidthPosition,match_text,match_text2,sabun
 import numpy as np
 from natsort import natsorted
 import multiprocessing
@@ -343,7 +343,7 @@ def text_read(text_img,img_temp,label_temp):
     start = 0
     while True:
         img = text_img.get()
-        out = match_text2(img_temp,label_temp,img)
+        out = match_text3(img_temp,label_temp,img)
         print(out)
         make_voice_file(out)
         file_name = latest_play_voice_file()
