@@ -24,7 +24,6 @@ from img_processing2 import arrow_exist,mask_make, match_text3,projective_transf
 import audio_output
 from sklearn.neighbors import NearestNeighbors 
 from io import BytesIO
-from numba import jit
 #flag = True: 音声出力
 #flag = false: 音声出力しない
 import itertools
@@ -35,7 +34,7 @@ vol = 1.0
 
 global present_img
 global before_frame 
-@jit
+
 def camera():
     global before_frame
     cap = cv2.VideoCapture(1)
@@ -483,13 +482,19 @@ if __name__ == "__main__":
     ##plt.imshow(before_frame_row4)
     ##plt.show()
     #cv2.imwrite("before_frame_row4.jpg",before_frame_row4)
+    t0 = time.perf_counter()
+    out= match(img_temp,label_temp,img2)
+    print(out)
+    t1 = time.perf_counter()
+    print("time1:")
+    print(t1-t0)
 
     t0 = time.perf_counter()
     output_text,before_frame_row1,before_frame_row2,before_frame_row3,before_frame_row4 =diff_image_search(img1,img2,img_temp,label_temp,before_frame_row1,before_frame_row2,before_frame_row3,before_frame_row4)
     #list(itertools.chain.from_iterable(output_text))
     #flat = [x for row in output_text for x in row]
     t1 = time.perf_counter()
-    print("time:")
+    print("time2:")
     print(t1-t0)
     #voice1 = multiprocessing.Process(target =voice,args = (output_text,voice_flag))
     #voice1.start()
