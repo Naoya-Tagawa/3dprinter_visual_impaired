@@ -770,6 +770,88 @@ def match_text2(img_temp,label_temp,frame):
         continue
 
     return out
+
+def match_text3(img_temp,label_temp,frame):
+    #対象画像をリサイズ
+    #対象画像をグレイスケール化
+    #gray_img = cv2.cvtColor(syaei_resize_img,cv2.COLOR_BGR2GRAY)
+    #二値画像へ
+    #ret, img_mask = cv2.threshold(gray_img,0,255,cv2.THRESH_OTSU)
+    img_mask = frame
+    #img_mask = cv2.adaptiveThreshold(gray_img,255,cv2.ADAPTIVE_THRESH_MEAN_C,cv2.THRESH_BINARY,7,-3)
+    #ノイズ除去
+    #img_mask = cv2.medianBlur(img_mask,3)
+    #膨張化
+    #img_mask = cv2.dilate(img_mask,kernel)
+    #高さ、幅を保持
+    height,width = img_mask.shape
+    out_modify = "" #修正したテキスト
+    #横方向のProjection Profileを得る
+    array_V = Projection_V(img_mask,height,width)
+    W_THRESH = max(array_V)
+    char_List2 = Detect_WidthPosition(W_THRESH,width,array_V)
+    out_modify = "" #修正したテキスト
+    out = "" #読み取ったテキスト
+    #横方向にきって列ごとに保存
+    temp_th = [ cv2.resize(img_temp[i],dsize=(26,36)) for i in range(len(img_temp))]
+    #print(len(temp_th))
+    for j in range(0,len(char_List2)-1,2):
+        #end_time = time.perf_counter()
+        #print(end_time-start_time)
+        #一文字ずつ切り取る
+        match_img = img_mask[:,int(char_List2[j])-1:int(char_List2[j+1])+1]
+        #cv2.imwrite("match.jpg",match_img)
+        try:
+            match_img = cv2.resize(match_img,dsize=(26,36))
+        except cv2.error:
+            return ""
+        height_m,width_m = match_img.shape
+        match = [cv2.matchTemplate(match_img,temp_th[i],cv2.TM_CCORR_NORMED) for i in range(len(label_temp))]
+        max_value = [cv2.minMaxLoc(match[i])[1] for i in range(len(label_temp))]
+        max_index = np.argmax(max_value)
+        max_v = max_value[max_index]
+        if max_v < 0.6:
+            continue
+        if (j != 0) & (char_List2[j] > (width_m + char_List2[j-1])):
+            if (j+1) == len(char_List2)-1:
+                out_modify = out_modify+ ' ' + label_temp[max_index]
+                out = out + out_modify + ' '
+                #output_text.append('\n')
+                out_modify = ""
+                continue
+                #out_modify = speling.correct(out_modify)
+                #out_modify += label_temp[new_d[0][1]]
+            out_modify += ' '
+                #out = out + out_modify
+                #output_text.append(' ')
+                #output_text.append(out_modify)
+                #print(out_modify)
+                #out_modify = ""
+        #行の最後の時
+        if (j+1) == len(char_List2)-1:
+            out_modify = out_modify + label_temp[max_index]
+            #out_modify = speling.correct(out_modify)
+            out = out + out_modify + ' '
+            #output_text.append('\n')
+            out_modify = ""
+            new_d = {}
+            continue
+        #print(label_temp[new_d[0][1]])
+        out_modify = out_modify + label_temp[max_index]
+        #print(out_modify)
+        continue
+    
+    return out
+
+
+
+
+
+
+
+
+
+
 def arrow_exist(frame_row):
     kernel = np.ones((3,3),np.uint8)
     arrow_img = cv2.imread("./arrow.jpg")
