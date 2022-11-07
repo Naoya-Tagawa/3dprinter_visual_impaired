@@ -23,7 +23,7 @@ from pylsd.lsd import lsd
 import itertools
 import pyocr
 def mask_make(blue_threshold_present_img):
-    #kernel = np.ones((1,1),np.uint8)
+    kernel = np.ones((3,3),np.uint8)
     #hsvLower = np.array([100,130,180])
     hsvLower = np.array([70, 25, 25])    # 抽出する色の下限(HSV)
     hsvUpper = np.array([255, 222, 255])    # 抽出する色の上限(HSV)
@@ -33,8 +33,8 @@ def mask_make(blue_threshold_present_img):
     hsv_mask = cv2.medianBlur(hsv_mask,3)
     #mask_present_img2 = cv2.dilate(mask_present_img2,kernel)
     #ret, mask_present_img2 = cv2.threshold(hsv_mask,0,255,cv2.THRESH_OTSU)
-    #mask_present_img2 = cv2.dilate(hsv_mask,kernel)
-    mask_present_img2 = hsv_mask
+    mask_present_img2 = cv2.dilate(hsv_mask,kernel)
+    #mask_present_img2 = hsv_mask
     #plt.imshow(mask_present_img2)
     #plt.show()
     cv2.imwrite("mask.png",mask_present_img2)
@@ -72,7 +72,37 @@ def cut_blue_img1(img):
     cv2.fillPoly(close_img, cnts, [255,255,255])
     dst = cv2.bitwise_and(img,img,mask = close_img)
     return dst
+def cut_blue_img2(img):
+        #γ変換の値
+    gamma=0.1
+    #γ変換の対応表を作る
+    LUT_Table=np.zeros((256,1),dtype='uint8')
+    for i in range(len(LUT_Table)):
+        LUT_Table[i][0]=255*(float(i)/255)**(1.0/gamma)
 
+    #γ変換をする
+    img=cv2.LUT(img,LUT_Table)
+    c_img = cv2.cvtColor(img,cv2.COLOR_BGR2RGB)
+    img_hsv = cv2.cvtColor(img,cv2.COLOR_BGR2HSV)
+    #ブルーに近いものを切り抜く
+    average_color_per_row = np.average(c_img,axis=0)
+    average_color = np.average(average_color_per_row,axis=0)
+    average_color = np.uint8(average_color)
+    #ブルーの最小値
+    blue_min = np.array([100,130,180],np.uint8)
+    #ブルーの最大値
+    blue_max = np.array([120,255,255],np.uint8)
+    threshold_blue_img = cv2.inRange(img_hsv,blue_min,blue_max)
+    #threshold_blue_img = cv2.cvtColor(threshold_blue_img,cv2.COLOR_GRAY2RGB)
+    kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (7,7))
+    close_img = cv2.morphologyEx(threshold_blue_img, cv2.MORPH_CLOSE, kernel, iterations=1)
+
+    #文字の部分を塗りつぶす 
+    cnts = cv2.findContours(close_img, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+    cnts = cnts[0] if len(cnts) == 2 else cnts[1]
+    cv2.fillPoly(close_img, cnts, [255,255,255])
+    dst = cv2.bitwise_and(img,img,mask = close_img)
+    return dst
 #コーナー検出
 def points_extract(img):
     #コーナー検出
