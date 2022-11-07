@@ -375,4 +375,4 @@ if __name__ == "__main__":
             cv2.destroyAllWindows()
             break
         
-        time.sleep(0.5)
+        

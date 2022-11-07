@@ -906,21 +906,21 @@ def arrow_exist(frame_row):
 def sabun(before_frame_row,present_frame_row):
     kernel = np.ones((3,3),np.uint8)
     #gray_present_img = cv2.cvtColor(present_frame_row,cv2.COLOR_BGR2GRAY)
-    present_frame_row = cv2.medianBlur(present_frame_row,3)
+    #present_frame_row = cv2.medianBlur(present_frame_row,3)
     #print(present_frame_row.shape)
     #ret, present_frame_row = cv2.threshold(gray_present_img,0,255,cv2.THRESH_OTSU)
     #膨張処理
-    present_frame_row = cv2.dilate(present_frame_row,kernel)
+    #present_frame_row = cv2.dilate(present_frame_row,kernel)
     
     h ,w = present_frame_row.shape
     #print(before_frame_row.shape)
     before_frame_row = cv2.resize(before_frame_row,dsize=(w,h))
-    before_frame_row = cv2.dilate(before_frame_row,kernel)
+    #before_frame_row = cv2.dilate(before_frame_row,kernel)
     #gray_before_img = cv2.cvtColor(before_frame_row,cv2.COLOR_BGR2GRAY)
-    before_frame_row = cv2.medianBlur(before_frame_row,3)
+    #before_frame_row = cv2.medianBlur(before_frame_row,3)
     #ret, before_frame_row = cv2.threshold(gray_before_img,0,255,cv2.THRESH_OTSU)
     frame_diff = cv2.absdiff(present_frame_row,before_frame_row)
-    frame_diff = cv2.medianBlur(frame_diff,5)
+    #frame_diff = cv2.medianBlur(frame_diff,5)
     #frame_diff = cv2.absdiff(present_frame,before_frame)
     ##plt.imshow(frame_diff)
     ##plt.show()
@@ -932,6 +932,7 @@ def sabun(before_frame_row,present_frame_row):
     white_pixels2 = np.count_nonzero(before_frame_row)
     sum_white_pixels = white_pixels1 + white_pixels2
     white_pixels = np.count_nonzero(frame_diff)
+    cv2.imwrite("jkl.jpg",before_frame_row)
     diff_white_pixels = sum_white_pixels - white_pixels
     if diff_white_pixels < 0:
         diff_white_pixels = - diff_white_pixels
