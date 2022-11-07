@@ -457,8 +457,12 @@ if __name__ == "__main__":
     #テンプレートをロード
     t0 = time.perf_counter()
     img1 = cv2.imread("./camera1/camera39.jpg")
+<<<<<<< HEAD
     img2 = cv2.imread("./camera1/camera70.jpg")
     img5 = cv2.imread("./img55.png")
+=======
+    img2 = cv2.imread("./wave.png")
+>>>>>>> a6d42a1b138c366d8601bc33330ffc1586698195
     temp = np.load(r'./dataset2.npz')
     #テンプレート画像を格納
     img_temp = temp['x']
