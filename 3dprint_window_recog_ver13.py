@@ -141,7 +141,7 @@ def diff_image_search(present_frame,img_temp,label_temp,before_frame_row1,before
         #cut_present1 = mask_present_img[int(j[0]):int(j[1]),]
     
         if sabun_count > 3:
-            out = match_text3(cut_present)
+            out = match_text3(img_temp,label_temp,cut_present)
             output_textx = output_textx + " " + out
             before_frame_row.append(cut_present)
             #try:
@@ -279,7 +279,7 @@ def text_read(output_text,img_temp,label_temp):
         print("queu size :{0}".format(output_text.qsize()))
         if output_text.qsize() >= 1:
             while output_text.qsize() > 1:
-                img = output_text.get()
+                text = output_text.get()
                 
                 #cv2.imwrite("real.jpg",img)
         
@@ -295,7 +295,7 @@ def text_read(output_text,img_temp,label_temp):
             delete_voice_file()
             start = 1
         start += 1
-        time.sleep(0.1)
+        #time.sleep(0.1)
 
 
 if __name__ == "__main__":
@@ -306,7 +306,7 @@ if __name__ == "__main__":
     #テンプレートのラベル(文)を格納
     label_temp = temp['y']
     #diff_image_search(img1,img2)
-    cap = cv2.VideoCapture(0)
+    cap = cv2.VideoCapture(1)
     read_fps = cap.get(cv2.CAP_PROP_FPS)
     print(read_fps)
     voice_flag = multiprocessing.Value('i',0)
