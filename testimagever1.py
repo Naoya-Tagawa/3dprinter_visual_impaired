@@ -319,6 +319,8 @@ def diff_image_search(before_frame,present_frame,img_temp,label_temp,before_fram
     time3 = time.perf_counter()
     print("やじるし:"+str(time3-time2))
     present_char_List , mask_present_img2 = mask_make(blue_threshold_present_img)
+    plt.imshow(mask_present_img2)
+    plt.show()
     for i in present_char_List:
         #normal = mask_present_img2.copy()
         cut_present = mask_present_img2[int(i[0]):int(i[1]),]
@@ -456,6 +458,7 @@ if __name__ == "__main__":
     t0 = time.perf_counter()
     img1 = cv2.imread("./camera1/camera39.jpg")
     img2 = cv2.imread("./camera1/camera70.jpg")
+    img5 = cv2.imread("./img55.png")
     temp = np.load(r'./dataset2.npz')
     #テンプレート画像を格納
     img_temp = temp['x']
@@ -482,19 +485,24 @@ if __name__ == "__main__":
     ##plt.imshow(before_frame_row4)
     ##plt.show()
     #cv2.imwrite("before_frame_row4.jpg",before_frame_row4)
-    t0 = time.perf_counter()
-    out= match(img_temp,label_temp,img2)
-    print(out)
-    t1 = time.perf_counter()
-    print("time1:")
-    print(t1-t0)
+    #t0 = time.perf_counter()
+    #out= match(img_temp,label_temp,img2)
+    #print(out)
+    #t1 = time.perf_counter()
+    #print("time1:")
+    #print(t1-t0)
 
-    t0 = time.perf_counter()
-    output_text,before_frame_row1,before_frame_row2,before_frame_row3,before_frame_row4 =diff_image_search(img1,img2,img_temp,label_temp,before_frame_row1,before_frame_row2,before_frame_row3,before_frame_row4)
+    #t0 = time.perf_counter()
+    #output_text,before_frame_row1,before_frame_row2,before_frame_row3,before_frame_row4 =diff_image_search(img1,img2,img_temp,label_temp,before_frame_row1,before_frame_row2,before_frame_row3,before_frame_row4)
     #list(itertools.chain.from_iterable(output_text))
     #flat = [x for row in output_text for x in row]
-    t1 = time.perf_counter()
-    print("time2:")
-    print(t1-t0)
+    #t1 = time.perf_counter()
+    #print("time2:")
+    #print(t1-t0)
+    img5 = cv2.imread("./gammma.jpg")
+    #out = match(img_temp,label_temp,img5)
+    #print(out)
+    output_text,before_frame_row1,before_frame_row2,before_frame_row3,before_frame_row4 =diff_image_search(img1,img5,img_temp,label_temp,before_frame_row1,before_frame_row2,before_frame_row3,before_frame_row4)
+ 
     #voice1 = multiprocessing.Process(target =voice,args = (output_text,voice_flag))
     #voice1.start()

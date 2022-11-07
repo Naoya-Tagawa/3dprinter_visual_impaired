@@ -21,9 +21,10 @@ import cv2
 import matplotlib.pyplot as plt
 from pylsd.lsd import lsd
 import itertools
-
+import pyocr
 def mask_make(blue_threshold_present_img):
-    kernel = np.ones((1,1),np.uint8)
+    #kernel = np.ones((1,1),np.uint8)
+    #hsvLower = np.array([100,130,180])
     hsvLower = np.array([70, 25, 25])    # 抽出する色の下限(HSV)
     hsvUpper = np.array([255, 222, 255])    # 抽出する色の上限(HSV)
     hsv = cv2.cvtColor(blue_threshold_present_img, cv2.COLOR_BGR2HSV) # 画像をHSVに変換
@@ -36,6 +37,8 @@ def mask_make(blue_threshold_present_img):
     mask_present_img2 = hsv_mask
     #plt.imshow(mask_present_img2)
     #plt.show()
+    cv2.imwrite("mask.png",mask_present_img2)
+
     height_present , width_present = mask_present_img2.shape
     
     array_present_H = Projection_H(mask_present_img2,height_present,width_present)
@@ -313,8 +316,7 @@ def match(img_temp,label_temp,frame):
     window_img = frame
     #sフレームの青い部分を二値化
     blue_threshold_img = cut_blue_img1(window_img)
-    #plt.imshow(blue_threshold_img)
-    #plt.show()
+    
     #コーナー検出
     try:
         p1,p2,p3,p4 = points_extract1(blue_threshold_img)
@@ -337,7 +339,8 @@ def match(img_temp,label_temp,frame):
     #ノイズ除去
     img_mask = cv2.medianBlur(img_mask,3)
     #膨張化
-    img_mask = cv2.dilate(img_mask,kernel)
+    #img_mask = cv2.dilate(img_mask,kernel)
+    
     #高さ、幅を保持
     height,width = img_mask.shape
     #縦方向のProjection Profileを保持
