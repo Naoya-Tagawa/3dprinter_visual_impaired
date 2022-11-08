@@ -944,13 +944,14 @@ def sabun(before_frame_row,present_frame_row):
     #ret, present_frame_row = cv2.threshold(gray_present_img,0,255,cv2.THRESH_OTSU)
     #膨張処理
     present_frame_row = cv2.dilate(present_frame_row,kernel)
-    
+    cv2.imwrite("pre.png",present_frame_row)
     h ,w = present_frame_row.shape
     #print(before_frame_row.shape)
     before_frame_row = cv2.resize(before_frame_row,dsize=(w,h))
     before_frame_row = cv2.dilate(before_frame_row,kernel)
     #gray_before_img = cv2.cvtColor(before_frame_row,cv2.COLOR_BGR2GRAY)
     before_frame_row = cv2.medianBlur(before_frame_row,3)
+    cv2.imwrite("bef.png",before_frame_row)
     #ret, before_frame_row = cv2.threshold(gray_before_img,0,255,cv2.THRESH_OTSU)
     frame_diff = cv2.absdiff(present_frame_row,before_frame_row)
     frame_diff = cv2.medianBlur(frame_diff,5)
@@ -968,17 +969,18 @@ def sabun(before_frame_row,present_frame_row):
     diff_white_pixels = sum_white_pixels - white_pixels
     if diff_white_pixels < 0:
         diff_white_pixels = - diff_white_pixels
-        
+    cv2.imwrite("absh.png",frame_diff)
     black_pixels = frame_diff.size - white_pixels
     #print("前のフレームとの変化量%")
     #percent = white_pixels/frame_diff.size *100
-    print(white_pixels1)
-    print(white_pixels2)
+    #print(white_pixels1)
+    #print(white_pixels2)
     try:
         percent = white_pixels / sum_white_pixels * 100
     except ZeroDivisionError:
         percent = 100
-    
+    print(percent)
+    time.sleep(1)
     if percent < 2:
         
         return True

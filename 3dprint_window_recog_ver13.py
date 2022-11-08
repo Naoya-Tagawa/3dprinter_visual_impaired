@@ -93,7 +93,7 @@ def diff_image_search_first(present_frame,img_temp,label_temp,text_img):
         return img,img,img,img
 
 
-def diff_image_search(present_frame,img_temp,label_temp,before_frame_row1,before_frame_row2,before_frame_row3,before_frame_row4,text_img):
+def diff_image_search(present_frame,img_temp,label_temp,before_frame_row1,before_frame_row2,before_frame_row3,before_frame_row4,output_text):
     img = cv2.imread("./balck_img.jpg")
     #arrow_img = cv2.imread("./ex6/ex63.jpg")
     img = cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
@@ -155,15 +155,15 @@ def diff_image_search(present_frame,img_temp,label_temp,before_frame_row1,before
                         #output_textx.append(out)
         #矢印があるかどうか判定
         #if arrow_exist(cut_present):
-        
-        if len(output_textx)!=0:
-            output_text.put(output_textx)
         sabun_count = 0
-        count += 1
-    
+        count += 1    
+
+    if len(output_textx)!=0:
+        output_text.put(output_textx)
+
     #start1 = time.perf_counter()
     #end1 = time.perf_counter()
-    #print("hhh" + str(end1-start1))
+    print(len(present_char_List1))
     try:
         if len(present_char_List1) == 0:
             return img,img,img,img
@@ -337,3 +337,5 @@ if __name__ == "__main__":
             cap.release()
             cv2.destroyAllWindows()
             break
+        
+    read.join()

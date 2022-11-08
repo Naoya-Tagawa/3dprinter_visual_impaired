@@ -19,7 +19,7 @@ import difflib
 import numpy as np
 import cv2
 import matplotlib.pyplot as plt
-from img_processing2 import arrow_exist,mask_make, match_text3,projective_transformation,points_extract1,cut_blue_img1,Projection_H,Projection_V,Detect_HeightPosition,Detect_WidthPosition,match_text,match_text2,sabun,match
+from img_processing2 import arrow_exist,mask_make, match_text3,projective_transformation,points_extract1,cut_blue_img1,Projection_H,Projection_V,Detect_HeightPosition,Detect_WidthPosition,match_text,match_text2,sabun,match,cut_blue_img2
 
 import audio_output
 from sklearn.neighbors import NearestNeighbors 
@@ -75,12 +75,12 @@ def diff_image_search1(present_frame,before_frame,img_temp,label_temp):
     #plt.imshow(blue_threshold_present_img)
     #plt.show()
     #コーナー検出
-    #try:
-    before_p1,before_p2,before_p3,before_p4 = points_extract1(blue_threshold_before_img)
-    present_p1,present_p2,present_p3,present_p4 = points_extract1(blue_threshold_present_img)
-    #except TypeError:
+    try:
+        before_p1,before_p2,before_p3,before_p4 = points_extract1(blue_threshold_before_img)
+        present_p1,present_p2,present_p3,present_p4 = points_extract1(blue_threshold_present_img)
+    except TypeError:
         #print("Screen cannot be detected")
-        #return before_frame,[] ,[]
+        return before_frame,[] ,[]
     #before_frame = cv2.resize(before_frame,dsize=(610,211))
     #present_frame = cv2.resize(present_frame,dsize=(610,211))
     #コーナーに従って画像の切り取り
@@ -153,7 +153,7 @@ def diff_image_search1(present_frame,before_frame,img_temp,label_temp):
     #文字のみのマスク画像生成
     present_char_List , mask_present_img2 = mask_make(blue_threshold_present_img)
     
-    engine = pyttsx3.init()
+    #engine = pyttsx3.init()
     before_frame_row = []
 
 
@@ -198,8 +198,8 @@ def diff_image_search(before_frame,present_frame,img_temp,label_temp,before_fram
     #plt.imshow(blue_threshold_before_img)
     #plt.show()
     blue_threshold_present_img = cut_blue_img1(present_frame)
-    #plt.imshow(blue_threshold_present_img)
-    #plt.show()
+    plt.imshow(blue_threshold_present_img)
+    plt.show()
     #コーナー検出
     
     #コーナーに従って画像の切り取り
@@ -394,6 +394,7 @@ def diff_image_search(before_frame,present_frame,img_temp,label_temp,before_fram
         #present_img = present_frame
         #return True #音声出力する
     #sabun(img,cut_present_img)
+    print(len(present_char_List))
     print(output_text)
     time4 = time.perf_counter()
     print("認識:"+str(time4-time3))
@@ -457,12 +458,9 @@ if __name__ == "__main__":
     #テンプレートをロード
     t0 = time.perf_counter()
     img1 = cv2.imread("./camera1/camera39.jpg")
-<<<<<<< HEAD
     img2 = cv2.imread("./camera1/camera70.jpg")
     img5 = cv2.imread("./img55.png")
-=======
-    img2 = cv2.imread("./wave.png")
->>>>>>> a6d42a1b138c366d8601bc33330ffc1586698195
+    #img2 = cv2.imread("./wave.png")
     temp = np.load(r'./dataset2.npz')
     #テンプレート画像を格納
     img_temp = temp['x']

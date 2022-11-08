@@ -628,6 +628,7 @@ def sabun(before_frame_row,present_frame_row):
     #ret, before_frame_row = cv2.threshold(gray_before_img,0,255,cv2.THRESH_OTSU)
     frame_diff = cv2.absdiff(present_frame_row,before_frame_row)
     frame_diff = cv2.medianBlur(frame_diff,5)
+    cv2.imwrite("absh.png",frame_diff)
     #frame_diff = cv2.absdiff(present_frame,before_frame)
     ##plt.imshow(frame_diff)
     ##plt.show()
@@ -642,7 +643,7 @@ def sabun(before_frame_row,present_frame_row):
     diff_white_pixels = sum_white_pixels - white_pixels
     if diff_white_pixels < 0:
         diff_white_pixels = - diff_white_pixels
-        
+    
     black_pixels = frame_diff.size - white_pixels
     #print("前のフレームとの変化量%")
     #percent = white_pixels/frame_diff.size *100
