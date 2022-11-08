@@ -100,7 +100,7 @@ def diff_image_search(present_frame,img_temp,label_temp,before_frame_row1,before
     h,w,d = present_frame.shape
     #フレームの青い部分を二値化
     blue_threshold_present_img = cut_blue_img2(present_frame)
-
+    #kk
     before_frame_row = []
     sabun_count = 0
 
