@@ -3,7 +3,7 @@ import numpy as np
 import cv2
 import matplotlib.pyplot as plt
 import time
-from img_processing2 import arrow_exist,mask_make, match_text3,projective_transformation,points_extract1,cut_blue_img1,Projection_H,Projection_V,Detect_HeightPosition,Detect_WidthPosition,match_text,match_text2,sabun
+from img_processing2 import arrow_exist, cut_blue_img2,mask_make, match_text3,projective_transformation,points_extract1,cut_blue_img1,Projection_H,Projection_V,Detect_HeightPosition,Detect_WidthPosition,match_text,match_text2,sabun
 import numpy as np
 from natsort import natsorted
 import multiprocessing
@@ -41,7 +41,7 @@ def diff_image_search_first(present_frame,img_temp,label_temp,text_img):
     #output_text = []
     out = ""
     #フレームの青い部分を二値化
-    blue_threshold_present_img = cut_blue_img1(present_frame)
+    blue_threshold_present_img = cut_blue_img2(present_frame)
     
     #コーナー検出
     try:
@@ -78,7 +78,7 @@ def diff_image_search_first(present_frame,img_temp,label_temp,text_img):
         cut_present_row = mask_present_img2[int(i[0]):int(i[1]),]
         before_frame_row.append(cut_present_row)
     
-    text_img.put(cut_present_row)
+    #text_img.put(cut_present_row)
     if len(present_char_List2) == 0:
         return img,img,img,img
     elif len(present_char_List2) == 1:
@@ -99,47 +99,12 @@ def diff_image_search(present_frame,img_temp,label_temp,before_frame_row1,before
     img = cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
     h,w,d = present_frame.shape
     #フレームの青い部分を二値化
-    blue_threshold_present_img = cut_blue_img1(present_frame)
+    blue_threshold_present_img = cut_blue_img2(present_frame)
 
     before_frame_row = []
     sabun_count = 0
-    if arrow_exist(before_frame_row1):
-        height,width = before_frame_row1.shape
-        array_V = Projection_V(before_frame_row1,height,width)
-        W_THRESH = max(array_V)
-        char_List = Detect_WidthPosition(W_THRESH,width,array_V)
-        before_arrow = before_frame_row1.copy()
-        cv2.rectangle(before_arrow,(0,0),(int(char_List[1]+1),h-1),(0,0,0),-1)
-        before_frame_row1 = before_arrow
 
-    if arrow_exist(before_frame_row2):
-        height,width = before_frame_row2.shape
-        array_V = Projection_V(before_frame_row2,height,width)
-        W_THRESH = max(array_V)
-        char_List = Detect_WidthPosition(W_THRESH,width,array_V)
-        before_arrow = before_frame_row2.copy()
-        cv2.rectangle(before_arrow,(0,0),(int(char_List[1]+1),h-1),(0,0,0),-1)
-        before_frame_row2 = before_arrow
-    
-    if arrow_exist(before_frame_row3):
-        height,width = before_frame_row3.shape
-        array_V = Projection_V(before_frame_row3,height,width)
-        W_THRESH = max(array_V)
-        char_List = Detect_WidthPosition(W_THRESH,width,array_V)
-        before_arrow = before_frame_row3.copy()
-        cv2.rectangle(before_arrow,(0,0),(int(char_List[1]+1),h-1),(0,0,0),-1)
-        before_frame_row3 = before_arrow
-
-
-    if arrow_exist(before_frame_row4):
-        height,width = before_frame_row4.shape
-        array_V = Projection_V(before_frame_row4,height,width)
-        W_THRESH = max(array_V)
-        char_List = Detect_WidthPosition(W_THRESH,width,array_V)
-        before_arrow = before_frame_row4.copy()
-        cv2.rectangle(before_arrow,(0,0),(int(char_List[1]+1),h-1),(0,0,0),-1)
-        before_frame_row4 = before_arrow
-    
+    output_textx = ""
     count = 0
     present_char_List1 , mask_present_img2 = mask_make(blue_threshold_present_img)
     cv2.imwrite("realtimeimg.jpg",mask_present_img2)
@@ -157,8 +122,9 @@ def diff_image_search(present_frame,img_temp,label_temp,before_frame_row1,before
             #plt.imshow(before_arrow)
             #plt.show()
             cv2.rectangle(cut_present_arrow,(0,0),(int(char_List[1]+1),h-1),(0,0,0),-1)
-            cut_present1 = cut_present
+            #cut_present1 = cut_present
             cut_present = cut_present_arrow
+            
 
         #before_frame_row.append(cut_present)
         if not sabun(before_frame_row1,cut_present):
@@ -176,12 +142,11 @@ def diff_image_search(present_frame,img_temp,label_temp,before_frame_row1,before
         #cut_present1 = mask_present_img[int(j[0]):int(j[1]),]
     
         if sabun_count > 3:
-            if flag == True:
-                text_img.put(cut_present1)
-                before_frame_row.append(cut_present1)
-            else:
-                text_img.put(cut_present)
-                before_frame_row.append(cut_present)
+            out = match_text3(img_temp,label_temp,cut_present)
+            output_textx = output_textx + " " + out
+            before_frame_row.append(cut_present)
+            
+
             #try:
                 #if not sabun(before_arrow,cut_present):
                     #output_text_p,out = img_processing2.match_text2(img_temp,label_temp,cut_present1)
@@ -197,7 +162,9 @@ def diff_image_search(present_frame,img_temp,label_temp,before_frame_row1,before
     
         sabun_count = 0
         count += 1
-    
+    if len(output_textx) != 0:
+        output_text.put(output_textx)
+        voice_flag.value = 1
     #start1 = time.perf_counter()
     #end1 = time.perf_counter()
     #print("hhh" + str(end1-start1))
@@ -308,21 +275,21 @@ class AudioPlayer(object): #音声ファイルを再生、停止する
             self.thread.join()
 
 
-def text_read(text_img,img_temp,label_temp):
+def text_read(output_text,img_temp,label_temp):
     start = 0
     while True:
-        img = text_img.get()
-        cv2.imwrite("real.jpg",img)
-        print("queu size :{0}".format(text_img.qsize()))
-        if text_img.qsize() >= 1:
-            while text_img.qsize() > 1:
-                img = text_img.get()
+        text = output_text.get()
+        #cv2.imwrite("real.jpg",img)
+        print("queu size :{0}".format(output_text.qsize()))
+        if output_text.qsize() >= 1:
+            while output_text.qsize() > 1:
+                text = output_text.get()
                 
-                cv2.imwrite("real.jpg",img)
+                #cv2.imwrite("real.jpg",img)
         
-        out = match_text3(img_temp,label_temp,img)
-        print(out)
-        make_voice_file(out)
+        #out = match_text3(img_temp,label_temp,img)
+        print(text)
+        make_voice_file(text)
         file_name = latest_play_voice_file()
         if start !=0:
             player.stop()
@@ -349,15 +316,19 @@ if __name__ == "__main__":
     voice_flag = multiprocessing.Value('i',0)
     #voice_flagが1なら今発話中,0なら発話していない
     count = 0
-    text_img = multiprocessing.Queue()
+    output_text = multiprocessing.Queue()
     #output_text = multiprocessing.Queue()
-    read = multiprocessing.Process(target=text_read,args=(text_img,img_temp,label_temp))
+    read = multiprocessing.Process(target=text_read,args=(output_text,img_temp,label_temp))
     read.start()
     #最初のフレームを取得する
     ret , bg = cap.read()
-    before_frame_row1,before_frame_row2,before_frame_row3,before_frame_row4 = diff_image_search_first(bg,img_temp,label_temp,text_img)
+    before_frame_row1,before_frame_row2,before_frame_row3,before_frame_row4 = diff_image_search_first(bg,img_temp,label_temp,output_text)
+    cv2.imwrite("im1.jpg",before_frame_row1)
+    cv2.imwrite("im2.jpg",before_frame_row2)
+    cv2.imwrite("im3.jpg",before_frame_row3)
+    cv2.imwrite("im4.jpg",before_frame_row4)
     frame = bg
-    while True:
+    for i in range(2):
         ret , frame = cap.read()
         #フレームが取得できない場合は画面を閉じる
         if not ret:
@@ -365,7 +336,7 @@ if __name__ == "__main__":
         cv2.imshow("frame",frame)
         #画面が遷移したか調査
         start = time.perf_counter()
-        before_frame_row1,before_frame_row2,before_frame_row3,before_frame_row4= diff_image_search(frame,img_temp,label_temp,before_frame_row1,before_frame_row2,before_frame_row3,before_frame_row4,text_img)
+        before_frame_row1,before_frame_row2,before_frame_row3,before_frame_row4= diff_image_search(frame,img_temp,label_temp,before_frame_row1,before_frame_row2,before_frame_row3,before_frame_row4,output_text)
         #diff_flag = Trueなら画面遷移,diff_flag=Falseなら画面遷移していない
         #present_kersol = audio_output.kersol_search(output_text)
         #if present_kersol == 1: # カーソルがない
@@ -375,4 +346,8 @@ if __name__ == "__main__":
             cv2.destroyAllWindows()
             break
         
-        time.sleep(0.5)
+        #time.sleep(0.1)
+    cv2.imwrite("row1.jpg",before_frame_row1)
+    cv2.imwrite("row2.jpg",before_frame_row2)
+    cv2.imwrite("row3.jpg",before_frame_row3)
+    cv2.imwrite("row4.jpg",before_frame_row4)

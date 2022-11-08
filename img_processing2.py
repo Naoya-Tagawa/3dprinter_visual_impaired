@@ -21,21 +21,24 @@ import cv2
 import matplotlib.pyplot as plt
 from pylsd.lsd import lsd
 import itertools
-
 def mask_make(blue_threshold_present_img):
-    kernel = np.ones((1,1),np.uint8)
-    hsvLower = np.array([70, 25, 25])    # 抽出する色の下限(HSV)
+    kernel = np.ones((3,3),np.uint8)
+    #hsvLower = np.array([100,130,180])
+    hsvLower = np.array([70, 25, 25])    #s 抽出する色の下限(HSV)
     hsvUpper = np.array([255, 222, 255])    # 抽出する色の上限(HSV)
     hsv = cv2.cvtColor(blue_threshold_present_img, cv2.COLOR_BGR2HSV) # 画像をHSVに変換
     hsv_mask = cv2.inRange(hsv, hsvLower, hsvUpper)    # HSVからマスクを作成
     #result = cv2.bitwise_and(blue_threshold_present_img, blue_threshold_present_img, mask=hsv_mask) # 元画像とマスクを合成
     hsv_mask = cv2.medianBlur(hsv_mask,3)
+    cv2.imwrite("m.png",hsv_mask)
     #mask_present_img2 = cv2.dilate(mask_present_img2,kernel)
     #ret, mask_present_img2 = cv2.threshold(hsv_mask,0,255,cv2.THRESH_OTSU)
-    #mask_present_img2 = cv2.dilate(hsv_mask,kernel)
-    mask_present_img2 = hsv_mask
+    mask_present_img2 = cv2.dilate(hsv_mask,kernel,iterations=1)
+    #mask_present_img2 = hsv_mask
     #plt.imshow(mask_present_img2)
     #plt.show()
+    cv2.imwrite("mask.png",mask_present_img2)
+
     height_present , width_present = mask_present_img2.shape
     
     array_present_H = Projection_H(mask_present_img2,height_present,width_present)
@@ -69,6 +72,40 @@ def cut_blue_img1(img):
     cv2.fillPoly(close_img, cnts, [255,255,255])
     dst = cv2.bitwise_and(img,img,mask = close_img)
     return dst
+
+def cut_blue_img2(img):
+    #γ変換の値
+    gamma=0.1
+    #γ変換の対応表を作る
+    LUT_Table=np.zeros((256,1),dtype='uint8')
+    for i in range(len(LUT_Table)):
+        LUT_Table[i][0]=255*(float(i)/255)**(1.0/gamma)
+
+    #γ変換をする
+    img=cv2.LUT(img,LUT_Table)
+    c_img = cv2.cvtColor(img,cv2.COLOR_BGR2RGB)
+    img_hsv = cv2.cvtColor(img,cv2.COLOR_BGR2HSV)
+    #ブルーに近いものを切り抜く
+    average_color_per_row = np.average(c_img,axis=0)
+    average_color = np.average(average_color_per_row,axis=0)
+    average_color = np.uint8(average_color)
+    #ブルーの最小値
+    blue_min = np.array([100,130,180],np.uint8)
+    #ブルーの最大値
+    blue_max = np.array([120,255,255],np.uint8)
+    threshold_blue_img = cv2.inRange(img_hsv,blue_min,blue_max)
+    #threshold_blue_img = cv2.cvtColor(threshold_blue_img,cv2.COLOR_GRAY2RGB)
+    kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (7,7))
+    close_img = cv2.morphologyEx(threshold_blue_img, cv2.MORPH_CLOSE, kernel, iterations=1)
+
+    #文字の部分を塗りつぶす 
+    cnts = cv2.findContours(close_img, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+    cnts = cnts[0] if len(cnts) == 2 else cnts[1]
+    cv2.fillPoly(close_img, cnts, [255,255,255])
+    dst = cv2.bitwise_and(img,img,mask = close_img)
+    return dst
+
+
 
 #コーナー検出
 def points_extract(img):
@@ -313,8 +350,9 @@ def match(img_temp,label_temp,frame):
     window_img = frame
     #sフレームの青い部分を二値化
     blue_threshold_img = cut_blue_img1(window_img)
-    #plt.imshow(blue_threshold_img)
-    #plt.show()
+    plt.imshow(blue_threshold_img)
+    plt.show()
+    #高さ、幅を保持
     #コーナー検出
     try:
         p1,p2,p3,p4 = points_extract1(blue_threshold_img)
@@ -337,7 +375,9 @@ def match(img_temp,label_temp,frame):
     #ノイズ除去
     img_mask = cv2.medianBlur(img_mask,3)
     #膨張化
-    img_mask = cv2.dilate(img_mask,kernel)
+    #img_mask = cv2.dilate(img_mask,kernel)
+    #plt.imshow(img_mask)
+    #plt.show()
     #高さ、幅を保持
     height,width = img_mask.shape
     #縦方向のProjection Profileを保持
@@ -940,14 +980,16 @@ def sabun(before_frame_row,present_frame_row):
     black_pixels = frame_diff.size - white_pixels
     #print("前のフレームとの変化量%")
     #percent = white_pixels/frame_diff.size *100
-    print(white_pixels1)
+    print("white1"+ str(white_pixels1))
     print(white_pixels2)
     try:
         percent = white_pixels / sum_white_pixels * 100
     except ZeroDivisionError:
-        percent = 100
+        percent = 0
     
-    if percent < 2:
+    print(percent)
+    
+    if percent < 80:
         
         return True
     else:

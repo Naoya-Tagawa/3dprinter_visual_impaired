@@ -222,11 +222,11 @@ def diff_image_search(present_frame,img_temp,label_temp,before_frame_row1,before
     
         if sabun_count > 3:
             if flag == True:
-                out = img_processing2.match_text2(img_temp,label_temp,cut_present1)
+                out = img_processing2.match_text3(img_temp,label_temp,cut_present1)
                 output_textx.append(out)
                 before_frame_row.append(cut_present1)
             else:
-                out = img_processing2.match_text2(img_temp,label_temp,cut_present)
+                out = img_processing2.match_text3(img_temp,label_temp,cut_present)
                 output_textx.append(out)
                 before_frame_row.append(cut_present)
             #try:
