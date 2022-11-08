@@ -116,19 +116,19 @@ def diff_image_search(present_frame,img_temp,label_temp,before_frame_row1,before
     for i in present_char_List1:
         
         cut_present = mask_present_img2[int(i[0]):int(i[1]),]
-        flag = arrow_exist(cut_present)
-        if flag == True:
-            height,width = cut_present.shape
+        #flag = arrow_exist(cut_present)
+        #if flag == True:
+        #    height,width = cut_present.shape
             #frame_row = cv2.medianBlur(frame_row,3)
-            array_V = Projection_V(cut_present,height,width)
-            W_THRESH = max(array_V)
-            char_List = Detect_WidthPosition(W_THRESH,width,array_V)
-            cut_present_arrow = cut_present.copy()
+        #    array_V = Projection_V(cut_present,height,width)
+        #    W_THRESH = max(array_V)
+        #    char_List = Detect_WidthPosition(W_THRESH,width,array_V)
+        #    cut_present_arrow = cut_present.copy()
             #plt.imshow(before_arrow)
             #plt.show()
-            cv2.rectangle(cut_present_arrow,(0,0),(int(char_List[1]+1),h-1),(0,0,0),-1)
-            cut_present1 = cut_present
-            cut_present = cut_present_arrow
+        #    cv2.rectangle(cut_present_arrow,(0,0),(int(char_List[1]+1),h-1),(0,0,0),-1)
+        #    cut_present1 = cut_present
+        #    cut_present = cut_present_arrow
 
         #before_frame_row.append(cut_present)
         if not sabun(before_frame_row1,cut_present):
@@ -162,7 +162,7 @@ def diff_image_search(present_frame,img_temp,label_temp,before_frame_row1,before
         #if arrow_exist(cut_present):
         before_frame_row.append(cut_present)
         sabun_count = 0
-        count += 1    
+        #count += 1    
 
     if len(output_textx)!=0:
         output_text.put(output_textx)
@@ -327,6 +327,8 @@ if __name__ == "__main__":
     ret , bg = cap.read()
     before_frame_row1,before_frame_row2,before_frame_row3,before_frame_row4 = diff_image_search_first(bg,img_temp,label_temp,output_text)
     frame = bg
+    count = 0
+    
     while True:
         ret , frame = cap.read()
         #フレームが取得できない場合は画面を閉じる
@@ -334,8 +336,13 @@ if __name__ == "__main__":
             cv2.destroyAllWindows()
         cv2.imshow("frame",frame)
         #画面が遷移したか調査
-        start = time.perf_counter()
-        before_frame_row1,before_frame_row2,before_frame_row3,before_frame_row4= diff_image_search(frame,img_temp,label_temp,before_frame_row1,before_frame_row2,before_frame_row3,before_frame_row4,output_text)
+        if count == 0:
+            before_frame_row1,before_frame_row2,before_frame_row3,before_frame_row4= diff_image_search(frame,img_temp,label_temp,before_frame_row1,before_frame_row2,before_frame_row3,before_frame_row4,output_text)
+        count += 1
+        
+        if count == 10:
+            count = 0
+        
         #diff_flag = Trueなら画面遷移,diff_flag=Falseなら画面遷移していない
         #present_kersol = audio_output.kersol_search(output_text)
         #if present_kersol == 1: # カーソルがない
