@@ -107,6 +107,7 @@ def diff_image_search(present_frame,img_temp,label_temp,before_frame_row1,before
     output_textx = ""
     count = 0
     present_char_List1 , mask_present_img2 = mask_make(blue_threshold_present_img)
+    
     if len(present_char_List1) > 4:
         blue_threshold_present_img = cut_blue_img1(present_frame)
         present_char_List1, mask_present_img2 = mask_make(blue_threshold_present_img)
