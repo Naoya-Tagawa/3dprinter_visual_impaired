@@ -78,7 +78,7 @@ def diff_image_search_first(present_frame,img_temp,label_temp,text_img):
         cut_present_row = mask_present_img2[int(i[0]):int(i[1]),]
         before_frame_row.append(cut_present_row)
     
-    text_img.put(cut_present_row)
+    
     if len(present_char_List2) == 0:
         return img,img,img,img
     elif len(present_char_List2) == 1:
@@ -107,6 +107,10 @@ def diff_image_search(present_frame,img_temp,label_temp,before_frame_row1,before
     output_textx = ""
     count = 0
     present_char_List1 , mask_present_img2 = mask_make(blue_threshold_present_img)
+    if len(present_char_List1) > 4:
+        blue_threshold_present_img = cut_blue_img1(present_frame)
+        present_char_List1, mask_present_img2 = mask_make(blue_threshold_present_img)
+    
     cv2.imwrite("realtimeimg.jpg",mask_present_img2)
     for i in present_char_List1:
         
@@ -143,7 +147,7 @@ def diff_image_search(present_frame,img_temp,label_temp,before_frame_row1,before
         if sabun_count > 3:
             out = match_text3(img_temp,label_temp,cut_present)
             output_textx = output_textx + " " + out
-            before_frame_row.append(cut_present)
+            #before_frame_row.append(cut_present)
             #try:
                 #if not sabun(before_arrow,cut_present):
                     #output_text_p,out = img_processing2.match_text2(img_temp,label_temp,cut_present1)
@@ -155,6 +159,7 @@ def diff_image_search(present_frame,img_temp,label_temp,before_frame_row1,before
                         #output_textx.append(out)
         #矢印があるかどうか判定
         #if arrow_exist(cut_present):
+        before_frame_row.append(cut_present)
         sabun_count = 0
         count += 1    
 
@@ -163,6 +168,7 @@ def diff_image_search(present_frame,img_temp,label_temp,before_frame_row1,before
 
     #start1 = time.perf_counter()
     #end1 = time.perf_counter()
+    print("リストの大きさ")
     print(len(present_char_List1))
     try:
         if len(present_char_List1) == 0:
@@ -306,7 +312,7 @@ if __name__ == "__main__":
     #テンプレートのラベル(文)を格納
     label_temp = temp['y']
     #diff_image_search(img1,img2)
-    cap = cv2.VideoCapture(1)
+    cap = cv2.VideoCapture(0)
     read_fps = cap.get(cv2.CAP_PROP_FPS)
     print(read_fps)
     voice_flag = multiprocessing.Value('i',0)

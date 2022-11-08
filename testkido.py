@@ -5,12 +5,8 @@ from PIL import Image
 
 #画像の読み込み
 #img = cv2.imread("./camera1/camera39.jpg")
-img=cv2.imread("./mask.png")
-kernel = np.ones((5,5),np.uint8)
-mask_present_img2 = cv2.dilate(img,kernel,iterations=1)
-cv2.imshow('after gamma',mask_present_img2)
-cv2.waitKey(0)
-cv2.destroyAllWindows()
+img=cv2.imread("./cameras.jpg")
+
 
 
 #γ変換の値

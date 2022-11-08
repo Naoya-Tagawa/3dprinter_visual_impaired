@@ -33,11 +33,8 @@ def mask_make(blue_threshold_present_img):
     cv2.imwrite("m.png",hsv_mask)
     #mask_present_img2 = cv2.dilate(mask_present_img2,kernel)
     #ret, mask_present_img2 = cv2.threshold(hsv_mask,0,255,cv2.THRESH_OTSU)
-<<<<<<< HEAD
     mask_present_img2 = cv2.dilate(hsv_mask,kernel,iterations=1)
-=======
     mask_present_img2 = cv2.dilate(hsv_mask,kernel)
->>>>>>> 4cc49da5bcd1c93b7c9bb033244edbc4e77a9a3f
     #mask_present_img2 = hsv_mask
     #plt.imshow(mask_present_img2)
     #plt.show()
@@ -77,24 +74,12 @@ def cut_blue_img1(img):
     dst = cv2.bitwise_and(img,img,mask = close_img)
     return dst
 def cut_blue_img2(img):
-        #γ変換の値
+    #γ変換の値
     gamma=0.2
     #γ変換の対応表を作る
     LUT_Table=np.zeros((256,1),dtype='uint8')
     for i in range(len(LUT_Table)):
         LUT_Table[i][0]=255*(float(i)/255)**(1.0/gamma)
-
-<<<<<<< HEAD
-def cut_blue_img2(img):
-    #γ変換の値
-    gamma=0.1
-    #γ変換の対応表を作る
-    LUT_Table=np.zeros((256,1),dtype='uint8')
-    for i in range(len(LUT_Table)):
-        LUT_Table[i][0]=255*(float(i)/255)**(1.0/gamma)
-
-=======
->>>>>>> 4cc49da5bcd1c93b7c9bb033244edbc4e77a9a3f
     #γ変換をする
     img=cv2.LUT(img,LUT_Table)
     c_img = cv2.cvtColor(img,cv2.COLOR_BGR2RGB)
@@ -118,12 +103,7 @@ def cut_blue_img2(img):
     cv2.fillPoly(close_img, cnts, [255,255,255])
     dst = cv2.bitwise_and(img,img,mask = close_img)
     return dst
-<<<<<<< HEAD
 
-
-
-=======
->>>>>>> 4cc49da5bcd1c93b7c9bb033244edbc4e77a9a3f
 #コーナー検出
 def points_extract(img):
     #コーナー検出
@@ -967,24 +947,17 @@ def sabun(before_frame_row,present_frame_row):
     #print(present_frame_row.shape)
     #ret, present_frame_row = cv2.threshold(gray_present_img,0,255,cv2.THRESH_OTSU)
     #膨張処理
-<<<<<<< HEAD
     #present_frame_row = cv2.dilate(present_frame_row,kernel)
-    
-=======
-    present_frame_row = cv2.dilate(present_frame_row,kernel)
+    #present_frame_row = cv2.dilate(present_frame_row,kernel)
     cv2.imwrite("pre.png",present_frame_row)
->>>>>>> 4cc49da5bcd1c93b7c9bb033244edbc4e77a9a3f
     h ,w = present_frame_row.shape
     #print(before_frame_row.shape)
     before_frame_row = cv2.resize(before_frame_row,dsize=(w,h))
     #before_frame_row = cv2.dilate(before_frame_row,kernel)
     #gray_before_img = cv2.cvtColor(before_frame_row,cv2.COLOR_BGR2GRAY)
-<<<<<<< HEAD
     #before_frame_row = cv2.medianBlur(before_frame_row,3)
-=======
     before_frame_row = cv2.medianBlur(before_frame_row,3)
     cv2.imwrite("bef.png",before_frame_row)
->>>>>>> 4cc49da5bcd1c93b7c9bb033244edbc4e77a9a3f
     #ret, before_frame_row = cv2.threshold(gray_before_img,0,255,cv2.THRESH_OTSU)
     frame_diff = cv2.absdiff(present_frame_row,before_frame_row)
     #frame_diff = cv2.medianBlur(frame_diff,5)
@@ -1007,29 +980,17 @@ def sabun(before_frame_row,present_frame_row):
     black_pixels = frame_diff.size - white_pixels
     #print("前のフレームとの変化量%")
     #percent = white_pixels/frame_diff.size *100
-<<<<<<< HEAD
-    print("white1"+ str(white_pixels1))
-    print(white_pixels2)
+    #print("white1"+ str(white_pixels1))
+    #print(white_pixels2)
     try:
         percent = white_pixels / sum_white_pixels * 100
     except ZeroDivisionError:
         percent = 0
     
     print(percent)
-    
-    if percent < 80:
-=======
-    #print(white_pixels1)
-    #print(white_pixels2)
-    try:
-        percent = white_pixels / sum_white_pixels * 100
-    except ZeroDivisionError:
-        percent = 100
-    print(percent)
-    time.sleep(1)
-    if percent < 2:
->>>>>>> 4cc49da5bcd1c93b7c9bb033244edbc4e77a9a3f
-        
+
+    #time.sleep(1)
+    if percent < 5:
         return True
     else:
         
