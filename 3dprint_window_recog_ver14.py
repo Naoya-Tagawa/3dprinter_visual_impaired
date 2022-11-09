@@ -123,6 +123,11 @@ def diff_image_search(present_frame,before_frame,before_frame_row1,before_frame_
     #print(before_frame_row.shape)
     #before_frame = cv2.resize(before_frame,dsize=(w,h))
     frame_diff = cv2.absdiff(mask_present_img2,before_frame)
+    frame_diff = cv2.medianBlur(frame_diff,3)
+    contours, hierarchy = cv2.findContours(frame_diff.astype("uint8"), cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE)
+    for i in range(len(contours)):
+        if (cv2.contourArea(contours[i]) < 5):
+            frame_diff = cv2.fillPoly(frame_diff, [contours[i][:,0,:]], (0,255,0), lineType=cv2.LINE_8, shift=0)
     plt.imshow(frame_diff)
     plt.show()
     present_char_List1 = make_char_list(frame_diff)

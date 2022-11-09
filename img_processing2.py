@@ -35,7 +35,7 @@ def mask_make(blue_threshold_present_img):
     cv2.imwrite("m.png",hsv_mask)
     #mask_present_img2 = cv2.dilate(mask_present_img2,kernel)
     #ret, mask_present_img2 = cv2.threshold(hsv_mask,0,255,cv2.THRESH_OTSU)
-    mask_present_img2 = cv2.dilate(hsv_mask,kernel,iterations=1)
+    #mask_present_img2 = cv2.dilate(hsv_mask,kernel,iterations=1)
     mask_present_img2 = cv2.dilate(hsv_mask,kernel)
     #mask_present_img2 = hsv_mask
     #plt.imshow(mask_present_img2)
@@ -76,7 +76,7 @@ def mask_make1(blue_threshold_present_img):
     #cv2.imwrite("m.png",hsv_mask)
     #mask_present_img2 = cv2.dilate(mask_present_img2,kernel)
     #ret, mask_present_img2 = cv2.threshold(hsv_mask,0,255,cv2.THRESH_OTSU)
-    mask_present_img2 = cv2.dilate(hsv_mask,kernel,iterations=1)
+    #mask_present_img2 = cv2.dilate(hsv_mask,kernel,iterations=1)
     mask_present_img2 = cv2.dilate(hsv_mask,kernel)
     #mask_present_img2 = hsv_mask
     #plt.imshow(mask_present_img2)
@@ -966,11 +966,11 @@ def arrow_exist_judge(frame):
     array_V = Projection_V(frame,height,width)
     W_THRESH = max(array_V)
     char_List = Detect_WidthPosition(W_THRESH,width,array_V)
-    print(char_List)
+    
         #    cut_present_arrow = cut_present.copy()
             #plt.imshow(before_arrow)
             #plt.show()
-    cv2.rectangle(frame,(0,0),(int(char_List[0]+23),height-1),(0,0,0),-1)
+    cv2.rectangle(frame,(0,0),(int(char_List[0]+20),height-1),(0,0,0),-1)
         #    cut_present1 = cut_present
         #    cut_present = cut_present_arrow
 
