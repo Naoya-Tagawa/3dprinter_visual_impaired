@@ -21,6 +21,8 @@ import cv2
 import matplotlib.pyplot as plt
 from pylsd.lsd import lsd
 import itertools
+import os
+import pyocr
 def mask_make(blue_threshold_present_img):
     kernel = np.ones((3,3),np.uint8)
     #hsvLower = np.array([100,130,180])
@@ -49,6 +51,41 @@ def mask_make(blue_threshold_present_img):
     present_char_List = np.reshape(present_char_List,[int(len(present_char_List)/2),2])
     #present_char_List = image_processing.convert_1d_to_2d(present_char_List,2)
     return present_char_List , mask_present_img2
+
+def make_char_list(mask_present_img2):
+        height_present , width_present = mask_present_img2.shape
+    
+        array_present_H = Projection_H(mask_present_img2,height_present,width_present)
+        presentH_THRESH = max(array_present_H)
+        present_char_List = Detect_HeightPosition(presentH_THRESH,height_present,array_present_H)
+        #print(present_char_List)
+        present_char_List = np.reshape(present_char_List,[int(len(present_char_List)/2),2])
+        #present_char_List = image_processing.convert_1d_to_2d(present_char_List,2)
+        return present_char_List
+
+
+def mask_make1(blue_threshold_present_img):
+    kernel = np.ones((3,3),np.uint8)
+    #hsvLower = np.array([100,130,180])
+    hsvLower = np.array([70, 25, 25])    #s 抽出する色の下限(HSV)
+    hsvUpper = np.array([255, 222, 255])    # 抽出する色の上限(HSV)
+    hsv = cv2.cvtColor(blue_threshold_present_img, cv2.COLOR_BGR2HSV) # 画像をHSVに変換
+    hsv_mask = cv2.inRange(hsv, hsvLower, hsvUpper)    # HSVからマスクを作成
+    #result = cv2.bitwise_and(blue_threshold_present_img, blue_threshold_present_img, mask=hsv_mask) # 元画像とマスクを合成
+    hsv_mask = cv2.medianBlur(hsv_mask,3)
+    #cv2.imwrite("m.png",hsv_mask)
+    #mask_present_img2 = cv2.dilate(mask_present_img2,kernel)
+    #ret, mask_present_img2 = cv2.threshold(hsv_mask,0,255,cv2.THRESH_OTSU)
+    mask_present_img2 = cv2.dilate(hsv_mask,kernel,iterations=1)
+    mask_present_img2 = cv2.dilate(hsv_mask,kernel)
+    #mask_present_img2 = hsv_mask
+    #plt.imshow(mask_present_img2)
+    #plt.show()
+    cv2.imwrite("mask.png",mask_present_img2)
+
+    #height_present , width_present = mask_present_img2.shape
+    return  mask_present_img2
+
 
 #アオイ部分を切り抜く
 def cut_blue_img1(img):
@@ -898,8 +935,64 @@ def match_text3(img_temp,label_temp,frame):
     
     return out
 
+def recog_text(img):
+    #環境変数「PATH」にTesseract-OCRのパスを設定。
+#Windowsの環境変数に設定している場合は不要。
+    path='C:\\Program Files\\Tesseract-OCR\\'
+    os.environ['PATH'] = os.environ['PATH'] + path
 
+    #pyocrにTesseractを指定する。
+    pyocr.tesseract.TESSERACT_CMD = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
+    tools = pyocr.get_available_tools()
+    tool = tools[0]
+    img = Image.fromarray(img)
+    #文字を抽出したい画像のパスを選ぶ
+    #img = Image.open('./bef.png')
 
+    #画像の文字を抽出
+    builder = pyocr.builders.TextBuilder(tesseract_layout=6)
+    text = tool.image_to_string(img, lang="Eng", builder=builder)
+
+    return text
+
+def arrow_exist_judge(frame):
+    kernel = np.ones((3,3),np.uint8)
+    #arrow_img = cv2.imread("./arrow.jpg")
+    #arrow_img = cv2.cvtColor(arrow_img,cv2.COLOR_BGR2GRAY)
+    #arrow_img = cv2.resize(arrow_img,dsize=(36,36))
+    #w,h = arrow_img.shape
+    height,width = frame.shape
+            #frame_row = cv2.medianBlur(frame_row,3)
+    array_V = Projection_V(frame,height,width)
+    W_THRESH = max(array_V)
+    char_List = Detect_WidthPosition(W_THRESH,width,array_V)
+    print(char_List)
+        #    cut_present_arrow = cut_present.copy()
+            #plt.imshow(before_arrow)
+            #plt.show()
+    cv2.rectangle(frame,(0,0),(int(char_List[0]+23),height-1),(0,0,0),-1)
+        #    cut_present1 = cut_present
+        #    cut_present = cut_present_arrow
+
+    #match = cv2.matchTemplate(frame,arrow_img,cv2.TM_CCORR_NORMED)
+    #返り値は最小類似点、最大類似点、最小の場所、最大の場所
+    #min_value, max_value, min_pt, max_pt = cv2.minMaxLoc(match)
+    
+    #if max_value > 0.8:#なぜかめっちゃ小さい
+       # 検索結果の左上頂点の座標を取得
+    #    top_left = max_pt
+
+        # 検索結果の右下頂点の座標を取得
+    #    bottom_right = (top_left[0] + w, top_left[1] + h)
+
+        # 検索対象画像内に、検索結果を長方形で描画
+    #    cv2.rectangle(frame, top_left, bottom_right, (0, 0, 0), -1)
+    #    return frame
+    #else:
+    #    return frame
+    return frame
+
+        
 
 
 
@@ -956,7 +1049,7 @@ def sabun(before_frame_row,present_frame_row):
     #before_frame_row = cv2.dilate(before_frame_row,kernel)
     #gray_before_img = cv2.cvtColor(before_frame_row,cv2.COLOR_BGR2GRAY)
     #before_frame_row = cv2.medianBlur(before_frame_row,3)
-    before_frame_row = cv2.medianBlur(before_frame_row,3)
+    #before_frame_row = cv2.medianBlur(before_frame_row,3)
     cv2.imwrite("bef.png",before_frame_row)
     #ret, before_frame_row = cv2.threshold(gray_before_img,0,255,cv2.THRESH_OTSU)
     frame_diff = cv2.absdiff(present_frame_row,before_frame_row)
@@ -990,7 +1083,7 @@ def sabun(before_frame_row,present_frame_row):
     print(percent)
 
     #time.sleep(1)
-    if percent < 5:
+    if percent < 10:
         return True
     else:
         
