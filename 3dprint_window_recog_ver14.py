@@ -96,8 +96,9 @@ def diff_image_search_first(present_frame,img_temp,label_temp,text_img):
         return img,img,img,img,mask_present_img2
 
 
-def diff_image_search(present_frame,before_frame,before_frame_row1,before_frame_row2,before_frame_row3,before_frame_row4,output_text):
+def diff_image_search(present_frame,before_frame,before_frame_row1,before_frame_row2,before_frame_row3,before_frame_row4,output_text,img_temp,label_temp):
     img = cv2.imread("./balck_img.jpg")
+    kernel = np.ones((1,1),np.uint8)
     #arrow_img = cv2.imread("./ex6/ex63.jpg")
     img = cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
     h,w,d = present_frame.shape
@@ -106,7 +107,7 @@ def diff_image_search(present_frame,before_frame,before_frame_row1,before_frame_
     #kk
     before_frame_row = []
     sabun_count = 0
-
+    judge = False
     output_textx = ""
     count = 0
     present_char_List1 , mask_present_img2 = mask_make(blue_threshold_present_img)
@@ -114,28 +115,35 @@ def diff_image_search(present_frame,before_frame,before_frame_row1,before_frame_
     if len(present_char_List1) > 4:
         blue_threshold_present_img = cut_blue_img1(present_frame)
         mask_present_img2 = mask_make1(blue_threshold_present_img)
+        frame_diff = cv2.absdiff(mask_present_img2,before_frame)
+        frame_diff = cv2.medianBlur(frame_diff,3)
+        frame_diff = cv2.dilate(frame_diff,kernel)
+    else:
+        frame_diff = cv2.absdiff(mask_present_img2,before_frame)
+        frame_diff = cv2.medianBlur(frame_diff,3)
+
 
     cv2.imwrite("realtimeimg.jpg",mask_present_img2)
 
-    plt.imshow(mask_present_img2)
-    plt.show()
+    #plt.imshow(mask_present_img2)
+    #plt.show()
     #h ,w = present_frame.shape
     #print(before_frame_row.shape)
     #before_frame = cv2.resize(before_frame,dsize=(w,h))
-    frame_diff = cv2.absdiff(mask_present_img2,before_frame)
-    frame_diff = cv2.medianBlur(frame_diff,3)
     contours, hierarchy = cv2.findContours(frame_diff.astype("uint8"), cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE)
     for i in range(len(contours)):
-        if (cv2.contourArea(contours[i]) < 5):
+        if (cv2.contourArea(contours[i]) < 30):
             frame_diff = cv2.fillPoly(frame_diff, [contours[i][:,0,:]], (0,255,0), lineType=cv2.LINE_8, shift=0)
-    plt.imshow(frame_diff)
-    plt.show()
+    #plt.imshow(frame_diff)
+    cv2.imwrite("framediff.jpg",frame_diff)
+    #plt.show()
     present_char_List1 = make_char_list(frame_diff)
     
     for i in present_char_List1:
         
         cut_present = mask_present_img2[int(i[0]):int(i[1]),]
-
+        #if arrow_exist(cut_present):
+            #cut_present,judge = arrow_exist_judge(cut_present)
 
         #before_frame_row.append(cut_present)
         if not sabun(before_frame_row1,cut_present):
@@ -153,8 +161,9 @@ def diff_image_search(present_frame,before_frame,before_frame_row1,before_frame_
         #cut_present1 = mask_present_img[int(j[0]):int(j[1]),]
     
         if sabun_count > 3:
-            out = recog_text(cut_present)
-            output_textx = output_textx + " " + out
+            out = match_text3(img_temp,label_temp,cut_present)
+            #out = recog_text(cut_present)
+            output_textx = output_textx + " \n" + out
             #before_frame_row.append(cut_present)
             #try:
                 #if not sabun(before_arrow,cut_present):
@@ -167,20 +176,10 @@ def diff_image_search(present_frame,before_frame,before_frame_row1,before_frame_
                         #output_textx.append(out)
         #矢印があるかどうか判定
         #if arrow_exist(cut_present):
-        flag = arrow_exist(cut_present)
-        if flag == True:
-            height,width = cut_present.shape
-           #frame_row = cv2.medianBlur(frame_row,3)
-            array_V = Projection_V(cut_present,height,width)
-            W_THRESH = max(array_V)
-            char_List = Detect_WidthPosition(W_THRESH,width,array_V)
-            #cut_present_arrow = cut_present.copy()
-            #plt.imshow(before_arrow)
-            #plt.show()
-            cv2.rectangle(cut_present,(0,0),(int(char_List[1]+1),h-1),(0,0,0),-1)
-            #cut_present1 = cut_present
         before_frame_row.append(cut_present)
         sabun_count = 0
+        
+
         #count += 1
            
 
@@ -191,7 +190,7 @@ def diff_image_search(present_frame,before_frame,before_frame_row1,before_frame_
     #end1 = time.perf_counter()
     print("リストの大きさ")
     print(len(present_char_List1))
-    mask_present_img2 = arrow_exist_judge(mask_present_img2)
+    mask_present_img2,judge = arrow_exist_judge(mask_present_img2)
     try:
         if len(present_char_List1) == 0:
             return img,img,img,img,mask_present_img2
@@ -358,10 +357,10 @@ if __name__ == "__main__":
         cv2.imshow("frame",frame)
         #画面が遷移したか調査
         if count == 0:
-            before_frame_row1,before_frame_row2,before_frame_row3,before_frame_row4,before_frame= diff_image_search(frame,before_frame,before_frame_row1,before_frame_row2,before_frame_row3,before_frame_row4,output_text)
+            before_frame_row1,before_frame_row2,before_frame_row3,before_frame_row4,before_frame= diff_image_search(frame,before_frame,before_frame_row1,before_frame_row2,before_frame_row3,before_frame_row4,output_text,img_temp,label_temp)
         count += 1
         
-        if count == 5:
+        if count == 10:
             count = 0
         
         #diff_flag = Trueなら画面遷移,diff_flag=Falseなら画面遷移していない
