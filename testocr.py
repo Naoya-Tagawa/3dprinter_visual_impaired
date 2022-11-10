@@ -14,8 +14,11 @@ tools = pyocr.get_available_tools()
 tool = tools[0]
 
 #文字を抽出したい画像のパスを選ぶ
-img = Image.open('./bef.png')
-
+img = Image.open('./heikou.png')
+#img = cv2.imread('./cameras.jpg')
+#img = img_processing2.cut_blue_img2(img)
+#p,img = img_processing2.mask_make(img)
+#cv2.imwrite("heikou.png",img)
 #画像の文字を抽出
 builder = pyocr.builders.TextBuilder(tesseract_layout=6)
 text = tool.image_to_string(img, lang="Eng", builder=builder)
