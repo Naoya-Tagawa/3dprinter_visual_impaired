@@ -957,6 +957,7 @@ def recog_text(img):
 
 def arrow_exist_judge(frame):
     kernel = np.ones((3,3),np.uint8)
+    
     #arrow_img = cv2.imread("./arrow.jpg")
     #arrow_img = cv2.cvtColor(arrow_img,cv2.COLOR_BGR2GRAY)
     #arrow_img = cv2.resize(arrow_img,dsize=(36,36))
@@ -1086,7 +1087,7 @@ def sabun(before_frame_row,present_frame_row):
     print(percent)
 
     #time.sleep(1)
-    if percent < 10:
+    if percent < 20:
         return True
     else:
         
