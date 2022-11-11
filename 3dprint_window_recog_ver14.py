@@ -356,12 +356,12 @@ if __name__ == "__main__":
             cv2.destroyAllWindows()
         cv2.imshow("frame",frame)
         #画面が遷移したか調査
-        if count == 0:
-            before_frame_row1,before_frame_row2,before_frame_row3,before_frame_row4,before_frame= diff_image_search(frame,before_frame,before_frame_row1,before_frame_row2,before_frame_row3,before_frame_row4,output_text,img_temp,label_temp)
-        count += 1
+        #if count == 0:
+        before_frame_row1,before_frame_row2,before_frame_row3,before_frame_row4,before_frame= diff_image_search(frame,before_frame,before_frame_row1,before_frame_row2,before_frame_row3,before_frame_row4,output_text,img_temp,label_temp)
+        #count += 1
         
-        if count == 10:
-            count = 0
+        #if count == 10:
+        #    count = 0
         
         #diff_flag = Trueなら画面遷移,diff_flag=Falseなら画面遷移していない
         #present_kersol = audio_output.kersol_search(output_text)
