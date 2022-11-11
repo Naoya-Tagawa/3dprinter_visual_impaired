@@ -146,7 +146,9 @@ def diff_image_search(present_frame,before_frame,before_frame_row1,before_frame_
     present_char_List1 = make_char_list(frame_diff)
     
     for i in present_char_List1:
-        
+        if len(present_char_List1)==0:
+            break
+
         cut_present = mask_present_img2[int(i[0]):int(i[1]),]
         #if arrow_exist(cut_present):
             #cut_present,judge = arrow_exist_judge(cut_present)
@@ -194,8 +196,6 @@ def diff_image_search(present_frame,before_frame,before_frame_row1,before_frame_
 
     #start1 = time.perf_counter()
     #end1 = time.perf_counter()
-    print("リストの大きさ")
-    print(len(present_char_List1))
     #mask_present_img2,judge = arrow_exist_judge(mask_present_img2)
     try:
         if len(present_char_List1) == 0:
