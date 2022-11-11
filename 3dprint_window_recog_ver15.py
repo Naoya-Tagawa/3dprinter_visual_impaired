@@ -112,20 +112,20 @@ def diff_image_search(present_frame,before_frame,before_frame_row1,before_frame_
     output_textx = ""
     count = 0
     present_char_List1 , mask_present_img2 = mask_make(blue_threshold_present_img)
-    if before_frame is None:
-        before_frame = mask_present_img2.copy().astype('float')
+    
+    before_frame = before_frame.astype('float')
         
 
     if len(present_char_List1) > 4:
         blue_threshold_present_img = cut_blue_img1(present_frame)
         mask_present_img2 = mask_make1(blue_threshold_present_img)
-        cv2.accumulateWeighted(mask_present_img2, before_frame, 0.5)
+        cv2.accumulateWeighted(mask_present_img2, before_frame, 0.8)
         frame_diff = cv2.absdiff(mask_present_img2,cv2.convertScaleAbs(before_frame))
         frame_diff = cv2.medianBlur(frame_diff,3)
         frame_diff = cv2.dilate(frame_diff,kernel)
     else:
         
-        cv2.accumulateWeighted(mask_present_img2, before_frame, 0.5)
+        cv2.accumulateWeighted(mask_present_img2, before_frame, 0.8)
         frame_diff = cv2.absdiff(mask_present_img2,cv2.convertScaleAbs(before_frame))
         frame_diff = cv2.medianBlur(frame_diff,3)
 
@@ -355,7 +355,7 @@ if __name__ == "__main__":
     before_frame_row1,before_frame_row2,before_frame_row3,before_frame_row4,before_frame= diff_image_search_first(bg,img_temp,label_temp,output_text)
     frame = bg
     count = 0
-    before_frame = None
+    #before_frame = None
     while True:
         ret , frame = cap.read()
         #フレームが取得できない場合は画面を閉じる

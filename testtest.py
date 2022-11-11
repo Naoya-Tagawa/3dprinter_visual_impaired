@@ -31,14 +31,15 @@ while True:
     if len(present_char_List1) > 4:
         blue_threshold_present_img = cut_blue_img1(frame)
         mask_present_img2 = mask_make1(blue_threshold_present_img)
-        cv2.accumulateWeighted(mask_present_img2, before, 0.1)
+        cv2.accumulateWeighted(mask_present_img2, before, 0.8)
         frame_diff = cv2.absdiff(mask_present_img2,cv2.convertScaleAbs(before))
         frame_diff = cv2.medianBlur(frame_diff,3)
         frame_diff = cv2.dilate(frame_diff,kernel)
     else:
-        cv2.accumulateWeighted(mask_present_img2, before, 0.1)
+        cv2.accumulateWeighted(mask_present_img2, before, 0.8)
         frame_diff = cv2.absdiff(mask_present_img2,cv2.convertScaleAbs(before))
         frame_diff = cv2.medianBlur(frame_diff,3)
+        
         #mask = cv2.medianBlur(mask,3)
     # 背景の画素は黒 (0, 0, 0) にする。
     #mask_present_img2[mask == 0] = 0
