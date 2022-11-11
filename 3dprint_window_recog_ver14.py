@@ -98,7 +98,7 @@ def diff_image_search_first(present_frame,img_temp,label_temp,text_img):
 
 def diff_image_search(present_frame,before_frame,before_frame_row1,before_frame_row2,before_frame_row3,before_frame_row4,output_text,img_temp,label_temp):
     img = cv2.imread("./balck_img.jpg")
-    kernel = np.ones((1,1),np.uint8)
+    kernel = np.ones((3,3),np.uint8)
     #arrow_img = cv2.imread("./ex6/ex63.jpg")
     img = cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
     h,w,d = present_frame.shape
