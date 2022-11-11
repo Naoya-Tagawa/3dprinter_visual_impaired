@@ -951,7 +951,7 @@ def recog_text(img):
 
     #画像の文字を抽出
     builder = pyocr.builders.TextBuilder(tesseract_layout=6)
-    text = tool.image_to_string(img, lang="Eng", builder=builder)
+    text = tool.image_to_string(img, lang="eng", builder=builder)
 
     return text
 
@@ -970,8 +970,11 @@ def arrow_exist_judge(frame):
         #    cut_present_arrow = cut_present.copy()
             #plt.imshow(before_arrow)
             #plt.show()
-    cv2.rectangle(frame,(0,0),(int(char_List[0]+20),height-1),(0,0,0),-1)
-        #    cut_present1 = cut_present
+    try:
+        cv2.rectangle(frame,(0,0),(int(char_List[0]+15),height-1),(0,0,0),-1)
+    except IndexError:
+        return frame ,False   
+    #    cut_present1 = cut_present
         #    cut_present = cut_present_arrow
 
     #match = cv2.matchTemplate(frame,arrow_img,cv2.TM_CCORR_NORMED)
@@ -990,7 +993,7 @@ def arrow_exist_judge(frame):
     #    return frame
     #else:
     #    return frame
-    return frame
+    return frame ,True
 
         
 
@@ -1007,7 +1010,7 @@ def arrow_exist(frame_row):
     arrow_img = cv2.resize(arrow_img,dsize=(26,36))
 
     height,width = frame_row.shape
-    frame_row = cv2.medianBlur(frame_row,3)
+    #frame_row = cv2.medianBlur(frame_row,3)
     array_V = Projection_V(frame_row,height,width)
     W_THRESH = max(array_V)
     char_List2 = Detect_WidthPosition(W_THRESH,width,array_V)
@@ -1018,7 +1021,7 @@ def arrow_exist(frame_row):
     
     try:
         match_img = cv2.resize(match_img,dsize=(26,36))
-        match_img = cv2.dilate(match_img,kernel)
+        #match_img = cv2.dilate(match_img,kernel)
         ##plt.imshow(match_img)
         ##plt.show()
     except cv2.error:
