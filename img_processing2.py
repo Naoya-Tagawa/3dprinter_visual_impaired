@@ -1087,7 +1087,7 @@ def sabun(before_frame_row,present_frame_row):
     print(percent)
 
     #time.sleep(1)
-    if percent < 20:
+    if percent < 10:
         return True
     else:
         

@@ -19,13 +19,8 @@ import difflib
 import numpy as np
 import cv2
 import matplotlib.pyplot as plt
-<<<<<<< HEAD
 from image_processing import cut_blue_img
-from img_processing2 import arrow_exist,mask_make, match_text3,projective_transformation,points_extract1,cut_blue_img1,Projection_H,Projection_V,Detect_HeightPosition,Detect_WidthPosition,match_text,match_text2,sabun,match
-=======
 from img_processing2 import arrow_exist,mask_make, match_text3,projective_transformation,points_extract1,cut_blue_img1,Projection_H,Projection_V,Detect_HeightPosition,Detect_WidthPosition,match_text,match_text2,sabun,match,cut_blue_img2
->>>>>>> 4cc49da5bcd1c93b7c9bb033244edbc4e77a9a3f
-
 import audio_output
 from sklearn.neighbors import NearestNeighbors 
 from io import BytesIO
@@ -202,7 +197,7 @@ def diff_image_search(before_frame,present_frame,img_temp,label_temp,before_fram
     #blue_threshold_before_img = cut_blue_img1(before_frame)
     #plt.imshow(blue_threshold_before_img)
     #plt.show()
-    blue_threshold_present_img = cut_blue_img1(present_frame)
+    blue_threshold_present_img = cut_blue_img2(present_frame)
     plt.imshow(blue_threshold_present_img)
     plt.show()
     #コーナー検出
@@ -506,7 +501,7 @@ if __name__ == "__main__":
     #t1 = time.perf_counter()
     #print("time2:")
     #print(t1-t0)
-    img5 = cv2.imread("./gammma.jpg")
+    img5 = cv2.imread("./ll12.jpg")
     #out = match(img_temp,label_temp,img5)
     #print(out)
     output_text,before_frame_row1,before_frame_row2,before_frame_row3,before_frame_row4 =diff_image_search(img1,img5,img_temp,label_temp,before_frame_row1,before_frame_row2,before_frame_row3,before_frame_row4)
