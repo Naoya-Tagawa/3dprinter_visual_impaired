@@ -1,3 +1,6 @@
+import numpy as np
+import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import Axes3D
 import cv2
 import img_processing2
 import numpy as np
@@ -50,17 +53,33 @@ cv2.waitKey(0)
 
 
 
-for i,col in enumerate(color):
-    histr = cv2.calcHist([img],[i],mask_present_img2,[256],[0,256])
-    
-    #histr += histr
+histr1 = cv2.calcHist([img],[0],mask_present_img2,[256],[0,256])
+histr2 = cv2.calcHist([img],[1],mask_present_img2,[256],[0,256])
+histr3 = cv2.calcHist([img],[2],mask_present_img2,[256],[0,256])
+# Figureを追加
+fig = plt.figure(figsize = (8, 8))
 
-plt.plot(histr,color = 'g')
-plt.xlim([0,256])
+# 3DAxesを追加
+ax = fig.add_subplot(111, projection='3d')
 
+# Axesのタイトルを設定
+ax.set_title("", size = 20)
 
+# 軸ラベルを設定
+ax.set_xlabel("x", size = 14, color = "r")
+ax.set_ylabel("y", size = 14, color = "r")
+ax.set_zlabel("z", size = 14, color = "r")
 
-plt.savefig("hist6.png")
+# 軸目盛を設定
+ax.set_xticks(np.arange(0,256,step=100))
+ax.set_yticks(np.arange(0,256,step=100))
+
+# -5～5の乱数配列(100要素)
+x = 10 * np.random.rand(100, 1) - 5
+y = 10 * np.random.rand(100, 1) - 5
+z = 10 * np.random.rand(100, 1) - 5
+
+# 曲線を描画
+ax.scatter(histr1, histr2, histr3, color = "blue")
+
 plt.show()
-
-
