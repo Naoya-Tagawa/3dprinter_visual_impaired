@@ -218,6 +218,8 @@ def diff_image_search(present_frame,before_frame,before_frame_row1,before_frame_
 
 def make_voice_file(text): #音声ファイル作成
     engine = pyttsx3.init()
+    voices = engine.getProperty('voices')
+    engine.setProperty("voice", voices[1].id)
     path = "./voice/"
     now = str(datetime.datetime.now())
     now_day , now_time = now.split()

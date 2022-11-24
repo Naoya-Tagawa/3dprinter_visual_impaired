@@ -9,6 +9,8 @@ from time import sleep
 CHUNK = 1024
 def make_voice_file(text):
     engine = pyttsx3.init()
+    voices = engine.getProperty('voices')
+    engine.setProperty("voice", voices[1].id)
     path = "./voice/"
     now = str(datetime.datetime.now())
     now_day , now_time = now.split()
@@ -109,11 +111,11 @@ def latest_play_voice_file():
     return path + file_list[0][0]
 
 
-make_voice_file("ヒロイン失格")
-make_voice_file("ヒロイン育成計画")
+make_voice_file("stop")
+make_voice_file("flash king")
 make_voice_file("flash")
-make_voice_file("事実")
-make_voice_file("コココソフト")
+make_voice_file("fact")
+make_voice_file("calibration")
 file = latest_play_voice_file()
 player = AudioPlayer(file)
 player.play()
