@@ -13,7 +13,7 @@ import pyaudio
 import wave
 CHUNK = 1024
 def make_voice_file(text):
-    start = time.perf_counter()
+    #start = time.perf_counter()
     engine = pyttsx3.init()
     path = "./voice/"
     now = str(datetime.datetime.now())
@@ -27,9 +27,9 @@ def make_voice_file(text):
     
     engine.save_to_file(text,file_name)
     engine.runAndWait()
-    end = time.perf_counter()
-    time = end -start
-    print(time)
+    #end = time.perf_counter()
+    #time = end -start
+    #print(time)
 def delete_voice_file():
     file_list = []
     path = "./voice/"
@@ -190,12 +190,14 @@ def car(q):
             if i != 0:
                 player.stop()
             #player.stop()
-            make_voice_file("とまれとまれとまれとまれとまれとまれとまれとまれとまれとまれとまれ")
+            make_voice_file("stop")
             file_name = latest_play_voice_file()
             player = AudioPlayer(file_name)
             player.play()
             i = 1
         else:
+            if i != 0:
+                player.stop()
             player.stop()
             make_voice_file("すすめ")
             file_name = latest_play_voice_file() 
@@ -203,6 +205,7 @@ def car(q):
             player.play()
             print("赤から青")
             delete_voice_file()
+            i += 1
             time.sleep(1)
         #time.sleep(1)
 if __name__ == '__main__':
