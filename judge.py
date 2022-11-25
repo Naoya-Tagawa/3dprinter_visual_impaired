@@ -6,7 +6,7 @@ from PIL import Image
 import itertools
 img = cv2.imread("./hei/camera186.jpg")
 img1 = cv2.imread("./hei/camera181.jpg")
-img2 = cv2.imread("./hei/camera120.jpg")
+img2 = cv2.imread("./hei/camer120.jpg")
 img3 = cv2.imread("./hei/camera618.jpg")
 img4 = cv2.imread("./hei/camera518.jpg")
 #img = cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)

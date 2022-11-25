@@ -23,22 +23,27 @@ while True:
     judge = False
     output_textx = ""
     count = 0
-    present_char_List1 , mask_present_img2 = mask_make(blue_threshold_present_img)
+    frame = cv2.cvtColor(frame,cv2.COLOR_BGR2GRAY)
+    cv2.accumulateWeighted(frame, before, 0.8)
+    frame_diff = cv2.absdiff(frame,cv2.convertScaleAbs(before))
     if before is None:
-        before = mask_present_img2.copy().astype('float')
+        before = frame.copy().astype('float')
         continue
+    
+    present_char_List1 , mask_present_img2 = mask_make(blue_threshold_present_img)
+
     
     if len(present_char_List1) > 4:
         blue_threshold_present_img = cut_blue_img1(frame)
         mask_present_img2 = mask_make1(blue_threshold_present_img)
-        cv2.accumulateWeighted(mask_present_img2, before, 0.8)
-        frame_diff = cv2.absdiff(mask_present_img2,cv2.convertScaleAbs(before))
-        frame_diff = cv2.medianBlur(frame_diff,3)
-        frame_diff = cv2.dilate(frame_diff,kernel)
-    else:
-        cv2.accumulateWeighted(mask_present_img2, before, 0.8)
-        frame_diff = cv2.absdiff(mask_present_img2,cv2.convertScaleAbs(before))
-        frame_diff = cv2.medianBlur(frame_diff,3)
+        #cv2.accumulateWeighted(mask_present_img2, before, 0.8)
+        #frame_diff = cv2.absdiff(mask_present_img2,cv2.convertScaleAbs(before))
+        #frame_diff = cv2.medianBlur(frame_diff,3)
+        #frame_diff = cv2.dilate(frame_diff,kernel)
+    
+        #cv2.accumulateWeighted(mask_present_img2, before, 0.8)
+        #frame_diff = cv2.absdiff(mask_present_img2,cv2.convertScaleAbs(before))
+        #frame_diff = cv2.medianBlur(frame_diff,3)
         
         #mask = cv2.medianBlur(mask,3)
     # 背景の画素は黒 (0, 0, 0) にする。

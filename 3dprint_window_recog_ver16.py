@@ -104,6 +104,9 @@ def diff_image_search(present_frame,before_frame,before_frame_row1,before_frame_
     img = cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
     h,w,d = present_frame.shape
     #フレームの青い部分を二値化
+    frame= cv2.cvtColor(present_frame,cv2.COLOR_BGR2RGB)
+
+    
     blue_threshold_present_img = cut_blue_img2(present_frame)
     #kk
     before_frame_row = []
@@ -368,8 +371,11 @@ if __name__ == "__main__":
             cv2.destroyAllWindows()
         cv2.imshow("frame",frame)
         #画面が遷移したか調査
+
+        
         before_frame_row1,before_frame_row2,before_frame_row3,before_frame_row4,before_frame= diff_image_search(frame,before_frame,before_frame_row1,before_frame_row2,before_frame_row3,before_frame_row4,output_text,img_temp,label_temp)
-            
+        
+
         
 
         

@@ -315,6 +315,7 @@ def projective_transformation(img1,p1,p2,p3,p4):
     #射影変換を実施
     M = cv2.getPerspectiveTransform(pts1, pts2)
     dst = cv2.warpPerspective(img1, M, (w, h))
+    print(M)
     return dst
 #縦方向のProjection profileを得る
 def Projection_H(img,h,w):

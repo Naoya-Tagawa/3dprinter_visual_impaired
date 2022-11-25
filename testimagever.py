@@ -107,6 +107,7 @@ def syaei(img1,p1,p2,p3,p4):
     #射影変換を実施
     M = cv2.getPerspectiveTransform(pts1, pts2)
     dst = cv2.warpPerspective(img1, M, (w, h))
+    print(M)
     return dst
 #縦方向のProjection profileを得る
 def Projection_H(img, height, width):
@@ -208,7 +209,9 @@ def diff_match_text(before_frame,present_frame):
     cut_before = before_frame[before_p1[1]:before_p2[1],before_p2[0]:before_p3[0]]
     #射影変換
     #syaei_before_img = syaei(before_frame,before_p1,before_p2,before_p3,before_p4)
-    #syaei_present_img = syaei(present_frame,present_p1,present_p2,present_p3,present_p4)
+    syaei_present_img = syaei(present_frame,present_p1,present_p2,present_p3,present_p4)
+    cv2.imshow("ss",syaei_present_img)
+    cv2.waitKey(0)
     #対象画像をリサイズ
     syaei_resize_before_img = cv2.resize(cut_before,dsize=(610,211))
     syaei_resize_present_img = cv2.resize(cut_present,dsize=(610,211))

@@ -5,7 +5,7 @@ import cv2
 import img_processing2
 import numpy as np
 import matplotlib.pyplot as plt
-img2 = cv2.imread("./hei/camera120.jpg")
+img2 = cv2.imread("./hei/camer120.jpg")
 from PIL import Image
 img = cv2.imread("./hei/camera186.jpg")
 img1 = cv2.imread("./hei/camera181.jpg")
@@ -49,10 +49,10 @@ for i in range(h):
             img[i, j] = change_color
 #print(count)
 dst = cv2.bitwise_and(img,img,mask=mask_present_img2)
-dst1 = cv2.bitwise_and(img2,img2,mask=mask_present_img2)
+dst1 = cv2.bitwise_and(img1,img1,mask=mask_present_img2)
 dst1[dst1 >= 255] = 0
 dst[dst>= 255] = 0
-cv2.imshow("hh",img1)
+cv2.imshow("hh",dst1)
 cv2.waitKey(0)
 red = []
 green = []
@@ -82,9 +82,9 @@ img_r = img.copy()
 img_r[:, :, 0] = 0  # G
 img_r[:, :, 1] = 0  # r
 print(img_b)
-histr1 = cv2.calcHist([img2],[0],mask_present_img2,[256],[0,256])
-histr2 = cv2.calcHist([img2],[1],mask_present_img2,[256],[0,256])
-histr3 = cv2.calcHist([img2],[2],mask_present_img2,[256],[0,256])
+histr1 = cv2.calcHist([img1],[0],mask_present_img2,[256],[0,256])
+histr2 = cv2.calcHist([img1],[1],mask_present_img2,[256],[0,256])
+histr3 = cv2.calcHist([img1],[2],mask_present_img2,[256],[0,256])
 # Figureを追加
 fig = plt.figure(figsize = (8, 8))
 

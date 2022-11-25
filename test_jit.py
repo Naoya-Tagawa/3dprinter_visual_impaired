@@ -1,8 +1,6 @@
 import cv2
 import img_processing2
-import numpy as np
-import matplotlib.pyplot as plt
-from PIL import Image
+
 img = cv2.imread("./hei/camera186.jpg")
 img1 = cv2.imread("./hei/camera181.jpg")
 img2 = cv2.imread("./hei/camer120.jpg")
@@ -13,22 +11,30 @@ h,w,d = img1.shape
     #フレームの青い部分を二値化
 img1 = cv2.resize(img1, img.shape[1::-1])
 blue_threshold_present_img = img_processing2.cut_blue_img2(img1)
+
+
 present_char_List1 , mask_present_img2 = img_processing2.mask_make(blue_threshold_present_img)
+<<<<<<< HEAD
 
 
 blue_threshold_present_img7 = img_processing2.cut_blue_img2(img4)
 present_char_List1 , mask8 = img_processing2.mask_make(blue_threshold_present_img7)
 cv2.imshow("hh",mask_present_img2)
+=======
+cv2.imshow("hh",img)
+>>>>>>> 4a79dab4cfbe43bbef99985a89e2ce11c3cad693
 cv2.waitKey(0)
 #mask_present_img2 = cv2.resize(mask_present_img2, img.shape[1::-1])
 #mask_present_img2 = cv2.cvtColor(mask_present_img2, cv2.COLOR_GRAY2BGR)
 blue_threshold_present_img1 = img_processing2.cut_blue_img2(img)
 present_char_List1 , mask_present_img3 = img_processing2.mask_make(blue_threshold_present_img1)
 print(mask_present_img2.shape)
-cv2.imwrite("mask.jpg",mask_present_img3)
-dst = cv2.bitwise_and(img1,img1,mask=mask_present_img2)
+dst = cv2.bitwise_and(img,mask_present_img2)
 cv2.imshow("hh",dst)
 cv2.waitKey(0)
+<<<<<<< HEAD
+cv2.imwrite("mask_p.jpg",dst)
+=======
 cv2.imwrite("mask_p.jpg",dst)
 
 present_char_List1 , mask_present_img2 = img_processing2.mask_make(blue_threshold_present_img)
@@ -75,3 +81,4 @@ plt.savefig("hist8.png")
 plt.show()
 
 
+>>>>>>> d678f219b78c309e7e939ea2e8f7ceff7e14e969
