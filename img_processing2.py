@@ -236,9 +236,9 @@ def func_search_neighbourhood(p0, ps):
         return ps[new_d[0][1]]
 
 def points_extract1(img):
-    #img = cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
-    cv2.imshow("00",img)
-    cv2.waitKey(0)
+    img = cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
+    #cv2.imshow("00",img)
+    #cv2.waitKey(0)
     #コーナー検出
     #img_1 = cv2.Canny(img,50,150)
     #linesH = cv2.HoughLinesP(img,rho=1,theta = np.pi/360,threshold=50,minLineLength=50,maxLineGap=10)
@@ -350,7 +350,7 @@ def projective_transformation(img1,p1,p2,p3,p4):
     M = cv2.getPerspectiveTransform(pts1, pts2)
     dst = cv2.warpPerspective(img1, M, (w, h))
     print(M)
-    return dst,M
+    return dst
 #縦方向のProjection profileを得る
 def Projection_H(img,h,w):
     array_H = np.full(h,w)
