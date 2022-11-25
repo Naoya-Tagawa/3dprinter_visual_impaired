@@ -49,14 +49,42 @@ for i in range(h):
             img[i, j] = change_color
 #print(count)
 dst = cv2.bitwise_and(img,img,mask=mask_present_img2)
+dst1 = cv2.bitwise_and(img2,img2,mask=mask_present_img2)
+dst1[dst1 >= 255] = 0
+dst[dst>= 255] = 0
 cv2.imshow("hh",img1)
 cv2.waitKey(0)
+red = []
+green = []
+blue = []
+h,w = dst1.shape[:2]
+for i in range(h):
+    for j in range(w):
+        b,g,r = dst1[i,j]
+        if (b,g,r) == (0,0,0):
+            continue
+        blue.append(b)
+        green.append(g)
+        red.append(r)
+        
+img_b = img.copy()
+# GとBの要素を0に変換
+img_b[:, :, 1] = 0  # G
+img_b[:, :, 2] = 0  # r
 
+img_g = img.copy()
+# GとBの要素を0に変換
+img_g[:, :, 0] = 0  # b
+img_g[:, :, 2] = 0  # r
 
-
-histr1 = cv2.calcHist([img2],[0],None,[256],[0,256])
-histr2 = cv2.calcHist([img2],[1],None,[256],[0,256])
-histr3 = cv2.calcHist([img2],[2],None,[256],[0,256])
+img_r = img.copy()
+# GとBの要素を0に変換
+img_r[:, :, 0] = 0  # G
+img_r[:, :, 1] = 0  # r
+print(img_b)
+histr1 = cv2.calcHist([img2],[0],mask_present_img2,[256],[0,256])
+histr2 = cv2.calcHist([img2],[1],mask_present_img2,[256],[0,256])
+histr3 = cv2.calcHist([img2],[2],mask_present_img2,[256],[0,256])
 # Figureを追加
 fig = plt.figure(figsize = (8, 8))
 
@@ -81,6 +109,6 @@ y = 10 * np.random.rand(100, 1) - 5
 z = 10 * np.random.rand(100, 1) - 5
 
 # 曲線を描画
-ax.scatter(histr1, histr2, histr3, color = "blue")
+ax.scatter(blue, green, red, color = "blue")
 
 plt.show()

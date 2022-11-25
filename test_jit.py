@@ -5,13 +5,19 @@ import matplotlib.pyplot as plt
 from PIL import Image
 img = cv2.imread("./hei/camera186.jpg")
 img1 = cv2.imread("./hei/camera181.jpg")
-img2 = cv2.imread("./hei/camera120.jpg")
+img2 = cv2.imread("./hei/camer120.jpg")
+img3 = cv2.imread("./hei/camera618.jpg")
+img4 = cv2.imread("./hei/camera518.jpg")
 #img = cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
 h,w,d = img1.shape
     #フレームの青い部分を二値化
 img1 = cv2.resize(img1, img.shape[1::-1])
 blue_threshold_present_img = img_processing2.cut_blue_img2(img1)
 present_char_List1 , mask_present_img2 = img_processing2.mask_make(blue_threshold_present_img)
+
+
+blue_threshold_present_img7 = img_processing2.cut_blue_img2(img4)
+present_char_List1 , mask8 = img_processing2.mask_make(blue_threshold_present_img7)
 cv2.imshow("hh",mask_present_img2)
 cv2.waitKey(0)
 #mask_present_img2 = cv2.resize(mask_present_img2, img.shape[1::-1])
@@ -28,7 +34,7 @@ cv2.imwrite("mask_p.jpg",dst)
 present_char_List1 , mask_present_img2 = img_processing2.mask_make(blue_threshold_present_img)
 hist_mask = cv2.calcHist([img],[0],mask_present_img2,[256],[0,256])
 color = ('b','g','r')
-img1[img1 >= 255] = 0
+img2[img2 >= 255] = 0
 dst = cv2.imread("./mask_p.jpg")
 target_color = (255, 255, 255)
 
@@ -50,18 +56,22 @@ cv2.imshow("hh",dst)
 cv2.waitKey(0)
 cv2.imwrite("dst.jpg",dst)
 
+dst7 = cv2.bitwise_and(img3,img3,mask=mask8)
+#dst[dst >= 255] = 0
+cv2.imshow("dst7",dst7)
+cv2.waitKey(0)
+cv2.imwrite("dst.jpg",dst)
 
 for i,col in enumerate(color):
-    histr = cv2.calcHist([img],[i],mask_present_img2,[256],[0,256])
-    
+    histr = cv2.calcHist([img2],[i],mask_present_img2,[256],[0,256])
+    plt.plot(histr,color = col)
+    plt.xlim([0,256])
     #histr += histr
 
-plt.plot(histr,color = 'g')
-plt.xlim([0,256])
 
 
 
-plt.savefig("hist6.png")
+plt.savefig("hist8.png")
 plt.show()
 
 
