@@ -23,6 +23,7 @@ from pylsd.lsd import lsd
 import itertools
 import os
 import pyocr
+import math
 def mask_make(blue_threshold_present_img):
     kernel = np.ones((3,3),np.uint8)
     #hsvLower = np.array([100,130,180])
@@ -141,6 +142,37 @@ def cut_blue_img2(img):
     dst = cv2.bitwise_and(img,img,mask = close_img)
     return dst
 
+def cut_blue_trans(img):
+    #γ変換の値
+    gamma=0.2
+    #γ変換の対応表を作る
+    LUT_Table=np.zeros((256,1),dtype='uint8')
+    for i in range(len(LUT_Table)):
+        LUT_Table[i][0]=255*(float(i)/255)**(1.0/gamma)
+    #γ変換をする
+    img=cv2.LUT(img,LUT_Table)
+    c_img = cv2.cvtColor(img,cv2.COLOR_BGR2RGB)
+    img_hsv = cv2.cvtColor(img,cv2.COLOR_BGR2HSV)
+    #ブルーに近いものを切り抜く
+    average_color_per_row = np.average(c_img,axis=0)
+    average_color = np.average(average_color_per_row,axis=0)
+    average_color = np.uint8(average_color)
+    #ブルーの最小値
+    blue_min = np.array([100,130,180],np.uint8)
+    #ブルーの最大値
+    blue_max = np.array([120,255,255],np.uint8)
+    threshold_blue_img = cv2.inRange(img_hsv,blue_min,blue_max)
+    #threshold_blue_img = cv2.cvtColor(threshold_blue_img,cv2.COLOR_GRAY2RGB)
+    kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (7,7))
+    close_img = cv2.morphologyEx(threshold_blue_img, cv2.MORPH_CLOSE, kernel, iterations=1)
+
+    #文字の部分を塗りつぶす 
+    cnts = cv2.findContours(close_img, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+    cnts = cnts[0] if len(cnts) == 2 else cnts[1]
+    cv2.fillPoly(close_img, cnts, [255,255,255])
+    
+    return close_img
+
 #コーナー検出
 def points_extract(img):
     #コーナー検出
@@ -204,8 +236,10 @@ def func_search_neighbourhood(p0, ps):
     else:
         return ps[new_d[0][1]]
 
-def points_extract1(img):
-    img = cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
+def points_extract2(img):
+    #img = cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
+    #cv2.imshow("00",img)
+    #cv2.waitKey(0)
     #コーナー検出
     #img_1 = cv2.Canny(img,50,150)
     #linesH = cv2.HoughLinesP(img,rho=1,theta = np.pi/360,threshold=50,minLineLength=50,maxLineGap=10)
@@ -230,14 +264,126 @@ def points_extract1(img):
     #data = BytesIO(ly)
     x_point = la[:,0]
     la = la[np.argsort(x_point)]
+    l_distance = [ math.sqrt(x*x + y*y)  for x,y in la]
+    min_index = l_distance.index(min(l_distance))
+    reverse_l_distance = l_distance[::-1]
+    max_index = l_distance.index(max(reverse_l_distance))
+    #print(ly)
+    min_x = int(la[min_index][0])
+    max_x = int(la[max_index][0])
+    #print(min_x)
+    #print(max_x)
+    #print(int(la[min_index][1]))
+    #print(int(la[max_index][1]))
+    mi_x = [ [x,y] for x,y in la if x-min_x <=30]
+    minmax_distance = [ math.sqrt(x*x + y*y)  for x,y in mi_x]
+    minmax_index = minmax_distance.index(max(minmax_distance))
+    #左下
+    print("左hした")
+    print(mi_x[minmax_index][0])
+    print(mi_x[minmax_index][1])
+    mi_x = np.array(mi_x)
+    mi_x = mi_x.ravel()
+    ma_x = [ [x,y] for x,y in la if max_x-x <=30]
+    maxmin_distance = [ math.sqrt(x*x + y*y)  for x,y in ma_x]
+    maxmin_index = maxmin_distance.index(min(maxmin_distance))
+    print("右上")
+    print(ma_x[maxmin_index][0],ma_x[maxmin_index][1])
+    ma_x = np.array(ma_x)
+    ma_x = ma_x.ravel()
+    mi_x = mi_x.reshape(int(len(mi_x)/2),2)
+    ma_x = ma_x.reshape(int(len(ma_x)/2),2)
+    
+    ma_x = ma_x[np.argsort(ma_x[:,1])]
+    mi_x = mi_x[np.argsort(mi_x[:,1])] 
+    
+    #左うえ
+    #min_1 = [int(mi_x[0][0]),int(mi_x[0][1])]
+    min_1 = [int(la[min_index][0]),int(la[min_index][1])]
+    print(int(la[max_index][1]))
+    near_min_1 = func_search_neighbourhood(min_1,mi_x[1:])
+    #右上
+    #max_1 = [int(ma_x[0][0]),int(ma_x[0][1])]
+    max_1 = [int(ma_x[maxmin_index][0]),int(ma_x[maxmin_index][1])]
+    
+    near_max_1 = func_search_neighbourhood(max_1,ma_x[1:])
+    #左下
+    #min_2 = [int(mi_x[-1][0]),int(mi_x[-1][1])]
+    min_2 = [int(mi_x[minmax_index][0]),int(mi_x[minmax_index][1])]
+    near_min_2 = func_search_neighbourhood(min_2,mi_x[:-1])
+    #右下
+    #max_2 = [int(ma_x[-1][0]),int(ma_x[-1][1])]
+    max_2 = [int(la[max_index][0]),int(la[max_index][1])]
+    near_max_2 = func_search_neighbourhood(max_2,ma_x[:-1])
+    #print(near_max_2)
+    #print(max_2)
+    #ひだりうえ
+    p1 = [int((min_1[0]+near_min_1[0])/2),int((min_1[1]+near_min_1[1])/2)]
+    #左下
+    p2 = [int((min_2[0]+near_min_2[0])/2),int((min_2[1]+near_min_2[1])/2)]
+    #右上
+    p3 = [int((max_1[0]+near_max_1[0])/2),int((max_1[1]+near_max_1[1])/2)]
+    #右下
+    p4 = [int((max_2[0]+near_max_2[0])/2),int((max_2[1]+near_max_2[1])/2)]
+    if img[p1[1]][p1[0]] == 0:
+        p1 = [int(min_1[0]),int(min_1[1])]
+    if img[p2[1]][p2[0]] == 0:
+        p2 = [int(min_2[0]),int(min_2[1])]
+    if img[p3[1]][p3[0]] == 0:
+        p3 = [int(max_1[0]),int(max_1[1])]
+    if img[p4[1]][p4[0]] == 0:
+        p4 = [int(max_2[0]),int(max_2[1])]
+    #print(p1)
+    #print(p2)
+    #print(p3)
+    #print(p4)
+    #de_position = pd.read_csv(io.BytesIO(ly))
+    #print(de_position)
+# 小さい輪郭は誤検出として削除する
+    #contours = list(filter(lambda x: cv2.contourArea(x) > 100, contours))
 
+    # 輪郭を描画する。
+    #cv2.drawContours(img2, contours, -1, color=(0, 0, 255), thickness=3)
+
+    #plt.imshow(img2)
+    #plt.show()
+    return p1,p2,p3,p4
+def points_extract1(img):
+    img = cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
+    #cv2.imshow("00",img)
+    #cv2.waitKey(0)
+    #コーナー検出
+    #img_1 = cv2.Canny(img,50,150)
+    #linesH = cv2.HoughLinesP(img,rho=1,theta = np.pi/360,threshold=50,minLineLength=50,maxLineGap=10)
+    
+    #コーナーの中でx座標が最小、最大
+
+    #Smin_p= np.min(dst,axis=0)
+    #max_p = np.max(dst,axis=0)
+    linsl = lsd(img)
+    #x1,y1の列のみ抽出
+    xy1_line = linsl[:,0:2]
+    #x2,y2の列のみ抽出
+    xy2_line = linsl[:,2:4]
+
+    la = np.vstack((xy1_line,xy2_line))
+    
+    la = np.asarray(la,dtype=int)
+    mi_x =[]
+    ma_x = []
+    #print(linsl)
+    #print(ly)
+    #data = BytesIO(ly)
+    x_point = la[:,0]
+    la = la[np.argsort(x_point)]
+    
     #print(ly)
     min_x = int(la[0][0])
     max_x = int(la[-1][0])
     mi_x = [ [x,y] for x,y in la if x-min_x <=10]
     mi_x = np.array(mi_x)
     mi_x = mi_x.ravel()
-    ma_x = [ [x,y] for x,y in la if max_x-x <=10]
+    ma_x = [ [x,y] for x,y in la if max_x-x <=30]
     ma_x = np.array(ma_x)
     ma_x = ma_x.ravel()
     mi_x = mi_x.reshape(int(len(mi_x)/2),2)
@@ -259,6 +405,7 @@ def points_extract1(img):
     near_min_2 = func_search_neighbourhood(min_2,mi_x[:-1])
     #右下
     max_2 = [int(ma_x[-1][0]),int(ma_x[-1][1])]
+    
     near_max_2 = func_search_neighbourhood(max_2,ma_x[:-1])
     #print(near_max_2)
     #print(max_2)
@@ -317,6 +464,29 @@ def projective_transformation(img1,p1,p2,p3,p4):
     dst = cv2.warpPerspective(img1, M, (w, h))
     print(M)
     return dst
+
+def projective_transformation2(img1,p1,p2,p3,p4):
+    #座標
+    #p1 左上
+    #p2 左下
+    #p3 右上
+    #p4 右下
+    #幅
+    #print(p3)
+    #print(p1)
+    w = np.linalg.norm(p3[0]-p1[0])
+    w = math.floor(w)
+    h = np.linalg.norm(p2[1]-p1[1])
+    h = math.floor(h)
+    #pts1はカードの4辺、pts2は変換後の座標
+    pts1 = np.float32([p1,p3,p2,p4])
+    #print(pts1)
+    pts2 = np.float32([[0,0], [w,0], [0,h], [w,h]])
+    #射影変換を実施
+    M = cv2.getPerspectiveTransform(pts1, pts2)
+    dst = cv2.warpPerspective(img1, M, (w, h))
+    print(M)
+    return dst,M
 #縦方向のProjection profileを得る
 def Projection_H(img,h,w):
     array_H = np.full(h,w)

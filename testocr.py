@@ -24,7 +24,7 @@ print(langs)
 # 言語に日本語と今回の学習済みデータを指定
 lang_setting = langs[0]+"+"+langs[3]
 #文字を抽出したい画像のパスを選ぶ
-img = Image.open('./realtimeimg.jpg')
+img = Image.open('./mask.png')
 #img = cv2.imread('./cameras.jpg')
 #img = img_processing2.cut_blue_img2(img)
 #p,img = img_processing2.mask_make(img)

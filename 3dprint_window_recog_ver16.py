@@ -363,6 +363,9 @@ if __name__ == "__main__":
     before_frame_row1,before_frame_row2,before_frame_row3,before_frame_row4,before_frame= diff_image_search_first(bg,img_temp,label_temp,output_text)
     frame = bg
     count = 0
+    
+    h,w=frame.shape[:2]
+    base=np.zeros((h,w,3),np.uint32)
     #before_frame = None
     while True:
         ret , frame = cap.read()
@@ -372,9 +375,17 @@ if __name__ == "__main__":
         cv2.imshow("frame",frame)
         #画面が遷移したか調査
 
-        
-        before_frame_row1,before_frame_row2,before_frame_row3,before_frame_row4,before_frame= diff_image_search(frame,before_frame,before_frame_row1,before_frame_row2,before_frame_row3,before_frame_row4,output_text,img_temp,label_temp)
-        
+        if count == 4:
+            base = frame+ base
+            base = base/5
+            base=base.astype(np.uint8)
+            
+            before_frame_row1,before_frame_row2,before_frame_row3,before_frame_row4,before_frame= diff_image_search(base,before_frame,before_frame_row1,before_frame_row2,before_frame_row3,before_frame_row4,output_text,img_temp,label_temp)
+            count  = 0
+            base=np.zeros((h,w,3),np.uint32)
+        else:
+            base = base + frame
+            count += 1
 
         
 
