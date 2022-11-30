@@ -173,6 +173,29 @@ def cut_blue_trans(img):
     
     return close_img
 
+def cut_blue_trans2(img):
+    c_img = cv2.cvtColor(img,cv2.COLOR_BGR2RGB)
+    img_hsv = cv2.cvtColor(img,cv2.COLOR_BGR2HSV)
+    #ブルーに近いものを切り抜く
+    average_color_per_row = np.average(c_img,axis=0)
+    average_color = np.average(average_color_per_row,axis=0)
+    average_color = np.uint8(average_color)
+    #ブルーの最小値
+    blue_min = np.array([100,130,180],np.uint8)
+    #ブルーの最大値
+    blue_max = np.array([120,255,255],np.uint8)
+    threshold_blue_img = cv2.inRange(img_hsv,blue_min,blue_max)
+    #threshold_blue_img = cv2.cvtColor(threshold_blue_img,cv2.COLOR_GRAY2RGB)
+    kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (7,7))
+    close_img = cv2.morphologyEx(threshold_blue_img, cv2.MORPH_CLOSE, kernel, iterations=1)
+
+    #文字の部分を塗りつぶす 
+    cnts = cv2.findContours(close_img, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+    cnts = cnts[0] if len(cnts) == 2 else cnts[1]
+    cv2.fillPoly(close_img, cnts, [255,255,255])
+    #dst = cv2.bitwise_and(img,img,mask = close_img)
+    return close_img
+
 #コーナー検出
 def points_extract(img):
     #コーナー検出
@@ -279,16 +302,16 @@ def points_extract2(img):
     minmax_distance = [ math.sqrt(x*x + y*y)  for x,y in mi_x]
     minmax_index = minmax_distance.index(max(minmax_distance))
     #左下
-    print("左hした")
-    print(mi_x[minmax_index][0])
-    print(mi_x[minmax_index][1])
+    #print("左hした")
+    #print(mi_x[minmax_index][0])
+    #print(mi_x[minmax_index][1])
     mi_x = np.array(mi_x)
     mi_x = mi_x.ravel()
     ma_x = [ [x,y] for x,y in la if max_x-x <=30]
     maxmin_distance = [ math.sqrt(x*x + y*y)  for x,y in ma_x]
     maxmin_index = maxmin_distance.index(min(maxmin_distance))
-    print("右上")
-    print(ma_x[maxmin_index][0],ma_x[maxmin_index][1])
+    #print("右上")
+    #print(ma_x[maxmin_index][0],ma_x[maxmin_index][1])
     ma_x = np.array(ma_x)
     ma_x = ma_x.ravel()
     mi_x = mi_x.reshape(int(len(mi_x)/2),2)
@@ -300,7 +323,7 @@ def points_extract2(img):
     #左うえ
     #min_1 = [int(mi_x[0][0]),int(mi_x[0][1])]
     min_1 = [int(la[min_index][0]),int(la[min_index][1])]
-    print(int(la[max_index][1]))
+    #print(int(la[max_index][1]))
     near_min_1 = func_search_neighbourhood(min_1,mi_x[1:])
     #右上
     #max_1 = [int(ma_x[0][0]),int(ma_x[0][1])]
@@ -462,7 +485,7 @@ def projective_transformation(img1,p1,p2,p3,p4):
     #射影変換を実施
     M = cv2.getPerspectiveTransform(pts1, pts2)
     dst = cv2.warpPerspective(img1, M, (w, h))
-    print(M)
+    #print(M)
     return dst
 
 def projective_transformation2(img1,p1,p2,p3,p4):
@@ -485,7 +508,7 @@ def projective_transformation2(img1,p1,p2,p3,p4):
     #射影変換を実施
     M = cv2.getPerspectiveTransform(pts1, pts2)
     dst = cv2.warpPerspective(img1, M, (w, h))
-    print(M)
+    #print(M)
     return dst,M
 #縦方向のProjection profileを得る
 def Projection_H(img,h,w):
@@ -1034,6 +1057,11 @@ def match_text2(img_temp,label_temp,frame):
 
     return out
 
+#二次元リストから同じものを削除
+def get_unique_list(seq):
+    seen = []
+    return [x for x in seq if x not in seen and not seen.append(x)]
+
 def match_text3(img_temp,label_temp,frame):
     #対象画像をリサイズ
     #対象画像をグレイスケール化
@@ -1048,6 +1076,9 @@ def match_text3(img_temp,label_temp,frame):
     #img_mask = cv2.dilate(img_mask,kernel)
     #高さ、幅を保持
     height,width = img_mask.shape
+    #img_erode = cv2.erode(img_mask,np.ones((5,5),np.uint8),iterations=1)
+    #cv2.imshow("ll",img_erode)
+    #cv2.waitKey(0)
     out_modify = "" #修正したテキスト
     #横方向のProjection Profileを得る
     array_V = Projection_V(img_mask,height,width)
@@ -1070,6 +1101,8 @@ def match_text3(img_temp,label_temp,frame):
         except cv2.error:
             return ""
         height_m,width_m = match_img.shape
+        #cv2.imshow("kk",match_img)
+        #cv2.waitKey(0)
         match = [cv2.matchTemplate(match_img,temp_th[i],cv2.TM_CCORR_NORMED) for i in range(len(label_temp))]
         max_value = [cv2.minMaxLoc(match[i])[1] for i in range(len(label_temp))]
         max_index = np.argmax(max_value)

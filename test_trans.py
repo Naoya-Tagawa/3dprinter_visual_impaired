@@ -20,7 +20,7 @@ import numpy as np
 import cv2
 import matplotlib.pyplot as plt
 from image_processing import cut_blue_img
-from img_processing2 import recog_text,projective_transformation2,cut_blue_trans,arrow_exist,mask_make, match_text3,projective_transformation,points_extract1,points_extract2,cut_blue_img1,Projection_H,Projection_V,Detect_HeightPosition,Detect_WidthPosition,match_text,match_text2,sabun,match,cut_blue_img2
+from img_processing2 import make_char_list,get_unique_list,recog_text,projective_transformation2,cut_blue_trans,arrow_exist,mask_make, match_text3,projective_transformation,points_extract1,points_extract2,cut_blue_img1,Projection_H,Projection_V,Detect_HeightPosition,Detect_WidthPosition,match_text,match_text2,sabun,match,cut_blue_img2
 import audio_output
 from sklearn.neighbors import NearestNeighbors 
 from io import BytesIO
@@ -32,14 +32,20 @@ img_temp = temp['x']
 #テンプレートのラベル(文)を格納
 label_temp = temp['y']
 kernel = np.ones((3,3),np.uint8)
-img4 = cv2.imread("./hei/camera1077.jpg")
+img4 = cv2.imread("./hei/camera1352.jpg")
 img = cv2.imread("./camera1/camera10.jpg")
 plt.imshow(img4)
 plt.show()
 c = img4[223:252,]
 h,w,d = img4.shape
-hh= np.array([[0,223],[0,252]],dtype='float32')
+hh= np.array([[223,252],[290,320]],dtype='float32')
+List = [ [0,y] for l in hh for y in l]
+print(List)
+print(np.array(List))
+print("ff")
+hh= np.array([[0,223],[0,252],[0,290],[0,320]],dtype='float32')
 hh = np.array([hh])
+print(hh)
 cv2.imshow("hhh",c)
 cv2.waitKey(0)
 blue_threshold_present_img = cut_blue_img2(img4)
@@ -56,6 +62,8 @@ for i in present_char_List1:
     cut_present = mask_present_img2[int(i[0]):int(i[1]),]
     cv2.imshow("p",cut_present)
     cv2.waitKey(0)
+    out = match_text3(img_temp,label_temp,cut_present)
+    print(out)
 cv2.imshow("syaei",mask_present_img2)
 cv2.waitKey(0)
     #フレームの青い部分を二値化
@@ -98,10 +106,31 @@ print(out)
 
 cv2.imshow("syaei",syaei_img)
 cv2.waitKey(0)
-present_char_List1 , mask_present_img2 = mask_make(syaei_img)
+present_char_List1  = make_char_list(syaei_img)
+print(present_char_List1)
+#present_char_List1 = np.reshape(present_char_List1,[int(len(present_char_List1)/2),2])
+#print(present_char_List1)
 #cv2.imshow("syaei",syaei_img2)
 #cv2.waitKey(0)
+#pt = np.reshape(pt,[int(len(pt)/2),2])
+pt = pt[0][:,1]
+pt = np.reshape(pt,[int(len(pt)/2),2])
+#pt = np.array([[pt[0][0][1],pt[0][1][1]],[pt[0][2][1],pt[0][3][1]]],dtype='float32')
+print(pt)
+#present_char_List1 = np.reshape(present_char_List1,[int(len(present_char_List1)/2),2])
+knn_model = NearestNeighbors(n_neighbors=1, algorithm='ball_tree').fit(present_char_List1) 
+distances, indices = knn_model.kneighbors(pt)
+indices = get_unique_list(indices)
+print(indices)
+for i in indices:
+    cut_present_img = syaei_img[int(present_char_List1[i[0]][0]):int(present_char_List1[i[0]][1]),]
+    cv2.imshow("cut",cut_present_img)
+    cv2.waitKey(0)
 #対象画像をリサイズ
+out = match_text3(img_temp,label_temp,cut_present_img)
+ou = recog_text(cut_present_img)
+print(ou)
+print(out)
 syaei_resize_img = cv2.resize(syaei_img,dsize=(610,211))
     #対象画像をグレイスケール化
 gray_img = cv2.cvtColor(syaei_resize_img,cv2.COLOR_BGR2GRAY)
