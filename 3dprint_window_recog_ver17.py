@@ -170,9 +170,12 @@ def diff_image_search(present_frame,before_frame,before_frame_row1,before_frame_
     #print(List)
     #pt = cv2.perspectiveTransform(np.array([List]),M)
     if len(present_char_List1) != 0:
-        knn_model = NearestNeighbors(n_neighbors=1, algorithm='ball_tree').fit(present_char_List2) 
-        distances, indices = knn_model.kneighbors(present_char_List1)
-        indices = get_unique_list(indices)
+        try:
+            knn_model = NearestNeighbors(n_neighbors=1, algorithm='ball_tree').fit(present_char_List2) 
+            distances, indices = knn_model.kneighbors(present_char_List1)
+            indices = get_unique_list(indices)
+        except ValueError:
+            indices = []
     else:
         indices = []
     #print(indices)
