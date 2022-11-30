@@ -20,12 +20,17 @@ import numpy as np
 import cv2
 import matplotlib.pyplot as plt
 from image_processing import cut_blue_img
-from img_processing2 import projective_transformation2,cut_blue_trans,arrow_exist,mask_make, match_text3,projective_transformation,points_extract1,points_extract2,cut_blue_img1,Projection_H,Projection_V,Detect_HeightPosition,Detect_WidthPosition,match_text,match_text2,sabun,match,cut_blue_img2
+from img_processing2 import recog_text,projective_transformation2,cut_blue_trans,arrow_exist,mask_make, match_text3,projective_transformation,points_extract1,points_extract2,cut_blue_img1,Projection_H,Projection_V,Detect_HeightPosition,Detect_WidthPosition,match_text,match_text2,sabun,match,cut_blue_img2
 import audio_output
 from sklearn.neighbors import NearestNeighbors 
 from io import BytesIO
 
-
+#テンプレートをロード
+temp = np.load(r'./dataset2.npz')
+#テンプレート画像を格納
+img_temp = temp['x']
+#テンプレートのラベル(文)を格納
+label_temp = temp['y']
 kernel = np.ones((3,3),np.uint8)
 img4 = cv2.imread("./hei/camera1077.jpg")
 img = cv2.imread("./camera1/camera10.jpg")
@@ -51,7 +56,7 @@ for i in present_char_List1:
     cut_present = mask_present_img2[int(i[0]):int(i[1]),]
     cv2.imshow("p",cut_present)
     cv2.waitKey(0)
-cv2.imshow("syaei",img4)
+cv2.imshow("syaei",mask_present_img2)
 cv2.waitKey(0)
     #フレームの青い部分を二値化
 blue_threshold_img = cut_blue_trans(img4)
@@ -76,13 +81,21 @@ cv2.circle(img4, p4, 3, (0,255,0), thickness=1, lineType=cv2.LINE_8, shift=0)
 cv2.imshow("syaei",img4)
 cv2.waitKey(0)
 #射影変換
-syaei_img,M = projective_transformation2(img4,p1,p2,p3,p4)
+syaei_img,M = projective_transformation2(mask_present_img2,p1,p2,p3,p4)
 pt = cv2.perspectiveTransform(hh,M)
 print(pt)
 syae = syaei_img[int(pt[0][0][1]):int(pt[0][1][1]),]
 #syaei_img2 = projective_transformation(img,p8,p5,p6,p7)
+
+cv2.imshow("syaei",syaei_img)
+cv2.waitKey(0)
 cv2.imshow("syaei",syae)
 cv2.waitKey(0)
+out = match_text3(img_temp,label_temp,syae)
+ou = recog_text(syae)
+print(ou)
+print(out)
+
 cv2.imshow("syaei",syaei_img)
 cv2.waitKey(0)
 present_char_List1 , mask_present_img2 = mask_make(syaei_img)
