@@ -116,12 +116,12 @@ def diff_image_search(present_frame,before_frame,before_frame_row1,before_frame_
     judge = False
     output_textx = ""
     count = 0
-    present_char_List1 , mask_present_img2 = mask_make(blue_threshold_present_img)
+    present_char_List2,mask_present_img2 = mask_make(blue_threshold_present_img)
     
     before_frame = before_frame.astype('float')
         
 
-    if len(present_char_List1) > 4:
+    if len(present_char_List2) > 4:
         blue_threshold_present_img = cut_blue_img1(present_frame)
         mask_present_img2 = mask_make1(blue_threshold_present_img)
         blue = cut_blue_trans2(present_frame)
@@ -153,42 +153,36 @@ def diff_image_search(present_frame,before_frame,before_frame_row1,before_frame_
     #plt.show()
     #img = cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
     present_char_List1 = make_char_list(frame_diff)
-    try:
-        cv2.imshow("gg",blue)
-        cv2.waitKey(0)
-        p1,p2,p3,p4 = points_extract2(blue)
-    except TypeError:
-        print("Screen cannot be detected")
+    #try:
+       # cv2.imshow("gg",blue)
+        #cv2.waitKey(0)
+        #p1,p2,p3,p4 = points_extract2(blue)
+    #except TypeError:
+        #print("Screen cannot be detected")
 
-    syaei_img,M = projective_transformation2(mask_present_img2,p1,p2,p3,p4)
-    cv2.circle(present_frame, p1, 3, (0,255,0), thickness=1, lineType=cv2.LINE_8, shift=0)
-    cv2.circle(present_frame, p2, 3, (0,255,0), thickness=1, lineType=cv2.LINE_8, shift=0)
-    cv2.circle(present_frame, p3, 3, (0,255,0), thickness=1, lineType=cv2.LINE_8, shift=0)
-    cv2.circle(present_frame, p4, 3, (0,255,0), thickness=1, lineType=cv2.LINE_8, shift=0)
-    cv2.imshow("ff",present_frame)
-    cv2.waitKey(0)
-    cv2.imshow("ff",syaei_img)
-    cv2.waitKey(0)
-    print(present_char_List1)
-    List = [ [0,y] for l in present_char_List1 for y in l]
-    present_char_List1 = make_char_list(syaei_img)
-    print(present_char_List1)
+    #syaei_img,M = projective_transformation2(mask_present_img2,p1,p2,p3,p4)
+
+    #print(present_char_List1)
+    #List = [ [0,y] for l in present_char_List1 for y in l]
+    #present_char_List2 = make_char_list(mask_present_img2)
+    #print(present_char_List2)
     #List = [ [[0,y] for y in l ]for l in present_char_List1]
-    print(List)
-    pt = cv2.perspectiveTransform(np.array([List]),M)
-    pt = pt[0][:,1]
-    pt = np.reshape(pt,[int(len(pt)/2),2])
-    knn_model = NearestNeighbors(n_neighbors=1, algorithm='ball_tree').fit(present_char_List1) 
-    distances, indices = knn_model.kneighbors(pt)
-    indices = get_unique_list(indices)
-    print(indices)
+    #print(List)
+    #pt = cv2.perspectiveTransform(np.array([List]),M)
+    if len(present_char_List1) != 0:
+        knn_model = NearestNeighbors(n_neighbors=1, algorithm='ball_tree').fit(present_char_List2) 
+        distances, indices = knn_model.kneighbors(present_char_List1)
+        indices = get_unique_list(indices)
+    else:
+        indices = []
+    #print(indices)
     for i in indices:
         print(i)
         if len(indices)==0:
             break
         elif len(indices) > 4:
             break
-        cut_present = syaei_img[int(present_char_List1[i[0]][0]):int(present_char_List1[i[0]][1]),]
+        cut_present = mask_present_img2[int(present_char_List2[i[0]][0]):int(present_char_List2[i[0]][1]),]
         #if arrow_exist(cut_present):
             #cut_present,judge = arrow_exist_judge(cut_present)
         #cv2.imshow("HHH",cut_present)
