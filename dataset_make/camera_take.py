@@ -5,6 +5,7 @@ def coordinates(event,x,y, flags,param):
 cap = cv2.VideoCapture(0)
 count =1
 while True:
+    
     ret, frame = cap.read()
     if not ret:
         cv2.destroyAllWindows()
