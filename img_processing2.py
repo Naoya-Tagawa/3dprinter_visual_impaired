@@ -1098,6 +1098,8 @@ def match_text3(img_temp,label_temp,frame):
         #cv2.imwrite("match.jpg",match_img)
         try:
             match_img = cv2.resize(match_img,dsize=(26,36))
+            #cv2.imshow("kk",match_img)
+            #cv2.waitKey(0)
         except cv2.error:
             return ""
         height_m,width_m = match_img.shape
@@ -1144,18 +1146,22 @@ def recog_text(img):
 #Windowsの環境変数に設定している場合は不要。
     path='C:\\Program Files\\Tesseract-OCR\\'
     os.environ['PATH'] = os.environ['PATH'] + path
+    
+# 言語に日本語と今回の学習済みデータを指定
 
     #pyocrにTesseractを指定する。
     pyocr.tesseract.TESSERACT_CMD = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
     tools = pyocr.get_available_tools()
     tool = tools[0]
+    langs = tool.get_available_languages()
     img = Image.fromarray(img)
+    lang_setting = langs[0]+"+"+langs[3]
     #文字を抽出したい画像のパスを選ぶ
     #img = Image.open('./bef.png')
 
     #画像の文字を抽出
     builder = pyocr.builders.TextBuilder(tesseract_layout=6)
-    text = tool.image_to_string(img, lang="eng", builder=builder)
+    text = tool.image_to_string(img, lang=lang_setting, builder=builder)
 
     return text
 
@@ -1291,7 +1297,7 @@ def sabun(before_frame_row,present_frame_row):
     print(percent)
 
     #time.sleep(1)
-    if percent < 10:
+    if percent < 9:
         return True
     else:
         

@@ -124,14 +124,14 @@ def diff_image_search(present_frame,before_frame,before_frame_row1,before_frame_
     if len(present_char_List2) > 4:
         blue_threshold_present_img = cut_blue_img1(present_frame)
         mask_present_img2 = mask_make1(blue_threshold_present_img)
-        blue = cut_blue_trans2(present_frame)
+        #blue = cut_blue_trans2(present_frame)
         cv2.accumulateWeighted(mask_present_img2, before_frame, 0.9)
         frame_diff = cv2.absdiff(mask_present_img2,cv2.convertScaleAbs(before_frame))
         frame_diff = cv2.medianBlur(frame_diff,3)
         frame_diff = cv2.dilate(frame_diff,kernel)
         cv2.imwrite("raaa.jpg",frame_diff)
     else:
-        blue = cut_blue_trans(present_frame)
+        #blue = cut_blue_trans(present_frame)
         cv2.accumulateWeighted(mask_present_img2, before_frame, 0.9)
         frame_diff = cv2.absdiff(mask_present_img2,cv2.convertScaleAbs(before_frame))
         frame_diff = cv2.medianBlur(frame_diff,3)
@@ -180,7 +180,7 @@ def diff_image_search(present_frame,before_frame,before_frame_row1,before_frame_
         indices = []
     #print(indices)
     for i in indices:
-        print(i)
+        
         if len(indices)==0:
             break
         elif len(indices) > 4:

@@ -14,15 +14,11 @@ blue_threshold_present_img = img_processing2.cut_blue_img2(img1)
 
 
 present_char_List1 , mask_present_img2 = img_processing2.mask_make(blue_threshold_present_img)
-<<<<<<< HEAD
-
 
 blue_threshold_present_img7 = img_processing2.cut_blue_img2(img4)
 present_char_List1 , mask8 = img_processing2.mask_make(blue_threshold_present_img7)
-cv2.imshow("hh",mask_present_img2)
-=======
+
 cv2.imshow("hh",img)
->>>>>>> 4a79dab4cfbe43bbef99985a89e2ce11c3cad693
 cv2.waitKey(0)
 #mask_present_img2 = cv2.resize(mask_present_img2, img.shape[1::-1])
 #mask_present_img2 = cv2.cvtColor(mask_present_img2, cv2.COLOR_GRAY2BGR)
@@ -32,7 +28,6 @@ print(mask_present_img2.shape)
 dst = cv2.bitwise_and(img,mask_present_img2)
 cv2.imshow("hh",dst)
 cv2.waitKey(0)
-<<<<<<< HEAD
 cv2.imwrite("mask_p.jpg",dst)
 =======
 cv2.imwrite("mask_p.jpg",dst)
@@ -81,4 +76,3 @@ plt.savefig("hist8.png")
 plt.show()
 
 
->>>>>>> d678f219b78c309e7e939ea2e8f7ceff7e14e969
