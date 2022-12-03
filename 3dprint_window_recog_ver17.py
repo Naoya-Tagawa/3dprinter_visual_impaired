@@ -107,7 +107,7 @@ def diff_image_search(present_frame,before_frame,before_frame_row1,before_frame_
     h,w,d = present_frame.shape
     #フレームの青い部分を二値化
     frame= cv2.cvtColor(present_frame,cv2.COLOR_BGR2RGB)
-
+    cv2.imwrite("frameBE.jpg",before_frame)
     
     blue_threshold_present_img = cut_blue_img2(present_frame)
     #kk
