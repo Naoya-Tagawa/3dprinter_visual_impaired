@@ -1,9 +1,9 @@
 import cv2
 import img_processing2
-
+import matplotlib.pyplot as plt
 img = cv2.imread("./hei/camera186.jpg")
 img1 = cv2.imread("./hei/camera181.jpg")
-img2 = cv2.imread("./hei/camer120.jpg")
+img2 = cv2.imread("./base.jpg")
 img3 = cv2.imread("./hei/camera618.jpg")
 img4 = cv2.imread("./hei/camera518.jpg")
 #img = cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
@@ -29,7 +29,6 @@ dst = cv2.bitwise_and(img,mask_present_img2)
 cv2.imshow("hh",dst)
 cv2.waitKey(0)
 cv2.imwrite("mask_p.jpg",dst)
-=======
 cv2.imwrite("mask_p.jpg",dst)
 
 present_char_List1 , mask_present_img2 = img_processing2.mask_make(blue_threshold_present_img)
@@ -64,7 +63,7 @@ cv2.waitKey(0)
 cv2.imwrite("dst.jpg",dst)
 
 for i,col in enumerate(color):
-    histr = cv2.calcHist([img2],[i],mask_present_img2,[256],[0,256])
+    histr = cv2.calcHist([img2],[i],None,[256],[0,256])
     plt.plot(histr,color = col)
     plt.xlim([0,256])
     #histr += histr
