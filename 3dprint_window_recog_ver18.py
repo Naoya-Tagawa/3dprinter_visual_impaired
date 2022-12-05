@@ -276,6 +276,8 @@ def make_img_file(img): #音声ファイル作成
     now_time = sec + msec
     file_name = path + "ave_img_" + now_time + ".jpg"
     #print(file_name)
+
+    
     cv2.imwrite(file_name,img)
 
 def get_pre_img(): #最古の音声ファイルを返す
@@ -290,6 +292,7 @@ def get_pre_img(): #最古の音声ファイルを返す
     pre_img = cv2.imread(path + file_list[0][0])
     
     os.remove(path + file_list[0][0])
+    pre_img=pre_img.astype(np.float32)
     return pre_img
 def delete_all_file(): #音声ファイルを削除
     file_list = []
@@ -438,9 +441,10 @@ if __name__ == "__main__":
     h,w=frame.shape[:2]
     base=np.zeros((h,w,3),np.uint32)
     for i in range(9):
+        ret , frame = cap.read()
         base = base + frame
         make_img_file(frame)
-    
+    base = base/9
     #before_frame = None
     while True:
         ret , frame = cap.read()
@@ -450,17 +454,18 @@ if __name__ == "__main__":
         cv2.imshow("frame",frame)
         #画面が遷移したか調査
 
-        base = frame+ base
-        base1 = base/10
+        base = base + frame
+        base1 = base/2
         
-        
+        #base1=np.where(base1<0,0,base1)
+        cv2.imwrite("base10.jpg",base1)
         base1=base1.astype(np.uint8)
         cv2.imwrite("base.jpg",base1)
         before_frame_row1,before_frame_row2,before_frame_row3,before_frame_row4,before_frame= diff_image_search(base1,before_frame,before_frame_row1,before_frame_row2,before_frame_row3,before_frame_row4,output_text,img_temp,label_temp)
         #count  = 0
         pre_img = get_pre_img()
         base = base - pre_img
-        cv2.imwrite("baseb.jpg",base/9)
+        #cv2.imwrite("baseb.jpg",base/9)
         make_img_file(frame)
         
         
