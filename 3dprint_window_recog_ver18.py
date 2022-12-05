@@ -276,7 +276,7 @@ def make_img_file(img): #音声ファイル作成
     now_time = sec + msec
     file_name = path + "ave_img_" + now_time + ".jpg"
     #print(file_name)
-    cv2.imwrite(path,img)
+    cv2.imwrite(file_name,img)
 
 def get_pre_img(): #最古の音声ファイルを返す
     file_list = []
@@ -286,11 +286,24 @@ def get_pre_img(): #最古の音声ファイルを返す
         if ext == '.jpg':
             wav_file = path + file
             file_list.append([file,os.path.getctime(wav_file)])
-    file_list.sort(key = itemgetter(1),reverse=True)
+    file_list.sort(key = itemgetter(1),reverse=False)
     pre_img = cv2.imread(path + file_list[0][0])
+    
     os.remove(path + file_list[0][0])
     return pre_img
-
+def delete_all_file(): #音声ファイルを削除
+    file_list = []
+    path = "./ave_img/"
+    for file in os.listdir("./ave_img"):
+        base , ext = os.path.splitext(file)
+        if ext == '.jpg':
+            wav_file = path + file
+            file_list.append([file,os.path.getctime(wav_file)])
+    file_list.sort(key = itemgetter(1),reverse=True)
+    #print(file_list)
+    for i , file in enumerate(file_list):
+        file_name = path + file[0]
+        os.remove(file_name)
 
 def delete_voice_file(): #音声ファイルを5つになるまで削除
     file_list = []
@@ -415,7 +428,7 @@ if __name__ == "__main__":
     output_text = multiprocessing.Queue()
     read = multiprocessing.Process(target=text_read,args=(output_text,img_temp,label_temp))
     read.start()
-
+    delete_all_file()
     #最初のフレームを取得する
     ret , bg = cap.read()
     before_frame_row1,before_frame_row2,before_frame_row3,before_frame_row4,before_frame= diff_image_search_first(bg,img_temp,label_temp,output_text)
@@ -427,7 +440,7 @@ if __name__ == "__main__":
     for i in range(9):
         base = base + frame
         make_img_file(frame)
-        
+    
     #before_frame = None
     while True:
         ret , frame = cap.read()
@@ -439,11 +452,15 @@ if __name__ == "__main__":
 
         base = frame+ base
         base1 = base/10
+        
+        
         base1=base1.astype(np.uint8)
+        cv2.imwrite("base.jpg",base1)
         before_frame_row1,before_frame_row2,before_frame_row3,before_frame_row4,before_frame= diff_image_search(base1,before_frame,before_frame_row1,before_frame_row2,before_frame_row3,before_frame_row4,output_text,img_temp,label_temp)
         #count  = 0
         pre_img = get_pre_img()
         base = base - pre_img
+        cv2.imwrite("baseb.jpg",base/9)
         make_img_file(frame)
         
         
