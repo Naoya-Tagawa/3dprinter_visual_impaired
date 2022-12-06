@@ -119,36 +119,32 @@ def diff_image_search(present_frame,before_frame,before_frame_row1,before_frame_
     present_char_List2,mask_present_img2 = mask_make(blue_threshold_present_img)
     
     before_frame = before_frame.astype('float')
-        
+    model = cv2.createBackgroundSubtractorMOG2()
 
     if len(present_char_List2) > 4:
-        blue_threshold_present_img = cut_blue_img1(present_frame)
+        blue_threshold_present_img = cut_blue_img1(frame)
         mask_present_img2 = mask_make1(blue_threshold_present_img)
-        #blue = cut_blue_trans2(present_frame)
-        cv2.accumulateWeighted(mask_present_img2, before_frame, 0.8)
-        #frame_diff = cv2.absdiff(mask_present_img2,cv2.convertScaleAbs(before_frame))
-        frame_diff = mask_present_img2 - cv2.convertScaleAbs(before_frame)
-        frame_diff = cv2.medianBlur(frame_diff,3)
-        frame_diff = cv2.dilate(frame_diff,kernel)
-        cv2.imwrite("raaa.jpg",frame_diff)
+        mask = model.apply(mask_present_img2)
+        #mask = cv2.medianBlur(mask,3)
+        mask = cv2.dilate(mask,kernel)
     else:
-        #blue = cut_blue_trans(present_frame)
-        cv2.accumulateWeighted(mask_present_img2, before_frame, 0.8)
-        frame_diff = mask_present_img2 - cv2.convertScaleAbs(before_frame)
-        frame_diff = cv2.medianBlur(frame_diff,3)
-        cv2.imwrite("raaa.jpg",frame_diff)
-
-    cv2.imwrite("realtimeimg.jpg",frame_diff)
+        mask_present_img2 = mask_make1(blue_threshold_present_img)
+        mask = model.apply(mask_present_img2)
+        mask = cv2.dilate(mask,kernel)
+        #mask = cv2.medianBlur(mask,3)
+    # 背景の画素は黒 (0, 0, 0) にする。
+    #mask_present_img2[mask == 0] = 0
+    cv2.imwrite("realtimeimg.jpg",mask)
 
     #plt.imshow(mask_present_img2)
     #plt.show()
     #h ,w = present_frame.shape
     #print(before_frame_row.shape)
     #before_frame = cv2.resize(before_frame,dsize=(w,h))
-    contours, hierarchy = cv2.findContours(frame_diff.astype("uint8"), cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE)
+    contours, hierarchy = cv2.findContours(mask_present_img2.astype("uint8"), cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE)
     for i in range(len(contours)):
         if (cv2.contourArea(contours[i]) < 30):
-            frame_diff = cv2.fillPoly(frame_diff, [contours[i][:,0,:]], (0,255,0), lineType=cv2.LINE_8, shift=0)
+            frame_diff = cv2.fillPoly(mask_present_img2, [contours[i][:,0,:]], (0,255,0), lineType=cv2.LINE_8, shift=0)
     #plt.imshow(frame_diff)
     cv2.imwrite("framediff.jpg",frame_diff)
     #plt.show()

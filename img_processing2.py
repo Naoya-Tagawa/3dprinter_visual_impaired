@@ -1266,7 +1266,10 @@ def sabun(before_frame_row,present_frame_row):
     #before_frame_row = cv2.medianBlur(before_frame_row,3)
     cv2.imwrite("bef.png",before_frame_row)
     #ret, before_frame_row = cv2.threshold(gray_before_img,0,255,cv2.THRESH_OTSU)
-    frame_diff = cv2.absdiff(present_frame_row,before_frame_row)
+    frame_diff = present_frame_row -before_frame_row
+            #frame_diff = mask_present_img2 - cv2.convertScaleAbs(before_frame)
+    frame_diff[frame_diff < 0] = 0
+    frame_diff = frame_diff.astype(np.uint8)
     #frame_diff = cv2.medianBlur(frame_diff,5)
     #frame_diff = cv2.absdiff(present_frame,before_frame)
     ##plt.imshow(frame_diff)
@@ -1297,7 +1300,7 @@ def sabun(before_frame_row,present_frame_row):
     print(percent)
 
     #time.sleep(1)
-    if percent < 9:
+    if percent < 3:
         return True
     else:
         

@@ -37,7 +37,7 @@ while True:
         mask = cv2.dilate(mask,kernel)
         #mask = cv2.medianBlur(mask,3)
     # 背景の画素は黒 (0, 0, 0) にする。
-    #mask_present_img2[mask == 0] = 0
+    mask_present_img2[mask == 0] = 0
 
 
     cv2.imshow("Frame (Only Forground)", mask)
