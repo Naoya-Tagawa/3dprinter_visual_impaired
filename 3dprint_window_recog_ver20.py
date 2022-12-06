@@ -106,8 +106,8 @@ def diff_image_search(present_frame,before_frame,before_frame_row1,before_frame_
     img = cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
     h,w,d = present_frame.shape
     #フレームの青い部分を二値化
-    frame= cv2.cvtColor(present_frame,cv2.COLOR_BGR2RGB)
-    cv2.imwrite("frameBE.jpg",before_frame)
+    #frame= cv2.cvtColor(present_frame,cv2.COLOR_BGR2RGB)
+    #cv2.imwrite("frameBE.jpg",before_frame)
     
     blue_threshold_present_img = cut_blue_img2(present_frame)
     #kk
@@ -119,22 +119,19 @@ def diff_image_search(present_frame,before_frame,before_frame_row1,before_frame_
     present_char_List2,mask_present_img2 = mask_make(blue_threshold_present_img)
     
     before_frame = before_frame.astype('float')
-    model = cv2.createBackgroundSubtractorMOG2()
-
+    
     if len(present_char_List2) > 4:
-        blue_threshold_present_img = cut_blue_img1(frame)
+        blue_threshold_present_img = cut_blue_img1(present_frame)
         mask_present_img2 = mask_make1(blue_threshold_present_img)
-        mask = model.apply(mask_present_img2)
-        #mask = cv2.medianBlur(mask,3)
-        mask = cv2.dilate(mask,kernel)
+        mask_present_img2 = cv2.medianBlur(mask_present_img2,3)
+        mask_present_img2 = cv2.dilate(mask_present_img2,kernel)
+        present_char_List2 = make_char_list(mask_present_img2)
     else:
         mask_present_img2 = mask_make1(blue_threshold_present_img)
-        mask = model.apply(mask_present_img2)
-        mask = cv2.dilate(mask,kernel)
-        #mask = cv2.medianBlur(mask,3)
+        mask_present_img2 = cv2.medianBlur(mask_present_img2,3)
     # 背景の画素は黒 (0, 0, 0) にする。
     #mask_present_img2[mask == 0] = 0
-    cv2.imwrite("realtimeimg.jpg",mask)
+    cv2.imwrite("realtimeimg.jpg",mask_present_img2)
 
     #plt.imshow(mask_present_img2)
     #plt.show()
@@ -146,10 +143,10 @@ def diff_image_search(present_frame,before_frame,before_frame_row1,before_frame_
         if (cv2.contourArea(contours[i]) < 30):
             frame_diff = cv2.fillPoly(mask_present_img2, [contours[i][:,0,:]], (0,255,0), lineType=cv2.LINE_8, shift=0)
     #plt.imshow(frame_diff)
-    cv2.imwrite("framediff.jpg",frame_diff)
+    cv2.imwrite("framediff.jpg",mask_present_img2)
     #plt.show()
     #img = cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
-    present_char_List1 = make_char_list(frame_diff)
+    
     #try:
        # cv2.imshow("gg",blue)
         #cv2.waitKey(0)
@@ -166,24 +163,13 @@ def diff_image_search(present_frame,before_frame,before_frame_row1,before_frame_
     #List = [ [[0,y] for y in l ]for l in present_char_List1]
     #print(List)
     #pt = cv2.perspectiveTransform(np.array([List]),M)
-    if len(present_char_List1) != 0:
-        try:
-            knn_model = NearestNeighbors(n_neighbors=1, algorithm='ball_tree').fit(present_char_List2) 
-            distances, indices = knn_model.kneighbors(present_char_List1)
-            indices = get_unique_list(indices)
-        except ValueError:
-            indices = []
-    else:
-        indices = []
-    #print(indices)
-    for i in indices:
-        
-        if len(indices)==0:
+    for i in present_char_List2:
+        if len(present_char_List2)==0:
             break
-        elif len(indices) > 4:
+        elif len(present_char_List2) > 4:
             break
-        cut_present = mask_present_img2[int(present_char_List2[i[0]][0]):int(present_char_List2[i[0]][1]),]
-        #if arrow_exist(cut_present):
+        cut_present = mask_present_img2[int(i[0]):int(i[1]),]
+    #if arrow_exist(cut_present):
             #cut_present,judge = arrow_exist_judge(cut_present)
         #cv2.imshow("HHH",cut_present)
         #cv2.waitKey(0)
@@ -233,15 +219,15 @@ def diff_image_search(present_frame,before_frame,before_frame_row1,before_frame_
     #end1 = time.perf_counter()
     #mask_present_img2,judge = arrow_exist_judge(mask_present_img2)
     try:
-        if len(present_char_List1) == 0:
-            return before_frame_row1,before_frame_row2,before_frame_row3,before_frame_row4,mask_present_img2
-        elif len(present_char_List1) == 1:
-            return before_frame_row[0] , before_frame_row2,before_frame_row3,before_frame_row4,mask_present_img2
-        elif len(present_char_List1) == 2:
-            return before_frame_row[0] , before_frame_row[1] ,before_frame_row3,before_frame_row4,mask_present_img2
-        elif len(present_char_List1) == 3:
-            return before_frame_row[0] , before_frame_row[1] ,before_frame_row[2] ,before_frame_row4,mask_present_img2
-        elif len(present_char_List1) == 4:
+        if len(present_char_List2) == 0:
+            return img,img,img,img,mask_present_img2
+        elif len(present_char_List2) == 1:
+            return before_frame_row[0] , img,img,img,mask_present_img2
+        elif len(present_char_List2) == 2:
+            return before_frame_row[0] , before_frame_row[1] ,img,img,mask_present_img2
+        elif len(present_char_List2) == 3:
+            return before_frame_row[0] , before_frame_row[1] ,before_frame_row[2] ,img,mask_present_img2
+        elif len(present_char_List2) == 4:
             return before_frame_row[0] , before_frame_row[1],before_frame_row[2],before_frame_row[3],mask_present_img2
         else:
             return img,img,img,img,mask_present_img2
