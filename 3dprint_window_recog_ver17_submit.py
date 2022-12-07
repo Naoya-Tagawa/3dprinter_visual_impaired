@@ -126,7 +126,10 @@ def diff_image_search(present_frame,before_frame,before_frame_row1,before_frame_
         mask_present_img2 = mask_make1(blue_threshold_present_img)
         #blue = cut_blue_trans2(present_frame)
         cv2.accumulateWeighted(mask_present_img2, before_frame, 0.8)
-        frame_diff = cv2.absdiff(mask_present_img2,cv2.convertScaleAbs(before_frame))
+        frame_diff = mask_present_img2 - cv2.convertScaleAbs(before_frame)
+        
+        frame_diff[frame_diff ==205] = 0
+        #frame_diff = cv2.absdiff(mask_present_img2,cv2.convertScaleAbs(before_frame))
         frame_diff = cv2.morphologyEx(frame_diff, cv2.MORPH_OPEN, kernel)
         #frame_diff = cv2.medianBlur(frame_diff,3)
         #frame_diff = cv2.dilate(frame_diff,kernel)
@@ -134,9 +137,11 @@ def diff_image_search(present_frame,before_frame,before_frame_row1,before_frame_
     else:
         #blue = cut_blue_trans(present_frame)
         cv2.accumulateWeighted(mask_present_img2, before_frame, 0.8)
-        frame_diff = cv2.absdiff(mask_present_img2,cv2.convertScaleAbs(before_frame))
+        frame_diff = mask_present_img2 - cv2.convertScaleAbs(before_frame)
+        frame_diff[frame_diff == 205] = 0
+        #frame_diff = cv2.absdiff(mask_present_img2,cv2.convertScaleAbs(before_frame))
         #frame_diff = cv2.medianBlur(frame_diff,3)
-        #frame_diff = cv2.morphologyEx(frame_diff, cv2.MORPH_OPEN, kernel)
+        frame_diff = cv2.morphologyEx(frame_diff, cv2.MORPH_OPEN, kernel)
         cv2.imwrite("raaa.jpg",frame_diff)
 
     cv2.imwrite("realtimeimg.jpg",frame_diff)
@@ -153,6 +158,8 @@ def diff_image_search(present_frame,before_frame,before_frame_row1,before_frame_
             frame_diff = cv2.fillPoly(frame_diff, [contours[i][:,0,:]], (0,255,0), lineType=cv2.LINE_8, shift=0)
     #plt.imshow(frame_diff)
     cv2.imshow("framediff.jpg",frame_diff)
+    cv2.imshow("before.jpg",before_frame)
+    cv2.imshow("mas",mask_present_img2)
     #plt.show()
     #img = cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
     present_char_List1 = make_char_list(frame_diff)
