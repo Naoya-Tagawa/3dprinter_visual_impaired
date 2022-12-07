@@ -34,7 +34,7 @@ color = ('b','g','r')
 
 #dst = cv2.imread("./mask_p.jpg")
 
-dst2 = cv2.bitwise_and(img2,img2,mask=mask_present_img2)
+dst2 = cv2.bitwise_and(img1,img1,mask=mask_present_img2)
 cv2.imshow("dst2",dst2)
 cv2.waitKey(0)
 cv2.imwrite("dst.jpg",dst2)

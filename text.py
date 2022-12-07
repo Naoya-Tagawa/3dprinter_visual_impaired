@@ -37,11 +37,15 @@ while True:
     #    mask = cv2.dilate(mask,kernel)
         #mask = cv2.medianBlur(mask,3)
     # 背景の画素は黒 (0, 0, 0) にする。
+<<<<<<< HEAD
     frame[mask == 0] = 0
     #contours, hierarchy = cv2.findContours(frame.astype("uint8"), cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE)
     #for i in range(len(contours)):
         #if (cv2.contourArea(contours[i]) < 30):
         #    frame = cv2.fillPoly(frame, [contours[i][:,0,:]], (0,255,0), lineType=cv2.LINE_8, shift=0)
+=======
+    mask_present_img2[mask == 0] = 0
+>>>>>>> f34da87169d4f759c22b00ab7dc2022c7bcad797
 
     cv2.imshow("Frame (Only Forground)", frame)
     cv2.waitKey(wait_secs)
