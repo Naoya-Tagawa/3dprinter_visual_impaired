@@ -23,6 +23,7 @@ import os
 from operator import itemgetter
 import datetime
 import pyaudio
+import itertools
 import wave
 from sklearn.neighbors import NearestNeighbors 
 
@@ -415,7 +416,7 @@ if __name__ == "__main__":
     before_frame_row1,before_frame_row2,before_frame_row3,before_frame_row4,before_frame= diff_image_search_first(bg,img_temp,label_temp,output_text)
     frame = bg
     count = 0
-    
+    before = bg
     h,w=frame.shape[:2]
     base=np.zeros((h,w,3),np.uint32)
     #before_frame = None
@@ -426,10 +427,25 @@ if __name__ == "__main__":
             cv2.destroyAllWindows()
         cv2.imshow("frame",frame)
         #画面が遷移したか調査
+        #dst1 = cv2.bitwise_and(before,before,mask=before_frame)
         #dst2 = cv2.bitwise_and(frame,frame,mask=before_frame)
-        if count == 9:
+        #cv2.imshow("ll",dst2)
+        #dst1[dst1 >= 255] = 0
+        #dst2[dst2>= 255] = 0
+        #h,w,e = dst1.shape
+        #print(h*w)
+        #count1 =  sum(((r>0) and (g>0) and (b>0)) for d in dst1 for r,g,b in d)
+        #count2 =  sum(((r>0) and (g>0) and (b>0)) for d in dst2 for r,g,b in d)
+        #dst0 = list(itertools.chain.from_iterable(dst1))
+        #dst3 = list(itertools.chain.from_iterable(dst2))
+        #dst1_count = sum(((b>0) and (r>150)) for b,g,r in dst0)
+        #dst2_count = sum(((b>0) and (r>150)) for b,g,r in dst3)
+        #per = (dst2_count / dst1_count) * 100
+        #print(dst1_count)
+        #print(dst2_count)
+        if count == 4:
             base = frame+ base
-            base = base/10
+            base = base/5
             base=base.astype(np.uint8)
             cv2.imwrite("base17.jpg",base)
             before_frame_row1,before_frame_row2,before_frame_row3,before_frame_row4,before_frame= diff_image_search(base,before_frame,before_frame_row1,before_frame_row2,before_frame_row3,before_frame_row4,output_text,img_temp,label_temp)
@@ -438,7 +454,7 @@ if __name__ == "__main__":
         else:
             base = base + frame
             count += 1
-
+        before = frame
         
 
         
