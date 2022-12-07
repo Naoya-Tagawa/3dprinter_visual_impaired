@@ -5,7 +5,7 @@ import cv2
 import matplotlib.pyplot as plt
 import time
 import numpy as np
-from img_processing2 import cut_blue_trans2,mask_make1,make_char_list,get_unique_list,recog_text,projective_transformation2,cut_blue_trans,arrow_exist,mask_make, match_text3,projective_transformation,points_extract1,points_extract2,cut_blue_img1,Projection_H,Projection_V,Detect_HeightPosition,Detect_WidthPosition,match_text,match_text2,sabun,match,cut_blue_img2
+from img_processing2 import sabun1,cut_blue_trans2,mask_make1,make_char_list,get_unique_list,recog_text,projective_transformation2,cut_blue_trans,arrow_exist,mask_make, match_text3,projective_transformation,points_extract1,points_extract2,cut_blue_img1,Projection_H,Projection_V,Detect_HeightPosition,Detect_WidthPosition,match_text,match_text2,sabun,match,cut_blue_img2
 from natsort import natsorted
 import multiprocessing
 from pandas import cut
@@ -125,7 +125,7 @@ def diff_image_search(present_frame,before_frame,before_frame_row1,before_frame_
         blue_threshold_present_img = cut_blue_img1(present_frame)
         mask_present_img2 = mask_make1(blue_threshold_present_img)
         #blue = cut_blue_trans2(present_frame)
-        cv2.accumulateWeighted(mask_present_img2, before_frame, 0.5)
+        cv2.accumulateWeighted(mask_present_img2, before_frame, 0.8)
         frame_diff = cv2.absdiff(mask_present_img2,cv2.convertScaleAbs(before_frame))
         frame_diff = cv2.morphologyEx(frame_diff, cv2.MORPH_OPEN, kernel)
         #frame_diff = cv2.medianBlur(frame_diff,3)
@@ -133,7 +133,7 @@ def diff_image_search(present_frame,before_frame,before_frame_row1,before_frame_
         cv2.imwrite("raaa.jpg",frame_diff)
     else:
         #blue = cut_blue_trans(present_frame)
-        cv2.accumulateWeighted(mask_present_img2, before_frame, 0.5)
+        cv2.accumulateWeighted(mask_present_img2, before_frame, 0.8)
         frame_diff = cv2.absdiff(mask_present_img2,cv2.convertScaleAbs(before_frame))
         #frame_diff = cv2.medianBlur(frame_diff,3)
         #frame_diff = cv2.morphologyEx(frame_diff, cv2.MORPH_OPEN, kernel)
@@ -198,16 +198,16 @@ def diff_image_search(present_frame,before_frame,before_frame_row1,before_frame_
         #cv2.imshow("HHH",cut_present)
         #cv2.waitKey(0)
         #before_frame_row.append(cut_present)
-        if not sabun(before_frame_row1,cut_present):
+        if not sabun1(before_frame_row1,cut_present):
             sabun_count += 1
 
-        if not sabun(before_frame_row2,cut_present):
+        if not sabun1(before_frame_row2,cut_present):
             sabun_count += 1
     
-        if not sabun(before_frame_row3,cut_present):
+        if not sabun1(before_frame_row3,cut_present):
             sabun_count += 1
             
-        if not sabun(before_frame_row4,cut_present):
+        if not sabun1(before_frame_row4,cut_present):
             sabun_count += 1
         
         #cut_present1 = mask_present_img[int(j[0]):int(j[1]),]
@@ -249,15 +249,15 @@ def diff_image_search(present_frame,before_frame,before_frame_row1,before_frame_
     #end1 = time.perf_counter()
     #mask_present_img2,judge = arrow_exist_judge(mask_present_img2)
     try:
-        if len(present_char_List1) == 0:
+        if len(present_char_List2) == 0:
             return before_frame_row1,before_frame_row2,before_frame_row3,before_frame_row4,mask_present_img2
-        elif len(present_char_List1) == 1:
+        elif len(present_char_List2) == 1:
             return before_frame_row[0] , before_frame_row2,before_frame_row3,before_frame_row4,mask_present_img2
-        elif len(present_char_List1) == 2:
+        elif len(present_char_List2) == 2:
             return before_frame_row[0] , before_frame_row[1] ,before_frame_row3,before_frame_row4,mask_present_img2
-        elif len(present_char_List1) == 3:
+        elif len(present_char_List2) == 3:
             return before_frame_row[0] , before_frame_row[1] ,before_frame_row[2] ,before_frame_row4,mask_present_img2
-        elif len(present_char_List1) == 4:
+        elif len(present_char_List2) == 4:
             return before_frame_row[0] , before_frame_row[1],before_frame_row[2],before_frame_row[3],mask_present_img2
         else:
             return img,img,img,img,mask_present_img2
@@ -419,7 +419,7 @@ if __name__ == "__main__":
             cv2.destroyAllWindows()
         cv2.imshow("frame",frame)
         #画面が遷移したか調査
-
+        #dst2 = cv2.bitwise_and(frame,frame,mask=before_frame)
         if count == 9:
             base = frame+ base
             base = base/10

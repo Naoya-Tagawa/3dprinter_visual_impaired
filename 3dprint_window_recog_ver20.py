@@ -125,9 +125,10 @@ def diff_image_search(present_frame,before_frame,before_frame_row1,before_frame_
         blue_threshold_present_img = cut_blue_img1(present_frame)
         mask_present_img2 = mask_make1(blue_threshold_present_img)
         cv2.accumulateWeighted(mask_present_img2, before_frame, 0.5)
-        frame_diff = mask_present_img2 - cv2.convertScaleAbs(before_frame)
+        #frame_diff = mask_present_img2 - cv2.convertScaleAbs(before_frame)
         #frame_diff = cv2.medianBlur(frame_diff,3)
         #frame_diff = cv2.dilate(frame_diff,kernel)
+        frame_diff = cv2.absdiff(mask_present_img2,cv2.convertScaleAbs(before_frame))
         frame_diff = cv2.morphologyEx(frame_diff, cv2.MORPH_OPEN, kernel)
         #mask_present_img2 = cv2.medianBlur(mask_present_img2,3)
         #mask_present_img2 = cv2.dilate(mask_present_img2,kernel)
@@ -135,28 +136,29 @@ def diff_image_search(present_frame,before_frame,before_frame_row1,before_frame_
     else:
         #mask_present_img2 = mask_make1(blue_threshold_present_img)
         cv2.accumulateWeighted(mask_present_img2, before_frame, 0.5)
-        frame_diff = mask_present_img2 - cv2.convertScaleAbs(before_frame)
+        frame_diff = cv2.absdiff(mask_present_img2,cv2.convertScaleAbs(before_frame))
         #frame_diff = cv2.medianBlur(frame_diff,3)
-        #frame_diff = cv2.dilate(frame_diff,kernel)
-        frame_diff = cv2.morphologyEx(frame_diff, cv2.MORPH_OPEN, kernel)#mask_present_img2 = cv2.medianBlur(mask_present_img2,3)
-        #mask_present_img2 = cv2.morphologyEx(mask_present_img2, cv2.MORPH_OPEN, kernel)
-    # 背景の画素は黒 (0, 0, 0) にする。
+        frame_diff = cv2.morphologyEx(frame_diff, cv2.MORPH_OPEN, kernel)
+        #mask_present_img2 = cv2.medianBlur(mask_present_img2,3)
+        #frame_diff = cv2.morphologyEx(frame_diff, cv2.MORPH_OPEN, kernel)
+        cv2.imwrite("raaa.jpg",frame_diff)
+# 背景の画素は黒 (0, 0, 0) にする。
     #mask_present_img2[mask == 0] = 0
     #cv2.imwrite("realtimeimg.jpg",mask_present_img2)
     #frame_diff = mask_present_img2 -before_frame
             #frame_diff = mask_present_img2 - cv2.convertScaleAbs(before_frame)
-    frame_diff[frame_diff < 0] = 0
+    #frame_diff[frame_diff < 0] = 0
     #frame_diff = frame_diff.astype(np.uint8)
-    frame_diff = cv2.morphologyEx(frame_diff, cv2.MORPH_OPEN, kernel)
+    #frame_diff = cv2.morphologyEx(frame_diff, cv2.MORPH_OPEN, kernel)
     #plt.imshow(mask_present_img2)
     #plt.show()
     #h ,w = present_frame.shape
     #print(before_frame_row.shape)
     #before_frame = cv2.resize(before_frame,dsize=(w,h))
     contours, hierarchy = cv2.findContours(frame_diff.astype("uint8"), cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE)
-    #for i in range(len(contours)):
-    #    if (cv2.contourArea(contours[i]) < 30):
-    #        frame_diff = cv2.fillPoly(frame_diff, [contours[i][:,0,:]], (0,255,0), lineType=cv2.LINE_8, shift=0)
+    for i in range(len(contours)):
+        if (cv2.contourArea(contours[i]) < 10):
+            frame_diff = cv2.fillPoly(frame_diff, [contours[i][:,0,:]], (0,255,0), lineType=cv2.LINE_8, shift=0)
     #plt.imshow(frame_diff)
     cv2.imshow("mask",mask_present_img2)
     cv2.imshow("frame_diff",frame_diff)

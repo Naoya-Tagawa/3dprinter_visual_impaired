@@ -1372,8 +1372,9 @@ def sabun1(before_frame_row,present_frame_row):
     print(percent)
 
     #time.sleep(1)
-    if percent < 5:
+    if percent < 2:
+        print("not change!")
         return True
     else:
-        
+        #print("ea")
         return False
