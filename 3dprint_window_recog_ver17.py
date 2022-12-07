@@ -125,16 +125,18 @@ def diff_image_search(present_frame,before_frame,before_frame_row1,before_frame_
         blue_threshold_present_img = cut_blue_img1(present_frame)
         mask_present_img2 = mask_make1(blue_threshold_present_img)
         #blue = cut_blue_trans2(present_frame)
-        cv2.accumulateWeighted(mask_present_img2, before_frame, 0.9)
+        cv2.accumulateWeighted(mask_present_img2, before_frame, 0.5)
         frame_diff = cv2.absdiff(mask_present_img2,cv2.convertScaleAbs(before_frame))
-        frame_diff = cv2.medianBlur(frame_diff,3)
-        frame_diff = cv2.dilate(frame_diff,kernel)
+        frame_diff = cv2.morphologyEx(frame_diff, cv2.MORPH_OPEN, kernel)
+        #frame_diff = cv2.medianBlur(frame_diff,3)
+        #frame_diff = cv2.dilate(frame_diff,kernel)
         cv2.imwrite("raaa.jpg",frame_diff)
     else:
         #blue = cut_blue_trans(present_frame)
-        cv2.accumulateWeighted(mask_present_img2, before_frame, 0.9)
+        cv2.accumulateWeighted(mask_present_img2, before_frame, 0.5)
         frame_diff = cv2.absdiff(mask_present_img2,cv2.convertScaleAbs(before_frame))
-        frame_diff = cv2.medianBlur(frame_diff,3)
+        #frame_diff = cv2.medianBlur(frame_diff,3)
+        #frame_diff = cv2.morphologyEx(frame_diff, cv2.MORPH_OPEN, kernel)
         cv2.imwrite("raaa.jpg",frame_diff)
 
     cv2.imwrite("realtimeimg.jpg",frame_diff)
@@ -143,17 +145,19 @@ def diff_image_search(present_frame,before_frame,before_frame_row1,before_frame_
     #plt.show()
     #h ,w = present_frame.shape
     #print(before_frame_row.shape)
+    flg = 0
     #before_frame = cv2.resize(before_frame,dsize=(w,h))
     contours, hierarchy = cv2.findContours(frame_diff.astype("uint8"), cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE)
     for i in range(len(contours)):
         if (cv2.contourArea(contours[i]) < 30):
             frame_diff = cv2.fillPoly(frame_diff, [contours[i][:,0,:]], (0,255,0), lineType=cv2.LINE_8, shift=0)
     #plt.imshow(frame_diff)
-    cv2.imwrite("framediff.jpg",frame_diff)
+    cv2.imshow("framediff.jpg",frame_diff)
     #plt.show()
     #img = cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
     present_char_List1 = make_char_list(frame_diff)
     #try:
+    
        # cv2.imshow("gg",blue)
         #cv2.waitKey(0)
         #p1,p2,p3,p4 = points_extract2(blue)
@@ -186,6 +190,9 @@ def diff_image_search(present_frame,before_frame,before_frame_row1,before_frame_
         elif len(indices) > 4:
             break
         cut_present = mask_present_img2[int(present_char_List2[i[0]][0]):int(present_char_List2[i[0]][1]),]
+        if len(present_char_List2) == len(present_char_List1):
+            before_frame_row.append(cut_present)
+            flg = 1
         #if arrow_exist(cut_present):
             #cut_present,judge = arrow_exist_judge(cut_present)
         #cv2.imshow("HHH",cut_present)
@@ -221,13 +228,20 @@ def diff_image_search(present_frame,before_frame,before_frame_row1,before_frame_
                         #output_textx.append(out)
         #矢印があるかどうか判定
         #if arrow_exist(cut_present):
-        before_frame_row.append(cut_present)
+        #before_frame_row.append(cut_present)
         sabun_count = 0
         
 
         #count += 1
            
-
+    if flg != 1:
+        for i in present_char_List2:
+            if len(present_char_List2)==0:
+                break
+            elif len(present_char_List2) > 4:
+                break
+            cut_present = mask_present_img2[int(i[0]):int(i[1]),]
+            before_frame_row.append(cut_present)
     if len(output_textx)!=0:
         output_text.put(output_textx)
 

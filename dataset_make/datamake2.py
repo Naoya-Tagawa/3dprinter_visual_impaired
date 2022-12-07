@@ -63,6 +63,6 @@ for i in range(70):
     plt.imshow(x[i+idx],cmap='gray')
     #print(len(photos['x']))
 plt.show()
-plt.imshow(x[93],cmap='gray')
+plt.imshow(x[73],cmap='gray')
 plt.show()
-print(y[93])
+print(y[73])
