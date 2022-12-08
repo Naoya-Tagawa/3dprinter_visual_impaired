@@ -1249,6 +1249,8 @@ def arrow_exist(frame_row):
 #列ごとに差分をとる
 def sabun(before_frame_row,present_frame_row):
     kernel = np.ones((3,3),np.uint8)
+    model = cv2.createBackgroundSubtractorMOG2()
+    mask = model.apply(present_frame_row)
     #gray_present_img = cv2.cvtColor(present_frame_row,cv2.COLOR_BGR2GRAY)
     #present_frame_row = cv2.medianBlur(present_frame_row,3)
     #print(present_frame_row.shape)
@@ -1256,7 +1258,8 @@ def sabun(before_frame_row,present_frame_row):
     #膨張処理
     #present_frame_row = cv2.dilate(present_frame_row,kernel)
     #present_frame_row = cv2.dilate(present_frame_row,kernel)
-    cv2.imwrite("pre.png",present_frame_row)
+    cv2.imshow("pre.png",present_frame_row)
+    #cv2.waitKey(0)
     h ,w = present_frame_row.shape
     #print(before_frame_row.shape)
     before_frame_row = cv2.resize(before_frame_row,dsize=(w,h))
@@ -1264,7 +1267,8 @@ def sabun(before_frame_row,present_frame_row):
     #gray_before_img = cv2.cvtColor(before_frame_row,cv2.COLOR_BGR2GRAY)
     #before_frame_row = cv2.medianBlur(before_frame_row,3)
     #before_frame_row = cv2.medianBlur(before_frame_row,3)
-    cv2.imwrite("bef.png",before_frame_row)
+    cv2.imshow("bef.png",before_frame_row)
+    #cv2.waitKey(0)
     #ret, before_frame_row = cv2.threshold(gray_before_img,0,255,cv2.THRESH_OTSU)
     frame_diff = present_frame_row -before_frame_row
             #frame_diff = mask_present_img2 - cv2.convertScaleAbs(before_frame)
@@ -1282,11 +1286,11 @@ def sabun(before_frame_row,present_frame_row):
     white_pixels2 = np.count_nonzero(before_frame_row)
     sum_white_pixels = white_pixels1 + white_pixels2
     white_pixels = np.count_nonzero(frame_diff)
-    cv2.imwrite("jkl.jpg",before_frame_row)
     diff_white_pixels = sum_white_pixels - white_pixels
     if diff_white_pixels < 0:
         diff_white_pixels = - diff_white_pixels
-    cv2.imwrite("absh.png",frame_diff)
+    cv2.imshow("absh.png",frame_diff)
+    #cv2.waitKey(0)
     black_pixels = frame_diff.size - white_pixels
     #print("前のフレームとの変化量%")
     #percent = white_pixels/frame_diff.size *100
@@ -1300,8 +1304,77 @@ def sabun(before_frame_row,present_frame_row):
     print(percent)
 
     #time.sleep(1)
-    if percent < 3:
+    if percent < 10:
         return True
     else:
         
+        return False
+
+
+
+def sabun1(before_frame_row,present_frame_row):
+    #kernel = np.ones((1,1),np.uint8)
+    cv2.imshow("pre.png",present_frame_row)
+    #model = cv2.createBackgroundSubtractorMOG2()
+    #mask = model.apply(present_frame_row)
+    #present_frame_row = cv2.morphologyEx(present_frame_row, cv2.MORPH_OPEN, kernel)
+    #present_frame_row[mask == 0] =0  
+    #gray_present_img = cv2.cvtColor(present_frame_row,cv2.COLOR_BGR2GRAY)
+    #present_frame_row = cv2.medianBlur(present_frame_row,3)
+    #print(present_frame_row.shape)
+    #ret, present_frame_row = cv2.threshold(gray_present_img,0,255,cv2.THRESH_OTSU)
+    #膨張処理
+    #present_frame_row = cv2.dilate(present_frame_row,kernel)
+    #present_frame_row = cv2.dilate(present_frame_row,kernel)
+    #cv2.imshow("pre_mask.png",present_frame_row)
+    #cv2.waitKey(0)
+    h ,w = present_frame_row.shape
+    #print(before_frame_row.shape)
+    before_frame_row = cv2.resize(before_frame_row,dsize=(w,h))
+    #before_frame_row = cv2.dilate(before_frame_row,kernel)
+    #gray_before_img = cv2.cvtColor(before_frame_row,cv2.COLOR_BGR2GRAY)
+    #before_frame_row = cv2.medianBlur(before_frame_row,3)
+    #before_frame_row = cv2.medianBlur(before_frame_row,3)
+    cv2.imshow("bef.png",before_frame_row)
+    #cv2.waitKey(0)
+    #ret, before_frame_row = cv2.threshold(gray_before_img,0,255,cv2.THRESH_OTSU)
+    frame_diff = present_frame_row -before_frame_row
+            #frame_diff = mask_present_img2 - cv2.convertScaleAbs(before_frame)
+    frame_diff[frame_diff < 0] = 0
+    frame_diff = frame_diff.astype(np.uint8)
+    #frame_diff = cv2.medianBlur(frame_diff,5)
+    #frame_diff = cv2.absdiff(present_frame,before_frame)
+    ##plt.imshow(frame_diff)
+    ##plt.show()
+    #height , width = frame_diff.shape
+    #array_V = Projection_V(frame_diff,height,width)
+    #W_THRESH = max(array_V)
+    #char_List2 = Detect_WidthPosition(W_THRESH,width,array_V)
+    white_pixels1 = np.count_nonzero(present_frame_row)
+    white_pixels2 = np.count_nonzero(before_frame_row)
+    sum_white_pixels = white_pixels1 + white_pixels2
+    white_pixels = np.count_nonzero(frame_diff)
+    diff_white_pixels = sum_white_pixels - white_pixels
+    if diff_white_pixels < 0:
+        diff_white_pixels = - diff_white_pixels
+    cv2.imshow("absh.png",frame_diff)
+    #cv2.waitKey(0)
+    black_pixels = frame_diff.size - white_pixels
+    #print("前のフレームとの変化量%")
+    #percent = white_pixels/frame_diff.size *100
+    #print("white1"+ str(white_pixels1))
+    #print(white_pixels2)
+    try:
+        percent = white_pixels / sum_white_pixels * 100
+    except ZeroDivisionError:
+        percent = 0
+    
+    print(percent)
+
+    #time.sleep(1)
+    if percent < 2:
+        print("not change!")
+        return True
+    else:
+        #print("ea")
         return False

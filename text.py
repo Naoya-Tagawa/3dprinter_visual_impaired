@@ -4,7 +4,7 @@ import numpy as np
 cap = cv2.VideoCapture(0)
 wait_secs = int(1000 / cap.get(cv2.CAP_PROP_FPS))
 
-model = cv2.createBackgroundSubtractorMOG2()
+model = cv2.createBackgroundSubtractorMOG2(history=30,detectShadows=False)
 
 while True:
     ret, frame = cap.read()
@@ -45,9 +45,18 @@ while True:
         #    frame = cv2.fillPoly(frame, [contours[i][:,0,:]], (0,255,0), lineType=cv2.LINE_8, shift=0)
 =======
     mask_present_img2[mask == 0] = 0
+<<<<<<< HEAD
 >>>>>>> f34da87169d4f759c22b00ab7dc2022c7bcad797
 
     cv2.imshow("Frame (Only Forground)", frame)
+=======
+    mask_present_img2 = cv2.morphologyEx(mask_present_img2, cv2.MORPH_OPEN, kernel)
+    contours, hierarchy = cv2.findContours(mask_present_img2.astype("uint8"), cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE)
+    for i in range(len(contours)):
+        if (cv2.contourArea(contours[i]) < 30):
+            mask_present_img2 = cv2.fillPoly(mask_present_img2, [contours[i][:,0,:]], (0,255,0), lineType=cv2.LINE_8, shift=0)
+    cv2.imshow("Frame (Only Forground)", mask)
+>>>>>>> 9ffbb6bf42f5505f4665b5faf5a5113fe412d8b4
     cv2.waitKey(wait_secs)
 
 cap.release()

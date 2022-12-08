@@ -31,7 +31,7 @@ def read_image():
             y.append(data)
             fa.close()
 
-    glob_files(r'.\imgx\*',r'.\exx',26,36)
+    glob_files(r'./imgx/*',r'./exx',26,36)
     np.savez(outfile,x=x,y=y)
 
 

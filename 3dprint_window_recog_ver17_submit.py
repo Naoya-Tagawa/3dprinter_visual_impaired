@@ -5,7 +5,7 @@ import cv2
 import matplotlib.pyplot as plt
 import time
 import numpy as np
-from img_processing2 import cut_blue_trans2,mask_make1,make_char_list,get_unique_list,recog_text,projective_transformation2,cut_blue_trans,arrow_exist,mask_make, match_text3,projective_transformation,points_extract1,points_extract2,cut_blue_img1,Projection_H,Projection_V,Detect_HeightPosition,Detect_WidthPosition,match_text,match_text2,sabun,match,cut_blue_img2
+from img_processing2 import sabun1,cut_blue_trans2,mask_make1,make_char_list,get_unique_list,recog_text,projective_transformation2,cut_blue_trans,arrow_exist,mask_make, match_text3,projective_transformation,points_extract1,points_extract2,cut_blue_img1,Projection_H,Projection_V,Detect_HeightPosition,Detect_WidthPosition,match_text,match_text2,sabun,match,cut_blue_img2
 from natsort import natsorted
 import multiprocessing
 from pandas import cut
@@ -23,6 +23,7 @@ import os
 from operator import itemgetter
 import datetime
 import pyaudio
+import itertools
 import wave
 from sklearn.neighbors import NearestNeighbors 
 
@@ -125,16 +126,23 @@ def diff_image_search(present_frame,before_frame,before_frame_row1,before_frame_
         blue_threshold_present_img = cut_blue_img1(present_frame)
         mask_present_img2 = mask_make1(blue_threshold_present_img)
         #blue = cut_blue_trans2(present_frame)
-        cv2.accumulateWeighted(mask_present_img2, before_frame, 0.9)
-        frame_diff = cv2.absdiff(mask_present_img2,cv2.convertScaleAbs(before_frame))
-        frame_diff = cv2.medianBlur(frame_diff,3)
-        frame_diff = cv2.dilate(frame_diff,kernel)
+        cv2.accumulateWeighted(mask_present_img2, before_frame, 0.8)
+        frame_diff = mask_present_img2 - cv2.convertScaleAbs(before_frame)
+        
+        frame_diff[frame_diff ==205] = 0
+        #frame_diff = cv2.absdiff(mask_present_img2,cv2.convertScaleAbs(before_frame))
+        frame_diff = cv2.morphologyEx(frame_diff, cv2.MORPH_OPEN, kernel)
+        #frame_diff = cv2.medianBlur(frame_diff,3)
+        #frame_diff = cv2.dilate(frame_diff,kernel)
         cv2.imwrite("raaa.jpg",frame_diff)
     else:
         #blue = cut_blue_trans(present_frame)
-        cv2.accumulateWeighted(mask_present_img2, before_frame, 0.9)
-        frame_diff = cv2.absdiff(mask_present_img2,cv2.convertScaleAbs(before_frame))
-        frame_diff = cv2.medianBlur(frame_diff,3)
+        cv2.accumulateWeighted(mask_present_img2, before_frame, 0.8)
+        frame_diff = mask_present_img2 - cv2.convertScaleAbs(before_frame)
+        frame_diff[frame_diff == 205] = 0
+        #frame_diff = cv2.absdiff(mask_present_img2,cv2.convertScaleAbs(before_frame))
+        #frame_diff = cv2.medianBlur(frame_diff,3)
+        frame_diff = cv2.morphologyEx(frame_diff, cv2.MORPH_OPEN, kernel)
         cv2.imwrite("raaa.jpg",frame_diff)
 
     cv2.imwrite("realtimeimg.jpg",frame_diff)
@@ -143,17 +151,21 @@ def diff_image_search(present_frame,before_frame,before_frame_row1,before_frame_
     #plt.show()
     #h ,w = present_frame.shape
     #print(before_frame_row.shape)
+    flg = 0
     #before_frame = cv2.resize(before_frame,dsize=(w,h))
     contours, hierarchy = cv2.findContours(frame_diff.astype("uint8"), cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE)
     for i in range(len(contours)):
         if (cv2.contourArea(contours[i]) < 30):
             frame_diff = cv2.fillPoly(frame_diff, [contours[i][:,0,:]], (0,255,0), lineType=cv2.LINE_8, shift=0)
     #plt.imshow(frame_diff)
-    cv2.imwrite("framediff.jpg",frame_diff)
+    cv2.imshow("framediff.jpg",frame_diff)
+    cv2.imshow("before.jpg",before_frame)
+    cv2.imshow("mas",mask_present_img2)
     #plt.show()
     #img = cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
     present_char_List1 = make_char_list(frame_diff)
     #try:
+    
        # cv2.imshow("gg",blue)
         #cv2.waitKey(0)
         #p1,p2,p3,p4 = points_extract2(blue)
@@ -186,21 +198,24 @@ def diff_image_search(present_frame,before_frame,before_frame_row1,before_frame_
         elif len(indices) > 4:
             break
         cut_present = mask_present_img2[int(present_char_List2[i[0]][0]):int(present_char_List2[i[0]][1]),]
+        if len(present_char_List2) == len(present_char_List1):
+            before_frame_row.append(cut_present)
+            flg = 1
         #if arrow_exist(cut_present):
             #cut_present,judge = arrow_exist_judge(cut_present)
         #cv2.imshow("HHH",cut_present)
         #cv2.waitKey(0)
         #before_frame_row.append(cut_present)
-        if not sabun(before_frame_row1,cut_present):
+        if not sabun1(before_frame_row1,cut_present):
             sabun_count += 1
 
-        if not sabun(before_frame_row2,cut_present):
+        if not sabun1(before_frame_row2,cut_present):
             sabun_count += 1
     
-        if not sabun(before_frame_row3,cut_present):
+        if not sabun1(before_frame_row3,cut_present):
             sabun_count += 1
             
-        if not sabun(before_frame_row4,cut_present):
+        if not sabun1(before_frame_row4,cut_present):
             sabun_count += 1
         
         #cut_present1 = mask_present_img[int(j[0]):int(j[1]),]
@@ -221,13 +236,20 @@ def diff_image_search(present_frame,before_frame,before_frame_row1,before_frame_
                         #output_textx.append(out)
         #矢印があるかどうか判定
         #if arrow_exist(cut_present):
-        before_frame_row.append(cut_present)
+        #before_frame_row.append(cut_present)
         sabun_count = 0
         
 
         #count += 1
            
-
+    if flg != 1:
+        for i in present_char_List2:
+            if len(present_char_List2)==0:
+                break
+            elif len(present_char_List2) > 4:
+                break
+            cut_present = mask_present_img2[int(i[0]):int(i[1]),]
+            before_frame_row.append(cut_present)
     if len(output_textx)!=0:
         output_text.put(output_textx)
 
@@ -235,15 +257,15 @@ def diff_image_search(present_frame,before_frame,before_frame_row1,before_frame_
     #end1 = time.perf_counter()
     #mask_present_img2,judge = arrow_exist_judge(mask_present_img2)
     try:
-        if len(present_char_List1) == 0:
+        if len(present_char_List2) == 0:
             return before_frame_row1,before_frame_row2,before_frame_row3,before_frame_row4,mask_present_img2
-        elif len(present_char_List1) == 1:
+        elif len(present_char_List2) == 1:
             return before_frame_row[0] , before_frame_row2,before_frame_row3,before_frame_row4,mask_present_img2
-        elif len(present_char_List1) == 2:
+        elif len(present_char_List2) == 2:
             return before_frame_row[0] , before_frame_row[1] ,before_frame_row3,before_frame_row4,mask_present_img2
-        elif len(present_char_List1) == 3:
+        elif len(present_char_List2) == 3:
             return before_frame_row[0] , before_frame_row[1] ,before_frame_row[2] ,before_frame_row4,mask_present_img2
-        elif len(present_char_List1) == 4:
+        elif len(present_char_List2) == 4:
             return before_frame_row[0] , before_frame_row[1],before_frame_row[2],before_frame_row[3],mask_present_img2
         else:
             return img,img,img,img,mask_present_img2
@@ -394,7 +416,7 @@ if __name__ == "__main__":
     before_frame_row1,before_frame_row2,before_frame_row3,before_frame_row4,before_frame= diff_image_search_first(bg,img_temp,label_temp,output_text)
     frame = bg
     count = 0
-    
+    before = bg
     h,w=frame.shape[:2]
     base=np.zeros((h,w,3),np.uint32)
     #before_frame = None
@@ -405,10 +427,25 @@ if __name__ == "__main__":
             cv2.destroyAllWindows()
         cv2.imshow("frame",frame)
         #画面が遷移したか調査
-
-        if count == 9:
+        #dst1 = cv2.bitwise_and(before,before,mask=before_frame)
+        #dst2 = cv2.bitwise_and(frame,frame,mask=before_frame)
+        #cv2.imshow("ll",dst2)
+        #dst1[dst1 >= 255] = 0
+        #dst2[dst2>= 255] = 0
+        #h,w,e = dst1.shape
+        #print(h*w)
+        #count1 =  sum(((r>0) and (g>0) and (b>0)) for d in dst1 for r,g,b in d)
+        #count2 =  sum(((r>0) and (g>0) and (b>0)) for d in dst2 for r,g,b in d)
+        #dst0 = list(itertools.chain.from_iterable(dst1))
+        #dst3 = list(itertools.chain.from_iterable(dst2))
+        #dst1_count = sum(((b>0) and (r>150)) for b,g,r in dst0)
+        #dst2_count = sum(((b>0) and (r>150)) for b,g,r in dst3)
+        #per = (dst2_count / dst1_count) * 100
+        #print(dst1_count)
+        #print(dst2_count)
+        if count == 4:
             base = frame+ base
-            base = base/10
+            base = base/5
             base=base.astype(np.uint8)
             cv2.imwrite("base17.jpg",base)
             before_frame_row1,before_frame_row2,before_frame_row3,before_frame_row4,before_frame= diff_image_search(base,before_frame,before_frame_row1,before_frame_row2,before_frame_row3,before_frame_row4,output_text,img_temp,label_temp)
@@ -417,7 +454,7 @@ if __name__ == "__main__":
         else:
             base = base + frame
             count += 1
-
+        before = frame
         
 
         

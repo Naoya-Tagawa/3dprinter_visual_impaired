@@ -1,2 +1,1 @@
-xtract2(blue)
-    #except TypeError:
+= 2
