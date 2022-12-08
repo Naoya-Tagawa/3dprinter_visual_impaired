@@ -131,7 +131,7 @@ def diff_image_search(present_frame,before_frame,before_frame_row1,before_frame_
         frame_diff[frame_diff ==205] = 0
         #frame_diff = cv2.absdiff(mask_present_img2,cv2.convertScaleAbs(before_frame))
         frame_diff = cv2.morphologyEx(frame_diff, cv2.MORPH_OPEN, kernel)
-        #frame_diff = cv2.medianBlur(frame_diff,3)
+        frame_diff = cv2.medianBlur(frame_diff,3)
         #frame_diff = cv2.dilate(frame_diff,kernel)
         cv2.imwrite("raaa.jpg",frame_diff)
     else:
@@ -140,11 +140,11 @@ def diff_image_search(present_frame,before_frame,before_frame_row1,before_frame_
         frame_diff = mask_present_img2 - cv2.convertScaleAbs(before_frame)
         frame_diff[frame_diff == 205] = 0
         #frame_diff = cv2.absdiff(mask_present_img2,cv2.convertScaleAbs(before_frame))
-        #frame_diff = cv2.medianBlur(frame_diff,3)
+        frame_diff = cv2.medianBlur(frame_diff,3)
         frame_diff = cv2.morphologyEx(frame_diff, cv2.MORPH_OPEN, kernel)
-        cv2.imwrite("raaa.jpg",frame_diff)
-
-    cv2.imwrite("realtimeimg.jpg",frame_diff)
+        #cv2.imwrite("raaa.jpg",frame_diff)
+#
+#    cv2.imwrite("realtimeimg.jpg",frame_diff)
 
     #plt.imshow(mask_present_img2)
     #plt.show()
@@ -152,10 +152,10 @@ def diff_image_search(present_frame,before_frame,before_frame_row1,before_frame_
     #print(before_frame_row.shape)
     flg = 0
     #before_frame = cv2.resize(before_frame,dsize=(w,h))
-    #contours, hierarchy = cv2.findContours(frame_diff.astype("uint8"), cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE)
+    contours, hierarchy = cv2.findContours(frame_diff.astype("uint8"), cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE)
     #for i in range(len(contours)):
-        #if (cv2.contourArea(contours[i]) < 10):
-            #frame_diff = cv2.fillPoly(frame_diff, [contours[i][:,0,:]], (0,255,0), lineType=cv2.LINE_8, shift=0)
+    #    if (cv2.contourArea(contours[i]) < 10):
+    #        frame_diff = cv2.fillPoly(frame_diff, [contours[i][:,0,:]], (0,255,0), lineType=cv2.LINE_8, shift=0)
     #plt.imshow(frame_diff)
     cv2.imshow("framediff.jpg",frame_diff)
     cv2.imshow("before.jpg",before_frame)
@@ -420,9 +420,9 @@ if __name__ == "__main__":
     base=np.zeros((h,w,3),np.uint32)
     count = 0
     img_list = []
-    for i in range(14):
+    for i in range(29):
         ret , frame = cap.read()
-        #base = base + frame
+        base = base + frame
         img_list.append(frame)
         #make_img_file(frame)
     print(len(img_list))
@@ -437,21 +437,24 @@ if __name__ == "__main__":
         #dst = cv2.bitwise_and(frame,frame,mask=before_frame)
         #for img in img_list:
             #base = base + img
-        base = base + frame + img_list[0]+ img_list[1] + img_list[2] + img_list[3] + img_list[4] + img_list[5] + img_list[6] + img_list[7] + img_list[8]+img_list[9]+img_list[10] + img_list[11] + img_list[12] + img_list[13]
-        base = base/15
+        base = base + frame
+        #base = base + frame + img_list[0]+ img_list[1] + img_list[2] + img_list[3] + img_list[4] + img_list[5] + img_list[6] + img_list[7] + img_list[8]+img_list[9]+img_list[10] + img_list[11] + img_list[12] + img_list[13]
+        base1 = base/30
         #base1=np.where(base1<0,0,base1)
         #cv2.imwrite("base10.jpg",base)
-        base=base.astype(np.uint8)
-        cv2.imwrite("base.jpg",base)
-        cv2.imshow("base",img_list[0])
-        before_frame_row1,before_frame_row2,before_frame_row3,before_frame_row4,before_frame= diff_image_search(base,before_frame,before_frame_row1,before_frame_row2,before_frame_row3,before_frame_row4,output_text,img_temp,label_temp)
+        base1=base1.astype(np.uint8)
+        cv2.imshow("base",base1)
+        #cv2.imshow("baselast",img_list[0])
+        #cv2.waitKey(0)
+        before_frame_row1,before_frame_row2,before_frame_row3,before_frame_row4,before_frame= diff_image_search(base1,before_frame,before_frame_row1,before_frame_row2,before_frame_row3,before_frame_row4,output_text,img_temp,label_temp)
         #count  = 0
         #pre_img = get_pre_img()
         #cv2.imshow("ff",before_frame)
         #cv2.waitKey(0)
+        base = base - img_list[0]
         img_list.pop(0)
         img_list.append(frame)
-        base=np.zeros((h,w,3),np.uint32)
+        #base=np.zeros((h,w,3),np.uint32)
         
 
         

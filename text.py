@@ -55,8 +55,12 @@ while True:
     for i in range(len(contours)):
         if (cv2.contourArea(contours[i]) < 30):
             mask_present_img2 = cv2.fillPoly(mask_present_img2, [contours[i][:,0,:]], (0,255,0), lineType=cv2.LINE_8, shift=0)
+<<<<<<< HEAD
     cv2.imshow("Frame (Only Forground)", mask)
 >>>>>>> 9ffbb6bf42f5505f4665b5faf5a5113fe412d8b4
+=======
+    cv2.imshow("Frame (Only Forground)", mask_present_img2)
+>>>>>>> e15bea30be865aa63b93406a6dc4edb2b7a1e7e1
     cv2.waitKey(wait_secs)
 
 cap.release()
