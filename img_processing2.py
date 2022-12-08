@@ -113,7 +113,7 @@ def cut_blue_img1(img):
     return dst
 def cut_blue_img2(img):
     #γ変換の値
-    gamma=0.2
+    gamma=0.23
     #γ変換の対応表を作る
     LUT_Table=np.zeros((256,1),dtype='uint8')
     for i in range(len(LUT_Table)):
@@ -1240,7 +1240,8 @@ def arrow_exist(frame_row):
     match = cv2.matchTemplate(match_img,arrow_img,cv2.TM_CCORR_NORMED)
     #返り値は最小類似点、最大類似点、最小の場所、最大の場所
     min_value, max_value, min_pt, max_pt = cv2.minMaxLoc(match)
-    #print(max_value)
+    print("aroow")
+    print(max_value)
     if max_value > 0.8:#なぜかめっちゃ小さい
         return 1
     else:
@@ -1312,7 +1313,7 @@ def sabun(before_frame_row,present_frame_row):
 
 
 
-def sabun1(before_frame_row,present_frame_row):
+def sabun1(before_frame_row,present_frame_row,l):
     #kernel = np.ones((1,1),np.uint8)
     cv2.imshow("pre.png",present_frame_row)
     #model = cv2.createBackgroundSubtractorMOG2()
@@ -1340,7 +1341,7 @@ def sabun1(before_frame_row,present_frame_row):
     #ret, before_frame_row = cv2.threshold(gray_before_img,0,255,cv2.THRESH_OTSU)
     frame_diff = present_frame_row -before_frame_row
             #frame_diff = mask_present_img2 - cv2.convertScaleAbs(before_frame)
-    frame_diff[frame_diff < 0] = 0
+    #frame_diff[frame_diff < 0] = 0
     frame_diff = frame_diff.astype(np.uint8)
     #frame_diff = cv2.medianBlur(frame_diff,5)
     #frame_diff = cv2.absdiff(present_frame,before_frame)
@@ -1372,9 +1373,14 @@ def sabun1(before_frame_row,present_frame_row):
     print(percent)
 
     #time.sleep(1)
-    if percent < 2:
-        print("not change!")
-        return True
+    if l <= 1:
+        if percent <2:
+            return True
+        else:
+            return False
     else:
-        #print("ea")
-        return False
+        if percent < 20:
+            return True
+        else:
+            return False
+    
