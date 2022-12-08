@@ -491,9 +491,9 @@ if __name__ == "__main__":
         #per = (dst2_count / dst1_count) * 100
         #print(dst1_count)
         #print(dst2_count)
-        if count == 4:
+        if count == 5:
             base = frame+ base
-            base = base/5
+            base = base/6
             base=base.astype(np.uint8)
             #cv2.imwrite("base17.jpg",base)
             present_frame.put(base)

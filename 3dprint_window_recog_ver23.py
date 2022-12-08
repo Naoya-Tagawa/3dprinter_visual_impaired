@@ -1,4 +1,3 @@
-
 import multiprocessing
 import numpy as np
 import cv2
@@ -103,8 +102,9 @@ def diff_image_search(present_frame,before_frame,before_frame_row1,before_frame_
     img = cv2.imread("./balck_img.jpg")
     img = cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
     kernel = np.ones((3,3),np.uint8)
-    model = cv2.createBackgroundSubtractorMOG2(history=3,detectShadows=False)
+    model = cv2.createBackgroundSubtractorMOG2(history=1,detectShadows=False)
     while True:
+        #e = time.perf_counter()
         frame = present_frame.get()
         #arrow_img = cv2.imread("./ex6/ex63.jpg")
         h,w,d = frame.shape
@@ -140,7 +140,9 @@ def diff_image_search(present_frame,before_frame,before_frame_row1,before_frame_
             cv2.imwrite("raaa.jpg",frame_diff)
         else:
             #blue = cut_blue_trans(present_frame)
+            
             mask = model.apply(mask_frame)
+            
             #cv2.accumulateWeighted(mask_present_img2, before_frame, 0.8)
             #frame_diff = mask_present_img2 - cv2.convertScaleAbs(before_frame)
             #frame_diff[frame_diff == 205] = 0
@@ -148,10 +150,15 @@ def diff_image_search(present_frame,before_frame,before_frame_row1,before_frame_
             #frame_diff = cv2.medianBlur(frame_diff,3)
             mask = cv2.morphologyEx(mask, cv2.MORPH_OPEN, kernel)
             #cv2.imwrite("raaa.jpg",frame_diff)
+        
         mask_frame[mask == 0] = 0
+
+        
+        
         frame_diff = cv2.morphologyEx(mask_frame, cv2.MORPH_OPEN, kernel)
         cv2.imwrite("realtimeimg.jpg",frame_diff)
         cv2.imwrite("mask_frame.jpg",mask_present_img2)
+
         #plt.imshow(mask_present_img2)
         #plt.show()
         #h ,w = present_frame.shape
@@ -159,9 +166,9 @@ def diff_image_search(present_frame,before_frame,before_frame_row1,before_frame_
         flg = 0
         #before_frame = cv2.resize(before_frame,dsize=(w,h))
         contours, hierarchy = cv2.findContours(frame_diff.astype("uint8"), cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE)
-        for i in range(len(contours)):
-            if (cv2.contourArea(contours[i]) < 30):
-                frame_diff = cv2.fillPoly(frame_diff, [contours[i][:,0,:]], (0,255,0), lineType=cv2.LINE_8, shift=0)
+        #for i in range(len(contours)):
+            #if (cv2.contourArea(contours[i]) < 30):
+            #    frame_diff = cv2.fillPoly(frame_diff, [contours[i][:,0,:]], (0,255,0), lineType=cv2.LINE_8, shift=0)
         #plt.imshow(frame_diff)
         #cv2.imshow("framediff.jpg",frame_diff)
         #cv2.imshow("before.jpg",before_frame)
@@ -316,7 +323,9 @@ def diff_image_search(present_frame,before_frame,before_frame_row1,before_frame_
         cv2.imwrite("before_frame_row2.jpg",before_frame_row2)
         cv2.imwrite("before_frame_row3.jpg",before_frame_row3)
         cv2.imwrite("before_frame_row4.jpg",before_frame_row4)
-
+        ew = time.perf_counter()
+        #print("time")
+        #print(ew-e)
 def make_voice_file(text): #音声ファイル作成
     engine = pyttsx3.init()
     voices = engine.getProperty('voices')
@@ -507,6 +516,7 @@ if __name__ == "__main__":
         #cv2.waitKey(0)
         present_frame.put(base1)
         #before_frame_row1,before_frame_row2,before_frame_row3,before_frame_row4,before_frame= diff_image_search(base1,before_frame,before_frame_row1,before_frame_row2,before_frame_row3,before_frame_row4,output_text,img_temp,label_temp)
+        
         base = base - img_list[0]
         img_list.pop(0)
         img_list.append(frame)

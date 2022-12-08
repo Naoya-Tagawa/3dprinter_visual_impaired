@@ -1315,7 +1315,7 @@ def sabun(before_frame_row,present_frame_row):
 
 def sabun1(before_frame_row,present_frame_row,l):
     #kernel = np.ones((1,1),np.uint8)
-    cv2.imshow("pre.png",present_frame_row)
+    #cv2.imshow("pre.png",present_frame_row)
     #model = cv2.createBackgroundSubtractorMOG2()
     #mask = model.apply(present_frame_row)
     #present_frame_row = cv2.morphologyEx(present_frame_row, cv2.MORPH_OPEN, kernel)
@@ -1336,7 +1336,7 @@ def sabun1(before_frame_row,present_frame_row,l):
     #gray_before_img = cv2.cvtColor(before_frame_row,cv2.COLOR_BGR2GRAY)
     #before_frame_row = cv2.medianBlur(before_frame_row,3)
     #before_frame_row = cv2.medianBlur(before_frame_row,3)
-    cv2.imshow("bef.png",before_frame_row)
+    #cv2.imshow("bef.png",before_frame_row)
     #cv2.waitKey(0)
     #ret, before_frame_row = cv2.threshold(gray_before_img,0,255,cv2.THRESH_OTSU)
     frame_diff = present_frame_row -before_frame_row
@@ -1358,7 +1358,7 @@ def sabun1(before_frame_row,present_frame_row,l):
     diff_white_pixels = sum_white_pixels - white_pixels
     if diff_white_pixels < 0:
         diff_white_pixels = - diff_white_pixels
-    cv2.imshow("absh.png",frame_diff)
+    #cv2.imshow("absh.png",frame_diff)
     #cv2.waitKey(0)
     black_pixels = frame_diff.size - white_pixels
     #print("前のフレームとの変化量%")
@@ -1370,7 +1370,7 @@ def sabun1(before_frame_row,present_frame_row,l):
     except ZeroDivisionError:
         percent = 0
     
-    print(percent)
+    #print(percent)
 
     #time.sleep(1)
     if l <= 1:
