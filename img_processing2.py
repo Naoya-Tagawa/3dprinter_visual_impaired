@@ -1242,7 +1242,7 @@ def arrow_exist(frame_row):
     min_value, max_value, min_pt, max_pt = cv2.minMaxLoc(match)
     print("aroow")
     print(max_value)
-    if max_value > 0.8:#なぜかめっちゃ小さい
+    if max_value > 0.5:#なぜかめっちゃ小さい
         return 1
     else:
         return 0
