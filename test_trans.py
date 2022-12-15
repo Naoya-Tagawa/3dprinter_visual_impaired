@@ -32,7 +32,7 @@ img_temp = temp['x']
 #テンプレートのラベル(文)を格納
 label_temp = temp['y']
 kernel = np.ones((3,3),np.uint8)
-img4 = cv2.imread("./hei/camera1352.jpg")
+img4 = cv2.imread("./hei/camera518.jpg")
 img = cv2.imread("./camera1/camera10.jpg")
 plt.imshow(img4)
 plt.show()
@@ -64,13 +64,19 @@ for i in present_char_List1:
     cv2.waitKey(0)
     out = match_text3(img_temp,label_temp,cut_present)
     print(out)
-cv2.imshow("syaei",mask_present_img2)
+cv2.imshow("syaeil",mask_present_img2)
 cv2.waitKey(0)
     #フレームの青い部分を二値化
 blue_threshold_img = cut_blue_trans(img4)
 b = cut_blue_img1(img)
-cv2.imshow("syaei",b)
+gray = cv2.cvtColor(b, cv2.COLOR_RGB2GRAY)
+  
+# 方法2       
+dst = cv2.adaptiveThreshold(gray,255,cv2.ADAPTIVE_THRESH_MEAN_C, cv2.THRESH_BINARY,11,2)
+cv2.imshow("dst",dst)
 cv2.waitKey(0)
+outa = recog_text(dst)
+print(outa)
 cv2.imshow("syaei",blue_threshold_img)
 cv2.waitKey(0)
     #コーナー検出
@@ -92,10 +98,11 @@ cv2.waitKey(0)
 syaei_img,M = projective_transformation2(mask_present_img2,p1,p2,p3,p4)
 pt = cv2.perspectiveTransform(hh,M)
 print(pt)
+
 syae = syaei_img[int(pt[0][0][1]):int(pt[0][1][1]),]
 #syaei_img2 = projective_transformation(img,p8,p5,p6,p7)
 
-cv2.imshow("syaei",syaei_img)
+cv2.imshow("syaeigg",syaei_img)
 cv2.waitKey(0)
 cv2.imshow("syaei",syae)
 cv2.waitKey(0)
