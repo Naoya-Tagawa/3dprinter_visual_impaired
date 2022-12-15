@@ -230,7 +230,7 @@ def diff_image_search(present_frame,before_frame,before_frame_row1,before_frame_
                 out = match_text3(img_temp,label_temp,cut_present)
             #out = recog_text(cut_present)
             #矢印があるかどうか判定
-                if arrow_exist(cut_present):
+                if out[0:1] == '>':
                     output_textx = output_textx + " The cursor points to "
                 output_textx = output_textx + " \n" + out
             #before_frame_row.append(cut_present)

@@ -113,7 +113,7 @@ def cut_blue_img1(img):
     return dst
 def cut_blue_img2(img):
     #γ変換の値
-    gamma=0.23
+    gamma=0.24
     #γ変換の対応表を作る
     LUT_Table=np.zeros((256,1),dtype='uint8')
     for i in range(len(LUT_Table)):
