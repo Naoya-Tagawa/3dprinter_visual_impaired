@@ -76,6 +76,7 @@ present_char_List1 , mask_present_img2 = mask_make(blue_threshold_present_img)
 #hh = np.array([hh])
 
 print(present_char_List1)
+<<<<<<< HEAD
 #for i in present_char_List1:
 #    if len(present_char_List1)==0:
 #            break
@@ -87,10 +88,24 @@ print(present_char_List1)
 #    out = match_text3(img_temp,label_temp,cut_present)
 #    print(out)
 cv2.imshow("syaei",mask_present_img2)
+=======
+for i in present_char_List1:
+    if len(present_char_List1)==0:
+            break
+    elif len(present_char_List1) > 4:
+            break
+    cut_present = mask_present_img2[int(i[0]):int(i[1]),]
+    cv2.imshow("p",cut_present)
+    cv2.waitKey(0)
+    out = match_text3(img_temp,label_temp,cut_present)
+    print(out)
+cv2.imshow("syaeil",mask_present_img2)
+>>>>>>> b6d627b7d1231e7e1c302d1be9aae4fe4f881159
 cv2.waitKey(0)
     #フレームの青い部分を二値化
 blue_threshold_img = cut_blue_trans(img4)
 b = cut_blue_img1(img)
+<<<<<<< HEAD
 
 # グレースケール変換
 gray = cv2.cvtColor(b, cv2.COLOR_RGB2GRAY)
@@ -99,6 +114,17 @@ dst = cv2.adaptiveThreshold(gray,255,cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_
 cv2.imshow("syaei99",dst)
 cv2.waitKey(0)
 cv2.imshow("syaei6",b)
+=======
+gray = cv2.cvtColor(b, cv2.COLOR_RGB2GRAY)
+  
+# 方法2       
+dst = cv2.adaptiveThreshold(gray,255,cv2.ADAPTIVE_THRESH_MEAN_C, cv2.THRESH_BINARY,11,2)
+cv2.imshow("dst",dst)
+cv2.waitKey(0)
+outa = recog_text(dst)
+print(outa)
+cv2.imshow("syaei",blue_threshold_img)
+>>>>>>> b6d627b7d1231e7e1c302d1be9aae4fe4f881159
 cv2.waitKey(0)
     #コーナー検出
 try:
@@ -119,14 +145,19 @@ cv2.waitKey(0)
 syaei_img,M = projective_transformation2(b,p1,p2,p3,p4)
 pt = cv2.perspectiveTransform(hh,M)
 print(pt)
+
 syae = syaei_img[int(pt[0][0][1]):int(pt[0][1][1]),]
 #syaei_img2 = projective_transformation(img,p8,p5,p6,p7)
 
+<<<<<<< HEAD
 gray = cv2.cvtColor(syaei_img, cv2.COLOR_RGB2GRAY)
 dst = cv2.adaptiveThreshold(gray,255,cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY,11,2)
 oute = recog_text(dst)
 print(oute)
 cv2.imshow("s",dst)
+=======
+cv2.imshow("syaeigg",syaei_img)
+>>>>>>> b6d627b7d1231e7e1c302d1be9aae4fe4f881159
 cv2.waitKey(0)
 cv2.imshow("syaei",syae)
 cv2.waitKey(0)
