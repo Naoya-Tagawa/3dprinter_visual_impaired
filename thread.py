@@ -2,7 +2,7 @@ import threading
 import time
 import pyaudio
 import wave
-
+import pyttsx3
 CHUNK = 1024
 class AudioPlayer(object): #音声ファイルを再生、停止する
     """ A Class For Playing Audio """
@@ -54,13 +54,24 @@ class AudioPlayer(object): #音声ファイルを再生、停止する
             self.playing.clear()
             self.thread.join()
 
-
+def make_voice_file(text): #音声ファイル作成
+    engine = pyttsx3.init()
+    voices = engine.getProperty('voices')
+    rate = engine.getProperty('rate')
+    engine.setProperty('rate',100)
+    engine.setProperty("voice", voices[1].id)
+    print(text)
+    file_name = "./voice/voice_05889059.wav"
+    #print(file_name)
+    engine.save_to_file(text,file_name)
+    engine.runAndWait()
 def text_read():
     start = 0
     
     file_name = "./voice/voice_05889059.wav"
     player = AudioPlayer(file_name)
     player.play()
-        
 
-text_read()
+
+text = "I have a pen. I have an appele. appele pen"
+make_voice_file(text)

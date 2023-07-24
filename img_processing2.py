@@ -260,7 +260,7 @@ def func_search_neighbourhood(p0, ps):
         return ps[new_d[0][1]]
 
 def points_extract2(img):
-    #img = cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
+    img = cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
     #cv2.imshow("00",img)
     #cv2.waitKey(0)
     #コーナー検出

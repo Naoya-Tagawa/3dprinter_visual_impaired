@@ -165,7 +165,7 @@ def Detect_WidthPosition(W_THRESH, width, array_V):
  
 if __name__ == "__main__":
     count = 0
-    files = glob.glob('./camera1/*')
+    files = glob.glob('./cha_dataset/*')
     for f in files:
         # input image
         img = cv2.imread(f)
@@ -216,7 +216,7 @@ if __name__ == "__main__":
                     img_f = img_mask[int(char_List1[i])-1:int(char_List1[i+1])+1, int(char_List2[j])-1:int(char_List2[j+1])+1]
                     #cv2.imwrite("result{0}.jpg".format(k),img_f)
                     #k += 1
-                    cv2.imwrite(r"C:\Users\Fate2\Desktop\ex3\ex{0}.jpg".format(count), img_f)
+                    cv2.imwrite("./chara/ex{0}.jpg".format(count), img_f)
                     count += 1
         
         else:

@@ -1,5 +1,5 @@
 import cv2
-camera = cv2.VideoCapture(1)                               # カメラCh.(ここでは0)を指定
+camera = cv2.VideoCapture(0)                               # カメラCh.(ここでは0)を指定
 camera1 = cv2.VideoCapture(2)
 # 動画ファイル保存用の設定
 fps = int(camera.get(cv2.CAP_PROP_FPS))                    # カメラのFPSを取得

@@ -214,7 +214,7 @@ if __name__ == "__main__":
                 img_f = img_mask[int(char_List1[i])-2:int(char_List1[i+1])+2, int(char_List2[j])-1:int(char_List2[j+1])+1]
                 #cv2.imwrite("result{0}.jpg".format(k),img_f)
                 #k += 1
-                cv2.imwrite(r"C:\Users\Fate2\Desktop\ex3\ex{0}.jpg".format(count), img_f)
+                cv2.imwrite("./chara/ex{0}.jpg".format(count), img_f)
                 count += 1
         
     else:
