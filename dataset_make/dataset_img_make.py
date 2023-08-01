@@ -9,6 +9,7 @@ import matplotlib.pyplot as plt
 import glob
 from natsort import natsorted
 from PIL import Image
+from img_processing2 import sabun1,cut_blue_trans2,mask_make1,make_char_list,get_unique_list,recog_text,projective_transformation2,cut_blue_trans,arrow_exist,mask_make, match_text3,projective_transformation,points_extract1,points_extract2,cut_blue_img1,Projection_H,Projection_V,Detect_HeightPosition,Detect_WidthPosition,match_text,match_text2,sabun,match,cut_blue_img2
 def cut_blue_img(img):
     c_img = cv2.cvtColor(img,cv2.COLOR_BGR2RGB)
     img_hsv = cv2.cvtColor(img,cv2.COLOR_BGR2HSV)
@@ -171,11 +172,10 @@ if __name__ == "__main__":
         img = cv2.imread(f)
         #対象画像をロード
         #青い部分のみを二値化
-        close_img = cut_blue_img(img)
+        close_img = cut_blue_img1(img)
         #コーナー検出
-        p1,p2,p3,p4 = points_extract(close_img)
+        p1,p2,p3,p4 = points_extract1(close_img)
         #コーナーに従って画像の切り取り
-        #img_k = img[p1[1]:p2[1],p2[0]:p3[0]]
         #射影変換
         syaei_img = syaei(img,p1,p2,p3,p4)
         # convert gray scale image
@@ -196,26 +196,16 @@ if __name__ == "__main__":
         # detect character height position
         H_THRESH = max(array_H)
         char_List1 = Detect_HeightPosition(H_THRESH, height, array_H)
- 
-        # detect character width position
-        #W_THRESH = max(array_V)
-        #char_List2 = Detect_WidthPosition(W_THRESH, width, array_V)
-        #print(array_V)
-        # draw image
         if (len(char_List1) % 2) == 0:
             k=0
-            #print("Succeeded in character detection")
             for i in range(0,len(char_List1)-1,2):
                 img_h = img_mask[int(char_List1[i]):int(char_List1[i+1]),:]
                 h , w = img_h.shape
                 array_V = Projection_V(img_h,h,w)
                 W_THRESH = max(array_V)
                 char_List2 = Detect_WidthPosition(W_THRESH,w,array_V)
-                #print(char_List2)
                 for j in range(0,len(char_List2)-1, 2):
                     img_f = img_mask[int(char_List1[i])-1:int(char_List1[i+1])+1, int(char_List2[j])-1:int(char_List2[j+1])+1]
-                    #cv2.imwrite("result{0}.jpg".format(k),img_f)
-                    #k += 1
                     cv2.imwrite("./chara/ex{0}.jpg".format(count), img_f)
                     count += 1
         
