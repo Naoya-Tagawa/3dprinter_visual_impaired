@@ -293,10 +293,10 @@ def diff_image_search(present_frame,before_frame,before_frame_row1,before_frame_
                 before_frame_row3 = img
                 before_frame_row4 = img
                 before_frame = mask_present_img2
-        #cv2.imwrite("before_frame_row1.jpg",before_frame_row1)
-        #cv2.imwrite("before_frame_row2.jpg",before_frame_row2)
-        #cv2.imwrite("before_frame_row3.jpg",before_frame_row3)
-        #cv2.imwrite("before_frame_row4.jpg",before_frame_row4)
+        cv2.imwrite("before_frame_row1.jpg",before_frame_row1)
+        cv2.imwrite("before_frame_row2.jpg",before_frame_row2)
+        cv2.imwrite("before_frame_row3.jpg",before_frame_row3)
+        cv2.imwrite("before_frame_row4.jpg",before_frame_row4)
 
 
 

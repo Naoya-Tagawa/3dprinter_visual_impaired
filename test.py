@@ -8,6 +8,7 @@ event = multiprocessing.Event()
 count = 0
 from sklearn.neighbors import NearestNeighbors
 from MakeVoicefile.VoiceProcessing import text_read
+from CharacterRecog.CharacterRecog import load_model,TextRecog
 
 #flag = True: 音声出力
 #flag = false: 音声出力しない
@@ -80,7 +81,7 @@ def diff_image_search_first(present_frame):
         return img,img,img,img,mask_present_img2
 
 
-def diff_image_search(present_frame,before_frame,before_frame_row1,before_frame_row2,before_frame_row3,before_frame_row4,output_text,img_temp,label_temp):
+def diff_image_search(present_frame,before_frame,before_frame_row1,before_frame_row2,before_frame_row3,before_frame_row4,output_text,model_pca,scaler,pca):
     img = cv2.imread("./MaskBlack/balck_img.jpg")
     img = cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
     kernel = np.ones((3,3),np.uint8)
@@ -208,7 +209,7 @@ def diff_image_search(present_frame,before_frame,before_frame_row1,before_frame_
         #cut_present1 = mask_present_img[int(j[0]):int(j[1]),]
     
             if sabun_count > 3:
-                out = match_text3(img_temp,label_temp,cut_present)
+                out = TextRecog(model_pca,scaler,pca,cut_present)
             #out = recog_text(cut_present)
             #矢印があるかどうか判定
                 if out[0:1] == '>':
@@ -293,22 +294,17 @@ def diff_image_search(present_frame,before_frame,before_frame_row1,before_frame_
                 before_frame_row3 = img
                 before_frame_row4 = img
                 before_frame = mask_present_img2
-        #cv2.imwrite("before_frame_row1.jpg",before_frame_row1)
-        #cv2.imwrite("before_frame_row2.jpg",before_frame_row2)
-        #cv2.imwrite("before_frame_row3.jpg",before_frame_row3)
-        #cv2.imwrite("before_frame_row4.jpg",before_frame_row4)
+        cv2.imwrite("before_frame_row1.jpg",before_frame_row1)
+        cv2.imwrite("before_frame_row2.jpg",before_frame_row2)
+        cv2.imwrite("before_frame_row3.jpg",before_frame_row3)
+        cv2.imwrite("before_frame_row4.jpg",before_frame_row4)
 
 
 
 
 if __name__ == "__main__":
     #テンプレートをロード
-    temp = np.load(r'./dataset2.npz')
-    #テンプレート画像を格納
-    img_temp = temp['x']
-    #テンプレートのラベル(文)を格納
-    label_temp = temp['y']
-    #diff_image_search(img1,img2)
+    model,scaler,pca = load_model()
     cap = cv2.VideoCapture(0)
     read_fps = cap.get(cv2.CAP_PROP_FPS)
     print(read_fps)
@@ -330,7 +326,7 @@ if __name__ == "__main__":
     base=np.zeros((h,w,3),np.uint32)
     #before_frame = None
     present_frame = multiprocessing.Queue()
-    image_deal = multiprocessing.Process(target=diff_image_search,args=(present_frame,before_frame,before_frame_row1,before_frame_row2,before_frame_row3,before_frame_row4,output_text,img_temp,label_temp))
+    image_deal = multiprocessing.Process(target=diff_image_search,args=(present_frame,before_frame,before_frame_row1,before_frame_row2,before_frame_row3,before_frame_row4,output_text,model,scaler,pca,))
     image_deal.start()
     while True:
         ret , frame = cap.read()

@@ -3,24 +3,19 @@ import numpy as np
 import cv2
 import matplotlib.pyplot as plt
 import math
-import difflib
 import time
 import cv2
 import numpy as np
-import glob
 import pandas as pd
 from io import BytesIO
 from natsort import natsorted
 import threading
-from PIL import Image , ImageTk , ImageOps
-import pyttsx3 
-from dictionary_word import speling
+from PIL import Image
 import difflib
 import numpy as np
 import cv2
 import matplotlib.pyplot as plt
 from pylsd.lsd import lsd
-import itertools
 import os
 import pyocr
 import math
@@ -1103,8 +1098,7 @@ def match_text3(img_temp,label_temp,frame):
         except cv2.error:
             return ""
         height_m,width_m = match_img.shape
-        #cv2.imshow("kk",match_img)
-        #cv2.waitKey(0)
+        
         match = [cv2.matchTemplate(match_img,temp_th[i],cv2.TM_CCORR_NORMED) for i in range(len(label_temp))]
         max_value = [cv2.minMaxLoc(match[i])[1] for i in range(len(label_temp))]
         max_index = np.argmax(max_value)
@@ -1383,4 +1377,16 @@ def sabun1(before_frame_row,present_frame_row,l):
             return True
         else:
             return False
-    
+
+
+
+img = cv2.imread("before_frame_row1.jpg")
+img = cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
+#テンプレートをロード
+temp = np.load(r'./dataset2.npz')
+#テンプレート画像を格納
+img_temp = temp['x']
+#テンプレートのラベル(文)を格納
+label_temp = temp['y']
+oo =match_text3(img_temp,label_temp,img)
+print(oo)   
