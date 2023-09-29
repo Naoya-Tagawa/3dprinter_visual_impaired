@@ -24,7 +24,29 @@ from ImageProcessing.img_processing2 import make_char_list,get_unique_list,recog
 import audio_output
 from sklearn.neighbors import NearestNeighbors 
 from io import BytesIO
+def niBlackThreshold(src, blockSize, k):
+    mean = cv2.boxFilter(src, cv2.CV_32F, (blockSize, blockSize), None, (-1, -1), True, cv2.BORDER_REPLICATE)
+    sqmean = cv2.sqrBoxFilter(src, cv2.CV_32F, (blockSize, blockSize), None, (-1,-1), True, cv2.BORDER_REPLICATE)
+    variance = sqmean - mean * mean
+    stddev = cv2.sqrt(variance)
+    thresh = mean + k * stddev
+    diff = src - thresh
+    diff[diff > 0.0] = 255.0
+    diff[diff < 0.0] = 0.0
+    dst = diff.astype(np.uint8)
+    return dst
 
+def nickThreshold(src, blockSize, k):
+    mean = cv2.boxFilter(src, cv2.CV_32F, (blockSize,blockSize), None, (-1, -1), True, cv2.BORDER_REPLICATE)
+    sqmean = cv2.sqrBoxFilter(src, cv2.CV_32F, (blockSize, blockSize), None, (-1,-1), True, cv2.BORDER_REPLICATE);
+    variance = sqmean - mean * mean;
+    sqrtVarianceMeanSum = cv2.sqrt(variance + sqmean);
+    thresh = mean + k * sqrtVarianceMeanSum;
+    diff = src - thresh
+    diff[diff > 0.0] = 255.0
+    diff[diff < 0.0] = 0.0
+    dst = diff.astype(np.uint8)
+    return dst
 #テンプレートをロード
 temp = np.load(r'./dataset2.npz')
 #テンプレート画像を格納
@@ -54,6 +76,19 @@ present_char_List1 , mask_present_img2 = mask_make(blue_threshold_present_img)
 #hh = np.array([hh])
 
 print(present_char_List1)
+<<<<<<< HEAD
+#for i in present_char_List1:
+#    if len(present_char_List1)==0:
+#            break
+#    elif len(present_char_List1) > 4:
+#            break
+#    cut_present = mask_present_img2[int(i[0]):int(i[1]),]
+#    cv2.imshow("p",cut_present)
+#    cv2.waitKey(0)
+#    out = match_text3(img_temp,label_temp,cut_present)
+#    print(out)
+cv2.imshow("syaei",mask_present_img2)
+=======
 for i in present_char_List1:
     if len(present_char_List1)==0:
             break
@@ -65,10 +100,21 @@ for i in present_char_List1:
     out = match_text3(img_temp,label_temp,cut_present)
     print(out)
 cv2.imshow("syaeil",mask_present_img2)
+>>>>>>> b6d627b7d1231e7e1c302d1be9aae4fe4f881159
 cv2.waitKey(0)
     #フレームの青い部分を二値化
 blue_threshold_img = cut_blue_trans(img4)
 b = cut_blue_img1(img)
+<<<<<<< HEAD
+
+# グレースケール変換
+gray = cv2.cvtColor(b, cv2.COLOR_RGB2GRAY)
+#th, dst = cv2.threshold(gray, 0, 255, cv2.THRESH_OTSU)
+dst = cv2.adaptiveThreshold(gray,255,cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY,101,20)
+cv2.imshow("syaei99",dst)
+cv2.waitKey(0)
+cv2.imshow("syaei6",b)
+=======
 gray = cv2.cvtColor(b, cv2.COLOR_RGB2GRAY)
   
 # 方法2       
@@ -78,40 +124,52 @@ cv2.waitKey(0)
 outa = recog_text(dst)
 print(outa)
 cv2.imshow("syaei",blue_threshold_img)
+>>>>>>> b6d627b7d1231e7e1c302d1be9aae4fe4f881159
 cv2.waitKey(0)
     #コーナー検出
 try:
-    p1,p2,p3,p4 = points_extract2(blue_threshold_img)
+    p1,p2,p3,p4 = points_extract2(b)
 except TypeError:
     print("Screen cannot be detected")
 #p8,p5,p6,p7 = points_extract1(b)
 print(p1,p2,p3,p4)
-cv2.circle(img4, p1, 3, (0,255,0), thickness=1, lineType=cv2.LINE_8, shift=0)
-cv2.circle(img4, p2, 3, (0,255,0), thickness=1, lineType=cv2.LINE_8, shift=0)
-cv2.circle(img4, p3, 3, (0,255,0), thickness=1, lineType=cv2.LINE_8, shift=0)
-cv2.circle(img4, p4, 3, (0,255,0), thickness=1, lineType=cv2.LINE_8, shift=0)
+cv2.circle(img, p1, 3, (0,255,0), thickness=1, lineType=cv2.LINE_8, shift=0)
+cv2.circle(img, p2, 3, (0,255,0), thickness=1, lineType=cv2.LINE_8, shift=0)
+cv2.circle(img, p3, 3, (0,255,0), thickness=1, lineType=cv2.LINE_8, shift=0)
+cv2.circle(img, p4, 3, (0,255,0), thickness=1, lineType=cv2.LINE_8, shift=0)
     #コーナーに従って画像の切り取り
 #cut_img = window_img[p1[1]:p2[1],p2[0]:p3[0]]
-cv2.imshow("syaei",img4)
+cv2.imshow("syaei",img)
 cv2.waitKey(0)
 #射影変換
-syaei_img,M = projective_transformation2(mask_present_img2,p1,p2,p3,p4)
+syaei_img,M = projective_transformation2(b,p1,p2,p3,p4)
 pt = cv2.perspectiveTransform(hh,M)
 print(pt)
 
 syae = syaei_img[int(pt[0][0][1]):int(pt[0][1][1]),]
 #syaei_img2 = projective_transformation(img,p8,p5,p6,p7)
 
+<<<<<<< HEAD
+gray = cv2.cvtColor(syaei_img, cv2.COLOR_RGB2GRAY)
+dst = cv2.adaptiveThreshold(gray,255,cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY,11,2)
+oute = recog_text(dst)
+print(oute)
+cv2.imshow("s",dst)
+=======
 cv2.imshow("syaeigg",syaei_img)
+>>>>>>> b6d627b7d1231e7e1c302d1be9aae4fe4f881159
 cv2.waitKey(0)
 cv2.imshow("syaei",syae)
 cv2.waitKey(0)
-out = match_text3(img_temp,label_temp,syae)
-ou = recog_text(syae)
-print(ou)
-print(out)
+#out = match_text3(img_temp,label_temp,syae)
+#ou = recog_text(syae)
+#print(ou)
+#print(out)
 
-cv2.imshow("syaei",syaei_img)
+
+bin_niblack = nickThreshold(gray, 51, -0.1)
+
+cv2.imshow("syaei",bin_niblack)
 cv2.waitKey(0)
 present_char_List1  = make_char_list(syaei_img)
 print(present_char_List1)

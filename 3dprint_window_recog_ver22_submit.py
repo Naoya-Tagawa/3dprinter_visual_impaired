@@ -320,6 +320,8 @@ def diff_image_search(present_frame,before_frame,before_frame_row1,before_frame_
 def make_voice_file(text): #音声ファイル作成
     engine = pyttsx3.init()
     voices = engine.getProperty('voices')
+    rate = engine.getProperty('rate')
+    engine.setProperty('rate',150)
     engine.setProperty("voice", voices[1].id)
     path = "./voice/"
     now = str(datetime.datetime.now())
@@ -445,7 +447,7 @@ if __name__ == "__main__":
     #テンプレートのラベル(文)を格納
     label_temp = temp['y']
     #diff_image_search(img1,img2)
-    cap = cv2.VideoCapture(0)
+    cap = cv2.VideoCapture(1)
     read_fps = cap.get(cv2.CAP_PROP_FPS)
     print(read_fps)
     voice_flag = multiprocessing.Value('i',0)
@@ -468,8 +470,14 @@ if __name__ == "__main__":
     present_frame = multiprocessing.Queue()
     image_deal = multiprocessing.Process(target=diff_image_search,args=(present_frame,before_frame,before_frame_row1,before_frame_row2,before_frame_row3,before_frame_row4,output_text,img_temp,label_temp))
     image_deal.start()
+    fps = int(cap.get(cv2.CAP_PROP_FPS))                    # カメラのFPSを取得
+    w = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))              # カメラの横幅を取得
+    h = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))             # カメラの縦幅を取得
+    fourcc = cv2.VideoWriter_fourcc('M', 'P', '4','V')        # 動画保存時のfourcc設定（mp4用）
+    video = cv2.VideoWriter('./video2.mp4', fourcc, fps, (w, h))
     while True:
         ret , frame = cap.read()
+        video.write(frame)
         #フレームが取得できない場合は画面を閉じる
         if not ret:
             cv2.destroyAllWindows()
@@ -515,5 +523,5 @@ if __name__ == "__main__":
             cap.release()
             cv2.destroyAllWindows()
             break
-        
+    
     read.join()
