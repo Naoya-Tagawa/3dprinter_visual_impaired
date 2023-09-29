@@ -165,13 +165,18 @@ def Detect_WidthPosition(W_THRESH, width, array_V):
  
 if __name__ == "__main__":
     count = 0
-    files = glob.glob('./camera1/*')
+    files = glob.glob('./dataset/*')
     for f in files:
+        print(f)
         # input image
         img = cv2.imread(f)
+        cv2.imshow("img",img)
+        cv2.waitKey(0)
         #対象画像をロード
         #青い部分のみを二値化
         close_img = cut_blue_img(img)
+        cv2.imshow("img",close_img)
+        cv2.waitKey(0)
         #コーナー検出
         p1,p2,p3,p4 = points_extract(close_img)
         #コーナーに従って画像の切り取り
@@ -188,6 +193,8 @@ if __name__ == "__main__":
         #膨張化
         img_mask = cv2.dilate(bw_img,kernel)
         height, width = img_mask.shape
+        cv2.imshow("img",img_mask)
+        cv2.waitKey(0)
  
         # create projection distribution
         array_H = Projection_H(img_mask, height, width)
@@ -196,7 +203,7 @@ if __name__ == "__main__":
         # detect character height position
         H_THRESH = max(array_H)
         char_List1 = Detect_HeightPosition(H_THRESH, height, array_H)
- 
+        print(char_List1)
         # detect character width position
         #W_THRESH = max(array_V)
         #char_List2 = Detect_WidthPosition(W_THRESH, width, array_V)
@@ -214,9 +221,12 @@ if __name__ == "__main__":
                 #print(char_List2)
                 for j in range(0,len(char_List2)-1, 2):
                     img_f = img_mask[int(char_List1[i])-1:int(char_List1[i+1])+1, int(char_List2[j])-1:int(char_List2[j+1])+1]
+                    print("img_f")
+                    cv2.imshow("img",img_f)
+                    cv2.waitKey(0)
                     #cv2.imwrite("result{0}.jpg".format(k),img_f)
                     #k += 1
-                    cv2.imwrite(r"C:\Users\Fate2\Desktop\ex3\ex{0}.jpg".format(count), img_f)
+                    cv2.imwrite("./chara_data/ex{0}.jpg".format(count), img_f)
                     count += 1
         
         else:

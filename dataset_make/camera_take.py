@@ -11,11 +11,10 @@ while True:
         cv2.destroyAllWindows()
         
     cv2.imshow("frame",frame)
-    #cv2.imwrite("./hei/camera{0}.jpg".format(count),frame)
     count +=1
     key = cv2.waitKey(1) & 0XFF
     if key == ord('c'):
-        cv2.imwrite("./hei/camera{0}.jpg".format(count),frame)
+        cv2.imwrite("./dataset/jj/camera{0}.jpg".format(count),frame)
         count +=1
     elif key == ord('q'):
         break
