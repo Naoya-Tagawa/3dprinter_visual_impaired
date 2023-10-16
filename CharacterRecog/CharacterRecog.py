@@ -1,7 +1,6 @@
 import pickle
 import cv2
-from sklearn.preprocessing import StandardScaler
-import sklearn
+import time
 import numpy as np
 
 
@@ -68,11 +67,13 @@ def predict(model,scaler,pca,img):
 def TextRecog(model,scaler,pca,frame):
     #対象画像をリサイズ
     #対象画像をグレイスケール化
+    #start = time.time()
     #gray_img = cv2.cvtColor(syaei_resize_img,cv2.COLOR_BGR2GRAY)
     #二値画像へ
     #ret, img_mask = cv2.threshold(gray_img,0,255,cv2.THRESH_OTSU)
     img_mask = frame
     #img_mask = cv2.adaptiveThreshold(gray_img,255,cv2.ADAPTIVE_THRESH_MEAN_C,cv2.THRESH_BINARY,7,-3)
+
     #ノイズ除去
     #img_mask = cv2.medianBlur(img_mask,3)
     #膨張化
@@ -91,7 +92,7 @@ def TextRecog(model,scaler,pca,frame):
     char_List2 = Detect_WidthPosition(W_THRESH,width,array_V)
     out_modify = "" #修正したテキスト
     out = "" #読み取ったテキスト
-    print(char_List2)
+    #print(char_List2)
     img_mask = cv2.dilate(img_mask,kernel,iterations = 1)
     
     for j in range(0,len(char_List2)-1,2):
@@ -107,12 +108,12 @@ def TextRecog(model,scaler,pca,frame):
         except cv2.error:
             return ""
         height_m,width_m = match_img.shape
-        cv2.imshow("kk",match_img)
-        cv2.waitKey(0)
-        cv2.imwrite("match{0}.jpg".format(j),match_img)
+        #cv2.imshow("kk",match_img)
+        #cv2.waitKey(0)
+        #cv2.imwrite("match{0}.jpg".format(j),match_img)
 
         prediction = predict(model,scaler,pca,match_img)
-        print(prediction)
+        #print(prediction)
         if (j != 0) & (char_List2[j] > (width_m + char_List2[j-1])):
             if (j+1) == len(char_List2)-1:
                 out_modify = out_modify+ ' ' + prediction
@@ -140,16 +141,22 @@ def TextRecog(model,scaler,pca,frame):
         out_modify = out_modify + prediction
         #print(out_modify)
         continue
-    
+    #end = time.time()
+    #print("処理時間:",end-start)
+    #f = open("test_logi.txt",'a', encoding='UTF-8')
+    #f.write( '認識結果'+ out + '\n')
+    #f.write('実行時間'+ str(end-start) + '\n')
+    #f.close()
     return out
 
-if __name__ == "__main__":
-     print("Scikit-learnバージョン:", sklearn.__version__)
 
-     img = cv2.imread("before_frame_row1.jpg")
-     img = cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
-     model,scaler,pca = load_model()
-     text = TextRecog(model,scaler,pca,img)
-     print(text)
-     cv2.imshow("kk",img)
-     cv2.waitKey(0)
+# if __name__ == "__main__":
+#     print("Scikit-learnバージョン:", sklearn.__version__)
+
+#     img = cv2.imread("before_frame_row3.jpg")
+#     img = cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
+#     model,scaler,pca = load_model()
+#     text = TextRecog(model,scaler,pca,img)
+#     print(text)
+#     cv2.imshow("kk",img)
+#     cv2.waitKey(0)

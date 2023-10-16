@@ -19,6 +19,7 @@ from pylsd.lsd import lsd
 import os
 import pyocr
 import math
+import time
 def mask_make(blue_threshold_present_img):
     kernel = np.ones((3,3),np.uint8)
     #hsvLower = np.array([100,130,180])
@@ -1062,6 +1063,7 @@ def match_text3(img_temp,label_temp,frame):
     #対象画像をグレイスケール化
     #gray_img = cv2.cvtColor(syaei_resize_img,cv2.COLOR_BGR2GRAY)
     #二値画像へ
+    #start = time.time()
     #ret, img_mask = cv2.threshold(gray_img,0,255,cv2.THRESH_OTSU)
     img_mask = frame
     #img_mask = cv2.adaptiveThreshold(gray_img,255,cv2.ADAPTIVE_THRESH_MEAN_C,cv2.THRESH_BINARY,7,-3)
@@ -1094,8 +1096,8 @@ def match_text3(img_temp,label_temp,frame):
         #cv2.imwrite("match.jpg",match_img)
         try:
             match_img = cv2.resize(match_img,dsize=(26,36))
-            cv2.imshow("kk",match_img)
-            cv2.waitKey(0)
+            #cv2.imshow("kk",match_img)
+            #cv2.waitKey(0)
         except cv2.error:
             return ""
         height_m,width_m = match_img.shape
@@ -1133,7 +1135,11 @@ def match_text3(img_temp,label_temp,frame):
         out_modify = out_modify + label_temp[max_index]
         #print(out_modify)
         continue
-    
+    #end = time.time()
+    #f = open("test_template.txt","a", encoding='UTF-8')
+    #f.write("認識結果" + out + '\n')
+    #f.write('実行時間' + str(end-start) + '\n')
+    #f.close()
     return out
 
 def recog_text(img):
@@ -1381,13 +1387,13 @@ def sabun1(before_frame_row,present_frame_row,l):
 
 
 
-img = cv2.imread("before_frame_row1.jpg")
-img = cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
-#テンプレートをロード
-temp = np.load(r'./dataset2.npz')
-#テンプレート画像を格納
-img_temp = temp['x']
-#テンプレートのラベル(文)を格納
-label_temp = temp['y']
-oo =match_text3(img_temp,label_temp,img)
-print(oo)
+# img = cv2.imread("before_frame_row1.jpg")
+# img = cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
+# #テンプレートをロード
+# temp = np.load(r'./dataset2.npz')
+# #テンプレート画像を格納
+# img_temp = temp['x']
+# #テンプレートのラベル(文)を格納
+# label_temp = temp['y']
+# oo =match_text3(img_temp,label_temp,img)
+# print(oo)

@@ -39,7 +39,7 @@ def diff_image_search_first(present_frame):
 
     
     #コーナーに従って画像の切り取り
-    cut_present = present_frame[present_p1[1]:present_p2[1],present_p2[0]:present_p3[0]]
+    #cut_present = present_frame[present_p1[1]:present_p2[1],present_p2[0]:present_p3[0]]
     
     #射影変換
     syaei_present_img = projective_transformation(present_frame,present_p1,present_p2,present_p3,present_p4)
@@ -62,7 +62,7 @@ def diff_image_search_first(present_frame):
     before_frame_row = []
     #列ごとにマスク画像を取得
     for i in present_char_List2:
-        normal = mask_present_img2.copy()
+        #normal = mask_present_img2.copy()
         cut_present_row = mask_present_img2[int(i[0]):int(i[1]),]
         before_frame_row.append(cut_present_row)
     
@@ -89,7 +89,7 @@ def diff_image_search(present_frame,before_frame,before_frame_row1,before_frame_
     while True:
         frame = present_frame.get()
         #arrow_img = cv2.imread("./ex6/ex63.jpg")
-        h,w,d = frame.shape
+        #h,w,d = frame.shape
         #フレームの青い部分を二値化
         #frame= cv2.cvtColor(frame,cv2.COLOR_BGR2RGB)
         #cv2.imwrite("frameBE.jpg",before_frame)
@@ -98,9 +98,9 @@ def diff_image_search(present_frame,before_frame,before_frame_row1,before_frame_
         #kk
         before_frame_row = []
         sabun_count = 0
-        judge = False
+        #judge = False
         output_textx = ""
-        count = 0
+        #count = 0
         present_char_List2,mask_present_img2 = mask_make(blue_threshold_present_img)
         mask_frame = mask_present_img2.copy()
         before_frame = before_frame.astype('float')
@@ -132,8 +132,7 @@ def diff_image_search(present_frame,before_frame,before_frame_row1,before_frame_
             #cv2.imwrite("raaa.jpg",frame_diff)
         mask_frame[mask == 0] = 0
         frame_diff = cv2.morphologyEx(mask_frame, cv2.MORPH_OPEN, kernel)
-        cv2.imwrite("./ProcessingDisplay/realtimeimg.jpg",frame_diff)
-        cv2.imwrite("./ProcessingDisplay/mask_frame.jpg",mask_present_img2)
+
         #plt.imshow(mask_present_img2)
         #plt.show()
         #h ,w = present_frame.shape
@@ -144,6 +143,8 @@ def diff_image_search(present_frame,before_frame,before_frame_row1,before_frame_
         for i in range(len(contours)):
             if (cv2.contourArea(contours[i]) < 30):
                 frame_diff = cv2.fillPoly(frame_diff, [contours[i][:,0,:]], (0,255,0), lineType=cv2.LINE_8, shift=0)
+        cv2.imwrite("./ProcessingDisplay/realtimeimg.jpg",frame_diff)
+        cv2.imwrite("./ProcessingDisplay/mask_frame.jpg",mask_present_img2)
         #plt.imshow(frame_diff)
         #cv2.imshow("framediff.jpg",frame_diff)
         #cv2.imshow("before.jpg",before_frame)
