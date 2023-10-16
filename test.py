@@ -210,6 +210,7 @@ def diff_image_search(present_frame,before_frame,before_frame_row1,before_frame_
     
             if sabun_count > 3:
                 out = TextRecog(model_pca,scaler,pca,cut_present)
+                
             #out = recog_text(cut_present)
             #矢印があるかどうか判定
                 if out[0:1] == '>':

@@ -1071,7 +1071,7 @@ def match_text3(img_temp,label_temp,frame):
     #img_mask = cv2.dilate(img_mask,kernel)
     #高さ、幅を保持
     height,width = img_mask.shape
-    #img_erode = cv2.erode(img_mask,np.ones((5,5),np.uint8),iterations=1)
+    img_mask = cv2.erode(img_mask,np.ones((3,3),np.uint8),iterations=1)
     #cv2.imshow("ll",img_erode)
     #cv2.waitKey(0)
     out_modify = "" #修正したテキスト
@@ -1082,6 +1082,7 @@ def match_text3(img_temp,label_temp,frame):
     out_modify = "" #修正したテキスト
     out = "" #読み取ったテキスト
     #横方向にきって列ごとに保存
+    img_mask = cv2.dilate(img_mask,np.ones((3,3),np.uint8),iterations=1)
     
     temp_th = [ cv2.resize(img_temp[i],dsize=(26,36)) for i in range(len(img_temp))]
     #print(len(temp_th))
@@ -1093,8 +1094,8 @@ def match_text3(img_temp,label_temp,frame):
         #cv2.imwrite("match.jpg",match_img)
         try:
             match_img = cv2.resize(match_img,dsize=(26,36))
-            #cv2.imshow("kk",match_img)
-            #cv2.waitKey(0)
+            cv2.imshow("kk",match_img)
+            cv2.waitKey(0)
         except cv2.error:
             return ""
         height_m,width_m = match_img.shape
@@ -1389,4 +1390,4 @@ img_temp = temp['x']
 #テンプレートのラベル(文)を格納
 label_temp = temp['y']
 oo =match_text3(img_temp,label_temp,img)
-print(oo)   
+print(oo)

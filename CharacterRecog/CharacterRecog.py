@@ -40,9 +40,9 @@ def preprocess_new_image(img):
   #グレースケール化
   #img = cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
   #サイズ統一
-  image = cv2.resize(img, (26, 36))
+  #image = cv2.resize(img, (26, 36))
   #画像のピクセル値を特徴量として1次元配列に変換
-  pixels = image.flatten()
+  pixels = img.flatten()
   pixel_values_list.append(pixels)
   return pixel_values_list
 
@@ -78,10 +78,10 @@ def TextRecog(model,scaler,pca,frame):
     #膨張化
     #img_mask = cv2.dilate(img_mask,kernel)
     #高さ、幅を保持
-    #kernel = np.ones((3,3),np.uint8)
-    #img_mask = cv2.erode(img_mask,kernel,iterations = 1)
+    kernel = np.ones((3,3),np.uint8)
     height,width = img_mask.shape
-    #img_erode = cv2.erode(img_mask,np.ones((5,5),np.uint8),iterations=1)
+    img_mask = cv2.erode(img_mask,kernel,iterations = 1)
+    #img_mask = cv2.erode(img_mask,np.ones((5,5),np.uint8),iterations=1)
     #cv2.imshow("ll",img_erode)
     #cv2.waitKey(0)
     out_modify = "" #修正したテキスト
@@ -92,7 +92,7 @@ def TextRecog(model,scaler,pca,frame):
     out_modify = "" #修正したテキスト
     out = "" #読み取ったテキスト
     print(char_List2)
-    #img_mask = cv2.dilate(img_mask,kernel,iterations = 1)
+    img_mask = cv2.dilate(img_mask,kernel,iterations = 1)
     
     for j in range(0,len(char_List2)-1,2):
         #end_time = time.perf_counter()
@@ -107,8 +107,10 @@ def TextRecog(model,scaler,pca,frame):
         except cv2.error:
             return ""
         height_m,width_m = match_img.shape
-        #cv2.imshow("kk",match_img)
-        #cv2.waitKey(0)
+        cv2.imshow("kk",match_img)
+        cv2.waitKey(0)
+        cv2.imwrite("match{0}.jpg".format(j),match_img)
+
         prediction = predict(model,scaler,pca,match_img)
         print(prediction)
         if (j != 0) & (char_List2[j] > (width_m + char_List2[j-1])):
@@ -141,13 +143,13 @@ def TextRecog(model,scaler,pca,frame):
     
     return out
 
-# if __name__ == "__main__":
-#     print("Scikit-learnバージョン:", sklearn.__version__)
+if __name__ == "__main__":
+     print("Scikit-learnバージョン:", sklearn.__version__)
 
-#     img = cv2.imread("before_frame_row4.jpg")
-#     img = cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
-#     model,scaler,pca = load_model()
-#     text = TextRecog(model,scaler,pca,img)
-#     print(text)
-#     cv2.imshow("kk",img)
-#     cv2.waitKey(0)
+     img = cv2.imread("before_frame_row1.jpg")
+     img = cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
+     model,scaler,pca = load_model()
+     text = TextRecog(model,scaler,pca,img)
+     print(text)
+     cv2.imshow("kk",img)
+     cv2.waitKey(0)

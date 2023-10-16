@@ -14,29 +14,19 @@ from PIL import Image
   
 if __name__ == "__main__":
     count = 0
-<<<<<<< HEAD
-    files = glob.glob('./dataset/*')
-=======
-    files = glob.glob('./cha_dataset/*')
->>>>>>> 69b6e7e831c434ad354cab632bd239ad848a173c
+    files = glob.glob('./chara_data/*')
     for f in files:
         print(f)
         # input image
         img = cv2.imread(f)
-        cv2.imshow("img",img)
-        cv2.waitKey(0)
+        #cv2.imshow("img",img)
+        #cv2.waitKey(0)
         #対象画像をロード
         #青い部分のみを二値化
-<<<<<<< HEAD
-        close_img = cut_blue_img(img)
-        cv2.imshow("img",close_img)
-        cv2.waitKey(0)
-=======
         close_img = cut_blue_img2(img)
         close_img = mask_make1(close_img)
         #cv2.imshow("close",close_img)
         #cv2.waitKey(0)
->>>>>>> 69b6e7e831c434ad354cab632bd239ad848a173c
         #コーナー検出
         p1,p2,p3,p4 = points_extract1(close_img)
         #コーナーに従って画像の切り取り
@@ -57,18 +47,10 @@ if __name__ == "__main__":
         ##ノイズ除去
         #img_mask = cv2.medianBlur(bw_img,3)
         #膨張化
-<<<<<<< HEAD
-        img_mask = cv2.dilate(bw_img,kernel)
-        height, width = img_mask.shape
-        cv2.imshow("img",img_mask)
-        cv2.waitKey(0)
- 
-=======
         #img_mask = cv2.dilate(bw_img,kernel)
         height, width = close_img.shape
         #cv2.imshow("img_mask",close_img)
         #cv2.waitKey(0)
->>>>>>> 69b6e7e831c434ad354cab632bd239ad848a173c
         # create projection distribution
         array_H = Projection_H(close_img, height, width)
         #array_V = Projection_V(bw_img, height, width)
@@ -93,22 +75,12 @@ if __name__ == "__main__":
                 char_List2 = Detect_WidthPosition(W_THRESH,w,array_V)
                 #print(char_List2)
                 for j in range(0,len(char_List2)-1, 2):
-<<<<<<< HEAD
-                    img_f = img_mask[int(char_List1[i])-1:int(char_List1[i+1])+1, int(char_List2[j])-1:int(char_List2[j+1])+1]
-                    print("img_f")
-                    cv2.imshow("img",img_f)
-                    cv2.waitKey(0)
-                    #cv2.imwrite("result{0}.jpg".format(k),img_f)
-                    #k += 1
-                    cv2.imwrite("./chara_data/ex{0}.jpg".format(count), img_f)
-=======
                     img_f = close_img[int(char_List1[i])-1:int(char_List1[i+1])+1, int(char_List2[j])-1:int(char_List2[j+1])+1]
                     #cv2.imwrite("result{0}.jpg".format(k),img_f)
                     #k += 1
                     #cv2.imshow("img_f",img_f)
                     #cv2.waitKey(0)
                     cv2.imwrite("./chara/ex{0}.jpg".format(count), img_f)
->>>>>>> 69b6e7e831c434ad354cab632bd239ad848a173c
                     count += 1
         
         else:
