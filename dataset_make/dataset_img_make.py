@@ -16,8 +16,11 @@ if __name__ == "__main__":
     count = 0
     files = glob.glob('./chara_add/*')
     for f in files:
+        print(f)
         # input image
         img = cv2.imread(f)
+        #cv2.imshow("img",img)
+        #cv2.waitKey(0)
         #対象画像をロード
         #青い部分のみを二値化
         #cv2.imshow("close",img)

@@ -65,4 +65,4 @@ for i in range(70):
 plt.show()
 plt.imshow(x[73],cmap='gray')
 plt.show()
-print(y[73])
+#print(y[73])
