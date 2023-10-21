@@ -1,22 +1,26 @@
 
-import numpy as np
 import cv2
 import numpy as np
-from ImageProcessing.img_processing2 import sabun1,mask_make1,make_char_list,get_unique_list,mask_make, match_text3,projective_transformation,points_extract1,cut_blue_img1,Projection_H,Detect_HeightPosition,cut_blue_img2
 import multiprocessing
-event = multiprocessing.Event()
-count = 0
 from sklearn.neighbors import NearestNeighbors
 from MakeVoicefile.VoiceProcessing import text_read
-from CharacterRecog.CharacterRecog import load_model,TextRecog
+from CharacterRecog.CharacterRecog import load_model, TextRecog
+from ImageProcessing.img_processing2 import (
+    sabun1,
+    mask_make1,
+    make_char_list,
+    get_unique_list,
+    mask_make,
+    projective_transformation,
+    points_extract1,
+    cut_blue_img1,
+    Projection_H,
+    Detect_HeightPosition,
+    cut_blue_img2,
+)
 
 #flag = True: 音声出力
 #flag = false: 音声出力しない
-CHUNK = 1024
-#話すスピード
-speed = 300
-#ボリューム
-vol = 10.0
 
 def diff_image_search_first(present_frame):
     img = cv2.imread("./MaskBlack/black_img.jpg")
