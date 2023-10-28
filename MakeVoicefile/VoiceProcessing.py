@@ -5,6 +5,7 @@ from operator import itemgetter
 import pyaudio
 import wave
 import threading
+import time
 
 
 CHUNK = 1024
@@ -115,7 +116,6 @@ def text_read(output_text):
         if output_text.qsize() >= 1:
             while output_text.qsize() > 1:
                 text = output_text.get()
-                
                 #cv2.imwrite("real.jpg",img)
         
         #out = match_text3(img_temp,label_temp,img)
@@ -131,3 +131,32 @@ def text_read(output_text):
             start = 1
         start += 1
         #time.sleep(0.1)
+
+# def text_read_input(output_text):
+#     last_text = ""
+#     insert_count = 0  # 1秒間に挿入された回数
+#     last_insert_time = time.time()
+#     while True:
+#         try:
+#             # Empty the queue and keep only the last value
+#             while True:
+#                 last_text = output_text.get_nowait()
+#                 last_insert_time = time.time()
+#                 insert_count += 1
+#         except output_text.Empty:
+#             pass
+
+#         # Check if there were more than 5 inserts in the last second
+#         current_time = time.time()
+#         print(current_time - last_insert_time)
+#         if current_time - last_insert_time >= 1 and insert_count >= 5 and last_text:
+#             print("Text to read:", last_text)
+#             make_voice_file(last_text)
+#             file_name = latest_play_voice_file()
+#             player = AudioPlayer(file_name)
+#             player.play()
+#             delete_voice_file()
+
+#             # Reset the insert count and last insert time
+#             insert_count = 0
+#             last_insert_time = current_time

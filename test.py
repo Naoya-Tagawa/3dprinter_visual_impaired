@@ -7,7 +7,7 @@ import multiprocessing
 event = multiprocessing.Event()
 count = 0
 from sklearn.neighbors import NearestNeighbors
-from MakeVoicefile.VoiceProcessing import text_read
+from MakeVoicefile.VoiceProcessing import text_read,text_read_input
 from CharacterRecog.CharacterRecog import load_model,TextRecog
 
 #flag = True: 音声出力
@@ -315,7 +315,7 @@ if __name__ == "__main__":
     count = 0
     #text_img = multiprocessing.Queue()
     output_text = multiprocessing.Queue()
-    read = multiprocessing.Process(target=text_read,args=(output_text,))
+    read = multiprocessing.Process(target=text_read_input,args=(output_text,))
     read.start()
     
     #最初のフレームを取得する
