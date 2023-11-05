@@ -2,8 +2,8 @@ import pickle
 import cv2
 import time
 import numpy as np
-
-
+import warnings
+warnings.simplefilter('ignore')
 #横方向のProjection profileを得る
 def Projection_V(img,h,w):
     array_V = np.full(w,h)
