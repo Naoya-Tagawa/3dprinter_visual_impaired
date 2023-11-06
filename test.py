@@ -96,7 +96,7 @@ def diff_image_search(
     img = cv2.imread("./MaskBlack/balck_img.jpg")
     last_insert_time = time.time()
     img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-    kernel = np.ones((3, 3), np.uint8)
+    kernel = np.ones((5, 5), np.uint8)
     model = cv2.createBackgroundSubtractorMOG2(history=3, detectShadows=False)
     while True:
         frame = present_frame.get()
