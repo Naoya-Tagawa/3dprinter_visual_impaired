@@ -97,11 +97,12 @@ def diff_image_search(
     output_union = []
     last_insert_time = time.time()
     img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-    kernel = np.ones((3, 3), np.uint8)
+    kernel = np.ones((1, 1), np.uint8)
     model = cv2.createBackgroundSubtractorMOG2(history=3, detectShadows=False)
     while True:
         frame = present_frame.get()
         last_insert_time = time.time()
+        print(last_insert_time)
         # arrow_img = cv2.imread("./ex6/ex63.jpg")
         # h,w,d = frame.shape
         # フレームの青い部分を二値化
@@ -130,8 +131,9 @@ def diff_image_search(
 
             # frame_diff[frame_diff ==205] = 0
             # frame_diff = cv2.absdiff(mask_present_img2,cv2.convertScaleAbs(before_frame))
-            mask = cv2.morphologyEx(mask, cv2.MORPH_OPEN, kernel)
-            # frame_diff = cv2.medianBlur(frame_diff,3)
+            # mask = cv2.morphologyEx(mask, cv2.MORPH_OPEN, kernel)
+            mask = cv2.erode(mask, kernel, iterations=1)
+            # mask = cv2.dilate(mask, kernel, iterations=1)
             # frame_diff = cv2.dilate(frame_diff,kernel)
             # cv2.imwrite("./ProcessingDisplay/raaa.jpg",frame_diff)
         else:
@@ -141,8 +143,8 @@ def diff_image_search(
             # frame_diff = mask_present_img2 - cv2.convertScaleAbs(before_frame)
             # frame_diff[frame_diff == 205] = 0
             # frame_diff = cv2.absdiff(mask_present_img2,cv2.convertScaleAbs(before_frame))
-            # frame_diff = cv2.medianBlur(frame_diff,3)
-            mask = cv2.morphologyEx(mask, cv2.MORPH_OPEN, kernel)
+            mask = cv2.erode(mask, kernel, iterations=1)
+            # mask = cv2.morphologyEx(mask, cv2.MORPH_OPEN, kernel)
             # cv2.imwrite("raaa.jpg",frame_diff)
         mask_frame[mask == 0] = 0
         frame_diff = cv2.morphologyEx(mask_frame, cv2.MORPH_OPEN, kernel)
@@ -155,12 +157,12 @@ def diff_image_search(
         # before_frame = cv2.resize(before_frame,dsize=(w,h))
         contours, hierarchy = cv2.findContours(frame_diff.astype("uint8"), cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE)
         for i in range(len(contours)):
-            if cv2.contourArea(contours[i]) < 45:
+            if cv2.contourArea(contours[i]) < 100:
                 frame_diff = cv2.fillPoly(frame_diff, [contours[i][:, 0, :]], (0, 255, 0), lineType=cv2.LINE_8, shift=0)
-        cv2.imwrite("./ProcessingDisplay/realtimeimg_{0}.jpg".format(last_insert_time), frame_diff)
+        # cv2.imwrite("./ProcessingDisplay/realtimeimg_{0}.jpg".format(last_insert_time), frame_diff)
         cv2.imwrite("./ProcessingDisplay/mask_frame_{0}.jpg".format(last_insert_time), mask_present_img2)
         # plt.imshow(frame_diff)
-        # cv2.imshow("framediff.jpg",frame_diff)
+        cv2.imwrite("framediff.jpg", frame_diff)
         # cv2.imshow("before.jpg",before_frame)
 
         # cv2.imshow("mas",mask_present_img2)
@@ -196,7 +198,7 @@ def diff_image_search(
         else:
             indices = []
             # 認識するものがないことを示す
-            flg = 1
+            flg = 0
         # print(indices)
         for i in indices:
             if len(indices) == 0:
@@ -416,6 +418,7 @@ if __name__ == "__main__":
         else:
             base = base + frame
             count += 1
+            time.sleep(0.02)
         before = frame
 
         # diff_flag = Trueなら画面遷移,diff_flag=Falseなら画面遷移していない
