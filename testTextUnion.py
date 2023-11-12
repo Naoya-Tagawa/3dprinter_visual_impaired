@@ -97,12 +97,12 @@ def diff_image_search(
     output_union = []
     last_insert_time = time.time()
     img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-    kernel = np.ones((1, 1), np.uint8)
+    kernel = np.ones((3, 3), np.uint8)
     model = cv2.createBackgroundSubtractorMOG2(history=3, detectShadows=False)
     while True:
         frame = present_frame.get()
         last_insert_time = time.time()
-        print(last_insert_time)
+        # print(last_insert_time)
         # arrow_img = cv2.imread("./ex6/ex63.jpg")
         # h,w,d = frame.shape
         # フレームの青い部分を二値化
@@ -157,7 +157,7 @@ def diff_image_search(
         # before_frame = cv2.resize(before_frame,dsize=(w,h))
         contours, hierarchy = cv2.findContours(frame_diff.astype("uint8"), cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE)
         for i in range(len(contours)):
-            if cv2.contourArea(contours[i]) < 100:
+            if cv2.contourArea(contours[i]) < 10:
                 frame_diff = cv2.fillPoly(frame_diff, [contours[i][:, 0, :]], (0, 255, 0), lineType=cv2.LINE_8, shift=0)
         # cv2.imwrite("./ProcessingDisplay/realtimeimg_{0}.jpg".format(last_insert_time), frame_diff)
         cv2.imwrite("./ProcessingDisplay/mask_frame_{0}.jpg".format(last_insert_time), mask_present_img2)
@@ -198,7 +198,7 @@ def diff_image_search(
         else:
             indices = []
             # 認識するものがないことを示す
-            flg = 0
+            flg = 1
         # print(indices)
         for i in indices:
             if len(indices) == 0:
@@ -228,7 +228,7 @@ def diff_image_search(
                 sabun_count += 1
 
             # cut_present1 = mask_present_img[int(j[0]):int(j[1]),]
-
+            # print(sabun_count)
             if sabun_count > 3:
                 out = TextRecog(model_pca, scaler, pca, cut_present)
                 print("正規の文:")
@@ -242,7 +242,7 @@ def diff_image_search(
                     print(out)
                     out = out.split(">")
                     print(out)
-                    break
+
                     # output_textx = output_textx + " The cursor points to "
                 # output_textx = output_textx + " \n" + out
             # before_frame_row.append(cut_present)
@@ -271,18 +271,26 @@ def diff_image_search(
                     break
                 cut_present = mask_present_img2[int(i[0]) : int(i[1]),]
                 before_frame_row.append(cut_present)
-            output_union.append(out[1])
-            print("output_union:" + str(output_union))
+            if len(out) != 0:
+                output_union.append(out[1])
+                print("output_union:" + str(output_union))
+            out = ""
         else:
-            result = output_union[0]
-            for text in output_union[1:]:
-                result += text.lstrip(result)
-            print(result)
-            # print(result)
+            if len(output_union) != 0:
+                result = output_union[0]
+                result = result.strip()
+                for i, text in enumerate(output_union[1:]):
+                    py = text.strip()
+                    print(py.replace(result[i + 1 :], ""))
+                    if py.replace(result[i + 1 :], "") != py:
+                        result += py.replace(result[i + 1 :], "")
+                output_union = []
+
             if len(result) != 0:
-                output_text.put(result)
+                if len(result) > 1:
+                    output_text.put(result)
+                    print("reslut " + str(result))
                 result = ""
-                # output_union = []
 
         # start1 = time.perf_counter()
         # end1 = time.perf_counter()
@@ -418,7 +426,7 @@ if __name__ == "__main__":
         else:
             base = base + frame
             count += 1
-            time.sleep(0.02)
+            # time.sleep(0.02)
         before = frame
 
         # diff_flag = Trueなら画面遷移,diff_flag=Falseなら画面遷移していない

@@ -28,5 +28,25 @@ def merge_multiple_sequences(*sequences):
 text1 = "GGGGHHHko"
 text2 = "kko.code"
 text3 = "ko.code"
-result = merge_multiple_sequences(text1, text2, text3)
+output_union = [
+    "plejjjGq_box_0.15mm ",
+    "lejjjGq_box_0.15mm_ ",
+    "ejjjGq_box_0.15mm_P ",
+    "jjjGq_box_0.15mm_Pl ",
+    "jGq_box_0.15mm_PLA_ ",
+    "Gq_box_0Ll5mm_PLA_M ",
+    "x_0.l5mm_PLA_MK3_17 ",
+]
+result = output_union[0]
+result = result.strip()
+for i, text in enumerate(output_union[1:]):
+    print(result[i + 1 :])
+    py = text.strip()
+    print("py")
+    print(py)
+    print("jokyo")
+    print(py.replace(result[i + 1 :], ""))
+    if py.replace(result[i + 1 :], "") != py:
+        result += py.replace(result[i + 1 :], "")
+    print(result)
 print(result)

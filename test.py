@@ -96,7 +96,7 @@ def diff_image_search(
     img = cv2.imread("./MaskBlack/balck_img.jpg")
     last_insert_time = time.time()
     img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-    kernel = np.ones((5, 5), np.uint8)
+    kernel = np.ones((3, 3), np.uint8)
     model = cv2.createBackgroundSubtractorMOG2(history=3, detectShadows=False)
     while True:
         frame = present_frame.get()
@@ -154,12 +154,12 @@ def diff_image_search(
         # before_frame = cv2.resize(before_frame,dsize=(w,h))
         contours, hierarchy = cv2.findContours(frame_diff.astype("uint8"), cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE)
         for i in range(len(contours)):
-            if cv2.contourArea(contours[i]) < 30:
+            if cv2.contourArea(contours[i]) < 40:
                 frame_diff = cv2.fillPoly(frame_diff, [contours[i][:, 0, :]], (0, 255, 0), lineType=cv2.LINE_8, shift=0)
-        cv2.imwrite("./ProcessingDisplay/realtimeimg_{0}.jpg".format(last_insert_time), frame_diff)
-        cv2.imwrite("./ProcessingDisplay/mask_frame_{0}.jpg".format(last_insert_time), mask_present_img2)
+        # cv2.imwrite("./ProcessingDisplay/realtimeimg_{0}.jpg".format(last_insert_time), frame_diff)
+        # cv2.imwrite("./ProcessingDisplay/mask_frame_{0}.jpg".format(last_insert_time), mask_present_img2)
         # plt.imshow(frame_diff)
-        # cv2.imshow("framediff.jpg",frame_diff)
+        cv2.imwrite("framediff.jpg", frame_diff)
         # cv2.imshow("before.jpg",before_frame)
 
         # cv2.imshow("mas",mask_present_img2)
@@ -379,9 +379,9 @@ if __name__ == "__main__":
         # per = (dst2_count / dst1_count) * 100
         # print(dst1_count)
         # print(dst2_count)
-        if count == 8:
+        if count == 9:
             base = frame + base
-            base = base / 9
+            base = base / 10
             base = base.astype(np.uint8)
             # cv2.imwrite("base17.jpg",base)
             present_frame.put(base)
