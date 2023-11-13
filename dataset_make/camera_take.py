@@ -2,7 +2,7 @@ import cv2
 def coordinates(event,x,y, flags,param):
     if event == cv2.EVENT_LBUTTONDOWN:
         print(x,y)
-cap = cv2.VideoCapture(1)
+cap = cv2.VideoCapture(0)
 count =1
 while True:
     
@@ -11,7 +11,6 @@ while True:
         cv2.destroyAllWindows()
         
     cv2.imshow("frame",frame)
-    #cv2.imwrite("./hei/camera{0}.jpg".format(count),frame)
     count +=1
     key = cv2.waitKey(1) & 0XFF
     if key == ord('c'):

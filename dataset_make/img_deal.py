@@ -75,8 +75,8 @@ def mask_make1(blue_threshold_present_img):
     #mask_present_img2 = cv2.dilate(mask_present_img2,kernel)
     #ret, mask_present_img2 = cv2.threshold(hsv_mask,0,255,cv2.THRESH_OTSU)
     #mask_present_img2 = cv2.dilate(hsv_mask,kernel,iterations=1)
-    mask_present_img2 = cv2.dilate(hsv_mask,kernel)
-    #mask_present_img2 = hsv_mask
+    #mask_present_img2 = cv2.dilate(hsv_mask,kernel)
+    mask_present_img2 = hsv_mask
     #plt.imshow(mask_present_img2)
     #plt.show()
     cv2.imwrite("mask.png",mask_present_img2)

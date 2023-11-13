@@ -17,13 +17,20 @@ from PIL import Image
  
 if __name__ == "__main__":
     count = 0
-    files = glob.glob('./cha_dataset/*')
+    files = glob.glob('./chara_add/*')
     for f in files:
+        print(f)
         # input image
         img = cv2.imread(f)
+        #cv2.imshow("img",img)
+        #cv2.waitKey(0)
         #対象画像をロード
         #青い部分のみを二値化
+        #cv2.imshow("close",img)
+        #cv2.waitKey(0)
         close_img = cut_blue_img2(img)
+        #cv2.imshow("close",close_img)
+        #cv2.waitKey(0)
         close_img = mask_make1(close_img)
         #cv2.imshow("close",close_img)
         #cv2.waitKey(0)
@@ -77,7 +84,7 @@ if __name__ == "__main__":
                     #k += 1
                     #cv2.imshow("img_f",img_f)
                     #cv2.waitKey(0)
-                    cv2.imwrite("./chara/ex{0}.jpg".format(count), img_f)
+                    cv2.imwrite("./chara/add_data/ex{0}.jpg".format(count), img_f)
                     count += 1
         
         else:

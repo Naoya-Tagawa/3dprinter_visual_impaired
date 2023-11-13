@@ -16,8 +16,7 @@ from dictionary_word import speling
 import difflib
 import numpy as np
 import cv2
-import image_processing
-import audio_output
+import ImageProcessing.image_processing as image_processing
 from sklearn.neighbors import NearestNeighbors 
 def diff_image_search(present_frame,img_temp,label_temp,before_frame_row1,before_frame_row2,before_frame_row3,before_frame_row4):
     global present_img
