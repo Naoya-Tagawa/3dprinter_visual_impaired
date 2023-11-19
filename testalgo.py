@@ -1,21 +1,35 @@
 l = [
-    "plejjjGq_box_0.15mm ",
-    "lejjjGq_box_0.15mm_ ",
-    "ejjjGq_box_0.15mm_P ",
-    "jjjGq_box_0.15mm_Pl ",
-    "jGp_box_0.15mm_PIA- ",
-    "Gq_box_0Ll5mm_PLA_M ",
-    "x_0.l5mm_PLA_MK3_17 ",
+    "jjGq_box_0.11m_PLA ",
+    "jjGq_box_0.11m_PLA ",
+    "jjGq_box_0.11m_PLA ",
+    "jjGq_box_0.11m_PLA ",
+    "GqabbexL015LLPlLuL ",
+    "GqabbexL015LLPlLuL ",
+    "GqabbexL015LLPlLuL ",
+    "GqabbexL015LLPlLuL ",
+    "q_box_G.15m_PLA_MK ",
+    "q_box_G.15m_PLA_MK ",
+    "q_box_G.15m_PLA_MK ",
+    "q_box_G.15m_PLA_MK ",
+    "_box_0.1LPLA_MK3 ",
+    "_box_0.1LPLA_MK3 ",
+    "_box_0.1LPLA_MK3 ",
+    "_box_0.1LPLA_MK3 ",
+    "box_0.15vLA_MK3_ ",
+    "box_0.15vLA_MK3_ ",
+    "box_0.15vLA_MK3_ ",
+    "box_0.15vLA_MK3_ ",
 ]
+
 
 def text_union(l):
     # 投票テーブルを作成
     vote_table = []
-    #類似度の最大値をもつイテレータ
+    # 類似度の最大値をもつイテレータ
     count_max = 0
-    #類似度が最大のテキスト
+    # 類似度が最大のテキスト
     max_text = ""
-    #カウント
+    # カウント
     count = 0
     max_stop_id = 0
     max_last_stop_id = 0
@@ -59,14 +73,14 @@ def text_union(l):
                     vote_table[step].update({parts_text: 1})
 
         before_text = "".join(max(entry, key=entry.get) for entry in vote_table)
+        print(before_text)
+        print(" ")
+        print(count_max)
         count_max = 0
 
-    return "".join(max(entry, key=entry.get) for entry in vote_table)
+    return "".join(max(entry, key=entry.get) for entry in vote_table), vote_table
 
-result = text_union(l)
+
+result, table = text_union(l)
+print(table)
 print(result)
-
-
-
-
-

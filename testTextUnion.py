@@ -23,6 +23,63 @@ from ImageProcessing.img_processing2 import (
 # flag = false: 音声出力しない
 
 
+# 横スクロールするtextを結合する関数
+def text_union(l):
+    # 投票テーブルを作成
+    vote_table = []
+    # 類似度の最大値をもつイテレータ
+    count_max = 0
+    # 類似度が最大のテキスト
+    max_text = ""
+    # カウント
+    count = 0
+    max_stop_id = 0
+    max_last_stop_id = 0
+    for step, text in enumerate(l):
+        text = text.strip()
+        if step == 0:
+            # 投票テーブルの更新
+            vote_table = [{char: 1} for char in text]
+            before_text = text
+            continue
+
+        for i in range(len(text)):
+            before_text = before_text.strip()
+            # diff_length = len(before_text) - len(text)
+            text_parse = before_text[i:]
+            for j in range(len(text_parse)):
+                if j >= len(text):
+                    break
+                else:
+                    if text_parse[j] == text[j]:
+                        count += 2
+                    else:
+                        count += 0
+            count += i
+            if count_max < count:
+                count_max = count
+                max_stop_id = i
+                # max_text = before_text[0:i] + text_parse + text[len(text) - i + diff_length :]
+                max_text = before_text[0:i] + text
+                max_last_stop_id = len(max_text)
+            count = 0
+
+        for step in range(max_stop_id, max_last_stop_id):
+            parts_text = max_text[step]
+            if step >= len(vote_table):
+                vote_table.append({parts_text: 1})
+            else:
+                if parts_text in vote_table[step].keys():
+                    vote_table[step].update({parts_text: vote_table[step][parts_text] + 1})
+                else:
+                    vote_table[step].update({parts_text: 1})
+
+        before_text = "".join(max(entry, key=entry.get) for entry in vote_table)
+        count_max = 0
+
+    return "".join(max(entry, key=entry.get) for entry in vote_table)
+
+
 def diff_image_search_first(present_frame):
     img = cv2.imread("./MaskBlack/black_img.jpg")
     img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
@@ -81,6 +138,21 @@ def diff_image_search_first(present_frame):
         return img, img, img, img, mask_present_img2
 
 
+def check_last_five_elements(lst):
+    # リストの長さが5未満の場合は条件を満たすことができません
+    if len(lst) < 5:
+        return False
+
+    # リストの後ろから5つの要素が全て1であるかを判定
+    last_five_elements_are_ones = all(x == 1 for x in lst[-5:])
+
+    # リスト全体から1の要素の数を数える
+    count_of_ones = lst.count(1)
+
+    # 条件を満たす要素が5つ以上あるかを判定
+    return last_five_elements_are_ones and count_of_ones >= 5
+
+
 def diff_image_search(
     present_frame,
     before_frame,
@@ -99,6 +171,7 @@ def diff_image_search(
     img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
     kernel = np.ones((3, 3), np.uint8)
     model = cv2.createBackgroundSubtractorMOG2(history=3, detectShadows=False)
+    flg_count = []
     while True:
         frame = present_frame.get()
         last_insert_time = time.time()
@@ -193,12 +266,20 @@ def diff_image_search(
                 knn_model = NearestNeighbors(n_neighbors=1, algorithm="ball_tree").fit(present_char_List2)
                 distances, indices = knn_model.kneighbors(present_char_List1)
                 indices = get_unique_list(indices)
+                flg_count.append(0)
+                print("flg_count:" + str(flg_count))
             except ValueError:
                 indices = []
+                # 認識するものがないことを示す
+                flg_count.append(1)
+                print("flg_count:" + str(flg_count))
+
         else:
             indices = []
             # 認識するものがないことを示す
-            flg = 1
+            flg_count.append(1)
+            print("flg_count:" + str(flg_count))
+
         # print(indices)
         for i in indices:
             if len(indices) == 0:
@@ -241,6 +322,7 @@ def diff_image_search(
                     print("一文:")
                     print(out)
                     out = out.split(">")
+                    out = out[1]
                     print(out)
 
                     # output_textx = output_textx + " The cursor points to "
@@ -260,10 +342,9 @@ def diff_image_search(
             # before_frame_row.append(cut_present)
             sabun_count = 0
 
-        # count += 1
-        print("flg:" + str(flg))
-
-        if flg != 1:
+        #
+        print(check_last_five_elements(flg_count))
+        if (check_last_five_elements(flg_count) == False) & len(out) != 0:
             for i in present_char_List2:
                 if l2 == 0:
                     break
@@ -271,26 +352,16 @@ def diff_image_search(
                     break
                 cut_present = mask_present_img2[int(i[0]) : int(i[1]),]
                 before_frame_row.append(cut_present)
-            if len(out) != 0:
-                output_union.append(out[1])
+                output_union.append(out)
                 print("output_union:" + str(output_union))
             out = ""
-        else:
-            if len(output_union) != 0:
-                result = output_union[0]
-                result = result.strip()
-                for i, text in enumerate(output_union[1:]):
-                    py = text.strip()
-                    print(py.replace(result[i + 1 :], ""))
-                    if py.replace(result[i + 1 :], "") != py:
-                        result += py.replace(result[i + 1 :], "")
-                output_union = []
-
-            if len(result) != 0:
-                if len(result) > 1:
-                    output_text.put(result)
-                    print("reslut " + str(result))
-                result = ""
+        elif check_last_five_elements(flg_count) == True:
+            result = text_union(output_union)
+            output_text.put(result)
+            print("reslut " + str(result))
+            result = ""
+            flg_count = []
+            output_union = []
 
         # start1 = time.perf_counter()
         # end1 = time.perf_counter()
@@ -426,7 +497,7 @@ if __name__ == "__main__":
         else:
             base = base + frame
             count += 1
-            # time.sleep(0.02)
+            time.sleep(0.04)
         before = frame
 
         # diff_flag = Trueなら画面遷移,diff_flag=Falseなら画面遷移していない
