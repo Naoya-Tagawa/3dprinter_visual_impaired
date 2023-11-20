@@ -53,7 +53,8 @@ def text_union(l):
                         count += 2
                     else:
                         count += 0
-            count += i
+            
+            #count += i
             if count_max < count:
                 count_max = count
                 max_stop_id = i
@@ -73,9 +74,6 @@ def text_union(l):
                     vote_table[step].update({parts_text: 1})
 
         before_text = "".join(max(entry, key=entry.get) for entry in vote_table)
-        print(before_text)
-        print(" ")
-        print(count_max)
         count_max = 0
 
     return "".join(max(entry, key=entry.get) for entry in vote_table), vote_table
