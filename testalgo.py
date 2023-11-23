@@ -33,6 +33,8 @@ def text_union(l):
     count = 0
     max_stop_id = 0
     max_last_stop_id = 0
+    before_text1 = ""
+    
     for step, text in enumerate(l):
         text = text.strip()
         if step == 0:
@@ -40,11 +42,15 @@ def text_union(l):
             vote_table = [{char: 1} for char in text]
             before_text = text
             continue
+        if before_text1 == text:
+            continue
 
         for i in range(len(text)):
             before_text = before_text.strip()
             # diff_length = len(before_text) - len(text)
             text_parse = before_text[i:]
+           # print(text_parse)
+            #print(text)
             for j in range(len(text_parse)):
                 if j >= len(text):
                     break
@@ -53,7 +59,10 @@ def text_union(l):
                         count += 2
                     else:
                         count += 0
-            count += i
+            
+            #count += i
+            #print(count)
+            #print("\n")
             if count_max < count:
                 count_max = count
                 max_stop_id = i
@@ -73,10 +82,9 @@ def text_union(l):
                     vote_table[step].update({parts_text: 1})
 
         before_text = "".join(max(entry, key=entry.get) for entry in vote_table)
-        print(before_text)
-        print(" ")
-        print(count_max)
         count_max = 0
+        before_text1 = text
+        #print(vote_table)
 
     return "".join(max(entry, key=entry.get) for entry in vote_table), vote_table
 
