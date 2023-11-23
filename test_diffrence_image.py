@@ -27,10 +27,6 @@ cv2.imshow("b", before_frame)
 before_frame = cv2.cvtColor(before_frame, cv2.COLOR_BGR2GRAY)
 kernel = np.ones((3, 3), np.uint8)
 model = cv2.bgsegm.createBackgroundSubtractorMOG()
-<<<<<<< HEAD
-=======
-# for i in range(10):
->>>>>>> 1beaec42cd02ae959fd9e7d7615a35cf79e374d9
 mask = model.apply(before_frame)
 # print(last_insert_time)
 # arrow_img = cv2.imread("./ex6/ex63.jpg")
