@@ -77,7 +77,7 @@ def predict(model, scaler, pca, img):
     image_pc = pca.transform(image_scaled)
     prediction = model.predict(image_pc[-1].reshape(1, -1))
     prediction = str(prediction[0])
-    print(prediction)
+    # print(prediction)
     # 各クラスの確率を取得
     class_probabilities = model.predict_proba(image_pc[-1].reshape(1, -1))
 
@@ -86,7 +86,7 @@ def predict(model, scaler, pca, img):
 
     # 最大確率とそのクラスを出力
     max_prob = class_probabilities[0, max_prob_index]
-    print("最大確率:", max_prob)
+    # print("最大確率:", max_prob)
     return prediction, max_prob
 
 
