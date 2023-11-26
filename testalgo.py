@@ -1,24 +1,27 @@
 l = [
-    "jjGq_box_0.11m_PLA ",
-    "jjGq_box_0.11m_PLA ",
-    "jjGq_box_0.11m_PLA ",
-    "jjGq_box_0.11m_PLA ",
-    "GqabbexL015LLPlLuL ",
-    "GqabbexL015LLPlLuL ",
-    "GqabbexL015LLPlLuL ",
-    "GqabbexL015LLPlLuL ",
-    "q_box_G.15m_PLA_MK ",
-    "q_box_G.15m_PLA_MK ",
-    "q_box_G.15m_PLA_MK ",
-    "q_box_G.15m_PLA_MK ",
-    "_box_0.1LPLA_MK3 ",
-    "_box_0.1LPLA_MK3 ",
-    "_box_0.1LPLA_MK3 ",
-    "_box_0.1LPLA_MK3 ",
-    "box_0.15vLA_MK3_ ",
-    "box_0.15vLA_MK3_ ",
-    "box_0.15vLA_MK3_ ",
-    "box_0.15vLA_MK3_ ",
+    ["text"],
+    [
+        "jjGq_box_0.11m_PLA ",
+        "jjGq_box_0.11m_PLA ",
+        "jjGq_box_0.11m_PLA ",
+        "jjGq_box_0.11m_PLA ",
+        "GqabbexL015LLPlLuL ",
+        "GqabbexL015LLPlLuL ",
+        "GqabbexL015LLPlLuL ",
+        "GqabbexL015LLPlLuL ",
+        "q_box_G.15m_PLA_MK ",
+        "q_box_G.15m_PLA_MK ",
+        "q_box_G.15m_PLA_MK ",
+        "q_box_G.15m_PLA_MK ",
+        "_box_0.1LPLA_MK3 ",
+        "_box_0.1LPLA_MK3 ",
+        "_box_0.1LPLA_MK3 ",
+        "_box_0.1LPLA_MK3 ",
+        "box_0.15vLA_MK3_ ",
+        "box_0.15vLA_MK3_ ",
+        "box_0.15vLA_MK3_ ",
+        "box_0.15vLA_MK3_ ",
+    ],
 ]
 
 
@@ -89,6 +92,6 @@ def text_union(l):
     return "".join(max(entry, key=entry.get) for entry in vote_table), vote_table
 
 
-result, table = text_union(l)
+result, table = text_union(l[0])
 print(table)
 print(result)
