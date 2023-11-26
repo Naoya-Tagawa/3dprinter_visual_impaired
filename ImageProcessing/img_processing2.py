@@ -1539,3 +1539,16 @@ def diff_image_search_first(present_frame):
         return before_frame_row[0], before_frame_row[1], before_frame_row[2], before_frame_row[3], mask_present_img2
     else:
         return img, img, img, img, mask_present_img2
+
+
+def find_nearest_index(array, target):
+    array = np.asarray(array)
+    target = np.asarray(target)
+
+    # 距離の計算
+    distances = np.linalg.norm(array - target, axis=1)
+
+    # 最小距離のインデックスを返す
+    nearest_index = np.argmin(distances)
+
+    return nearest_index

@@ -16,6 +16,7 @@ from ImageProcessing.img_processing2 import (
     text_union,
     check_last_five_elements,
     diff_image_search_first,
+    find_nearest_index,
 )
 
 # flag = True: 音声出力
@@ -140,9 +141,12 @@ def diff_image_search(
             indices = []
             # 認識するものがないことを示す
             flg_count.append(1)
+        # print(present_char_List2)
 
         # print(indices)
-        for index, value in enumerate(indices):
+        # nearest_indexes = [find_nearest_index(present_char_List2, value) for value in indices]
+        # print(nearest_indexes)
+        for value in indices:
             if len(indices) == 0:
                 break
             elif len(indices) > 4:
@@ -188,13 +192,13 @@ def diff_image_search(
                     print("精度高い:")
                     print(out)
                     out = out.split(">")
-                    text_union_index = index
+                    text_union_index = value[0]
                     if out[1] != "":
                         text_union_output = out[1]
 
                     print(text_union_output)
                 else:
-                    output_union[index].append(out)
+                    output_union[value[0]].append(out)
 
                     # output_textx = output_textx + " The cursor points to "
                 # output_textx = output_textx + " \n" + out

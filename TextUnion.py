@@ -1,52 +1,26 @@
-from Bio import Align
-from Bio.Seq import Seq
+import numpy as np
 
 
-def merge_multiple_sequences(*sequences):
-    aligner = Align.PairwiseAligner()
+def find_nearest_index(array, target):
+    array = np.asarray(array)
+    target = np.asarray(target)
 
-    # Biopython Seqオブジェクトに変換
-    seq_objects = [Seq(seq) for seq in sequences]
+    # 距離の計算
+    distances = np.linalg.norm(array - target, axis=1)
 
-    # 一つ目のシーケンスと他のシーケンスを順番にアラインメントしてマージ
-    merged_seq = seq_objects[0]
-    for seq in seq_objects[1:]:
-        alignments = aligner.align(merged_seq, seq)
-        if alignments:
-            aligned_seq1, aligned_seq2 = alignments[0].aligned
-            overlap_start = aligned_seq1[0]
-            overlap_end = aligned_seq1[-1] + 1  # endはスライスに含まれないので+1
-            merged_seq = merged_seq[:overlap_start] + seq[overlap_end:]
-        else:
-            # アラインメントが見つからなかった場合、単純に連結
-            merged_seq += seq
+    # 最小距離のインデックスを返す
+    nearest_index = np.argmin(distances)
 
-    return str(merged_seq)
+    return nearest_index
 
 
-# テスト
-text1 = "GGGGHHHko"
-text2 = "kko.code"
-text3 = "ko.code"
-output_union = [
-    "plejjjGq_box_0.15mm ",
-    "lejjjGq_box_0.15mm_ ",
-    "ejjjGq_box_0.15mm_P ",
-    "jjjGq_box_0.15mm_Pl ",
-    "jGq_box_0.15mm_PLA_ ",
-    "Gq_box_0Ll5mm_PLA_M ",
-    "x_0.l5mm_PLA_MK3_17 ",
-]
-result = output_union[0]
-result = result.strip()
-for i, text in enumerate(output_union[1:]):
-    print(result[i + 1 :])
-    py = text.strip()
-    print("py")
-    print(py)
-    print("jokyo")
-    print(py.replace(result[i + 1 :], ""))
-    if py.replace(result[i + 1 :], "") != py:
-        result += py.replace(result[i + 1 :], "")
-    print(result)
-print(result)
+# 入力データ
+data = np.array([[253.0, 288.0], [292.0, 328.0], [332.0, 368.0], [371.0, 409.0]])
+
+# ターゲット値
+target_value = np.array([292.0, 328.0])
+
+# 最も近い行のインデックスを取得
+result_index = find_nearest_index(data, target_value)
+
+print("最も近い行のインデックス:", result_index)
