@@ -99,6 +99,7 @@ def diff_image_search(
     kernel = np.ones((3, 3), np.uint8)
     model = cv2.createBackgroundSubtractorMOG2(history=3, detectShadows=False)
     while True:
+        bad_acuuracy_flg = []
         frame = present_frame.get()
         last_insert_time = time.time()
         # arrow_img = cv2.imread("./ex6/ex63.jpg")
@@ -223,7 +224,9 @@ def diff_image_search(
             # cut_present1 = mask_present_img[int(j[0]):int(j[1]),]
 
             if sabun_count > 3:
-                out = TextRecog(model_pca, scaler, pca, cut_present)
+                out, acuuracy = TextRecog(model_pca, scaler, pca, cut_present)
+                if acuuracy < 0.9:
+                    bad_acuuracy_flg.append(False)
 
                 # out = recog_text(cut_present)
                 # 矢印があるかどうか判定
@@ -246,6 +249,9 @@ def diff_image_search(
             sabun_count = 0
 
         # count += 1
+        if all(bad_acuuracy_flg) == False:
+            mask = model.apply(before_frame)
+            continue
 
         if flg != 1:
             for i in present_char_List2:

@@ -46,6 +46,9 @@ def text_union(l):
         if before_text1 == text:
             continue
 
+        if before_text1 == text:
+            continue
+
         for i in range(len(text)):
             before_text = before_text.strip()
             # diff_length = len(before_text) - len(text)
@@ -79,6 +82,7 @@ def text_union(l):
 
         before_text = "".join(max(entry, key=entry.get) for entry in vote_table)
         count_max = 0
+        before_text1 = text
 
     return "".join(max(entry, key=entry.get) for entry in vote_table)
 
@@ -176,8 +180,10 @@ def diff_image_search(
     model = cv2.createBackgroundSubtractorMOG2(history=3, detectShadows=False)
     flg_count = []
     while True:
+        bad_accuracy_flg = []
         frame = present_frame.get()
         last_insert_time = time.time()
+        output = ""
         # print(last_insert_time)
         # arrow_img = cv2.imread("./ex6/ex63.jpg")
         # h,w,d = frame.shape
@@ -314,19 +320,24 @@ def diff_image_search(
             # cut_present1 = mask_present_img[int(j[0]):int(j[1]),]
             # print(sabun_count)
             if sabun_count > 3:
-                out = TextRecog(model_pca, scaler, pca, cut_present)
-                print("正規の文:")
-                print(out)
+                out, accuracy = TextRecog(model_pca, scaler, pca, cut_present)
+                if accuracy < 0.9:
+                    bad_accuracy_flg.append(False)
+                    print("破棄:")
+                    print(out)
+                    continue
 
                 # out = recog_text(cut_present)
                 # 矢印があるかどうか判定
                 if out[0:1] == ">":
                     sabun_count = 0
-                    print("一文:")
+                    print("精度高い:")
                     print(out)
                     out = out.split(">")
-                    out = out[1]
-                    print(out)
+                    if out[1] != "":
+                        output = out[1]
+
+                    print(output)
 
                     # output_textx = output_textx + " The cursor points to "
                 # output_textx = output_textx + " \n" + out
@@ -344,10 +355,14 @@ def diff_image_search(
             # if arrow_exist(cut_present):
             # before_frame_row.append(cut_present)
             sabun_count = 0
+        if all(bad_accuracy_flg) == False:
+            mask = model.apply(before_frame)
+            continue
 
-        #
         print(check_last_five_elements(flg_count))
-        if (check_last_five_elements(flg_count) == False) & len(out) != 0:
+        if (check_last_five_elements(flg_count) == False) and (output != ""):
+            output_union.append(output)
+            print("output_union:" + str(output_union))
             for i in present_char_List2:
                 if l2 == 0:
                     break
@@ -355,13 +370,11 @@ def diff_image_search(
                     break
                 cut_present = mask_present_img2[int(i[0]) : int(i[1]),]
                 before_frame_row.append(cut_present)
-                output_union.append(out)
-                print("output_union:" + str(output_union))
             out = ""
-        elif check_last_five_elements(flg_count) == True:
+        elif (check_last_five_elements(flg_count) == True) and (output_union != []):
             result = text_union(output_union)
             output_text.put(result)
-            print("reslut " + str(result))
+            print("result " + str(result))
             result = ""
             flg_count = []
             output_union = []
