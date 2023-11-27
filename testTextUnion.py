@@ -35,12 +35,15 @@ def text_union(l):
     count = 0
     max_stop_id = 0
     max_last_stop_id = 0
+    before_text1 = ""
     for step, text in enumerate(l):
         text = text.strip()
         if step == 0:
             # 投票テーブルの更新
             vote_table = [{char: 1} for char in text]
             before_text = text
+            continue
+        if before_text1 == text:
             continue
 
         for i in range(len(text)):
