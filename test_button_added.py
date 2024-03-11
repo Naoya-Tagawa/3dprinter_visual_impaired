@@ -314,7 +314,6 @@ def all_image_deal(
     blue_threshold_present_img = cut_blue_img2(frame)
     present_char_List2, mask_present_img2 = mask_make(blue_threshold_present_img)
     mask_frame = mask_present_img2.copy()
-    before_frame = before_frame.astype("float")
     l2 = len(present_char_List2)
     output_textx = ""
 
@@ -369,7 +368,7 @@ def all_image_deal(
             break
         elif len(present_char_List2) > 4:
             break
-        cut_present = mask_present_img2[int(present_char_List2[value[0]][0]) : int(present_char_List2[value[0]][1]),]
+        cut_present = mask_present_img2[int(value[0]) : int(value[1]),]
 
         # cut_present1 = mask_present_img[int(j[0]):int(j[1]),]
         # print(sabun_count)
@@ -501,6 +500,8 @@ if __name__ == "__main__":
         # sがおされたら
         elif cv2.waitKey(1) & 0xFF == ord("s"):
             text = all_image_deal(frame, model, scaler, pca)
-            text_read(text)
+            output_text.put(text)
+            print(text)
+            # text_read(text)
 
     read.join()
