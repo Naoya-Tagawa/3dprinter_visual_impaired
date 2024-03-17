@@ -16,7 +16,6 @@ from ImageProcessing.img_processing2 import (
     text_union,
     check_last_five_elements,
     diff_image_search_first,
-    find_nearest_index,
 )
 
 # flag = True: 音声出力
