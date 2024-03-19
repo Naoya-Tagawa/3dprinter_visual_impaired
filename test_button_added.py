@@ -42,7 +42,6 @@ def diff_image_search(
     model = cv2.createBackgroundSubtractorMOG2(history=3, detectShadows=False)
     flg_count = []
     text_union_index = 0
-    before_text_union_index = 0
     result = ""
     while True:
         if len(flg_count) > 15:
@@ -103,7 +102,8 @@ def diff_image_search(
         cv2.imwrite("framediff.jpg", frame_diff)
         # cv2.imshow("before.jpg",before_frame)
 
-        # cv2.imshow("mas",mask_present_img2)
+        # cv2.imshow("mas",frame_diff)
+        # cv2.waitKey(0)
         # plt.show()
         # img = cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
         present_char_List1 = make_char_list(frame_diff)
@@ -140,6 +140,7 @@ def diff_image_search(
             indices = []
             # 認識するものがないことを示す
             flg_count.append(1)
+            print("認識するものなし")
         # print(present_char_List2)
 
         # print(indices)
@@ -180,22 +181,23 @@ def diff_image_search(
                 out, accuracy = TextRecog(model_pca, scaler, pca, cut_present)
                 if accuracy < 0.9:
                     bad_accuracy_flg.append(False)
-                    print("破棄:")
-                    print(out)
+                    # print("破棄:")
+                    # print(out)
                     continue
-
+            
+                    
                 # out = recog_text(cut_present)
                 # 矢印があるかどうか判定
                 if out[0:1] == ">":
                     sabun_count = 0
-                    print("精度高い:")
-                    print(out)
+                    # print("精度高い:")
+                    # print(out)
                     out = out.split(">")
                     text_union_index = value[0]
                     if out[1] != "":
                         text_union_output = out[1]
 
-                    print(text_union_output)
+                    
                 else:
                     output_union[value[0]].append(out)
 
@@ -242,10 +244,10 @@ def diff_image_search(
                         output = ""
                 result = result + output + "\n"
             output_text.put(result)
+            print(result)
             result = ""
             flg_count = []
             output_union = [[], [], [], []]
-
         # start1 = time.perf_counter()
         # end1 = time.perf_counter()
         # mask_present_img2,judge = arrow_exist_judge(mask_present_img2)
@@ -408,7 +410,7 @@ def all_image_deal(
 if __name__ == "__main__":
     # テンプレートをロード
     model, scaler, pca = load_model()
-    cap = cv2.VideoCapture(0)
+    cap = cv2.VideoCapture(1)
     read_fps = cap.get(cv2.CAP_PROP_FPS)
     print(read_fps)
     voice_flag = multiprocessing.Value("i", 0)
@@ -472,9 +474,9 @@ if __name__ == "__main__":
         # per = (dst2_count / dst1_count) * 100
         # print(dst1_count)
         # print(dst2_count)
-        if count == 2:
+        if count == 5:
             base = frame + base
-            base = base / 3
+            base = base / 6
             base = base.astype(np.uint8)
             # cv2.imwrite("base17.jpg",base)
             present_frame.put(base)
@@ -499,6 +501,7 @@ if __name__ == "__main__":
         # sがおされたら
         elif cv2.waitKey(1) & 0xFF == ord("s"):
             text = all_image_deal(frame, model, scaler, pca)
+            print("all text")
             output_text.put(text)
             print(text)
             # text_read(text)

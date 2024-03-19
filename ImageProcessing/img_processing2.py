@@ -1469,17 +1469,17 @@ def text_union(l):
 # リストの中に1ガ連続して5つ以上あるかを判定
 def check_last_five_elements(lst):
     # リストの長さが5未満の場合は条件を満たすことができません
-    if len(lst) < 5:
+    if len(lst) < 3:
         return False
 
     # リストの後ろから5つの要素が全て1であるかを判定
-    last_five_elements_are_ones = all(x == 1 for x in lst[-5:])
+    last_five_elements_are_ones = all(x == 1 for x in lst[-3:])
 
     # リスト全体から1の要素の数を数える
     count_of_ones = lst.count(1)
 
     # 条件を満たす要素が5つ以上あるかを判定
-    return last_five_elements_are_ones and count_of_ones >= 5
+    return last_five_elements_are_ones and count_of_ones >= 3
 
 
 # 画像の差分検知(はじめ)
