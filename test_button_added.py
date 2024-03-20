@@ -35,6 +35,7 @@ def diff_image_search(
     pca,
 ):
     img = cv2.imread("./MaskBlack/balck_img.jpg")
+    all_change_flag = 0
     output_union = [[], [], [], []]
     last_insert_time = time.time()
     img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
@@ -46,6 +47,7 @@ def diff_image_search(
     while True:
         if len(flg_count) > 15:
             flg_count = []
+            output_union = [[], [], [], []]
         bad_accuracy_flg = []
         frame = present_frame.get()
         last_insert_time = time.time()
@@ -178,11 +180,12 @@ def diff_image_search(
             # cut_present1 = mask_present_img[int(j[0]):int(j[1]),]
             # print(sabun_count)
             if sabun_count > 3:
+                all_change_flag += 1
                 out, accuracy = TextRecog(model_pca, scaler, pca, cut_present)
                 if accuracy < 0.9:
                     bad_accuracy_flg.append(False)
-                    # print("破棄:")
-                    # print(out)
+                    print("破棄:")
+                    print(out)
                     continue
             
                     
@@ -220,6 +223,25 @@ def diff_image_search(
         if all(bad_accuracy_flg) == False:
             mask = model.apply(before_frame)
             continue
+        if all_change_flag > 3:
+            all_change_flag = 0
+            print("がめんせんい")
+            print("output_union:" + str(output_union))
+            for index, text_list in enumerate(output_union):
+                if index == text_union_index:
+                    output = "The cursor points to " + text_union(text_list)
+                else:
+                    try:
+                        output = text_list[0]
+                    except IndexError:
+                        output = ""
+                result = result + output + "\n"
+            output_text.put(result)
+            print(result)
+            result = ""
+            flg_count = []
+            output_union = [[], [], [], []]
+            
 
         if (check_last_five_elements(flg_count) == False) and (text_union_output != ""):
             output_union[text_union_index].append(text_union_output)
