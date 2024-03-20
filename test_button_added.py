@@ -42,7 +42,7 @@ def diff_image_search(
     kernel = np.ones((3, 3), np.uint8)
     model = cv2.createBackgroundSubtractorMOG2(history=3, detectShadows=False)
     flg_count = []
-    text_union_index = 0
+    text_union_index = -1
     result = ""
     while True:
         if len(flg_count) > 15:
@@ -187,8 +187,7 @@ def diff_image_search(
                     print("破棄:")
                     print(out)
                     continue
-            
-                    
+
                 # out = recog_text(cut_present)
                 # 矢印があるかどうか判定
                 if out[0:1] == ">":
@@ -200,7 +199,6 @@ def diff_image_search(
                     if out[1] != "":
                         text_union_output = out[1]
 
-                    
                 else:
                     output_union[value[0]].append(out)
 
@@ -241,7 +239,6 @@ def diff_image_search(
             result = ""
             flg_count = []
             output_union = [[], [], [], []]
-            
 
         if (check_last_five_elements(flg_count) == False) and (text_union_output != ""):
             output_union[text_union_index].append(text_union_output)
@@ -259,6 +256,8 @@ def diff_image_search(
             for index, text_list in enumerate(output_union):
                 if index == text_union_index:
                     output = "The cursor points to " + text_union(text_list)
+                    # -1のときは、カーソルがない
+                    text_union_index = -1
                 else:
                     try:
                         output = text_list[0]
