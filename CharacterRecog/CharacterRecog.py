@@ -352,6 +352,8 @@ def TextRecog(model, scaler, pca, frame):
         prediction, acurracy = predict(model, scaler, pca, match_img)
         sum_recog_accuracy += acurracy
         recog_count += 1
+        if prediction == "→":
+            prediction = " "
         # print(prediction)
         if (j != 0) & (char_List2[j] > (width_m + char_List2[j - 1])):
             if (j + 1) == len(char_List2) - 1:
