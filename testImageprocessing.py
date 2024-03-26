@@ -187,8 +187,7 @@ def diff_image_search(
                     print("破棄:")
                     print(out)
                     continue
-                
-                    
+
                 # out = recog_text(cut_present)
                 # 矢印があるかどうか判定
                 if out[0:1] == ">":
@@ -319,7 +318,7 @@ def all_image_deal(
     cv2.imshow("rame", blue_threshold_present_img)
     cv2.waitKey(0)
     p1, p2, p3, p4 = points_extract2(blue_threshold_present_img)
-    img_dst=projective_transformation(img, p1, p2, p3, p4)
+    img_dst = projective_transformation(img, p1, p2, p3, p4)
     cv2.imshow("img_dst", img_dst)
     cv2.waitKey(0)
     present_char_List2, mask_present_img2 = mask_make(blue_threshold_present_img)
@@ -353,7 +352,7 @@ def all_image_deal(
         # cv2.imwrite("raaa.jpg",frame_diff)
     # mask_frame[mask == 0] = 0
 
-    cv2.imshow("gg",mask_frame)
+    cv2.imshow("gg", mask_frame)
     cv2.waitKey(0)
     # p1,p2,p3,p4 = points_extract2(blue)
     # except TypeError:
@@ -379,7 +378,7 @@ def all_image_deal(
         elif len(present_char_List2) > 4:
             break
         cut_present = mask_present_img2[int(value[0]) : int(value[1]),]
-        cv2.imshow("k",cut_present)
+        cv2.imshow("k", cut_present)
         cv2.waitKey(0)
         # cut_present1 = mask_present_img[int(j[0]):int(j[1]),]
         # print(sabun_count)
@@ -423,7 +422,7 @@ if __name__ == "__main__":
     # 画面内の音声を出力するためのフラグ
 
     # 最初のフレームを取得する
-    bg = cv2.imread('./dataset_make/calibration/testImage/cameraca.jpg')
+    bg = cv2.imread("./dataset_make/calibration/testImage/cameraca.jpg")
     frame = bg
     count = 0
     before = bg

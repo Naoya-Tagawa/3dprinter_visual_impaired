@@ -294,20 +294,22 @@ def points_extract2(img):
     x_point = la[:, 0]
     la = la[np.argsort(x_point)]
     l_distance = [math.sqrt(x * x + y * y) for x, y in la]
-    print(l_distance)
     min_index = l_distance.index(min(l_distance))
     reverse_l_distance = l_distance[::-1]
     max_index = l_distance.index(max(reverse_l_distance))
     # print(ly)
     min_x = int(la[min_index][0])
+    min_y = int(la[min_index][1])
     max_x = int(la[max_index][0])
-    # print(min_x)
-    # print(max_x)
-    # print(int(la[min_index][1]))
-    # print(int(la[max_index][1]))
+    max_y = int(la[max_index][1])
+    print(min_x)
+    print(max_x)
+    print(int(la[min_index][1]))
+    print(int(la[max_index][1]))
     mi_x = [[x, y] for x, y in la if x - min_x <= 30]
     minmax_distance = [math.sqrt(x * x + y * y) for x, y in mi_x]
     minmax_index = minmax_distance.index(max(minmax_distance))
+    print(mi_x)
     # 左下
     # print("左hした")
     # print(mi_x[minmax_index][0])
@@ -330,20 +332,28 @@ def points_extract2(img):
     # 左うえ
     # min_1 = [int(mi_x[0][0]),int(mi_x[0][1])]
     min_1 = [int(la[min_index][0]), int(la[min_index][1])]
-    # print(int(la[max_index][1]))
+    print("左上")
+    print(min_1)
     near_min_1 = func_search_neighbourhood(min_1, mi_x[1:])
     # 右上
     # max_1 = [int(ma_x[0][0]),int(ma_x[0][1])]
-    max_1 = [int(ma_x[maxmin_index][0]), int(ma_x[maxmin_index][1])]
-
+    # max_1 = [int(ma_x[maxmin_index][0]), int(ma_x[maxmin_index][1])]
+    print("右上")
+    max_1 = func_search_neighbourhood([max_x, min_y], ma_x[1:])
+    print(max_1)
     near_max_1 = func_search_neighbourhood(max_1, ma_x[1:])
     # 左下
     # min_2 = [int(mi_x[-1][0]),int(mi_x[-1][1])]
-    min_2 = [int(mi_x[minmax_index][0]), int(mi_x[minmax_index][1])]
+    # min_2 = [int(mi_x[minmax_index][0]), int(mi_x[minmax_index][1])]
+    print("左下")
+    min_2 = func_search_neighbourhood([min_x, max_y], mi_x[:-1])
+    print(min_2)
     near_min_2 = func_search_neighbourhood(min_2, mi_x[:-1])
     # 右下
     # max_2 = [int(ma_x[-1][0]),int(ma_x[-1][1])]
     max_2 = [int(la[max_index][0]), int(la[max_index][1])]
+    print("右下")
+    print(max_2)
     near_max_2 = func_search_neighbourhood(max_2, ma_x[:-1])
     # print(near_max_2)
     # print(max_2)
@@ -370,15 +380,15 @@ def points_extract2(img):
     # de_position = pd.read_csv(io.BytesIO(ly))
     # print(de_position)
     # 小さい輪郭は誤検出として削除する
-    #contours = list(filter(lambda x: cv2.contourArea(x) > 100, contours))
+    # contours = list(filter(lambda x: cv2.contourArea(x) > 100, contours))
 
     # 輪郭を描画する。
-    #cv2.drawContours(img, contours, -1, color=(0, 0, 255), thickness=3)
+    # cv2.drawContours(img, contours, -1, color=(0, 0, 255), thickness=3)
 
-    #plt.imshow(img)
-    #plt.show()
+    # plt.imshow(img)
+    # plt.show()
     plt.imshow(cv2.cvtColor(img, cv2.COLOR_BGR2RGB))
-    plt.scatter([p1[0], p2[0], p3[0], p4[0]], [p1[1], p2[1], p3[1], p4[1]], color='red')
+    plt.scatter([p1[0], p2[0], p3[0], p4[0]], [p1[1], p2[1], p3[1], p4[1]], color="red")
     plt.show()
     return p1, p2, p3, p4
 
