@@ -114,7 +114,7 @@ def cut_blue_img1(img):
 
 def cut_blue_img2(img):
     # γ変換の値
-    gamma = 0.24
+    gamma = 0.21
     # γ変換の対応表を作る
     LUT_Table = np.zeros((256, 1), dtype="uint8")
     for i in range(len(LUT_Table)):
@@ -128,10 +128,12 @@ def cut_blue_img2(img):
     average_color = np.average(average_color_per_row, axis=0)
     average_color = np.uint8(average_color)
     # ブルーの最小値
-    blue_min = np.array([100, 130, 180], np.uint8)
+    blue_min = np.array([90, 130, 180], np.uint8)
     # ブルーの最大値
     blue_max = np.array([120, 255, 255], np.uint8)
     threshold_blue_img = cv2.inRange(img_hsv, blue_min, blue_max)
+    cv2.imshow("threshold_blue_img", threshold_blue_img)
+    cv2.waitKey(0)
     # threshold_blue_img = cv2.cvtColor(threshold_blue_img,cv2.COLOR_GRAY2RGB)
     kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (7, 7))
     close_img = cv2.morphologyEx(threshold_blue_img, cv2.MORPH_CLOSE, kernel, iterations=1)
@@ -292,6 +294,7 @@ def points_extract2(img):
     x_point = la[:, 0]
     la = la[np.argsort(x_point)]
     l_distance = [math.sqrt(x * x + y * y) for x, y in la]
+    print(l_distance)
     min_index = l_distance.index(min(l_distance))
     reverse_l_distance = l_distance[::-1]
     max_index = l_distance.index(max(reverse_l_distance))
@@ -367,13 +370,16 @@ def points_extract2(img):
     # de_position = pd.read_csv(io.BytesIO(ly))
     # print(de_position)
     # 小さい輪郭は誤検出として削除する
-    # contours = list(filter(lambda x: cv2.contourArea(x) > 100, contours))
+    #contours = list(filter(lambda x: cv2.contourArea(x) > 100, contours))
 
     # 輪郭を描画する。
-    # cv2.drawContours(img2, contours, -1, color=(0, 0, 255), thickness=3)
+    #cv2.drawContours(img, contours, -1, color=(0, 0, 255), thickness=3)
 
-    # plt.imshow(img2)
-    # plt.show()
+    #plt.imshow(img)
+    #plt.show()
+    plt.imshow(cv2.cvtColor(img, cv2.COLOR_BGR2RGB))
+    plt.scatter([p1[0], p2[0], p3[0], p4[0]], [p1[1], p2[1], p3[1], p4[1]], color='red')
+    plt.show()
     return p1, p2, p3, p4
 
 

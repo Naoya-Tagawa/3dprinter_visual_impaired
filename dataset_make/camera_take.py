@@ -14,7 +14,7 @@ while True:
     count +=1
     key = cv2.waitKey(1) & 0XFF
     if key == ord('c'):
-        cv2.imwrite("./cha_dataset/camera1.jpg".format(count),frame)
+        cv2.imwrite("./dataset_make/calibration/testImage/cameraca.jpg".format(count),frame)
         count +=1
     elif key == ord('q'):
         break

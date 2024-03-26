@@ -438,7 +438,7 @@ def diff_image_search(
 if __name__ == "__main__":
     # テンプレートをロード
     model, scaler, pca = load_model()
-    cap = cv2.VideoCapture(0)
+    cap = cv2.VideoCapture(1)
     read_fps = cap.get(cv2.CAP_PROP_FPS)
     print(read_fps)
     voice_flag = multiprocessing.Value("i", 0)

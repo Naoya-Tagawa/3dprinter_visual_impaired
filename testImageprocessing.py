@@ -16,6 +16,8 @@ from ImageProcessing.img_processing2 import (
     text_union,
     check_last_five_elements,
     diff_image_search_first,
+    points_extract2,
+    projective_transformation,
 )
 
 # flag = True: 音声出力
@@ -51,6 +53,8 @@ def diff_image_search(
         last_insert_time = time.time()
         text_union_output = ""
         blue_threshold_present_img = cut_blue_img2(frame)
+        cv2.imshow("rame", blue_threshold_present_img)
+        cv2.waitKey(0)
         before_frame_row = []
         sabun_count = 0
         present_char_List2, mask_present_img2 = mask_make(blue_threshold_present_img)
@@ -312,6 +316,12 @@ def all_image_deal(
     img = cv2.imread("./MaskBlack/balck_img.jpg")
     img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
     blue_threshold_present_img = cut_blue_img2(frame)
+    cv2.imshow("rame", blue_threshold_present_img)
+    cv2.waitKey(0)
+    p1, p2, p3, p4 = points_extract2(blue_threshold_present_img)
+    img_dst=projective_transformation(img, p1, p2, p3, p4)
+    cv2.imshow("img_dst", img_dst)
+    cv2.waitKey(0)
     present_char_List2, mask_present_img2 = mask_make(blue_threshold_present_img)
     mask_frame = mask_present_img2.copy()
     l2 = len(present_char_List2)
@@ -413,7 +423,7 @@ if __name__ == "__main__":
     # 画面内の音声を出力するためのフラグ
 
     # 最初のフレームを取得する
-    bg = cv2.imread('./cha_dataset/camera1.jpg')
+    bg = cv2.imread('./dataset_make/calibration/testImage/cameraca.jpg')
     frame = bg
     count = 0
     before = bg

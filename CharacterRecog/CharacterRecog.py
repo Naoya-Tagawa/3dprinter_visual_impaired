@@ -318,7 +318,7 @@ def TextRecog(model, scaler, pca, frame):
     # 高さ、幅を保持
     kernel = np.ones((3, 3), np.uint8)
     height, width = img_mask.shape
-    img_mask = cv2.erode(img_mask, kernel, iterations=1)
+    #img_mask = cv2.erode(img_mask, kernel, iterations=1)
     # img_mask = cv2.erode(img_mask,np.ones((5,5),np.uint8),iterations=1)
     # cv2.imshow("ll",img_erode)
     # cv2.waitKey(0)
@@ -330,7 +330,8 @@ def TextRecog(model, scaler, pca, frame):
     out_modify = ""  # 修正したテキスト
     out = ""  # 読み取ったテキスト
     # print(char_List2)
-    img_mask = cv2.dilate(img_mask, kernel, iterations=1)
+    #img_mask = cv2.erode(img_mask, kernel, iterations=1)
+    #img_mask = cv2.dilate(img_mask, kernel, iterations=1)
 
     for j in range(0, len(char_List2) - 1, 2):
         # end_time = time.perf_counter()
