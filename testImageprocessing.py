@@ -318,10 +318,10 @@ def all_image_deal(
     cv2.imshow("rame", blue_threshold_present_img)
     cv2.waitKey(0)
     p1, p2, p3, p4 = points_extract2(blue_threshold_present_img)
-    img_dst = projective_transformation(img, p1, p2, p3, p4)
+    img_dst = projective_transformation(blue_threshold_present_img, p1, p2, p3, p4)
     cv2.imshow("img_dst", img_dst)
     cv2.waitKey(0)
-    present_char_List2, mask_present_img2 = mask_make(blue_threshold_present_img)
+    present_char_List2, mask_present_img2 = mask_make(img_dst)
     mask_frame = mask_present_img2.copy()
     l2 = len(present_char_List2)
     output_textx = ""

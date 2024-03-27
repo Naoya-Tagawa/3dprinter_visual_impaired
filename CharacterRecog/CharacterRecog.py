@@ -318,7 +318,7 @@ def TextRecog(model, scaler, pca, frame):
     # 高さ、幅を保持
     kernel = np.ones((3, 3), np.uint8)
     height, width = img_mask.shape
-    #img_mask = cv2.erode(img_mask, kernel, iterations=1)
+    # img_mask = cv2.erode(img_mask, kernel, iterations=1)
     # img_mask = cv2.erode(img_mask,np.ones((5,5),np.uint8),iterations=1)
     # cv2.imshow("ll",img_erode)
     # cv2.waitKey(0)
@@ -330,8 +330,8 @@ def TextRecog(model, scaler, pca, frame):
     out_modify = ""  # 修正したテキスト
     out = ""  # 読み取ったテキスト
     # print(char_List2)
-    #img_mask = cv2.erode(img_mask, kernel, iterations=1)
-    #img_mask = cv2.dilate(img_mask, kernel, iterations=1)
+    # img_mask = cv2.erode(img_mask, kernel, iterations=1)
+    # img_mask = cv2.dilate(img_mask, kernel, iterations=1)
 
     for j in range(0, len(char_List2) - 1, 2):
         # end_time = time.perf_counter()
@@ -346,11 +346,18 @@ def TextRecog(model, scaler, pca, frame):
         except cv2.error:
             return ""
         height_m, width_m = match_img.shape
-        # cv2.imshow("kk",match_img)
+        # cv2.imshow("kk", match_img)
         # cv2.waitKey(0)
         # cv2.imwrite("match{0}.jpg".format(j),match_img)
 
         prediction, acurracy = predict(model, scaler, pca, match_img)
+        if acurracy < 0.9:
+            match_img = cv2.erode(match_img, kernel, iterations=1)
+            prediction1, acurracy2 = predict(model, scaler, pca, match_img)
+            if acurracy < acurracy2:
+                prediction = prediction1
+                acurracy = acurracy2
+
         sum_recog_accuracy += acurracy
         recog_count += 1
         if prediction == "→":

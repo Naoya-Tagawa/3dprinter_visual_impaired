@@ -42,8 +42,10 @@ def mask_make(blue_threshold_present_img):
     cv2.imwrite("mask.png", mask_present_img2)
 
     height_present, width_present = mask_present_img2.shape
-
+    kernel = np.ones((3, 3), np.uint8)
+    mask_present_img2 = cv2.erode(mask_present_img2, kernel, iterations=1)
     array_present_H = Projection_H(mask_present_img2, height_present, width_present)
+    mask_present_img2 = cv2.dilate(mask_present_img2, kernel, iterations=1)
     presentH_THRESH = max(array_present_H)
     present_char_List = Detect_HeightPosition(presentH_THRESH, height_present, array_present_H)
     # print(present_char_List)
@@ -302,14 +304,14 @@ def points_extract2(img):
     min_y = int(la[min_index][1])
     max_x = int(la[max_index][0])
     max_y = int(la[max_index][1])
-    print(min_x)
-    print(max_x)
-    print(int(la[min_index][1]))
-    print(int(la[max_index][1]))
+    # print(min_x)
+    # print(max_x)
+    # print(int(la[min_index][1]))
+    # print(int(la[max_index][1]))
     mi_x = [[x, y] for x, y in la if x - min_x <= 30]
     minmax_distance = [math.sqrt(x * x + y * y) for x, y in mi_x]
     minmax_index = minmax_distance.index(max(minmax_distance))
-    print(mi_x)
+    # print(mi_x)
     # 左下
     # print("左hした")
     # print(mi_x[minmax_index][0])
@@ -318,7 +320,7 @@ def points_extract2(img):
     mi_x = mi_x.ravel()
     ma_x = [[x, y] for x, y in la if max_x - x <= 30]
     maxmin_distance = [math.sqrt(x * x + y * y) for x, y in ma_x]
-    maxmin_index = maxmin_distance.index(min(maxmin_distance))
+    # maxmin_index = maxmin_distance.index(min(maxmin_distance))
     # print("右上")
     # print(ma_x[maxmin_index][0],ma_x[maxmin_index][1])
     ma_x = np.array(ma_x)
@@ -332,28 +334,28 @@ def points_extract2(img):
     # 左うえ
     # min_1 = [int(mi_x[0][0]),int(mi_x[0][1])]
     min_1 = [int(la[min_index][0]), int(la[min_index][1])]
-    print("左上")
-    print(min_1)
+    # print("左上")
+    # print(min_1)
     near_min_1 = func_search_neighbourhood(min_1, mi_x[1:])
     # 右上
     # max_1 = [int(ma_x[0][0]),int(ma_x[0][1])]
     # max_1 = [int(ma_x[maxmin_index][0]), int(ma_x[maxmin_index][1])]
-    print("右上")
+    # print("右上")
     max_1 = func_search_neighbourhood([max_x, min_y], ma_x[1:])
-    print(max_1)
+    # print(max_1)
     near_max_1 = func_search_neighbourhood(max_1, ma_x[1:])
     # 左下
     # min_2 = [int(mi_x[-1][0]),int(mi_x[-1][1])]
     # min_2 = [int(mi_x[minmax_index][0]), int(mi_x[minmax_index][1])]
-    print("左下")
+    # print("左下")
     min_2 = func_search_neighbourhood([min_x, max_y], mi_x[:-1])
-    print(min_2)
+    # print(min_2)
     near_min_2 = func_search_neighbourhood(min_2, mi_x[:-1])
     # 右下
     # max_2 = [int(ma_x[-1][0]),int(ma_x[-1][1])]
     max_2 = [int(la[max_index][0]), int(la[max_index][1])]
-    print("右下")
-    print(max_2)
+    # print("右下")
+    # print(max_2)
     near_max_2 = func_search_neighbourhood(max_2, ma_x[:-1])
     # print(near_max_2)
     # print(max_2)
@@ -387,9 +389,9 @@ def points_extract2(img):
 
     # plt.imshow(img)
     # plt.show()
-    plt.imshow(cv2.cvtColor(img, cv2.COLOR_BGR2RGB))
-    plt.scatter([p1[0], p2[0], p3[0], p4[0]], [p1[1], p2[1], p3[1], p4[1]], color="red")
-    plt.show()
+    # plt.imshow(cv2.cvtColor(img, cv2.COLOR_BGR2RGB))
+    # plt.scatter([p1[0], p2[0], p3[0], p4[0]], [p1[1], p2[1], p3[1], p4[1]], color="red")
+    # plt.show()
     return p1, p2, p3, p4
 
 
