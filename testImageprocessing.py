@@ -316,16 +316,37 @@ def all_image_deal(
     img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
     blue_threshold_present_img = cut_blue_img2(frame)
     cv2.imshow("rame", blue_threshold_present_img)
-    cv2.waitKey(0)
+    
+#    # チェスボード画像から算出したカメラパラメータを設定
+#     fx = 559.3006089
+#     fy = 559.46292818
+#     Cx = 309.64749103
+#     Cy = 228.93980934
+#     mtx = np.array([[fx, 0, Cx],[0, fy, Cy],[0, 0, 1]])
+
+#     # チェスボード画像から算出した歪係数を設定
+#     k1 = -0.02672116
+#     k2 = 0.09299264
+#     p1 = -0.00760871
+#     p2 = -0.00255127
+#     k3 = -0.61769096
+#     dist = np.array([[k1, k2, p1, p2, k3]])
+#     h,w = blue_threshold_present_img.shape[:2]
+#     newcameramtx, roi = cv2.getOptimalNewCameraMatrix(mtx, dist, (w,h), 1, (w,h))
+#     cv2.imshow("henkei", blue_threshold_present_img)
+#     cv2.waitKey(0)
+    # Method 1 to undistort the image
+    # blue_threshold_present_img = cv2.undistort(blue_threshold_present_img, mtx, dist, None, newcameramtx)
     p1, p2, p3, p4 = points_extract2(blue_threshold_present_img)
-    img_dst = projective_transformation(blue_threshold_present_img, p1, p2, p3, p4)
-    cv2.imshow("img_dst", img_dst)
-    cv2.waitKey(0)
-    present_char_List2, mask_present_img2 = mask_make(img_dst)
+    # img_dst = projective_transformation(blue_threshold_present_img, p1, p2, p3, p4)
+    # cv2.imshow("img_dst", img_dst)
+    # cv2.waitKey(0)
+    present_char_List2, mask_present_img2 = mask_make(blue_threshold_present_img)
     mask_frame = mask_present_img2.copy()
     l2 = len(present_char_List2)
-    output_textx = ""
 
+    output_textx = ""
+ 
     if l2 > 4:
         blue_threshold_present_img = cut_blue_img1(frame)
         mask_frame = mask_make1(blue_threshold_present_img)
