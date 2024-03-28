@@ -17,14 +17,14 @@ from ImageProcessing.img_processing2 import (
     cut_blue_img2,
 )
 
-before_frame = cv2.imread("./ProcessingDisplay/mask_frame_1699781826.7910953.jpg")
+# before_frame = cv2.imread("./ProcessingDisplay/mask_frame_1699781826.7910953.jpg")
 
-# frame = cv2.imread("./ProcessingDisplay/mask_frame_1699781826.9996154.jpg")
-frame = cv2.imread("./ProcessingDisplay/mask_frame_1699781837.4042451.jpg")
+before_frame = cv2.imread("./ProcessingDisplay/mask_frame_1711564375.8400826.jpg")
+frame = cv2.imread("./ProcessingDisplay/mask_frame_1711564376.0347426.jpg")
 # frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 cv2.imshow("d", frame)
 cv2.imshow("b", before_frame)
-before_frame = cv2.cvtColor(before_frame, cv2.COLOR_BGR2GRAY)
+# before_frame = cv2.cvtColor(before_frame, cv2.COLOR_BGR2GRAY)
 kernel = np.ones((3, 3), np.uint8)
 model = cv2.bgsegm.createBackgroundSubtractorMOG()
 mask = model.apply(before_frame)

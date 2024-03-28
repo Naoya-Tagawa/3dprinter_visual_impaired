@@ -134,8 +134,8 @@ def cut_blue_img2(img):
     # ブルーの最大値
     blue_max = np.array([120, 255, 255], np.uint8)
     threshold_blue_img = cv2.inRange(img_hsv, blue_min, blue_max)
-    cv2.imshow("threshold_blue_img", threshold_blue_img)
-    cv2.waitKey(0)
+    #cv2.imshow("threshold_blue_img", threshold_blue_img)
+    #cv2.waitKey(0)
     # threshold_blue_img = cv2.cvtColor(threshold_blue_img,cv2.COLOR_GRAY2RGB)
     kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (7, 7))
     close_img = cv2.morphologyEx(threshold_blue_img, cv2.MORPH_CLOSE, kernel, iterations=1)
@@ -1487,7 +1487,7 @@ def text_union(l):
 # リストの中に1ガ連続して5つ以上あるかを判定
 def check_last_five_elements(lst):
     # リストの長さが5未満の場合は条件を満たすことができません
-    if len(lst) < 3:
+    if len(lst) < 5:
         return False
 
     # リストの後ろから5つの要素が全て1であるかを判定
@@ -1497,7 +1497,7 @@ def check_last_five_elements(lst):
     count_of_ones = lst.count(1)
 
     # 条件を満たす要素が5つ以上あるかを判定
-    return last_five_elements_are_ones and count_of_ones >= 3
+    return last_five_elements_are_ones and count_of_ones >= 5
 
 
 # 画像の差分検知(はじめ)

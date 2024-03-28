@@ -47,7 +47,7 @@ def diff_image_search(
     while True:
         if len(flg_count) > 15:
             flg_count = []
-            output_union = [[], [], [], []]
+            # output_union = [[], [], [], []]
         bad_accuracy_flg = []
         frame = present_frame.get()
         last_insert_time = time.time()
@@ -86,8 +86,8 @@ def diff_image_search(
             # mask = cv2.morphologyEx(mask, cv2.MORPH_OPEN, kernel)
             # cv2.imwrite("raaa.jpg",frame_diff)
         mask_frame[mask == 0] = 0
-        frame_diff = cv2.morphologyEx(mask_frame, cv2.MORPH_OPEN, kernel)
-
+        #frame_diff = cv2.morphologyEx(mask_frame, cv2.MORPH_OPEN, kernel)
+        frame_diff = mask_frame
         # plt.imshow(mask_present_img2)
         # plt.show()
         # h ,w = present_frame.shape
@@ -96,10 +96,10 @@ def diff_image_search(
         # before_frame = cv2.resize(before_frame,dsize=(w,h))
         contours, hierarchy = cv2.findContours(frame_diff.astype("uint8"), cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE)
         for i in range(len(contours)):
-            if cv2.contourArea(contours[i]) < 10:
+            if cv2.contourArea(contours[i]) < 5:
                 frame_diff = cv2.fillPoly(frame_diff, [contours[i][:, 0, :]], (0, 255, 0), lineType=cv2.LINE_8, shift=0)
         # cv2.imwrite("./ProcessingDisplay/realtimeimg_{0}.jpg".format(last_insert_time), frame_diff)
-        cv2.imwrite("./ProcessingDisplay/mask_frame_{0}.jpg".format(last_insert_time), mask_present_img2)
+        # cv2.imwrite("./ProcessingDisplay/mask_frame_{0}.jpg".format(last_insert_time), mask_present_img2)
         # plt.imshow(frame_diff)
         cv2.imwrite("framediff.jpg", frame_diff)
         # cv2.imshow("before.jpg",before_frame)
@@ -145,7 +145,7 @@ def diff_image_search(
             print("認識するものなし")
         # print(present_char_List2)
 
-        # print(indices)
+        print(indices)
         # nearest_indexes = [find_nearest_index(present_char_List2, value) for value in indices]
         # print(nearest_indexes)
         for value in indices:
@@ -200,6 +200,8 @@ def diff_image_search(
                         text_union_output = out[1]
 
                 else:
+                    if value[0] > 3:
+                        break
                     output_union[value[0]].append(out)
 
                     # output_textx = output_textx + " The cursor points to "
@@ -478,6 +480,16 @@ if __name__ == "__main__":
         if not ret:
             cv2.destroyAllWindows()
         cv2.imshow("frame", frame)
+        if cv2.waitKey(1) & 0xFF == ord("q"):
+            cap.release()
+            cv2.destroyAllWindows()
+            break
+        # sがおされたら
+        elif cv2.waitKey(1) & 0xFF == ord("s"):
+            text = all_image_deal(frame, model, scaler, pca)
+            print("all text")
+            output_text.put(text)
+            print(text)
         # 画面が遷移したか調査
         # dst1 = cv2.bitwise_and(before,before,mask=before_frame)
         # dst2 = cv2.bitwise_and(frame,frame,mask=before_frame)
@@ -495,9 +507,9 @@ if __name__ == "__main__":
         # per = (dst2_count / dst1_count) * 100
         # print(dst1_count)
         # print(dst2_count)
-        if count == 9:
+        if count == 2:
             base = frame + base
-            base = base / 10
+            base = base / 3
             base = base.astype(np.uint8)
             # cv2.imwrite("base17.jpg",base)
             present_frame.put(base)
@@ -515,16 +527,7 @@ if __name__ == "__main__":
         # present_kersol = audio_output.kersol_search(output_text)
         # if present_kersol == 1: # カーソルがない
         # qキーが入力されたら画面を閉じる
-        if cv2.waitKey(1) & 0xFF == ord("q"):
-            cap.release()
-            cv2.destroyAllWindows()
-            break
-        # sがおされたら
-        elif cv2.waitKey(1) & 0xFF == ord("s"):
-            text = all_image_deal(frame, model, scaler, pca)
-            print("all text")
-            output_text.put(text)
-            print(text)
+
             # text_read(text)
 
     read.join()
